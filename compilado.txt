@@ -1,0 +1,1302 @@
+COMPILADO DE ARCHIVOS 
+ 
+ 
+================================= 
+.gitignore 
+================================= 
+ 
+# Nuxt dev/build outputs
+.output
+.data
+.nuxt
+.nitro
+.cache
+dist
+
+# Node dependencies
+node_modules
+
+# Logs
+logs
+*.log
+
+# Misc
+.DS_Store
+.fleet
+.idea
+
+# Local env files
+.env
+.env.*
+!.env.example
+ 
+================================= 
+app.vue 
+================================= 
+ 
+<template>
+  <NuxtLayout>
+    <NuxtPage />
+  </NuxtLayout>
+</template>
+
+<script setup>
+// Nuxt manejará automáticamente qué layout usar basado en la página
+</script> 
+================================= 
+nuxt.config.ts 
+================================= 
+ 
+// nuxt.config.ts - SIN PRIMEVUE TEMPORALMENTE
+export default defineNuxtConfig({
+  devtools: { enabled: true },
+  
+  // Módulos
+  modules: [
+    '@pinia/nuxt',
+    '@nuxtjs/tailwindcss'
+  ],
+  
+  // CSS Global - solo Tailwind por ahora
+  css: [
+    '~/assets/css/main.css'
+  ],
+  
+  // Configuración de la app
+  app: {
+    head: {
+      title: 'Senado de Bolivia',
+      htmlAttrs: { lang: 'es' },
+      meta: [
+        { charset: 'utf-8' },
+        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+        { name: 'description', content: 'Portal Oficial del Senado Nacional de Bolivia' }
+      ],
+      link: [
+        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+        { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+        { rel: 'preconnect', href: 'https://fonts.gstatic.com' },
+        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap' }
+      ]
+    }
+  }
+}) 
+================================= 
+package.json 
+================================= 
+ 
+{
+  "name": "frontend-publico",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@heroicons/vue": "^2.2.0",
+    "@pinia/nuxt": "^0.11.3",
+    "date-fns": "^4.1.0",
+    "dayjs": "^1.11.19",
+    "nuxt": "^4.2.2",
+    "pinia": "^3.0.4",
+    "primeicons": "^7.0.0",
+    "primevue": "^3.47.0",
+    "vue": "^3.5.27",
+    "vue-router": "^4.6.4"
+  },
+  "devDependencies": {
+    "@nuxtjs/tailwindcss": "^6.14.0",
+    "autoprefixer": "^10.4.23",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.19"
+  }
+}
+ 
+================================= 
+README.md 
+================================= 
+ 
+# Nuxt Minimal Starter
+
+Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+
+## Setup
+
+Make sure to install dependencies:
+
+```bash
+# npm
+npm install
+
+# pnpm
+pnpm install
+
+# yarn
+yarn install
+
+# bun
+bun install
+```
+
+## Development Server
+
+Start the development server on `http://localhost:3000`:
+
+```bash
+# npm
+npm run dev
+
+# pnpm
+pnpm dev
+
+# yarn
+yarn dev
+
+# bun
+bun run dev
+```
+
+## Production
+
+Build the application for production:
+
+```bash
+# npm
+npm run build
+
+# pnpm
+pnpm build
+
+# yarn
+yarn build
+
+# bun
+bun run build
+```
+
+Locally preview production build:
+
+```bash
+# npm
+npm run preview
+
+# pnpm
+pnpm preview
+
+# yarn
+yarn preview
+
+# bun
+bun run preview
+```
+
+Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+ 
+================================= 
+tailwind.config.js 
+================================= 
+ 
+// tailwind.config.js
+export default {
+  content: [
+    './components/**/*.{js,vue,ts}',
+    './layouts/**/*.vue',
+    './pages/**/*.vue',
+    './app.vue'
+  ],
+  theme: {
+    extend: {
+      colors: {
+        primary: {
+          50: '#eff6ff',
+          100: '#dbeafe',
+          500: '#3b82f6',
+          600: '#2563eb',
+          700: '#1d4ed8',
+          800: '#1e40af',
+          900: '#1e3a8a',
+        }
+      },
+      fontFamily: {
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+      },
+    },
+  },
+  plugins: [],
+} 
+================================= 
+tsconfig.json 
+================================= 
+ 
+{
+  // https://nuxt.com/docs/guide/concepts/typescript
+  "files": [],
+  "references": [
+    {
+      "path": "./.nuxt/tsconfig.app.json"
+    },
+    {
+      "path": "./.nuxt/tsconfig.server.json"
+    },
+    {
+      "path": "./.nuxt/tsconfig.shared.json"
+    },
+    {
+      "path": "./.nuxt/tsconfig.node.json"
+    }
+  ]
+}
+ 
+================================= 
+assets\css\main.css 
+================================= 
+ 
+/* assets/css/main.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities; 
+================================= 
+components\NewsCard.vue 
+================================= 
+ 
+<!-- components/NewsCard.vue -->
+<template>
+  <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition-shadow">
+    <div class="h-48 bg-gray-300 overflow-hidden">
+      <img 
+        :src="news.image" 
+        :alt="news.title"
+        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+      />
+    </div>
+    <div class="p-6">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-full">
+          {{ news.category }}
+        </span>
+        <span class="text-gray-500 text-sm">{{ formatDate(news.date) }}</span>
+      </div>
+      <h3 class="text-lg font-bold mb-3 text-gray-900 group-hover:text-blue-600 line-clamp-2">
+        {{ news.title }}
+      </h3>
+      <p class="text-gray-600 mb-4 line-clamp-3">{{ news.excerpt }}</p>
+      <button class="text-blue-600 font-medium hover:text-blue-700 flex items-center gap-2">
+        Leer más <i class="pi pi-arrow-right text-sm"></i>
+      </button>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { format } from 'date-fns'
+import { es } from 'date-fns/locale'
+
+const props = defineProps({
+  news: Object
+})
+
+const formatDate = (dateString) => {
+  const date = new Date(dateString)
+  return format(date, 'dd MMMM yyyy', { locale: es })
+}
+</script>
+
+<style scoped>
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+</style> 
+================================= 
+components\ServiceCard.vue 
+================================= 
+ 
+<!-- components/ServiceCard.vue -->
+<template>
+  <NuxtLink :to="link" class="block group">
+    <div class="bg-white rounded-xl shadow-lg p-8 h-full transition-all hover:shadow-2xl hover:-translate-y-1">
+      <div class="w-16 h-16 rounded-lg flex items-center justify-center mb-6" :class="iconColor">
+        <i :class="`pi ${icon} text-2xl text-white`"></i>
+      </div>
+      <h3 class="text-xl font-bold mb-3 text-gray-900 group-hover:text-blue-600">{{ title }}</h3>
+      <p class="text-gray-600 mb-4">{{ description }}</p>
+      <div class="flex items-center text-blue-600 font-medium">
+        <span>Ver más</span>
+        <i class="pi pi-arrow-right ml-2 transition-transform group-hover:translate-x-1"></i>
+      </div>
+    </div>
+  </NuxtLink>
+</template>
+
+<script setup>
+const props = defineProps({
+  title: String,
+  description: String,
+  icon: String,
+  link: String,
+  color: {
+    type: String,
+    default: 'blue'
+  }
+})
+
+const colorMap = {
+  blue: 'bg-blue-600',
+  green: 'bg-green-600',
+  purple: 'bg-purple-600',
+  orange: 'bg-orange-600'
+}
+
+const iconColor = computed(() => colorMap[props.color])
+</script> 
+================================= 
+components\StatCard.vue 
+================================= 
+ 
+<!-- components/StatCard.vue - CORREGIDO -->
+<template>
+  <div class="text-center p-6 rounded-xl transition-transform hover:scale-105" :class="cardColor">
+    <div class="text-5xl font-bold mb-4" :class="textColor">{{ number }}</div>
+    <div class="flex justify-center mb-4">
+      <i :class="`pi ${icon} text-3xl ${textColor}`"></i>
+    </div>
+    <p class="text-sm font-medium" :class="textColor + ' opacity-90'">{{ label }}</p>
+  </div>
+</template>
+
+<script setup>
+import { computed } from 'vue'
+
+const props = defineProps({
+  number: String,
+  label: String,
+  icon: String,
+  color: {
+    type: String,
+    default: 'blue'
+  }
+})
+
+const colorMap = {
+  blue: {
+    bg: 'bg-blue-50',
+    text: 'text-blue-700'
+  },
+  green: {
+    bg: 'bg-green-50', 
+    text: 'text-green-700'
+  },
+  purple: {
+    bg: 'bg-purple-50',
+    text: 'text-purple-700'
+  },
+  orange: {
+    bg: 'bg-orange-50',
+    text: 'text-orange-700'
+  }
+}
+
+const cardColor = computed(() => colorMap[props.color].bg)
+const textColor = computed(() => colorMap[props.color].text)
+</script> 
+================================= 
+layouts\alternative.vue 
+================================= 
+ 
+<!-- layouts/alternative.vue - VERSIÓN CORREGIDA -->
+<template>
+  <div class="min-h-screen bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow sticky top-0 z-40">
+      <div class="container mx-auto px-4 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <!-- Botón para mostrar/ocultar sidebar - SIEMPRE VISIBLE -->
+          <button 
+            @click="toggleSidebar"
+            class="p-2 text-gray-600 hover:text-blue-600 rounded-lg hover:bg-gray-100 lg:hidden"
+            :title="sidebarOpen ? 'Ocultar menú' : 'Mostrar menú'"
+          >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path 
+                v-if="!sidebarOpen" 
+                stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+              <path 
+                v-else
+                stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+          
+          <!-- Botón para desktop también -->
+          <button 
+            @click="toggleSidebar"
+            class="hidden lg:flex p-2 text-gray-600 hover:text-blue-600 rounded-lg hover:bg-gray-100"
+            :title="sidebarOpen ? 'Ocultar menú' : 'Mostrar menú'"
+          >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path 
+                v-if="!sidebarOpen" 
+                stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+              <path 
+                v-else
+                stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+          
+          <!-- Logo -->
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+              <span class="text-white font-bold">S</span>
+            </div>
+            <div>
+              <h1 class="text-xl font-bold text-gray-900">Senado de Bolivia</h1>
+              <p class="text-xs text-gray-500">Menú desplegable</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Indicador del estado del menú -->
+        <div class="hidden lg:flex items-center gap-2 text-sm text-gray-500">
+          <span v-if="sidebarOpen">Menú visible</span>
+          <span v-else>Menú oculto</span>
+          <div class="w-2 h-2 rounded-full" :class="sidebarOpen ? 'bg-green-500' : 'bg-gray-400'"></div>
+        </div>
+      </div>
+    </header>
+    
+    <!-- Contenedor principal con flex -->
+    <div class="flex relative">
+      <!-- Sidebar - SIEMPRE EN EL FLOW EN DESKTOP, FIXED EN MÓVIL -->
+      <aside 
+        ref="sidebarRef"
+        class="bg-white border-r border-gray-200 overflow-y-auto transition-all duration-300 ease-in-out"
+        :class="[
+          'h-[calc(100vh-73px)]', // Altura completa menos header
+          'sticky top-[73px]', // Se queda pegado debajo del header
+          'z-30', // Debajo del overlay
+          sidebarOpen 
+            ? 'w-64 translate-x-0 opacity-100' 
+            : 'w-0 -translate-x-full lg:w-0 lg:translate-x-0 lg:opacity-0 lg:invisible'
+        ]"
+      >
+        <!-- Contenido del sidebar -->
+        <div class="w-64 h-full p-4">
+          <!-- Navegación -->
+          <nav>
+            <ul class="space-y-2">
+              <li v-for="item in navItems" :key="item.name">
+                <NuxtLink 
+                  :to="item.href"
+                  class="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-50 text-gray-700 hover:text-blue-600 transition-colors"
+                  :class="{ 'bg-blue-50 text-blue-600': isActive(item.href) }"
+                  @click="closeSidebarOnMobile"
+                >
+                  <span v-html="getIcon(item.icon)" class="w-5 h-5 flex-shrink-0"></span>
+                  <span class="truncate">{{ item.name }}</span>
+                </NuxtLink>
+              </li>
+            </ul>
+          </nav>
+          
+          <!-- Separador -->
+          <div class="my-6 border-t border-gray-200"></div>
+          
+          <!-- Información adicional -->
+          <div class="space-y-3">
+            <div class="p-3 bg-blue-50 rounded-lg">
+              <h4 class="font-medium text-sm text-blue-700 mb-1">¿Necesitas ayuda?</h4>
+              <p class="text-xs text-blue-600">contacto@senado.bo</p>
+            </div>
+            
+            <div class="text-center">
+              <button 
+                @click="toggleSidebar"
+                class="text-sm text-gray-500 hover:text-gray-700"
+              >
+                {{ sidebarOpen ? 'Ocultar menú' : 'Mostrar menú' }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </aside>
+      
+      <!-- Overlay para móvil -->
+      <div 
+        v-if="sidebarOpen" 
+        class="fixed inset-0 bg-black bg-opacity-50 z-20 lg:hidden"
+        @click="sidebarOpen = false"
+      ></div>
+      
+      <!-- Contenido principal -->
+      <main class="flex-1 min-w-0">
+        <div class="container mx-auto px-4 py-8">
+          <slot />
+        </div>
+        
+        <!-- Footer -->
+        <footer class="bg-gray-800 text-white py-8 mt-12">
+          <div class="container mx-auto px-4">
+            <div class="text-center">
+              <p>© 2024 Senado Nacional de Bolivia</p>
+              <p class="text-sm text-gray-300 mt-2">
+                Menú desplegable - Presiona el botón ☰ para mostrar/ocultar
+              </p>
+              <div class="mt-4">
+                <NuxtLink to="/" class="text-gray-400 hover:text-white">
+                  ← Volver a versión con sidebar fijo
+                </NuxtLink>
+              </div>
+            </div>
+          </div>
+        </footer>
+      </main>
+      
+      <!-- Redes Sociales Fijas (Derecha) -->
+      <div class="hidden lg:block fixed right-0 top-1/2 transform -translate-y-1/2 z-40">
+        <div class="flex flex-col gap-4 p-2 bg-white/90 backdrop-blur-sm rounded-l-lg shadow-lg border border-gray-200">
+          <a 
+            v-for="social in socialLinks"
+            :key="social.name"
+            :href="social.url"
+            target="_blank"
+            :title="social.name"
+            class="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-colors"
+          >
+            <span v-html="social.svgIcon" class="w-5 h-5"></span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, watch } from 'vue'
+import { useRoute } from '#app'
+
+const route = useRoute()
+const sidebarRef = ref(null)
+const sidebarOpen = ref(false) // Por defecto cerrado en ambas versiones
+
+// Función para alternar sidebar
+const toggleSidebar = () => {
+  sidebarOpen.value = !sidebarOpen.value
+  console.log('Sidebar estado:', sidebarOpen.value ? 'Abierto' : 'Cerrado')
+}
+
+// Cerrar sidebar en móvil al cambiar de ruta
+const closeSidebarOnMobile = () => {
+  if (window.innerWidth < 1024) {
+    sidebarOpen.value = false
+  }
+}
+
+// Cerrar con tecla ESC
+const handleKeydown = (e) => {
+  if (e.key === 'Escape' && sidebarOpen.value) {
+    sidebarOpen.value = false
+  }
+}
+
+// Detectar clic fuera del sidebar en desktop
+const handleClickOutside = (event) => {
+  if (sidebarRef.value && 
+      !sidebarRef.value.contains(event.target) && 
+      !event.target.closest('button[title*="menú"]') &&
+      window.innerWidth >= 1024 &&
+      sidebarOpen.value) {
+    sidebarOpen.value = false
+  }
+}
+
+// Setup event listeners
+onMounted(() => {
+  window.addEventListener('keydown', handleKeydown)
+  document.addEventListener('click', handleClickOutside)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleKeydown)
+  document.removeEventListener('click', handleClickOutside)
+})
+
+// Cerrar sidebar al cambiar ruta en móvil
+watch(() => route.path, () => {
+  if (window.innerWidth < 1024) {
+    sidebarOpen.value = false
+  }
+})
+
+const navItems = [
+  { name: 'Inicio', href: '/alternative', icon: 'home' },
+  { name: 'La Institución', href: '/alternative/institucion', icon: 'building' },
+  { name: 'Legisladores', href: '/alternative/legisladores', icon: 'users' },
+  { name: 'Gestión Legislativa', href: '/alternative/gestion-legislativa', icon: 'book' },
+  { name: 'Cultura y Patrimonio', href: '/alternative/cultura', icon: 'museum' },
+  { name: 'Participación', href: '/alternative/participacion', icon: 'comments' },
+  { name: 'Noticias', href: '/alternative/noticias', icon: 'newspaper' },
+  { name: 'Contacto', href: '/alternative/contacto', icon: 'envelope' }
+]
+
+const socialLinks = [
+  { 
+    name: 'Twitter', 
+    svgIcon: '<svg fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>',
+    url: '#' 
+  },
+  { 
+    name: 'Facebook', 
+    svgIcon: '<svg fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>',
+    url: '#' 
+  },
+  { 
+    name: 'YouTube', 
+    svgIcon: '<svg fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>',
+    url: '#' 
+  }
+]
+
+const iconMap = {
+  home: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>',
+  building: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>',
+  users: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>',
+  book: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>',
+  museum: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>',
+  comments: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path></svg>',
+  newspaper: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>',
+  envelope: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>'
+}
+
+const getIcon = (iconName) => {
+  return iconMap[iconName] || iconMap.home
+}
+
+const isActive = (path) => {
+  return route.path === path || route.path.startsWith(path + '/')
+}
+</script>
+
+<style scoped>
+/* Animación suave para el sidebar */
+.sidebar-enter-active,
+.sidebar-leave-active {
+  transition: all 0.3s ease;
+}
+
+.sidebar-enter-from,
+.sidebar-leave-to {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+
+/* Asegurar que el contenido principal tenga espacio */
+main {
+  transition: margin-left 0.3s ease;
+}
+
+/* Estilos específicos para el botón */
+button[title*="menú"]:hover {
+  background-color: #f3f4f6;
+}
+</style> 
+================================= 
+layouts\default.vue 
+================================= 
+ 
+<!-- layouts/default.vue - SIN PRIMEVUE -->
+<template>
+  <div class="min-h-screen bg-gray-50 flex">
+    <!-- Sidebar Izquierdo (Desktop) -->
+    <aside class="hidden lg:block w-64 bg-white border-r border-gray-200">
+      <div class="sticky top-0 h-screen overflow-y-auto">
+        <!-- Logo -->
+        <div class="p-6 border-b border-gray-100">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+              <span class="text-white font-bold text-lg">S</span>
+            </div>
+            <div>
+              <h1 class="font-bold text-gray-900">Senado</h1>
+              <p class="text-xs text-gray-500">Bolivia</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Navegación Principal -->
+        <nav class="p-4">
+          <ul class="space-y-2">
+            <li v-for="item in navItems" :key="item.name">
+              <NuxtLink 
+                :to="item.href"
+                class="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-50 text-gray-700 hover:text-blue-600 transition-colors"
+                :class="{ 'bg-blue-50 text-blue-600': isActive(item.href) }"
+              >
+                <!-- Iconos SVG en lugar de PrimeIcons -->
+                <span v-html="getIcon(item.icon)" class="w-5 h-5"></span>
+                <span>{{ item.name }}</span>
+              </NuxtLink>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </aside>
+    
+    <!-- Contenido Principal -->
+    <main class="flex-1 overflow-x-hidden">
+      <!-- Header Móvil -->
+      <header class="lg:hidden bg-white border-b border-gray-200">
+        <div class="container mx-auto px-4 py-4 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+              <span class="text-white font-bold">S</span>
+            </div>
+            <div>
+              <h1 class="font-bold text-gray-900">Senado de Bolivia</h1>
+              <p class="text-xs text-gray-500">Portal Oficial</p>
+            </div>
+          </div>
+          
+          <button 
+            @click="mobileMenuOpen = !mobileMenuOpen"
+            class="p-2 text-gray-600 hover:text-blue-600"
+          >
+            <!-- Icono hamburguesa SVG -->
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+          </button>
+        </div>
+        
+        <!-- Menú Móvil -->
+        <div v-if="mobileMenuOpen" class="bg-white border-t border-gray-200 p-4">
+          <nav class="space-y-2">
+            <NuxtLink 
+              v-for="item in navItems"
+              :key="item.name"
+              :to="item.href"
+              class="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-50 text-gray-700"
+              @click="mobileMenuOpen = false"
+            >
+              <span v-html="getIcon(item.icon)" class="w-5 h-5"></span>
+              <span>{{ item.name }}</span>
+            </NuxtLink>
+          </nav>
+        </div>
+      </header>
+      
+      <!-- Contenido de la página -->
+      <div class="container mx-auto px-4 py-8">
+        <slot />
+      </div>
+      
+      <!-- Footer -->
+      <footer class="bg-gray-800 text-white py-8 mt-12">
+        <div class="container mx-auto px-4">
+          <div class="text-center">
+            <p>© 2024 Senado Nacional de Bolivia. Todos los derechos reservados.</p>
+          </div>
+        </div>
+      </footer>
+    </main>
+    
+    <!-- Redes Sociales Fijas (Derecha) - SVG icons -->
+    <div class="hidden lg:block fixed right-0 top-1/2 transform -translate-y-1/2 z-40">
+      <div class="flex flex-col gap-4 p-2 bg-white/90 backdrop-blur-sm rounded-l-lg shadow-lg border border-gray-200">
+        <a 
+          v-for="social in socialLinks"
+          :key="social.name"
+          :href="social.url"
+          target="_blank"
+          :title="social.name"
+          class="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-colors"
+        >
+          <span v-html="social.svgIcon" class="w-5 h-5"></span>
+        </a>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, computed } from 'vue'
+import { useRoute } from '#app'
+
+const route = useRoute()
+const mobileMenuOpen = ref(false)
+
+const navItems = [
+  { name: 'Inicio', href: '/', icon: 'home' },
+  { name: 'La Institución', href: '/institucion', icon: 'building' },
+  { name: 'Legisladores', href: '/legisladores', icon: 'users' },
+  { name: 'Gestión Legislativa', href: '/gestion-legislativa', icon: 'book' },
+  { name: 'Cultura y Patrimonio', href: '/cultura', icon: 'museum' },
+  { name: 'Participación', href: '/participacion', icon: 'comments' },
+  { name: 'Noticias', href: '/noticias', icon: 'newspaper' },
+  { name: 'Contacto', href: '/contacto', icon: 'envelope' }
+]
+
+const socialLinks = [
+  { 
+    name: 'Twitter', 
+    svgIcon: '<svg fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>',
+    url: '#' 
+  },
+  { 
+    name: 'Facebook', 
+    svgIcon: '<svg fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>',
+    url: '#' 
+  },
+  { 
+    name: 'YouTube', 
+    svgIcon: '<svg fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>',
+    url: '#' 
+  }
+]
+
+const iconMap = {
+  home: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>',
+  building: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>',
+  users: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>',
+  book: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>',
+  museum: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>',
+  comments: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path></svg>',
+  newspaper: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>',
+  envelope: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>'
+}
+
+const getIcon = (iconName) => {
+  return iconMap[iconName] || iconMap.home
+}
+
+const isActive = (path) => {
+  return route.path === path || route.path.startsWith(path + '/')
+}
+</script> 
+================================= 
+pages\index.vue 
+================================= 
+ 
+<!-- pages/index.vue - SIN PRIMEVUE -->
+<template>
+  <div>
+    <!-- Hero Section -->
+    <section class="relative bg-gradient-to-r from-blue-900 to-blue-700 text-white overflow-hidden">
+      <div class="absolute inset-0 bg-black/20"></div>
+      <div class="relative container mx-auto px-4 py-20">
+        <div class="max-w-3xl">
+          <h1 class="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+            Senado Nacional de Bolivia
+          </h1>
+          <p class="text-xl md:text-2xl opacity-90 mb-8">
+            Espacio de participación, información e interacción entre el Senado y la ciudadanía
+          </p>
+          <div class="flex flex-wrap gap-4">
+            <button class="px-8 py-3 bg-white text-blue-700 font-semibold rounded-lg hover:bg-gray-100 transition-colors">
+              Participar Activamente
+            </button>
+            <button class="px-8 py-3 border-2 border-white text-white font-semibold rounded-lg hover:bg-white/10 transition-colors">
+              Conocer Proyectos
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Estadísticas -->
+    <section class="py-16 bg-white">
+      <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-12 text-gray-900">
+          Actividad del Senado en Cifras
+          <span class="block text-lg font-normal text-gray-600 mt-2">
+            (Sesión Ordinaria 2024)
+          </span>
+        </h2>
+        
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div class="text-center p-6 rounded-xl transition-transform hover:scale-105 bg-blue-50">
+            <div class="text-5xl font-bold mb-4 text-blue-700">24</div>
+            <div class="flex justify-center mb-4">
+              <svg class="w-12 h-12 text-blue-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+            </div>
+            <p class="text-sm font-medium text-blue-700 opacity-90">Textos adoptados</p>
+          </div>
+          
+          <div class="text-center p-6 rounded-xl transition-transform hover:scale-105 bg-green-50">
+            <div class="text-5xl font-bold mb-4 text-green-700">1,850</div>
+            <div class="flex justify-center mb-4">
+              <svg class="w-12 h-12 text-green-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+              </svg>
+            </div>
+            <p class="text-sm font-medium text-green-700 opacity-90">Amendements adoptés</p>
+          </div>
+          
+          <div class="text-center p-6 rounded-xl transition-transform hover:scale-105 bg-purple-50">
+            <div class="text-5xl font-bold mb-4 text-purple-700">340</div>
+            <div class="flex justify-center mb-4">
+              <svg class="w-12 h-12 text-purple-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+            </div>
+            <p class="text-sm font-medium text-purple-700 opacity-90">Heures de séance</p>
+          </div>
+          
+          <div class="text-center p-6 rounded-xl transition-transform hover:scale-105 bg-orange-50">
+            <div class="text-5xl font-bold mb-4 text-orange-700">420</div>
+            <div class="flex justify-center mb-4">
+              <svg class="w-12 h-12 text-orange-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+              </svg>
+            </div>
+            <p class="text-sm font-medium text-orange-700 opacity-90">Heures de commissions</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Secciones Principales -->
+    <section class="py-16 bg-gray-50">
+      <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-12 text-gray-900">
+          Nuestros Servicios
+        </h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <!-- Institución -->
+          <div class="bg-white rounded-xl shadow-lg p-8 h-full transition-all hover:shadow-2xl hover:-translate-y-1">
+            <div class="w-16 h-16 rounded-lg flex items-center justify-center mb-6 bg-blue-600">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold mb-3 text-gray-900">Institución</h3>
+            <p class="text-gray-600 mb-4">Conoce el mandato constitucional, directiva cameral, reseña histórica y galería de imágenes.</p>
+            <div class="flex items-center text-blue-600 font-medium">
+              <span>Ver más</span>
+              <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+              </svg>
+            </div>
+          </div>
+          
+          <!-- Legisladores -->
+          <div class="bg-white rounded-xl shadow-lg p-8 h-full transition-all hover:shadow-2xl hover:-translate-y-1">
+            <div class="w-16 h-16 rounded-lg flex items-center justify-center mb-6 bg-green-600">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5 0a4 4 0 11-8 0 4 4 0 018 0z"></path>
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold mb-3 text-gray-900">Legisladores</h3>
+            <p class="text-gray-600 mb-4">Directiva, comisiones y comités, brigadas parlamentarias, bancadas políticas.</p>
+            <div class="flex items-center text-blue-600 font-medium">
+              <span>Ver más</span>
+              <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+              </svg>
+            </div>
+          </div>
+          
+          <!-- Gestión Legislativa -->
+          <div class="bg-white rounded-xl shadow-lg p-8 h-full transition-all hover:shadow-2xl hover:-translate-y-1">
+            <div class="w-16 h-16 rounded-lg flex items-center justify-center mb-6 bg-purple-600">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold mb-3 text-gray-900">Gestión Legislativa</h3>
+            <p class="text-gray-600 mb-4">Sesiones del pleno, proyectos de leyes, gaceta legislativa.</p>
+            <div class="flex items-center text-blue-600 font-medium">
+              <span>Ver más</span>
+              <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <div class="text-center mt-12 pt-8 border-t border-gray-200">
+    <h3 class="text-xl font-bold mb-4">¿Prefieres otro estilo?</h3>
+    <NuxtLink 
+      to="/alternative" 
+      class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+    >
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+      </svg>
+      Ver versión con menú desplegable
+    </NuxtLink>
+  </div>
+</template>
+
+<script setup>
+// Página funcional sin PrimeVue
+</script> 
+================================= 
+pages\alternative\index.vue 
+================================= 
+ 
+<!-- pages/alternative/index.vue - VERSIÓN MEJORADA -->
+<template>
+  <div>
+    <!-- Hero Section con indicador -->
+    <section class="relative bg-gradient-to-r from-blue-900 to-blue-700 text-white overflow-hidden">
+      <div class="absolute inset-0 bg-black/20"></div>
+      <div class="relative container mx-auto px-4 py-20">
+        <div class="max-w-3xl">
+          <!-- Indicador interactivo -->
+          <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/20 rounded-full mb-6 cursor-pointer hover:bg-white/30" @click="toggleDemo">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            </svg>
+            <span class="text-sm font-medium">DEMO: Menú desplegable</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </div>
+          
+          <h1 class="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+            Senado Nacional de Bolivia
+          </h1>
+          <p class="text-xl md:text-2xl opacity-90 mb-8">
+            Portal oficial con menú desplegable interactivo
+          </p>
+          
+          <!-- Instrucciones claras -->
+          <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6 mb-8">
+            <h3 class="text-lg font-bold mb-3">🚀 ¿Cómo usar el menú?</h3>
+            <ol class="list-decimal list-inside space-y-2 text-sm">
+              <li>Presiona el botón <strong class="bg-white/20 px-2 py-1 rounded">☰</strong> en la esquina superior izquierda</li>
+              <li>El menú se deslizará desde la izquierda</li>
+              <li>Presiona el mismo botón para ocultarlo</li>
+              <li>En móvil: toca fuera del menú para cerrar</li>
+            </ol>
+          </div>
+          
+          <div class="flex flex-wrap gap-4">
+            <button @click="toggleDemo" class="px-8 py-3 bg-white text-blue-700 font-semibold rounded-lg hover:bg-gray-100 transition-colors flex items-center gap-2">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+              </svg>
+              Probar Menú Ahora
+            </button>
+            <NuxtLink to="/" class="px-8 py-3 border-2 border-white text-white font-semibold rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+              </svg>
+              Ver Versión Original
+            </NuxtLink>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Demo interactiva del menú -->
+    <section v-if="showDemo" class="py-12 bg-gray-50 border-b border-gray-200">
+      <div class="container mx-auto px-4">
+        <div class="max-w-4xl mx-auto">
+          <div class="bg-white rounded-2xl shadow-xl p-8">
+            <div class="flex items-center justify-between mb-6">
+              <h3 class="text-2xl font-bold text-gray-900">🎮 Demo del Menú</h3>
+              <button @click="showDemo = false" class="text-gray-500 hover:text-gray-700">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+              </button>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div>
+                <h4 class="font-bold mb-3">Estado actual:</h4>
+                <div class="flex items-center gap-3 mb-4">
+                  <div class="w-4 h-4 rounded-full" :class="menuState ? 'bg-green-500' : 'bg-red-500'"></div>
+                  <span class="font-medium">{{ menuState ? 'Menú VISIBLE' : 'Menú OCULTO' }}</span>
+                </div>
+                
+                <div class="space-y-4">
+                  <button 
+                    @click="toggleMenuState"
+                    class="w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center justify-center gap-2"
+                  >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path v-if="!menuState" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                      <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                    {{ menuState ? 'Ocultar Menú' : 'Mostrar Menú' }}
+                  </button>
+                  
+                  <p class="text-sm text-gray-600">
+                    Prueba también el botón real en la esquina superior izquierda de la página.
+                  </p>
+                </div>
+              </div>
+              
+              <div class="border-l border-gray-200 pl-8">
+                <h4 class="font-bold mb-3">Ventajas:</h4>
+                <ul class="space-y-2">
+                  <li class="flex items-start gap-2">
+                    <svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-sm">Más espacio para contenido</span>
+                  </li>
+                  <li class="flex items-start gap-2">
+                    <svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-sm">Diseño más limpio</span>
+                  </li>
+                  <li class="flex items-start gap-2">
+                    <svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-sm">Fácil acceso en móvil</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Contenido de ejemplo -->
+    <section class="py-16 bg-white">
+      <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-12 text-gray-900">
+          Contenido de Ejemplo
+        </h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="bg-gray-50 p-8 rounded-xl">
+            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-6">
+              <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold mb-3">¿Por qué este diseño?</h3>
+            <p class="text-gray-600">
+              El menú desplegable maximiza el espacio útil en pantallas pequeñas y ofrece una experiencia más inmersiva.
+            </p>
+          </div>
+          
+          <div class="bg-gray-50 p-8 rounded-xl">
+            <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-6">
+              <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold mb-3">Accesibilidad</h3>
+            <p class="text-gray-600">
+              Diseñado pensando en todos los usuarios, con atajos de teclado y navegación táctil optimizada.
+            </p>
+          </div>
+          
+          <div class="bg-gray-50 p-8 rounded-xl">
+            <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-6">
+              <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold mb-3">Seguro e Intuitivo</h3>
+            <p class="text-gray-600">
+              Los usuarios siempre saben dónde está el menú y cómo acceder a él, sin importar el dispositivo.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Llamada a la acción -->
+    <section class="py-16 bg-gradient-to-r from-blue-600 to-blue-800 text-white">
+      <div class="container mx-auto px-4 text-center">
+        <h2 class="text-3xl font-bold mb-6">¿Cuál prefieres?</h2>
+        <p class="text-xl opacity-90 mb-8 max-w-2xl mx-auto">
+          Compara ambas versiones y elige la que mejor se adapte a las necesidades del portal.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <NuxtLink 
+            to="/" 
+            class="px-8 py-3 bg-white text-blue-700 font-semibold rounded-lg hover:bg-gray-100 transition-colors"
+          >
+            🔗 Versión con Sidebar Fijo
+          </NuxtLink>
+          <button 
+            @click="toggleDemo"
+            class="px-8 py-3 border-2 border-white text-white font-semibold rounded-lg hover:bg-white/10 transition-colors"
+          >
+            🎮 Probar Menú Desplegable
+          </button>
+        </div>
+      </div>
+    </section>
+  </div>
+</template>
+
+<script setup>
+import { ref } from 'vue'
+
+const showDemo = ref(true)
+const menuState = ref(false)
+
+const toggleDemo = () => {
+  showDemo.value = !showDemo.value
+}
+
+const toggleMenuState = () => {
+  menuState.value = !menuState.value
+  // Aquí podrías conectar con el estado real del sidebar si quisieras
+}
+</script> 
+================================= 
+public\favicon.ico 
+================================= 
+ 
+[ARCHIVO DE IMAGEN - CONTENIDO NO MOSTRADO] 
+ 
+================================= 
+public\robots.txt 
+================================= 
+ 
+User-Agent: *
+Disallow:
+ 
+================================= 
+stores\counter.ts 
+================================= 
+ 
+// stores/counter.ts
+export const useCounterStore = defineStore('counter', {
+  state: () => ({
+    count: 0
+  }),
+  actions: {
+    increment() {
+      this.count++
+    }
+  }
+}) 
+Total archivos: 18 
