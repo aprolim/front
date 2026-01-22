@@ -110,7 +110,7 @@
 
 <script setup>
 definePageMeta({
-  layout: 'alter'
+  layout: 'alter4'
 })
 // Esta función podría usarse para forzar mostrar el menú
 const forceShowMenu = () => {
