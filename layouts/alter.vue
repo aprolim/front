@@ -25,9 +25,16 @@
             </button>
 
             <!-- Logo -->
-            <NuxtLink to="/alternative" class="flex items-center gap-3 no-underline group">
-              <div class="w-10 h-10 bg-gradient-to-br from-[#E03636] to-[#C12F2F] rounded-lg flex items-center justify-center group-hover:scale-105 transition-transform">
+            <NuxtLink to="/" class="flex items-center gap-3 no-underline group">
+              <!-- <div class="w-10 h-10 bg-gradient-to-br from-[#E03636] to-[#C12F2F] rounded-lg flex items-center justify-center group-hover:scale-105 transition-transform">
                 <span class="text-white font-bold text-lg">S</span>
+              </div> -->
+              <div class="w-10 h-10 rounded-lg overflow-hidden flex items-center justify-center group-hover:scale-105 transition-transform">
+                <img 
+                  src="/logo camsen.png" 
+                  alt="Logo" 
+                  class="w-full h-full object-cover"
+                />
               </div>
               <div>
                 <h1 class="text-lg font-bold text-white">Senado Nacional</h1>
@@ -444,6 +451,7 @@ const activeSubmenu = ref(null)
 
 // Función para alternar sidebar
 const toggleSidebar = () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' })
   sidebarOpen.value = !sidebarOpen.value
 }
 

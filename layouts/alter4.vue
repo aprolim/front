@@ -28,12 +28,15 @@
             </button>
 
             <!-- Logo elegante -->
-            <NuxtLink to="/elegant" class="flex items-center gap-4 no-underline group">
+            <NuxtLink to="/" class="flex items-center gap-4 no-underline group">
               <div class="relative">
                 <div class="w-12 h-12 rounded-xl overflow-hidden shadow-lg group-hover:shadow-xl transition-shadow duration-300">
-                  <div class="absolute inset-0 bg-gradient-to-br from-[#E03636] via-[#E03636] to-[#C12F2F]"></div>
-                  <div class="absolute inset-0 flex items-center justify-center">
-                    <span class="text-white font-bold text-xl tracking-tight">S</span>
+                  <div class="w-10 h-10 rounded-lg overflow-hidden flex items-center justify-center group-hover:scale-105 transition-transform">
+                    <img 
+                      src="/logo camsen.png" 
+                      alt="Logo" 
+                      class="w-full h-full object-cover"
+                    />
                   </div>
                 </div>
                 <div class="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-[#E4D294] border-2 border-white shadow-md"></div>
@@ -351,6 +354,7 @@ const sidebarOpen = ref(false)
 const activeSubmenu = ref(null)
 
 const toggleSidebar = () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' })
   sidebarOpen.value = !sidebarOpen.value
 }
 

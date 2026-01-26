@@ -27,14 +27,13 @@
             </button>
 
             <!-- Logo -->
-            <NuxtLink to="/alternative" class="flex items-center gap-3 no-underline group">
-              <div 
-                class="w-12 h-12 rounded-xl transition-all duration-300 group-hover:scale-105 group-hover:rotate-3 group-hover:shadow-lg"
-                style="background: linear-gradient(135deg, #E03636 0%, #C12F2F 100%);"
-              >
-                <div class="w-full h-full flex items-center justify-center">
-                  <span class="text-white font-bold text-xl">S</span>
-                </div>
+            <NuxtLink to="/" class="flex items-center gap-3 no-underline group">
+              <div class="w-10 h-10 rounded-lg overflow-hidden flex items-center justify-center group-hover:scale-105 transition-transform">
+                <img 
+                  src="/logo camsen.png" 
+                  alt="Logo" 
+                  class="w-full h-full object-cover"
+                />
               </div>
               <div class="ml-1">
                 <h1 class="text-xl font-bold text-gray-800 group-hover:text-[#E03636] transition-colors duration-300">
@@ -371,6 +370,7 @@ const activeSubmenu = ref(null)
 
 // Función para alternar sidebar
 const toggleSidebar = () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' })
   sidebarOpen.value = !sidebarOpen.value
 }
 
