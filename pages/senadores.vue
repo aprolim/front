@@ -85,7 +85,7 @@
                     :y="seat.y + 30 + (idx * 9)"
                     text-anchor="middle"
                     fill="#374151"
-                    font-size="7"
+                    font-size="12"
                     font-weight="500"
                     class="senator-name-part"
                   >
@@ -135,7 +135,7 @@
                     :y="seat.y + 30 + (idx * 9)"
                     text-anchor="middle"
                     fill="#374151"
-                    font-size="7"
+                    font-size="12"
                     font-weight="500"
                     class="senator-name-part"
                   >
@@ -186,7 +186,7 @@
                     :y="seat.y + 30 + (idx * 9)"
                     text-anchor="middle"
                     fill="#374151"
-                    font-size="7"
+                    font-size="12"
                     font-weight="500"
                     class="senator-name-part"
                   >
@@ -236,7 +236,7 @@
                     :y="seat.y + 30 + (idx * 9)"
                     text-anchor="middle"
                     fill="#374151"
-                    font-size="7"
+                    font-size="12"
                     font-weight="500"
                     class="senator-name-part"
                   >
@@ -992,6 +992,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: visible !important
 }
 
 .hemicycle-svg-container {
@@ -1003,6 +1004,7 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: visible !important
 }
 
 .hemicycle-svg {
@@ -1010,6 +1012,7 @@ onMounted(() => {
   height: 100%;
   max-width: 100%;
   max-height: 100%;
+  overflow: visible !important;
 }
 
 /* CÍRCULOS - SIN MOVIMIENTO, SOLO AGRANDAR EN HOVER */
@@ -1048,7 +1051,7 @@ onMounted(() => {
 
 /* Estilo para nombres en columna */
 .senator-name-part {
-  font-size: 7px;
+  font-size: 9px;
   line-height: 1;
   font-weight: 500;
 }
