@@ -101,45 +101,46 @@
           >
             <NuxtLink 
               to="/la-institucion" 
-              class="btn-institutional group"
+              class="px-8 py-4 bg-white/10 backdrop-blur-sm text-white font-semibold rounded-xl hover:bg-white/20 transition-all duration-300 hover:-translate-y-1 flex items-center gap-3 group"
             >
-              <div class="text-xs md:text-sm text-white/80">La Instituci&oacute;n</div>
-              <svg class="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="text-xs md:text-sm text-white/80">La Instituci&oacute;n</div>
+                <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
               </svg>
             </NuxtLink>
             <NuxtLink 
               to="/la-institucion" 
-              class="btn-institutional group"
+              class="px-4 py-4 bg-white/10 backdrop-blur-sm text-white font-semibold rounded-xl hover:bg-white/20 transition-all duration-300 hover:-translate-y-1 flex items-center gap-3 group"
             >
-              <div class="text-xs md:text-sm text-white/80">Legisladores y Representaci&oacute;n</div>
-              <svg class="w-15 h-15 transition-transform group-hover:translate-x-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="text-xs md:text-sm text-white/80">Legisladores y Representaci&oacute;n</div>
+                <svg class="w-15 h-15 group-hover:translate-x-3 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
               </svg>
             </NuxtLink>
             <NuxtLink 
-              to="/la-institucion" 
-              class="btn-institutional btn-shimmer group"
+            to="/la-institucion" 
+            class="relative overflow-hidden px-8 py-4 bg-white/10 backdrop-blur-sm text-white font-semibold rounded-xl hover:bg-white/20 transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02] flex items-center gap-3 group"
             >
-              <div class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-1000 ease-in-out group-hover:translate-x-full"></div>
-              <div class="relative flex items-center gap-3">
-                <div class="text-xs md:text-sm text-white/80">Gestión Legislativa</div>
-                <svg class="w-6 h-7 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-                </svg>
-              </div>
+                <div class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent group-hover:translate-x-full transition-transform duration-1000 ease-in-out"></div>
+
+                <div class="relative flex items-center gap-3">
+                    <div class="text-xs md:text-sm text-white/80">Gestión Legislativa</div>
+                    <svg class="w-6 h-7 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                    </svg>
+                </div>
             </NuxtLink>
             <NuxtLink 
               to="/la-institucion" 
-              class="btn-institutional group"
+              class="px-8 py-4 bg-white/10 backdrop-blur-sm text-white font-semibold rounded-xl hover:bg-white/20 transition-all duration-300 hover:scale-105 flex items-center gap-3 group"
             >
-              <div class="text-xs md:text-sm text-white/80">Participacion y Transparencia Senado Abierto</div>
+                <div class="text-xs md:text-sm text-white/80">Participacion y Transparencia Senado Abierto</div>
             </NuxtLink>
             <NuxtLink 
               to="/la-institucion" 
-              class="btn-institutional group"
+              class="px-8 py-4 bg-white/10 backdrop-blur-sm text-white font-semibold rounded-xl hover:bg-white/20 transition-all duration-300 hover:ring-2 hover:ring-white/50 hover:ring-offset-2 hover:ring-offset-amber-200 flex items-center gap-3 group"
             >
-              <div class="text-xs md:text-sm text-white/80">La Institucion</div>
+                <div class="text-xs md:text-sm text-white/80">La Institucion</div>
             </NuxtLink>
           </div>
         </div>
@@ -179,7 +180,7 @@
 
     <!-- Sección de Noticias Importantes con efecto "Revelado Oficial" -->
     <section 
-      class="py-20 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden"
+      class="pt-20 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden"
       ref="newsSection"
     >
       <!-- Elementos decorativos de fondo -->
@@ -187,7 +188,7 @@
       <div class="absolute -top-24 -right-24 w-96 h-96 bg-[#8B1A1A]/5 rounded-full blur-3xl"></div>
       <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-[#F9E076]/5 rounded-full blur-3xl"></div>
       
-      <div class="container mx-auto px-6 relative z-10">
+      <div class="container mx-auto px-10 relative z-10">
         
 
         <!-- Grid de noticias con entrada escalonada -->
@@ -398,11 +399,320 @@
     
       </div>
     </section>
+    <!-- NUEVA SECCIÓN: Más Noticias (4 noticias) -->
+    <section 
+      class="bg-gradient-to-b from-white to-gray-50 relative overflow-hidden"
+      ref="moreNewsSection"
+    >
+      <!-- Elemento decorativo -->
+      <div class="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-[#8B1A1A]/10 to-transparent rounded-full blur-3xl"></div>
+      <div class="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-[#F9E076]/10 to-transparent rounded-full blur-3xl"></div>
+      <div class="container mx-auto px-10 relative z-10">
+        <!-- Encabezado de la sección -->
+        <div class="text-center mb-12">
+          
+          
+          <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            Últimas <span class="text-[#8B1A1A]">Noticias</span>
+          </h2>
+          <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+            Información actualizada sobre las actividades legislativas del Senado Nacional
+          </p>
+        </div>
+
+        <!-- Grid de 4 noticias -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" ref="moreNewsGrid">
+          
+          <!-- Noticia 1 -->
+          <div 
+            class="news-card opacity-0 translate-y-8"
+            :class="{ 'card-visible': isMoreNewsInView }"
+            :style="{ transitionDelay: '0ms' }"
+          >
+            <!-- Imagen -->
+            <div class="relative h-48 overflow-hidden">
+              <img 
+                src="https://images.unsplash.com/photo-1589652717521-10c0d092dea9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+                alt="Sesión parlamentaria"
+                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+              <div class="absolute top-4 left-4">
+                <span class="px-3 py-1 bg-gradient-to-r from-[#8B1A1A] to-[#5C1010] text-white text-xs font-bold rounded-full shadow-lg">
+                  EDUCACIÓN
+                </span>
+              </div>
+            </div>
+            
+            <!-- Contenido -->
+            <div class="p-6">
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-medium text-[#8B1A1A]">Comisión de Educación</span>
+                <span class="text-xs text-gray-500">22 ENE</span>
+              </div>
+              
+              <h3 class="text-lg font-bold text-gray-900 mb-3 group-hover:text-[#8B1A1A] transition-colors">
+                Reforma Educativa para áreas rurales aprobada
+              </h3>
+              
+              <p class="text-sm text-gray-600 mb-4 line-clamp-3">
+                Nueva ley busca mejorar la calidad educativa en comunidades rurales con programas de capacitación docente.
+              </p>
+              
+              <NuxtLink 
+                to="/noticias/reforma-educativa"
+                class="text-sm font-bold text-[#8B1A1A] hover:text-[#5C1010] transition-colors inline-flex items-center gap-1 group"
+              >
+                Leer más
+                <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                </svg>
+              </NuxtLink>
+            </div>
+          </div>
+
+          <!-- Noticia 2 -->
+          <div 
+            class="news-card opacity-0 translate-y-8"
+            :class="{ 'card-visible': isMoreNewsInView }"
+            :style="{ transitionDelay: '150ms' }"
+          >
+            <!-- Imagen -->
+            <div class="relative h-48 overflow-hidden">
+              <img 
+                src="https://online.udla.edu.ec/images/estudiantes-maestria-salud_700w.webp"
+                alt="Salud pública"
+                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+              <div class="absolute top-4 left-4">
+                <span class="px-3 py-1 bg-gradient-to-r from-[#F9E076] to-[#D4AF37] text-gray-900 text-xs font-bold rounded-full shadow-lg">
+                  SALUD
+                </span>
+              </div>
+            </div>
+            
+            <!-- Contenido -->
+            <div class="p-6">
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-medium text-[#D4AF37]">Comisión de Salud</span>
+                <span class="text-xs text-gray-500">20 ENE</span>
+              </div>
+              
+              <h3 class="text-lg font-bold text-gray-900 mb-3 group-hover:text-[#8B1A1A] transition-colors">
+                Plan Nacional de Hospitales 2024-2026
+              </h3>
+              
+              <p class="text-sm text-gray-600 mb-4 line-clamp-3">
+                Inversión de $500M para modernizar 45 hospitales públicos en todo el territorio nacional.
+              </p>
+              
+              <NuxtLink 
+                to="/noticias/plan-hospitalario"
+                class="text-sm font-bold text-[#8B1A1A] hover:text-[#5C1010] transition-colors inline-flex items-center gap-1 group"
+              >
+                Leer más
+                <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                </svg>
+              </NuxtLink>
+            </div>
+          </div>
+
+          <!-- Noticia 3 -->
+          <div 
+            class="news-card opacity-0 translate-y-8"
+            :class="{ 'card-visible': isMoreNewsInView }"
+            :style="{ transitionDelay: '300ms' }"
+          >
+            <!-- Imagen -->
+            <div class="relative h-48 overflow-hidden">
+              <img 
+                src="https://images.unsplash.com/photo-1589578527966-fdac0f44566c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+                alt="Medio ambiente"
+                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+              <div class="absolute top-4 left-4">
+                <span class="px-3 py-1 bg-gradient-to-r from-[#007934] to-[#005C26] text-white text-xs font-bold rounded-full shadow-lg">
+                  MEDIO AMBIENTE
+                </span>
+              </div>
+            </div>
+            
+            <!-- Contenido -->
+            <div class="p-6">
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-medium text-[#007934]">Comisión Ambiental</span>
+                <span class="text-xs text-gray-500">18 ENE</span>
+              </div>
+              
+              <h3 class="text-lg font-bold text-gray-900 mb-3 group-hover:text-[#8B1A1A] transition-colors">
+                Protección de bosques nativos ampliada
+              </h3>
+              
+              <p class="text-sm text-gray-600 mb-4 line-clamp-3">
+                Nueva legislación protege 2M hectáreas adicionales de bosques nativos contra deforestación ilegal.
+              </p>
+              
+              <NuxtLink 
+                to="/noticias/proteccion-bosques"
+                class="text-sm font-bold text-[#8B1A1A] hover:text-[#5C1010] transition-colors inline-flex items-center gap-1 group"
+              >
+                Leer más
+                <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                </svg>
+              </NuxtLink>
+            </div>
+          </div>
+
+          <!-- Noticia 4 -->
+          <div 
+            class="news-card opacity-0 translate-y-8"
+            :class="{ 'card-visible': isMoreNewsInView }"
+            :style="{ transitionDelay: '450ms' }"
+          >
+            <!-- Imagen -->
+            <div class="relative h-48 overflow-hidden">
+              <img 
+                src="https://images.unsplash.com/photo-1553877522-43269d4ea984?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+                alt="Tecnología"
+                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+              <div class="absolute top-4 left-4">
+                <span class="px-3 py-1 bg-gradient-to-r from-[#575756] to-[#3A3A39] text-white text-xs font-bold rounded-full shadow-lg">
+                  TECNOLOGÍA
+                </span>
+              </div>
+            </div>
+            
+            <!-- Contenido -->
+            <div class="p-6">
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-medium text-[#575756]">Innovación Digital</span>
+                <span class="text-xs text-gray-500">16 ENE</span>
+              </div>
+              
+              <h3 class="text-lg font-bold text-gray-900 mb-3 group-hover:text-[#8B1A1A] transition-colors">
+                Nueva plataforma digital del Senado
+              </h3>
+              
+              <p class="text-sm text-gray-600 mb-4 line-clamp-3">
+                Sistema permite seguimiento en tiempo real de sesiones y participación ciudadana en proyectos de ley.
+              </p>
+              
+              <NuxtLink 
+                to="/noticias/plataforma-digital"
+                class="text-sm font-bold text-[#8B1A1A] hover:text-[#5C1010] transition-colors inline-flex items-center gap-1 group"
+              >
+                Leer más
+                <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                </svg>
+              </NuxtLink>
+            </div>
+          </div>
+        </div>
+
+        <!-- Botón para más noticias -->
+        <div class="text-center mt-12">
+          <NuxtLink 
+            to="/noticias"
+            class="inline-flex items-center gap-3 px-8 py-3 bg-gradient-to-r from-[#8B1A1A] to-[#5C1010] text-white font-bold rounded-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 group"
+          >
+            <span>Ver todas las noticias</span>
+            <svg class="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+            </svg>
+          </NuxtLink>
+        </div>
+        <br>
+      </div>
+    </section>
+
+    <!-- Parte de  los senadores -->
+    <div class="container mx-auto px-10 ">
+      <SenateChamber
+        :show-footer="false"
+        @senator-selected="handleSenatorSelected"
+      >
+        <template #header>
+          <div class="custom-header">
+            <h2>Distribución del Senado 2024</h2>
+            <p>Selecciona un senador para ver detalles</p>
+          </div>
+        </template>
+      </SenateChamber>
+    </div>
+    <div class="container mx-auto px-10 ">
+      <MuseumSection
+      :dark-mode="darkMode"
+      @collection-selected="handleCollectionSelect"
+      @exhibition-selected="handleExhibitionSelect"
+      @program-registration="handleProgramRegistration"
+      @virtual-tour-started="handleVirtualTour"
+      @donation-clicked="handleDonationClick"
+    />
+
+    <!-- Botón de modo oscuro -->
+    <div class="theme-toggle">
+      <button @click="toggleDarkMode" class="theme-btn">
+        {{ darkMode ? '☀️ Modo Claro' : '🌙 Modo Oscuro' }}
+      </button>
+    </div>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
+import SenateChamber from '@/components/SenateChamber.vue'
+//museo
+import MuseumSection from '@/components/MuseumSection.vue'
+
+const darkMode = ref(false)
+
+const handleCollectionSelect = (collection) => {
+  console.log('Colección seleccionada desde la página:', collection)
+  // Aquí puedes mostrar un modal o navegar a una página de detalles
+}
+
+const handleExhibitionSelect = (exhibition) => {
+  console.log('Exhibición seleccionada desde la página:', exhibition)
+}
+
+const handleProgramRegistration = (program) => {
+  console.log('Registro a programa desde la página:', program)
+  // Aquí podrías abrir un formulario de registro
+}
+
+const handleVirtualTour = () => {
+  console.log('Tour virtual iniciado desde la página')
+}
+
+const handleDonationClick = () => {
+  console.log('Donación solicitada desde la página')
+  // Aquí podrías abrir un modal de donación
+}
+
+const toggleDarkMode = () => {
+  darkMode.value = !darkMode.value
+}
+
+// También puedes interactuar con el componente programáticamente
+const museumRef = ref()
+
+const updateMuseumData = () => {
+  if (museumRef.value) {
+    museumRef.value.updateMuseumData({
+      name: "Museo Actualizado del Senado",
+      // ... otros datos a actualizar
+    })
+  }
+}
+//fin museo
 
 // Refs para animaciones
 const heroSection = ref(null)
@@ -413,11 +723,14 @@ const heroButtons = ref(null)
 const scrollIndicator = ref(null)
 const newsSection = ref(null)
 const newsGrid = ref(null)
+const moreNewsSection = ref(null)
+const moreNewsGrid = ref(null)
 
 // Estados para controlar efectos
 const scrolled = ref(false)
 const scrollProgress = ref(0)
 const isInView = ref(false)
+const isMoreNewsInView = ref(false)
 
 // Controlador de scroll
 const handleScroll = () => {
@@ -453,8 +766,8 @@ onMounted(() => {
   window.addEventListener('scroll', handleScroll)
   handleScroll() // Ejecutar una vez al cargar
 
-  // Observer para la sección de noticias
-  const observer = new IntersectionObserver(
+  // Observer para la sección de noticias principales
+  const newsObserver = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
@@ -471,9 +784,6 @@ onMounted(() => {
               })
             }
           }, 800)
-        } else {
-          // Resetear animaciones si se sale de vista (opcional)
-          // isInView.value = false
         }
       })
     },
@@ -483,15 +793,49 @@ onMounted(() => {
     }
   )
 
+  // Observer para la sección de más noticias
+  const moreNewsObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          isMoreNewsInView.value = true
+          
+          // Animar las tarjetas de más noticias
+          setTimeout(() => {
+            if (moreNewsGrid.value) {
+              const cards = moreNewsGrid.value.children
+              Array.from(cards).forEach((card, index) => {
+                setTimeout(() => {
+                  card.classList.add('card-visible')
+                }, index * 150)
+              })
+            }
+          }, 300)
+        }
+      })
+    },
+    {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    }
+  )
+
   if (newsSection.value) {
-    observer.observe(newsSection.value)
+    newsObserver.observe(newsSection.value)
+  }
+
+  if (moreNewsSection.value) {
+    moreNewsObserver.observe(moreNewsSection.value)
   }
 
   // Limpiar eventos al desmontar
   onUnmounted(() => {
     window.removeEventListener('scroll', handleScroll)
     if (newsSection.value) {
-      observer.unobserve(newsSection.value)
+      newsObserver.unobserve(newsSection.value)
+    }
+    if (moreNewsSection.value) {
+      moreNewsObserver.unobserve(moreNewsSection.value)
     }
   })
 })
@@ -500,6 +844,37 @@ onMounted(() => {
 definePageMeta({
   layout: 'alter8'
 })
+
+const quickLinks = [
+  {
+    title: 'Legisladores',
+    description: 'Conoce a los representantes',
+    link: '/legisladores',
+    color: 'linear-gradient(135deg, #8B1A1A 0%, #5C1010 100%)',
+    icon: '👥'
+  },
+  {
+    title: 'Proyectos de Ley',
+    description: 'Seguimiento legislativo',
+    link: '/gestion-legislativa',
+    color: 'linear-gradient(135deg, #F9E076 0%, #D4AF37 100%)',
+    icon: '📋'
+  },
+  {
+    title: 'Participación',
+    description: 'Involúcrate activamente',
+    link: '/participacion',
+    color: 'linear-gradient(135deg, #007934 0%, #005C26 100%)',
+    icon: '💬'
+  },
+  {
+    title: 'Transparencia',
+    description: 'Información pública',
+    link: '/transparencia',
+    color: 'linear-gradient(135deg, #575756 0%, #3A3A39 100%)',
+    icon: '🔍'
+  }
+]
 </script>
 
 <style scoped>

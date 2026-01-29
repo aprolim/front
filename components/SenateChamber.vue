@@ -1,8 +1,12 @@
 <template>
   <div class="senate-chamber">
-    <!-- Header minimalista -->
-    <header class="chamber-header">
-      <!-- Solo espacio para header -->
+    <!-- Header (puede ser sobrescrito con slot) -->
+    <header v-if="showHeader" class="chamber-header">
+      <slot name="header">
+        <div class="default-header">
+          <h2>Hemiciclo del Senado</h2>
+        </div>
+      </slot>
     </header>
 
     <main class="main-content">
@@ -14,7 +18,7 @@
           <div class="hemicycle-svg-container">
             <svg 
               class="hemicycle-svg"
-              viewBox="100 200 1000 350"
+              :viewBox="viewBox"
               xmlns="http://www.w3.org/2000/svg"
               preserveAspectRatio="xMidYMid meet"
             >
@@ -27,7 +31,7 @@
                 <pattern id="hemicyclePattern" patternUnits="userSpaceOnUse" width="1000" height="350">
                   <!-- Imagen de fondo de un hemiciclo/parlamento -->
                   <image 
-                    href="https://images.unsplash.com/photo-1562602839-7f6d8c5c8c3b?w=1000&h=350&fit=crop&q=80&auto=format"
+                    :href="backgroundImage"
                     x="0" 
                     y="0" 
                     width="1000" 
@@ -59,8 +63,8 @@
                       'hovered': hoveredSeat?.id === seat.id
                     }]"
                   @click="selectSenator(seat)"
-                  @mouseenter="hoveredSeat = seat"
-                  @mouseleave="hoveredSeat = null"
+                  @mouseenter="handleMouseEnter(seat, $event)"
+                  @mouseleave="handleMouseLeave()"
                   filter="url(#circleShadow)"
                 />
                 
@@ -109,8 +113,8 @@
                       'hovered': hoveredSeat?.id === seat.id
                     }]"
                   @click="selectSenator(seat)"
-                  @mouseenter="hoveredSeat = seat"
-                  @mouseleave="hoveredSeat = null"
+                  @mouseenter="handleMouseEnter(seat, $event)"
+                  @mouseleave="handleMouseLeave()"
                   filter="url(#circleShadow)"
                 />
                 
@@ -160,8 +164,8 @@
                       'hovered': hoveredSeat?.id === seat.id
                     }]"
                   @click="selectSenator(seat)"
-                  @mouseenter="hoveredSeat = seat"
-                  @mouseleave="hoveredSeat = null"
+                  @mouseenter="handleMouseEnter(seat, $event)"
+                  @mouseleave="handleMouseLeave()"
                   filter="url(#circleShadow)"
                 />
                 
@@ -210,8 +214,8 @@
                       'hovered': hoveredSeat?.id === seat.id
                     }]"
                   @click="selectSenator(seat)"
-                  @mouseenter="hoveredSeat = seat"
-                  @mouseleave="hoveredSeat = null"
+                  @mouseenter="handleMouseEnter(seat, $event)"
+                  @mouseleave="handleMouseLeave()"
                   filter="url(#circleShadow)"
                 />
                 
@@ -277,7 +281,7 @@
         </div>
 
         <!-- Panel de controles a la derecha (en escritorio) -->
-        <div class="controls-panel-right">
+        <div v-if="showControls" class="controls-panel-right">
           <!-- Controles de vista -->
           <div class="controls-section">
             <h4>Controles</h4>
@@ -409,7 +413,7 @@
           </div>
 
           <!-- Comisiones -->
-          <div class="commissions-section" v-if="selectedSenator.commissions">
+          <div class="commissions-section" v-if="selectedSenator.commissions && selectedSenator.commissions.length > 0">
             <h4>🏛️ Comisiones</h4>
             <div class="commissions-list">
               <div 
@@ -422,6 +426,9 @@
               </div>
             </div>
           </div>
+
+          <!-- Slot para contenido adicional en el panel -->
+          <slot name="senator-details-extra" :senator="selectedSenator"></slot>
         </div>
 
         <div v-else class="empty-state">
@@ -431,29 +438,37 @@
           <div class="empty-tips">
             <p><strong>Curva Superior:</strong> 14 senadores</p>
             <p><strong>Curva Inferior:</strong> 22 senadores</p>
-            <p><strong>Total:</strong> 36 senadores de 3 partidos</p>
+            <p><strong>Total:</strong> {{ senators.length }} senadores de {{ parties.length }} partidos</p>
           </div>
         </div>
+
+        <!-- Slot para contenido adicional en el panel de información -->
+        <slot name="info-panel-extra"></slot>
       </div>
     </main>
 
-    <footer class="chamber-footer">
+    <!-- Footer (puede ser sobrescrito con slot) -->
+    <footer v-if="showFooter" class="chamber-footer">
       <div class="footer-content">
-        <div class="footer-info">
-          <p class="footer-sub">Visualización de Hemiciclo del Senado</p>
-        </div>
+        <slot name="footer">
+          <div class="footer-info">
+            <p class="footer-sub">Visualización de Hemiciclo del Senado</p>
+          </div>
+        </slot>
       </div>
     </footer>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, reactive, onMounted } from 'vue'
-definePageMeta({
-  layout: 'alter8'
-})
-// Datos de los 36 senadores actualizados con nombres completos
-const senatorsData = ref([
+import { ref, computed, reactive, onMounted, watch, nextTick } from 'vue'
+
+// Props para hacer el componente configurable
+const props = defineProps({
+  senators: {
+    type: Array,
+    required: false,
+    default: () => [
   // CURVA SUPERIOR: 14 senadores (1-14)
   // Lado izquierdo Curva Superior: 7 senadores (1-7)
   { id: 1, name: "María Eugenia Choque Quispe", seatNumber: 1, curve: 'upper', side: 'left',
@@ -646,6 +661,73 @@ const senatorsData = ref([
     department: "Cochabamba", age: 47,
     profession: "Abogada", period: "2020-2025"
   }
+
+    ]
+  },
+  parties: {
+    type: Array,
+    default: () => [
+      { 
+        id: 'MAS-IPSP', 
+        name: 'Movimiento al Socialismo', 
+        shortName: 'MAS', 
+        symbol: '🔴',
+        color: '#dc2626', 
+        count: 21,
+        position: 'Izquierda del pasillo'
+      },
+      { 
+        id: 'Comunidad Ciudadana', 
+        name: 'Comunidad Ciudadana', 
+        shortName: 'CC', 
+        symbol: '🔵',
+        color: '#2563eb', 
+        count: 11,
+        position: 'Derecha del pasillo'
+      },
+      { 
+        id: 'Creemos', 
+        name: 'Creemos', 
+        shortName: 'CREEMOS', 
+        symbol: '🟠',
+        color: '#f97316', 
+        count: 4,
+        position: 'Derecha del pasillo'
+      }
+    ]
+  },
+  showHeader: {
+    type: Boolean,
+    default: true
+  },
+  showFooter: {
+    type: Boolean,
+    default: true
+  },
+  showControls: {
+    type: Boolean,
+    default: true
+  },
+  initialShowLabels: {
+    type: Boolean,
+    default: true
+  },
+  backgroundImage: {
+    type: String,
+    default: 'https://images.unsplash.com/photo-1562602839-7f6d8c5c8c3b?w=1000&h=350&fit=crop&q=80&auto=format'
+  },
+  viewBox: {
+    type: String,
+    default: '100 200 1000 350'
+  }
+})
+
+// Emits para eventos
+const emit = defineEmits([
+  'senator-selected',
+  'senator-deselected',
+  'party-filter-changed',
+  'view-reset'
 ])
 
 // Estado reactivo
@@ -653,54 +735,31 @@ const selectedSenator = ref(null)
 const hoveredSeat = ref(null)
 const searchQuery = ref('')
 const activeFilters = ref([])
-const highlightedParty = ref(null)
-const showLabels = ref(true)
+const showLabels = ref(props.initialShowLabels)
 const tooltipStyle = reactive({ left: '0px', top: '0px' })
 
-// Partidos políticos
-const parties = computed(() => [
-  { 
-    id: 'MAS-IPSP', 
-    name: 'Movimiento al Socialismo', 
-    shortName: 'MAS', 
-    symbol: '🔴',
-    color: '#dc2626', 
-    count: 21,
-    position: 'Izquierda del pasillo'
-  },
-  { 
-    id: 'Comunidad Ciudadana', 
-    name: 'Comunidad Ciudadana', 
-    shortName: 'CC', 
-    symbol: '🔵',
-    color: '#2563eb', 
-    count: 11,
-    position: 'Derecha del pasillo'
-  },
-  { 
-    id: 'Creemos', 
-    name: 'Creemos', 
-    shortName: 'CREEMOS', 
-    symbol: '🟠',
-    color: '#f97316', 
-    count: 4,
-    position: 'Derecha del pasillo'
-  }
-])
+// Referencia local a los datos
+const senatorsData = ref([...props.senators])
+
+// Watcher para cuando cambien los props de senators
+watch(() => props.senators, (newSenators) => {
+  senatorsData.value = [...newSenators]
+  // Regenerar posiciones cuando cambien los datos
+  generateCurvedPositions()
+}, { deep: true })
+
+// Posiciones de los asientos
+const positions = reactive({
+  upperCurveLeftSeats: [],
+  upperCurveRightSeats: [],
+  lowerCurveLeftSeats: [],
+  lowerCurveRightSeats: []
+})
 
 // Función para dividir nombres en partes para mostrar en columna
 const getNameParts = (fullName) => {
   const parts = fullName.split(' ')
-//   if (parts.length <= 2) {
-//     return [fullName]
-//   } else if (parts.length === 3) {
-//     // Para "Grover Plaza Quiroga" -> ["Grover", "Plaza", "Quiroga"]
-//     return parts
-//   } else {
-//     // Para más de 3 partes, agrupar los apellidos
-//     return [parts[0], parts.slice(1).join(' ')]
-//   }
-    return parts
+  return parts
 }
 
 // Función para obtener iniciales
@@ -716,10 +775,11 @@ const formatInitials = (fullName) => {
 
 // Configuración de POSICIONES CON AJUSTES ESPECÍFICOS
 const generateCurvedPositions = () => {
-  const upperCurveLeftSeats = []   // 7 senadores
-  const upperCurveRightSeats = []  // 7 senadores
-  const lowerCurveLeftSeats = []   // 11 senadores
-  const lowerCurveRightSeats = []  // 11 senadores
+  // Reiniciar arrays
+  positions.upperCurveLeftSeats = []
+  positions.upperCurveRightSeats = []
+  positions.lowerCurveLeftSeats = []
+  positions.lowerCurveRightSeats = []
   
   // CURVA SUPERIOR CON AJUSTES ESPECÍFICOS
   // Lado izquierdo Curva Superior - AJUSTES: 1 más arriba, 7 más abajo
@@ -779,9 +839,11 @@ const generateCurvedPositions = () => {
   for (let i = 0; i < 7; i++) {
     let senator = senatorsData.value.find(s => s.seatNumber === i + 1)
     if (senator && upperLeftPositions[i]) {
-      senator.x = upperLeftPositions[i].x
-      senator.y = upperLeftPositions[i].y
-      upperCurveLeftSeats.push(senator)
+      // Crear copia para no mutar el prop original
+      const senatorCopy = { ...senator }
+      senatorCopy.x = upperLeftPositions[i].x
+      senatorCopy.y = upperLeftPositions[i].y
+      positions.upperCurveLeftSeats.push(senatorCopy)
     }
   }
   
@@ -789,9 +851,10 @@ const generateCurvedPositions = () => {
   for (let i = 0; i < 7; i++) {
     let senator = senatorsData.value.find(s => s.seatNumber === i + 8)
     if (senator && upperRightPositions[i]) {
-      senator.x = upperRightPositions[i].x
-      senator.y = upperRightPositions[i].y
-      upperCurveRightSeats.push(senator)
+      const senatorCopy = { ...senator }
+      senatorCopy.x = upperRightPositions[i].x
+      senatorCopy.y = upperRightPositions[i].y
+      positions.upperCurveRightSeats.push(senatorCopy)
     }
   }
   
@@ -799,9 +862,10 @@ const generateCurvedPositions = () => {
   for (let i = 0; i < 11; i++) {
     let senator = senatorsData.value.find(s => s.seatNumber === i + 15)
     if (senator && lowerLeftPositions[i]) {
-      senator.x = lowerLeftPositions[i].x
-      senator.y = lowerLeftPositions[i].y
-      lowerCurveLeftSeats.push(senator)
+      const senatorCopy = { ...senator }
+      senatorCopy.x = lowerLeftPositions[i].x
+      senatorCopy.y = lowerLeftPositions[i].y
+      positions.lowerCurveLeftSeats.push(senatorCopy)
     }
   }
   
@@ -809,42 +873,39 @@ const generateCurvedPositions = () => {
   for (let i = 0; i < 11; i++) {
     let senator = senatorsData.value.find(s => s.seatNumber === i + 26)
     if (senator && lowerRightPositions[i]) {
-      senator.x = lowerRightPositions[i].x
-      senator.y = lowerRightPositions[i].y
-      lowerCurveRightSeats.push(senator)
+      const senatorCopy = { ...senator }
+      senatorCopy.x = lowerRightPositions[i].x
+      senatorCopy.y = lowerRightPositions[i].y
+      positions.lowerCurveRightSeats.push(senatorCopy)
     }
   }
-  
-  return { upperCurveLeftSeats, upperCurveRightSeats, lowerCurveLeftSeats, lowerCurveRightSeats }
 }
-
-const { upperCurveLeftSeats, upperCurveRightSeats, lowerCurveLeftSeats, lowerCurveRightSeats } = generateCurvedPositions()
 
 // Computed properties para datos filtrados
 const filteredUpperCurveLeftSeats = computed(() => {
-  if (activeFilters.value.length === 0) return upperCurveLeftSeats
-  return upperCurveLeftSeats.filter(seat => activeFilters.value.includes(seat.party))
+  if (activeFilters.value.length === 0) return positions.upperCurveLeftSeats
+  return positions.upperCurveLeftSeats.filter(seat => activeFilters.value.includes(seat.party))
 })
 
 const filteredUpperCurveRightSeats = computed(() => {
-  if (activeFilters.value.length === 0) return upperCurveRightSeats
-  return upperCurveRightSeats.filter(seat => activeFilters.value.includes(seat.party))
+  if (activeFilters.value.length === 0) return positions.upperCurveRightSeats
+  return positions.upperCurveRightSeats.filter(seat => activeFilters.value.includes(seat.party))
 })
 
 const filteredLowerCurveLeftSeats = computed(() => {
-  if (activeFilters.value.length === 0) return lowerCurveLeftSeats
-  return lowerCurveLeftSeats.filter(seat => activeFilters.value.includes(seat.party))
+  if (activeFilters.value.length === 0) return positions.lowerCurveLeftSeats
+  return positions.lowerCurveLeftSeats.filter(seat => activeFilters.value.includes(seat.party))
 })
 
 const filteredLowerCurveRightSeats = computed(() => {
-  if (activeFilters.value.length === 0) return lowerCurveRightSeats
-  return lowerCurveRightSeats.filter(seat => activeFilters.value.includes(seat.party))
+  if (activeFilters.value.length === 0) return positions.lowerCurveRightSeats
+  return positions.lowerCurveRightSeats.filter(seat => activeFilters.value.includes(seat.party))
 })
 
 // Obtener conteo filtrado para la leyenda
 const getFilteredCount = (partyId) => {
   if (activeFilters.value.length === 0) {
-    return parties.value.find(p => p.id === partyId)?.count || 0
+    return props.parties.find(p => p.id === partyId)?.count || senatorsData.value.filter(s => s.party === partyId).length
   }
   if (activeFilters.value.includes(partyId)) {
     return senatorsData.value.filter(senator => senator.party === partyId).length
@@ -852,15 +913,17 @@ const getFilteredCount = (partyId) => {
   return 0
 }
 
-// Métodos (se mantienen igual)
+// Métodos
 const selectSenator = (senator) => {
   selectedSenator.value = senator
   hoveredSeat.value = null
   updateTooltipPosition(senator)
+  emit('senator-selected', senator)
 }
 
 const deselectSenator = () => {
   selectedSenator.value = null
+  emit('senator-deselected')
 }
 
 const getSeatColor = (seat) => {
@@ -895,21 +958,14 @@ const togglePartyFilter = (partyId) => {
   } else {
     activeFilters.value = [partyId] // Solo un partido a la vez
   }
-}
-
-const highlightParty = (partyId) => {
-  if (highlightedParty.value === partyId) {
-    highlightedParty.value = null
-  } else {
-    highlightedParty.value = partyId
-  }
+  emit('party-filter-changed', activeFilters.value)
 }
 
 const resetView = () => {
   selectedSenator.value = null
   activeFilters.value = []
-  highlightedParty.value = null
   searchQuery.value = ''
+  emit('view-reset')
 }
 
 const toggleLabels = () => {
@@ -917,21 +973,32 @@ const toggleLabels = () => {
 }
 
 const updateTooltipPosition = (seat) => {
-  const container = document.querySelector('.hemicycle-svg-container')
-  if (!container || !seat) return
-  
-  const svg = container.querySelector('svg')
-  const svgRect = svg.getBoundingClientRect()
-  const containerRect = container.getBoundingClientRect()
-  
-  const xPercent = (seat.x / 1200)
-  const yPercent = (seat.y / 800)
-  
-  const tooltipX = containerRect.left + (xPercent * svgRect.width)
-  const tooltipY = containerRect.top + (yPercent * svgRect.height)
-  
-  tooltipStyle.left = `${tooltipX - containerRect.left + 30}px`
-  tooltipStyle.top = `${tooltipY - containerRect.top - 100}px`
+  nextTick(() => {
+    const container = document.querySelector('.hemicycle-svg-container')
+    if (!container || !seat) return
+    
+    const svg = container.querySelector('svg')
+    const svgRect = svg.getBoundingClientRect()
+    const containerRect = container.getBoundingClientRect()
+    
+    const xPercent = (seat.x / 1200)
+    const yPercent = (seat.y / 800)
+    
+    const tooltipX = containerRect.left + (xPercent * svgRect.width)
+    const tooltipY = containerRect.top + (yPercent * svgRect.height)
+    
+    tooltipStyle.left = `${tooltipX - containerRect.left + 30}px`
+    tooltipStyle.top = `${tooltipY - containerRect.top - 100}px`
+  })
+}
+
+const handleMouseEnter = (seat, event) => {
+  hoveredSeat.value = seat
+  updateHoverTooltip(event)
+}
+
+const handleMouseLeave = () => {
+  hoveredSeat.value = null
 }
 
 const updateHoverTooltip = (event) => {
@@ -945,7 +1012,23 @@ const updateHoverTooltip = (event) => {
   }
 }
 
+// Método para actualizar datos externamente
+const updateSenators = (newSenators) => {
+  senatorsData.value = [...newSenators]
+  generateCurvedPositions()
+}
+
+// Exponer métodos al padre si es necesario
+defineExpose({
+  resetView,
+  updateSenators,
+  selectSenator,
+  deselectSenator
+})
+
+// Inicialización
 onMounted(() => {
+  generateCurvedPositions()
   const container = document.querySelector('.hemicycle-svg-container')
   if (container) {
     container.addEventListener('mousemove', updateHoverTooltip)
@@ -963,8 +1046,18 @@ onMounted(() => {
 
 /* Header minimalista */
 .chamber-header {
-  height: 20px;
+  height: auto;
   margin-bottom: 0.5rem;
+  padding: 1rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.default-header h2 {
+  margin: 0;
+  color: #1f2937;
+  font-size: 1.5rem;
 }
 
 /* Contenedor principal con flexbox */
