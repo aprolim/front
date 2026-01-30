@@ -636,7 +636,6 @@
     <div class="container mx-auto px-10 ">
       <SenateChamber
         :show-footer="false"
-        @senator-selected="handleSenatorSelected"
       >
         <template #header>
           <div class="custom-header">
@@ -647,7 +646,7 @@
       </SenateChamber>
     </div>
     <div class="container mx-auto px-10 ">
-      <MuseumSection
+      <MuseumSectionMinimal
       :dark-mode="darkMode"
       @collection-selected="handleCollectionSelect"
       @exhibition-selected="handleExhibitionSelect"
@@ -670,7 +669,7 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import SenateChamber from '@/components/SenateChamber.vue'
 //museo
-import MuseumSection from '@/components/MuseumSection.vue'
+import MuseumSectionMinimal from '@/components/MuseumSectionMinimal.vue'
 
 const darkMode = ref(false)
 
