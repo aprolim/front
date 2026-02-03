@@ -29,7 +29,15 @@
               <div class="mission-card">
                 <div class="mv-header" style="border-color: #E03636;">
                   <div class="mv-icon" style="background-color: #E03636;">🎯</div>
-                  <h4>Misión</h4>
+                  <NuxtLink 
+                    to="/la-institucion" 
+                    class="px-8 py-4 bg-white/10 backdrop-blur-sm text-[#8B1A1A] font-semibold rounded-xl hover:bg-white/20 transition-all duration-300 hover:-translate-y-1 flex items-center gap-3 group"
+                  >
+                      <div class="text-xs md:text-sm" >Mas info aqui</div>
+                      <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                  </NuxtLink>
                 </div>
               </div>
             </div>

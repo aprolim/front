@@ -655,12 +655,6 @@
       @donation-clicked="handleDonationClick"
     />
 
-    <!-- Botón de modo oscuro -->
-    <div class="theme-toggle">
-      <button @click="toggleDarkMode" class="theme-btn">
-        {{ darkMode ? '☀️ Modo Claro' : '🌙 Modo Oscuro' }}
-      </button>
-    </div>
     </div>
   </div>
 </template>

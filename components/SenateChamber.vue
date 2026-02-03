@@ -784,56 +784,54 @@ const generateCurvedPositions = () => {
   // CURVA SUPERIOR CON AJUSTES ESPECÍFICOS
   // Lado izquierdo Curva Superior - AJUSTES: 1 más arriba, 7 más abajo
   const upperLeftPositions = [
-    {x: 250, y: 265},  // Asiento 1: MÁS ARRIBA (265)
-    {x: 300, y: 285},
-    {x: 350, y: 303},
-    {x: 400, y: 320},  // Centro: mantiene
-    {x: 450, y: 331},
-    {x: 500, y: 334},
-    {x: 550, y: 335}   // Asiento 7: MÁS ABAJO (285)
-  ]
-  
-  // Lado derecho Curva Superior - AJUSTES: 14 más arriba, 8 más abajo
-  const upperRightPositions = [
-    {x: 650, y: 335},  // Asiento 8: MÁS ABAJO (285)
-    {x: 700, y: 334},
-    {x: 750, y: 331},
-    {x: 800, y: 320},  // Centro: mantiene
-    {x: 850, y: 303},
-    {x: 900, y: 285},
-    {x: 950, y: 265}   // Asiento 14: MÁS ARRIBA (265)
-  ]
+  { x: 400, y: 300 }, // -180°
+  { x: 405, y: 334 }, // -166.6°
+  { x: 421, y: 366 }, // -153.3°
+  { x: 445, y: 394 }, // -140°
+  { x: 477, y: 416 }, // -126.6°
+  { x: 513, y: 430 }, // -113.3°
+  { x: 553, y: 435 }  // -100°
+];
+
+const upperRightPositions = [
+  { x: 647, y: 435 }, // -80°
+  { x: 687, y: 430 }, // -66.6°
+  { x: 723, y: 416 }, // -53.3°
+  { x: 755, y: 394 }, // -40°
+  { x: 779, y: 366 }, // -26.6°
+  { x: 795, y: 334 }, // -13.3°
+  { x: 800, y: 300 }  // 0°
+];
   
   // CURVA INFERIOR CON AJUSTES ESPECÍFICOS
   // Lado izquierdo Curva Inferior - AJUSTES: 15 más arriba, 25 más abajo
   const lowerLeftPositions = [
-    {x: 160, y: 410},  // Asiento 15 - Similar curvatura a asiento 1
-    {x: 200, y: 435},  // 16 cercano entre sí
-    {x: 240, y: 460},
-    {x: 280, y: 478},
-    {x: 320, y: 490},
-    {x: 360, y: 500},  // 20 - menos pronunciado
-    {x: 400, y: 510},  // 21 suave
-    {x: 440, y: 515},  // 22 a asiento 5-6
-    {x: 480, y: 518},  // 23 descenso
-    {x: 520, y: 520},  // 24 suave
-    {x: 560, y: 521}   // Asiento 25: MÁS ABAJO (545)
-  ]
-  
-  // Lado derecho Curva Inferior - AJUSTES: 36 más arriba, 26 más abajo
-  const lowerRightPositions = [
-    {x: 640, y: 521},  // Asiento 26 - Similar curvatura a asiento 8
-    {x: 680, y: 520},  // Más cercano entre sí
-    {x: 720, y: 518},
-    {x: 760, y: 515},
-    {x: 800, y: 510},  // Similar a asiento 11-12
-    {x: 840, y: 500},  // Centro - menos pronunciado
-    {x: 880, y: 490},
-    {x: 920, y: 478},
-    {x: 960, y: 460},
-    {x: 1000, y: 435}, // Más suave
-    {x: 1040, y: 410}  // Asiento 36: MÁS ARRIBA (465)
-  ]
+    { x: 280, y: 250 }, // -180°
+    { x: 283, y: 300 }, // -171°
+    { x: 292, y: 349 }, // -162°
+    { x: 307, y: 395 }, // -153°
+    { x: 328, y: 438 }, // -144°
+    { x: 355, y: 477 }, // -135°
+    { x: 388, y: 511 }, // -126°
+    { x: 425, y: 538 }, // -117°
+    { x: 467, y: 559 }, // -108°
+    { x: 512, y: 571 }, // -99°
+    { x: 560, y: 575 }  // -90° (Justo debajo del centro superior)
+  ];
+
+const lowerRightPositions = [
+  { x: 640, y: 575 }, // -90°
+  { x: 688, y: 571 },
+  { x: 733, y: 559 },
+  { x: 775, y: 538 },
+  { x: 812, y: 511 },
+  { x: 845, y: 477 },
+  { x: 872, y: 438 },
+  { x: 893, y: 395 },
+  { x: 908, y: 349 },
+  { x: 917, y: 300 },
+  { x: 920, y: 250 }  // 0°
+];
   
   // Asignar posiciones Curva Superior Izquierda
   for (let i = 0; i < 7; i++) {
