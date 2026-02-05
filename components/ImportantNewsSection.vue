@@ -101,7 +101,7 @@ const tabs = [
 
 // Estilo para pestaña activa con los colores especificados
 const activeTabStyle = computed(() => ({
-  background: '#E03636',
+  background: '#706F6F',
   color: 'white'
 }));
 
@@ -211,14 +211,14 @@ const gestionLinks = [
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  border: 1px solid #e0e0e0;
+  border: 1px solid black;
 }
 
 .tabs-header {
   display: flex;
   background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
   padding: 0;
-  border-bottom: 2px solid #E4D294;
+  border-bottom: 2px solid black;
 }
 
 .tab-button {
@@ -228,9 +228,9 @@ const gestionLinks = [
   justify-content: center;
   gap: 12px;
   padding: 22px 24px;
-  background: #E4D294;
+  background: #000;
   border: none;
-  color: #333;
+  color: #fff;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
@@ -240,8 +240,7 @@ const gestionLinks = [
 }
 
 .tab-button:hover {
-  background: rgba(224, 54, 54, 0.08);
-  color: #E03636;
+  background: #575756;
 }
 
 .tab-button.active {

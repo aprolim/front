@@ -1,4 +1,4 @@
-<!-- pages/index.vue - VERSIÓN REFACTORIZADA -->
+<!-- pages/index.vue - VERSIÓN COMPLETA CON TRANSICIONES -->
 <template>
   <div class="min-h-screen">
     <!-- Hero Section -->
@@ -8,7 +8,6 @@
       ref="heroSection"
       @mouseleave="resumeCarousel"
     >
-    <!-- @mouseenter="pauseCarousel" -->
       <!-- Carrusel como componente -->
       <HeroCarousel
         :scrolled="scrolled"
@@ -18,6 +17,7 @@
 
       <!-- Contenido del hero -->
       <HeroContent :scrolled="scrolled" />
+      
 
       <!-- Indicadores del carrusel -->
       <div v-if="!scrolled" class="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 flex gap-2">
@@ -46,10 +46,26 @@
       <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#E03636]/30 to-transparent"></div>
     </div>
 
-    <ImportantNewsSection />
-    <MoreNewsGrid />
+    <!-- Secciones con transiciones de scroll -->
+    <div 
+      ref="importantNewsRef" 
+      class="scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out"
+    >
+      <ImportantNewsSection />
+    </div>
+    
+    <div 
+      ref="moreNewsRef" 
+      class="scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out delay-200"
+    >
+      <MoreNewsGrid />
+    </div>
+    
     <!-- Parte de los senadores -->
-    <div class="container mx-auto px-10 ">
+    <div 
+      ref="senateRef" 
+      class="container mx-auto px-10 scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out delay-300"
+    >
       <SenateChamber
         :show-footer="false"
       >
@@ -63,7 +79,10 @@
     </div>
     
     <!-- Museo -->
-    <div class="container mx-auto px-10 ">
+    <div 
+      ref="museumRef" 
+      class="container mx-auto px-10 scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out delay-400"
+    >
       <MuseumSectionMinimal
         :dark-mode="darkMode"
         @collection-selected="handleCollectionSelect"
@@ -77,7 +96,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, nextTick } from 'vue'
 import { useCarousel } from '@/composables/useCarousel'
 import { useScrollEffects } from '@/composables/useScrollEffects'
 import { useIntersection } from '@/composables/useIntersection'
@@ -90,6 +109,7 @@ import SectionHeader from '@/components/UI/SectionHeader.vue'
 import NewsCard from '@/components/News/NewsCard.vue'
 import ImportantNewsSection from '@/components/ImportantNewsSection.vue'
 import MoreNewsGrid from '@/components/MoreNewsGrid.vue'
+
 // Media para el hero
 const heroMedia = ref([
   {
@@ -150,6 +170,15 @@ const newsGrid = ref(null)
 const moreNewsSection = ref(null)
 const moreNewsGrid = ref(null)
 
+// Refs para las secciones con transiciones
+const importantNewsRef = ref(null)
+const moreNewsRef = ref(null)
+const senateRef = ref(null)
+const museumRef = ref(null)
+
+// Observer para transiciones de scroll
+let scrollObserver = null
+
 // Handlers del museo
 const handleCollectionSelect = (collection) => {
   console.log('Colección seleccionada:', collection)
@@ -171,6 +200,39 @@ const handleDonationClick = () => {
   console.log('Donación solicitada')
 }
 
+// Inicializar observador para transiciones
+const initScrollObserver = () => {
+  scrollObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-in')
+          // Opcional: dejar de observar después de animar para mejor rendimiento
+          scrollObserver.unobserve(entry.target)
+        }
+      })
+    },
+    {
+      threshold: 0.15,
+      rootMargin: '0px 0px -30px 0px'
+    }
+  )
+  
+  // Observar todas las secciones que necesitan animación
+  const sections = [
+    importantNewsRef.value,
+    moreNewsRef.value,
+    senateRef.value,
+    museumRef.value
+  ]
+  
+  sections.forEach(section => {
+    if (section) {
+      scrollObserver.observe(section)
+    }
+  })
+}
+
 onMounted(() => {
   // Iniciar carrusel
   startCarousel()
@@ -178,7 +240,7 @@ onMounted(() => {
   // Iniciar listeners de scroll
   initScrollListener()
   
-  // Asignar refs para los observers
+  // Asignar refs para los observers existentes
   if (newsSectionRef.value) {
     newsSectionRef.value = newsSection.value
   }
@@ -186,10 +248,20 @@ onMounted(() => {
   if (moreNewsSectionRef.value) {
     moreNewsSectionRef.value = moreNewsSection.value
   }
+  
+  // Inicializar observer de transiciones después de que el DOM esté listo
+  nextTick(() => {
+    initScrollObserver()
+  })
 })
 
 onUnmounted(() => {
   removeScrollListener()
+  
+  // Limpiar observer de transiciones
+  if (scrollObserver) {
+    scrollObserver.disconnect()
+  }
 })
 
 // Metadatos
@@ -233,5 +305,86 @@ definePageMeta({
 
 .animate-progress {
   animation: progressBar 1.5s ease-out forwards;
+}
+</style>
+
+<style>
+/* Estilos globales para las transiciones de scroll */
+.scroll-section {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+.scroll-section.animate-in {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+/* Transiciones escalonadas para elementos hijos dentro de las secciones */
+.scroll-section.animate-in > * {
+  animation: fadeInUpChild 0.6s ease-out forwards;
+}
+
+.scroll-section.animate-in > *:nth-child(1) { animation-delay: 0.1s; }
+.scroll-section.animate-in > *:nth-child(2) { animation-delay: 0.2s; }
+.scroll-section.animate-in > *:nth-child(3) { animation-delay: 0.3s; }
+.scroll-section.animate-in > *:nth-child(4) { animation-delay: 0.4s; }
+.scroll-section.animate-in > *:nth-child(5) { animation-delay: 0.5s; }
+.scroll-section.animate-in > *:nth-child(6) { animation-delay: 0.6s; }
+
+@keyframes fadeInUpChild {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Efecto hover para cards dentro de secciones animadas */
+.scroll-section.animate-in .news-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.scroll-section.animate-in .news-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Transición suave para el scroll global */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Mejoras de rendimiento y accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+  .scroll-section,
+  .scroll-section.animate-in,
+  .scroll-section.animate-in > * {
+    transition: none !important;
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  
+  .delay-200,
+  .delay-300,
+  .delay-400 {
+    animation-delay: 0s !important;
+  }
+}
+
+/* Optimización para dispositivos móviles */
+@media (max-width: 640px) {
+  .scroll-section {
+    transition-duration: 600ms !important;
+  }
+  
+  .scroll-section.animate-in > * {
+    animation-duration: 0.4s !important;
+  }
 }
 </style>

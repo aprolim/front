@@ -26,43 +26,29 @@
         <slot name="news">
           <!-- Noticia 1 por defecto -->
           <div 
-            class="news-card opacity-0 translate-y-8"
+            class="news-card relative opacity-0 translate-y-8 overflow-hidden rounded-2xl group"
             :class="{ 'card-visible': isInView }"
             :style="{ transitionDelay: '0ms' }"
           >
-            <!-- Imagen -->
-            <div class="relative h-48 overflow-hidden">
+            <div class="absolute inset-0 z-0">
               <img 
                 src="https://images.unsplash.com/photo-1589652717521-10c0d092dea9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
                 alt="Sesión parlamentaria"
-                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                class="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-110"
               />
-              <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-              <!-- <div class="absolute top-4 left-4">
-                <span class="px-3 py-1 bg-gradient-to-r from-[#8B1A1A] to-[#5C1010] text-white text-xs font-bold rounded-full shadow-lg">
-                  EDUCACIÓN
-                </span>
-              </div> -->
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
             </div>
+
+            <div class="relative h-64"></div>
             
-            <!-- Contenido -->
-            <div class="p-6">
-              <div class="flex items-center justify-between mb-3">
-                <span class="text-xs font-medium text-[#8B1A1A]">Comisión de Educación</span>
-                <span class="text-xs text-gray-500">22 ENE</span>
-              </div>
-              
-              <h3 class="text-lg font-bold text-gray-900 mb-3 group-hover:text-[#8B1A1A] transition-colors">
+            <div class="p-6 bg-red-900/80 backdrop-blur-md -mt-16 relative z-10 rounded-xl mx-4 mb-4 shadow-2xl border border-white/10">
+              <h3 class="text-lg font-bold text-white mb-3 group-hover:text-red-200 transition-colors">
                 Reforma Educativa para áreas rurales aprobada
               </h3>
               
-              <p class="text-sm text-gray-600 mb-4 line-clamp-3">
-                Nueva ley busca mejorar la calidad educativa en comunidades rurales con programas de capacitación docente.
-              </p>
-              
               <NuxtLink 
                 :to="newsLink1"
-                class="text-sm font-bold text-[#E03636] hover:text-[#5C1010] transition-colors inline-flex items-center gap-1 group"
+                class="text-sm font-bold text-white hover:text-red-100 transition-colors inline-flex items-center gap-1"
               >
                 Leer más
                 <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -74,43 +60,29 @@
 
           <!-- Noticia 2 por defecto -->
           <div 
-            class="news-card opacity-0 translate-y-8"
+            class="news-card relative group opacity-0 translate-y-8 overflow-hidden rounded-2xl shadow-xl"
             :class="{ 'card-visible': isInView }"
             :style="{ transitionDelay: '150ms' }"
           >
-            <!-- Imagen -->
-            <div class="relative h-48 overflow-hidden">
+            <div class="absolute inset-0 z-0">
               <img 
                 src="https://online.udla.edu.ec/images/estudiantes-maestria-salud_700w.webp"
                 alt="Salud pública"
-                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                class="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-110"
               />
-              <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-              <!-- <div class="absolute top-4 left-4">
-                <span class="px-3 py-1 bg-gradient-to-r from-[#F9E076] to-[#D4AF37] text-gray-900 text-xs font-bold rounded-full shadow-lg">
-                  SALUDs
-                </span>
-              </div> -->
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
             </div>
+
+            <div class="relative h-64"></div>
             
-            <!-- Contenido -->
-            <div class="p-6">
-              <div class="flex items-center justify-between mb-3">
-                <span class="text-xs font-medium text-[#D4AF37]">Comisión de Salud</span>
-                <span class="text-xs text-gray-500">20 ENE</span>
-              </div>
-              
-              <h3 class="text-lg font-bold text-gray-900 mb-3 group-hover:text-[#8B1A1A] transition-colors">
+            <div class="p-6 bg-red-800/80 backdrop-blur-md -mt-16 relative z-10 rounded-xl mx-4 mb-4 shadow-2xl border border-white/10">
+              <h3 class="text-lg font-bold text-white mb-3 group-hover:text-red-200 transition-colors">
                 Plan Nacional de Hospitales 2024-2026
               </h3>
               
-              <p class="text-sm text-gray-600 mb-4 line-clamp-3">
-                Inversión de $500M para modernizar 45 hospitales públicos en todo el territorio nacional.
-              </p>
-              
               <NuxtLink 
                 :to="newsLink2"
-                class="text-sm font-bold text-[#E03636] hover:text-[#5C1010] transition-colors inline-flex items-center gap-1 group"
+                class="text-sm font-bold text-white hover:text-red-100 transition-colors inline-flex items-center gap-1"
               >
                 Leer más
                 <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -122,43 +94,29 @@
 
           <!-- Noticia 3 por defecto -->
           <div 
-            class="news-card opacity-0 translate-y-8"
+            class="news-card relative group opacity-0 translate-y-8 overflow-hidden rounded-2xl shadow-xl"
             :class="{ 'card-visible': isInView }"
             :style="{ transitionDelay: '300ms' }"
           >
-            <!-- Imagen -->
-            <div class="relative h-48 overflow-hidden">
+            <div class="absolute inset-0 z-0">
               <img 
                 src="https://images.unsplash.com/photo-1589578527966-fdac0f44566c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
                 alt="Medio ambiente"
-                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                class="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-110"
               />
-              <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-              <!-- <div class="absolute top-4 left-4">
-                <span class="px-3 py-1 bg-gradient-to-r from-[#007934] to-[#005C26] text-white text-xs font-bold rounded-full shadow-lg">
-                  MEDIO AMBIENTE
-                </span>
-              </div> -->
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
             </div>
+
+            <div class="relative h-64"></div>
             
-            <!-- Contenido -->
-            <div class="p-6">
-              <div class="flex items-center justify-between mb-3">
-                <span class="text-xs font-medium text-[#007934]">Comisión Ambiental</span>
-                <span class="text-xs text-gray-500">18 ENE</span>
-              </div>
-              
-              <h3 class="text-lg font-bold text-gray-900 mb-3 group-hover:text-[#8B1A1A] transition-colors">
+            <div class="p-6 bg-red-800/80 backdrop-blur-md -mt-16 relative z-10 rounded-xl mx-4 mb-4 shadow-2xl border border-white/10">
+              <h3 class="text-lg font-bold text-white mb-3 group-hover:text-red-200 transition-colors">
                 Protección de bosques nativos ampliada
               </h3>
               
-              <p class="text-sm text-gray-600 mb-4 line-clamp-3">
-                Nueva legislación protege 2M hectáreas adicionales de bosques nativos contra deforestación ilegal.
-              </p>
-              
               <NuxtLink 
                 :to="newsLink3"
-                class="text-sm font-bold text-[#E03636] hover:text-[#5C1010] transition-colors inline-flex items-center gap-1 group"
+                class="text-sm font-bold text-white hover:text-red-100 transition-colors inline-flex items-center gap-1"
               >
                 Leer más
                 <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -170,43 +128,29 @@
 
           <!-- Noticia 4 por defecto -->
           <div 
-            class="news-card opacity-0 translate-y-8"
+            class="news-card relative group opacity-0 translate-y-8 overflow-hidden rounded-2xl shadow-xl"
             :class="{ 'card-visible': isInView }"
             :style="{ transitionDelay: '450ms' }"
           >
-            <!-- Imagen -->
-            <div class="relative h-48 overflow-hidden">
+            <div class="absolute inset-0 z-0">
               <img 
                 src="https://images.unsplash.com/photo-1553877522-43269d4ea984?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
                 alt="Tecnología"
-                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                class="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-110"
               />
-              <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-              <!-- <div class="absolute top-4 left-4">
-                <span class="px-3 py-1 bg-gradient-to-r from-[#575756] to-[#3A3A39] text-white text-xs font-bold rounded-full shadow-lg">
-                  TECNOLOGÍA
-                </span>
-              </div> -->
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
             </div>
+
+            <div class="relative h-64"></div>
             
-            <!-- Contenido -->
-            <div class="p-6">
-              <div class="flex items-center justify-between mb-3">
-                <span class="text-xs font-medium text-[#575756]">Innovación Digital</span>
-                <span class="text-xs text-gray-500">16 ENE</span>
-              </div>
-              
-              <h3 class="text-lg font-bold text-gray-900 mb-3 group-hover:text-[#8B1A1A] transition-colors">
+            <div class="p-6 bg-red-800/80 backdrop-blur-md -mt-16 relative z-10 rounded-xl mx-4 mb-4 shadow-2xl border border-white/10">
+              <h3 class="text-lg font-bold text-white mb-3 group-hover:text-red-200 transition-colors">
                 Nueva plataforma digital del Senado
               </h3>
               
-              <p class="text-sm text-gray-600 mb-4 line-clamp-3">
-                Sistema permite seguimiento en tiempo real de sesiones y participación ciudadana en proyectos de ley.
-              </p>
-              
               <NuxtLink 
                 :to="newsLink4"
-                class="text-sm font-bold text-[#E03636] hover:text-[#5C1010] transition-colors inline-flex items-center gap-1 group"
+                class="text-sm font-bold text-white hover:text-red-100 transition-colors inline-flex items-center gap-1"
               >
                 Leer más
                 <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
