@@ -18,13 +18,13 @@
           <div class="text-xs md:text-sm font-semibold text-gray-700 mt-1">SENADO NACIONAL</div>
         </div>
       </div> -->
-      <div class="absolute inset-0 flex items-center justify-center overflow-hidden rounded-full shadow-2xl">
-  <img 
-    src="/senadores.svg" 
-    alt="Escudo Senado Nacional" 
-    class="w-full h-full object-cover"
-  />
-</div>
+        <div class="absolute inset-0 flex items-center justify-center overflow-hidden rounded-full shadow-2xl">
+          <img 
+              src="/senadores.svg" 
+              alt="Escudo Senado Nacional" 
+              class="w-full h-full object-cover"
+          />
+        </div>
     </div>
   </div>
 </template>

@@ -104,13 +104,13 @@ const heroMedia = ref([
   },
   {
     type: 'image',
-    url: 'https://images.unsplash.com/photo-1559526324-4b87b5e36e44?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80',
-    alt: 'Arquitectura gubernamental'
+    url: 'https://pxcdn.reduno.com.bo/reduno/112025/1762461432445.webp?cw=800&ch=450&extw=jpg',
+    alt: 'Edificio del Congreso Nacional de Bolivia'
   },
   {
-    type: 'image',
-    url: 'https://images.unsplash.com/photo-1611262588024-d12430b98920?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80',
-    alt: 'Bandera de Bolivia'
+    type: 'image', 
+    url: 'https://apisi.senado.gob.bo/images/a001535c-1750-49a8-b277-37b32b038c45_1759275539.jpeg',
+    alt: 'Asamblea Legislativa Plurinacional de Bolivia'
   }
 ])
 

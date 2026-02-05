@@ -329,12 +329,16 @@
       <slot />
     </main>
     <!-- Contenido footer -->
-    <footer class="bg-gradient-to-r from-[#E03636] to-[#E03636] py-12 text-white">
+    <footer class="bg-gradient-to-r from-[#E03636] to-[#E03636] py-6 text-white">
       <div class="container mx-auto px-6">
         <div class="text-center">
           <div class="flex items-center justify-center gap-3 mb-6">
-            <div class="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center">
-              <span class="font-bold text-xl">SN</span>
+            <div class="w-[100px] h-[100px] flex items-center justify-center overflow-hidden rounded-full shadow-2xl">
+              <img
+                  src="/senadores.svg" 
+                  alt="Escudo Senado Nacional" 
+                  class="w-full h-full object-cover"
+              />
             </div>
             <div>
               <h3 class="text-xl font-bold">Senado Nacional</h3>
@@ -343,15 +347,11 @@
           </div>
           
           <p class="text-white/70 mb-6 max-w-2xl mx-auto">
-            © 2024 Senado Nacional de Bolivia. Todos los derechos reservados.<br>
+            © 2026 Senado Nacional de Bolivia. Todos los derechos reservados.<br>
             Portal oficial de información legislativa.
           </p>
           
-          <div class="flex items-center justify-center gap-6">
-            <a href="#" class="text-white/70 hover:text-white transition-colors text-sm">Transparencia</a>
-            <a href="#" class="text-white/70 hover:text-white transition-colors text-sm">Acceso a la Información</a>
-            <a href="#" class="text-white/70 hover:text-white transition-colors text-sm">Contacto</a>
-          </div>
+         
         </div>
       </div>
     </footer>
