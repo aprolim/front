@@ -3,7 +3,7 @@
     <!-- Header fijo y completamente transparente -->
     <header class="fixed top-0 left-0 right-0 z-50 bg-transparent">
       <!-- Línea roja superior -->
-      <div class="h-1 bg-gradient-to-r from-red-600 to-red-800"></div>
+      <div class="h-1 bg-gradient-to-r from-[#E03636] to-[#E03636]"></div>
       
       <!-- Contenedor del header con altura fija -->
       <div class="h-14 bg-transparent flex items-center px-4">

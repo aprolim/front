@@ -1363,8 +1363,8 @@ onMounted(() => {
 
 .panel-header {
   padding: 1rem 1.5rem;
-  background: #1e40af;
-  color: white;
+  background: #E4D294;
+  color: #333;
   display: flex;
   justify-content: space-between;
   align-items: center;
