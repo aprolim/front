@@ -1,32 +1,34 @@
 <template>
   <div class="min-h-screen bg-gray-50">
-    <!-- Navbar -->
+    <!-- Navbar Modificado -->
     <nav class="navbar">
-      <div class="navbar-bg"></div>
       <div class="navbar-content">
         <div class="logo">
           <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Coat_of_arms_of_Bolivia.svg/800px-Coat_of_arms_of_Bolivia.svg.png" alt="Escudo de Bolivia" class="escudo-img" />
           <div class="logo-text">BOLIVIA</div>
         </div>
         <ul class="nav-links">
-          <li><a href="#">Home</a></li>
-          <li><a href="#">Tours</a></li>
-          <li><a href="#">Hotels</a></li>
-          <li><a href="#">Services</a></li>
-          <li><a href="#">Contact</a></li>
+          <li><a href="#" class="nav-link active">Home</a></li>
+          <li><a href="#" class="nav-link">Tours</a></li>
+          <li><a href="#" class="nav-link">Hotels</a></li>
+          <li><a href="#" class="nav-link">Services</a></li>
+          <li><a href="#" class="nav-link">Contact</a></li>
         </ul>
         <button class="search-btn">Search</button>
       </div>
     </nav>
 
-    <!-- Portada con carousel -->
+    <!-- Portada con carousel y franja roja -->
     <section class="portada">
+      <!-- Franja roja transparente sobre la imagen -->
+      <div class="red-overlay"></div>
+      
       <div class="carousel">
         <div 
           v-for="(slide, index) in slides" 
           :key="index"
           :class="['carousel-slide', { active: currentSlide === index }]"
-          :style="{ backgroundImage: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(${slide.image})` }"
+          :style="{ backgroundImage: `url(${slide.image})` }"
         ></div>
         
         <div class="carousel-content">
@@ -328,13 +330,26 @@ const prevNewsGroup = () => {
 // Lifecycle hooks
 onMounted(() => {
   slideInterval = setInterval(nextSlide, 5000)
+  
+  // Añadir evento de scroll para navbar
+  window.addEventListener('scroll', handleScroll)
 })
 
 onUnmounted(() => {
   if (slideInterval) {
     clearInterval(slideInterval)
   }
+  window.removeEventListener('scroll', handleScroll)
 })
+
+const handleScroll = () => {
+  const navbar = document.querySelector('.navbar')
+  if (window.scrollY > 100) {
+    navbar.classList.add('scrolled')
+  } else {
+    navbar.classList.remove('scrolled')
+  }
+}
 </script>
 
 <style scoped>
@@ -347,29 +362,27 @@ onUnmounted(() => {
   --blanco: #FFFFFF;
   --negro: #222222;
   --rojo-transparente: rgba(224, 54, 54, 0.85);
+  --rojo-franja: rgba(224, 54, 54, 0.35); /* Rojo transparente para la franja */
 }
 
-/* Navbar - Fondo rojo sólido completo */
+/* Navbar Transparente con letras BLANCAS y subrayado permanente BLANCO */
 .navbar {
-  position: relative;
-  width: 100%;
-  height: 70px;
-  z-index: 1000;
-}
-
-.navbar-bg {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 70px;
+  background-color: transparent;
+  z-index: 1000;
+  transition: background-color 0.3s ease;
+}
+
+.navbar.scrolled {
   background-color: var(--rojo-solido);
-  z-index: 1;
 }
 
 .navbar-content {
   position: relative;
-  z-index: 2;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -378,6 +391,7 @@ onUnmounted(() => {
   width: 100%;
 }
 
+/* Logo en la izquierda - BLANCO */
 .logo {
   display: flex;
   align-items: center;
@@ -388,55 +402,91 @@ onUnmounted(() => {
   width: 45px;
   height: 45px;
   object-fit: contain;
-  filter: brightness(0) invert(1);
+  filter: brightness(0) invert(1); /* Blanco */
 }
 
 .logo-text {
   font-size: 24px;
   font-weight: 700;
   letter-spacing: 1px;
-  color: var(--blanco); /* Letras blancas */
+  color: var(--blanco); /* Letras BLANCAS */
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
 }
 
+/* Navegación en la izquierda - TODAS LAS LETRAS BLANCAS */
 .nav-links {
   display: flex;
   list-style: none;
   gap: 30px;
+  margin-right: auto;
+  margin-left: 50px;
 }
 
-.nav-links a {
-  color: var(--blanco); /* Letras blancas */
+.nav-link {
+  color: var(--blanco) !important; /* Letras BLANCAS siempre */
   text-decoration: none;
   font-weight: 500;
-  transition: color 0.3s;
+  transition: all 0.3s;
   font-size: 16px;
+  padding: 5px 0;
+  position: relative;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+  display: inline-block;
 }
 
-.nav-links a:hover {
-  color: var(--dorado);
+/* Subrayado permanente BLANCO siempre visible */
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 3px; /* Subrayado más visible */
+  background-color: var(--blanco) !important; /* Subrayado BLANCO siempre */
+  transform: scaleX(1);
+  transition: transform 0.3s ease;
 }
 
+.nav-link:hover::after {
+  transform: scaleX(1.1);
+}
+
+/* Botón Search con letras BLANCAS */
 .search-btn {
   background-color: transparent;
   border: 1px solid var(--blanco);
-  color: var(--blanco); /* Letras blancas */
+  color: var(--blanco) !important; /* Letras BLANCAS siempre */
   padding: 8px 20px;
   border-radius: 4px;
   cursor: pointer;
   font-weight: 500;
   transition: all 0.3s;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
 }
 
 .search-btn:hover {
   background-color: var(--blanco);
-  color: var(--rojo);
+  color: var(--rojo) !important;
 }
 
-/* Sección Portada */
+/* Sección Portada con franja roja transparente */
 .portada {
   height: 90vh;
   position: relative;
   overflow: hidden;
+  margin-top: 70px; /* Para compensar el navbar fijo */
+}
+
+/* Franja roja transparente sobre la imagen */
+.red-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--rojo-franja); /* Rojo 35% transparente */
+  z-index: 1;
+  pointer-events: none; /* Permite hacer clic en elementos debajo */
 }
 
 .carousel {
@@ -462,6 +512,7 @@ onUnmounted(() => {
   opacity: 1;
 }
 
+/* Contenido del carousel sobre la franja roja */
 .carousel-content {
   position: absolute;
   top: 50%;
@@ -470,7 +521,7 @@ onUnmounted(() => {
   text-align: left;
   color: var(--blanco);
   max-width: 500px;
-  z-index: 2;
+  z-index: 2; /* Sobre la franja roja */
 }
 
 .carousel-content h1 {
@@ -508,7 +559,7 @@ onUnmounted(() => {
   transform: translateX(-50%);
   display: flex;
   gap: 15px;
-  z-index: 2;
+  z-index: 2; /* Sobre la franja roja */
 }
 
 .indicator {
@@ -861,6 +912,8 @@ onUnmounted(() => {
     flex-wrap: wrap;
     justify-content: center;
     gap: 15px;
+    margin-left: 0;
+    margin-right: 0;
   }
   
   .personas-container {
@@ -868,12 +921,14 @@ onUnmounted(() => {
   }
   
   .carousel-content {
-    left: 75%;
+    left: 50%;
     width: 90%;
+    text-align: center;
+    transform: translate(-50%, -50%);
   }
   
   .carousel-indicators {
-    left: 75%;
+    left: 50%;
   }
   
   .news-item {
@@ -890,20 +945,15 @@ onUnmounted(() => {
     height: 40px;
     font-size: 16px;
   }
+  
+  .portada {
+    margin-top: 120px; /* Más espacio para navbar móvil */
+  }
 }
 
 @media (max-width: 576px) {
   .personas-container {
     grid-template-columns: repeat(1, 1fr);
-  }
-  
-  .carousel-content {
-    left: 50%;
-    text-align: center;
-  }
-  
-  .carousel-indicators {
-    left: 50%;
   }
   
   .logo-text {
@@ -916,6 +966,18 @@ onUnmounted(() => {
   
   .news-container {
     padding: 0 30px;
+  }
+  
+  .nav-links {
+    gap: 15px;
+  }
+  
+  .carousel-content h1 {
+    font-size: 2rem;
+  }
+  
+  .carousel-content p {
+    font-size: 1rem;
   }
 }
 </style>
