@@ -3,7 +3,7 @@
   <div class="min-h-screen">
     <!-- Hero Section -->
     <section 
-      class="relative min-h-[85vh] md:min-h-[90vh] flex items-center overflow-hidden transition-all duration-500"
+      class="relative h-screen flex items-center overflow-hidden transition-all duration-500"
       :class="{ 'min-h-[40vh] md:min-h-[45vh] pt-20': scrolled }"
       ref="heroSection"
       @mouseleave="resumeCarousel"

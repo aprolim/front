@@ -1,7 +1,7 @@
 <template>
   <!-- SECCIÓN: Más Noticias -->
   <section 
-    class="bg-gradient-to-b from-white to-gray-50 relative overflow-hidden"
+    class="bg-gradient-to-b from-white to-gray-50 relative overflow-hidden pt-6"
     ref="moreNewsSection"
   >
     <!-- Elemento decorativo -->
@@ -21,146 +21,83 @@
       </slot>
 
       <!-- Grid de 4 noticias -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" ref="moreNewsGrid">
-        <!-- Slot para noticias personalizadas -->
-        <slot name="news">
-          <!-- Noticia 1 por defecto -->
-          <div 
-            class="news-card relative opacity-0 translate-y-8 overflow-hidden rounded-2xl group"
-            :class="{ 'card-visible': isInView }"
-            :style="{ transitionDelay: '0ms' }"
-          >
-            <div class="absolute inset-0 z-0">
-              <img 
-                src="https://images.unsplash.com/photo-1589652717521-10c0d092dea9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
-                alt="Sesión parlamentaria"
-                class="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-110"
-              />
-              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-            </div>
-
-            <div class="relative h-64"></div>
-            
-            <div class="p-6 bg-red-900/80 backdrop-blur-md -mt-16 relative z-10 rounded-xl mx-4 mb-4 shadow-2xl border border-white/10">
-              <h3 class="text-lg font-bold text-white mb-3 group-hover:text-red-200 transition-colors">
-                Reforma Educativa para áreas rurales aprobada
-              </h3>
-              
-              <NuxtLink 
-                :to="newsLink1"
-                class="text-sm font-bold text-white hover:text-red-100 transition-colors inline-flex items-center gap-1"
-              >
-                Leer más
-                <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
-                </svg>
-              </NuxtLink>
-            </div>
-          </div>
-
-          <!-- Noticia 2 por defecto -->
-          <div 
-            class="news-card relative group opacity-0 translate-y-8 overflow-hidden rounded-2xl shadow-xl"
-            :class="{ 'card-visible': isInView }"
-            :style="{ transitionDelay: '150ms' }"
-          >
-            <div class="absolute inset-0 z-0">
-              <img 
-                src="https://online.udla.edu.ec/images/estudiantes-maestria-salud_700w.webp"
-                alt="Salud pública"
-                class="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-110"
-              />
-              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-            </div>
-
-            <div class="relative h-64"></div>
-            
-            <div class="p-6 bg-red-800/80 backdrop-blur-md -mt-16 relative z-10 rounded-xl mx-4 mb-4 shadow-2xl border border-white/10">
-              <h3 class="text-lg font-bold text-white mb-3 group-hover:text-red-200 transition-colors">
-                Plan Nacional de Hospitales 2024-2026
-              </h3>
-              
-              <NuxtLink 
-                :to="newsLink2"
-                class="text-sm font-bold text-white hover:text-red-100 transition-colors inline-flex items-center gap-1"
-              >
-                Leer más
-                <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
-                </svg>
-              </NuxtLink>
-            </div>
-          </div>
-
-          <!-- Noticia 3 por defecto -->
-          <div 
-            class="news-card relative group opacity-0 translate-y-8 overflow-hidden rounded-2xl shadow-xl"
-            :class="{ 'card-visible': isInView }"
-            :style="{ transitionDelay: '300ms' }"
-          >
-            <div class="absolute inset-0 z-0">
-              <img 
-                src="https://images.unsplash.com/photo-1589578527966-fdac0f44566c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
-                alt="Medio ambiente"
-                class="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-110"
-              />
-              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-            </div>
-
-            <div class="relative h-64"></div>
-            
-            <div class="p-6 bg-red-800/80 backdrop-blur-md -mt-16 relative z-10 rounded-xl mx-4 mb-4 shadow-2xl border border-white/10">
-              <h3 class="text-lg font-bold text-white mb-3 group-hover:text-red-200 transition-colors">
-                Protección de bosques nativos ampliada
-              </h3>
-              
-              <NuxtLink 
-                :to="newsLink3"
-                class="text-sm font-bold text-white hover:text-red-100 transition-colors inline-flex items-center gap-1"
-              >
-                Leer más
-                <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
-                </svg>
-              </NuxtLink>
-            </div>
-          </div>
-
-          <!-- Noticia 4 por defecto -->
-          <div 
-            class="news-card relative group opacity-0 translate-y-8 overflow-hidden rounded-2xl shadow-xl"
-            :class="{ 'card-visible': isInView }"
-            :style="{ transitionDelay: '450ms' }"
-          >
-            <div class="absolute inset-0 z-0">
-              <img 
-                src="https://images.unsplash.com/photo-1553877522-43269d4ea984?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
-                alt="Tecnología"
-                class="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-110"
-              />
-              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-            </div>
-
-            <div class="relative h-64"></div>
-            
-            <div class="p-6 bg-red-800/80 backdrop-blur-md -mt-16 relative z-10 rounded-xl mx-4 mb-4 shadow-2xl border border-white/10">
-              <h3 class="text-lg font-bold text-white mb-3 group-hover:text-red-200 transition-colors">
-                Nueva plataforma digital del Senado
-              </h3>
-              
-              <NuxtLink 
-                :to="newsLink4"
-                class="text-sm font-bold text-white hover:text-red-100 transition-colors inline-flex items-center gap-1"
-              >
-                Leer más
-                <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
-                </svg>
-              </NuxtLink>
-            </div>
-          </div>
-        </slot>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" ref="moreNewsGrid">
+  <slot name="news">
+    
+    <div class="news-card relative group opacity-0 translate-y-8 overflow-hidden rounded-2xl shadow-xl flex flex-col h-full"
+      :class="{ 'card-visible': isInView }" :style="{ transitionDelay: '0ms' }">
+      <div class="absolute inset-0 z-0">
+        <img src="https://images.unsplash.com/photo-1589652717521-10c0d092dea9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+          class="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-110" />
+        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
       </div>
+      <div class="flex-grow min-h-[160px]"></div>
+      <div class="p-5 bg-red-800/20 backdrop-blur-md relative z-10 mx-0 mb-0 shadow-2xl border border-white/10 flex flex-col justify-between min-h-[150px]">
+        <h3 class="text-lg font-bold text-white mb-3 group-hover:text-red-200 transition-colors line-clamp-3">
+          Reforma Educativa para áreas rurales aprobada Reforma Educativa para áreas rurales aprobada
+        </h3>
+        <NuxtLink :to="newsLink1" class="text-sm font-bold text-white hover:text-red-100 transition-colors inline-flex items-center gap-1 mt-auto">
+          Leer más <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </NuxtLink>
+      </div>
+    </div>
+
+    <div class="news-card relative group opacity-0 translate-y-8 overflow-hidden rounded-2xl shadow-xl flex flex-col h-full"
+      :class="{ 'card-visible': isInView }" :style="{ transitionDelay: '150ms' }">
+      <div class="absolute inset-0 z-0">
+        <img src="https://online.udla.edu.ec/images/estudiantes-maestria-salud_700w.webp"
+          class="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-110" />
+        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
+      </div>
+      <div class="flex-grow min-h-[160px]"></div>
+      <div class="p-5 bg-red-800/20 backdrop-blur-md relative z-10 mx-0 mb-0 shadow-2xl border border-white/10 flex flex-col justify-between min-h-[150px]">
+        <h3 class="text-lg font-bold text-white mb-3 group-hover:text-red-200 transition-colors line-clamp-3">
+          Plan Nacional de Hospitales 2024-2026: Fortalecimiento del sistema público
+        </h3>
+        <NuxtLink :to="newsLink2" class="text-sm font-bold text-white hover:text-red-100 transition-colors inline-flex items-center gap-1 mt-auto">
+          Leer más <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </NuxtLink>
+      </div>
+    </div>
+
+    <div class="news-card relative group opacity-0 translate-y-8 overflow-hidden rounded-2xl shadow-xl flex flex-col h-full"
+      :class="{ 'card-visible': isInView }" :style="{ transitionDelay: '300ms' }">
+      <div class="absolute inset-0 z-0">
+        <img src="https://images.unsplash.com/photo-1589578527966-fdac0f44566c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+          class="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-110" />
+        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
+      </div>
+      <div class="flex-grow min-h-[160px]"></div>
+      <div class="p-5 bg-red-800/20 backdrop-blur-md relative z-10 mx-0 mb-0 shadow-2xl border border-white/10 flex flex-col justify-between min-h-[150px]">
+        <h3 class="text-lg font-bold text-white mb-3 group-hover:text-red-200 transition-colors line-clamp-3">
+          Protección de bosques nativos ampliada para mitigar el cambio climático
+        </h3>
+        <NuxtLink :to="newsLink3" class="text-sm font-bold text-white hover:text-red-100 transition-colors inline-flex items-center gap-1 mt-auto">
+          Leer más <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </NuxtLink>
+      </div>
+    </div>
+
+    <div class="news-card relative group opacity-0 translate-y-8 overflow-hidden rounded-2xl shadow-xl flex flex-col h-full"
+      :class="{ 'card-visible': isInView }" :style="{ transitionDelay: '450ms' }">
+      <div class="absolute inset-0 z-0">
+        <img src="https://images.unsplash.com/photo-1553877522-43269d4ea984?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+          class="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-110" />
+        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
+      </div>
+      <div class="flex-grow min-h-[160px]"></div>
+      <div class="p-5 bg-red-800/20 backdrop-blur-md relative z-10 mx-0 mb-0 shadow-2xl border border-white/10 flex flex-col justify-between min-h-[150px]">
+        <h3 class="text-lg font-bold text-white mb-3 group-hover:text-red-200 transition-colors line-clamp-3">
+          Nueva Nueva Nueva Nueva Nueva Nueva NuevaNueva Nueva Nueva 
+        </h3>
+        <NuxtLink :to="newsLink4" class="text-sm font-bold text-white hover:text-red-100 transition-colors inline-flex items-center gap-1 mt-auto">
+          Leer más <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </NuxtLink>
+      </div>
+    </div>
+
+  </slot>
+</div>
 
       <!-- Botón para más noticias -->
       <slot name="footer">
