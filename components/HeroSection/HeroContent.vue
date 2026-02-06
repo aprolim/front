@@ -175,8 +175,8 @@
 
     <!-- FRANJA ROJA DE ANCHO COMPLETO (dentro del mismo contenedor principal) -->
     <!-- Usamos posición absoluta para que salga del container pero esté dentro del mismo div padre -->
-    <div class="absolute left-0 right-0 bottom-0 transform translate-y-[69%]    md:translate-y-[79%] lg:translate-y-[85%] xl:translate-y-[100%] 2xl:translate-y-[170%] z-20">
-      <div class="relative bg-gradient-to-r from-red-700/70 via-red-800/70 to-red-900/70 py-6 md:py-8 shadow-2xl overflow-hidden group full-width-franja">
+    <div class="absolute left-0 right-0 -bottom-[20%] md:-bottom-[35%] lg:-bottom-[50%] xl:-bottom-[70%] 2xl:-bottom-[110%] 3xl:-bottom-[140%] 4xl:-bottom-[160%] 5xl:-bottom-[180%] z-20">
+      <div class="relative bg-gradient-to-r from-red-700/70 via-red-800/70 to-red-900/70 py-0 md:py-2 lg:py-5 xl:py-8 2xl:py-24 3xl:py-28 4xl:py-32 5xl:py-32 shadow-2xl overflow-hidden group full-width-franja">
         
         <!-- Patrón de fondo sutil -->
         <div class="absolute inset-0 opacity-5">
