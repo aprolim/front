@@ -10,6 +10,7 @@ export default defineNuxtConfig({
   
   // CSS Global - solo Tailwind por ahora
   css: [
+    '~/assets/css/fonts.css',
     '~/assets/css/main.css'
   ],
   
@@ -27,7 +28,9 @@ export default defineNuxtConfig({
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
         { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
         { rel: 'preconnect', href: 'https://fonts.gstatic.com' },
-        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap' }
+        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap' },
+        { rel: 'preload', href: '/fonts/Montserrat-Regular.otf', as: 'font', type: 'font/otf', crossorigin: '' },
+        { rel: 'preload', href: '/fonts/Montserrat-Bold.otf', as: 'font', type: 'font/otf', crossorigin: '' }
       ]
     }
   }

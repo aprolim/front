@@ -193,7 +193,7 @@
           <!-- Texto principal con efecto de gradiente -->
           <p class="text-2xl md:text-3xl font-bold text-white">
             <span class="bg-clip-text text-transparent bg-gradient-to-r from-white via-yellow-100 to-yellow-200">
-              Primera Legislatura del Tricentenario.
+              PRIMERA LEGISLATURA DEL TRICENTENARIO.
             </span>
           </p>
 
