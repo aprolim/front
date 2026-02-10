@@ -142,7 +142,7 @@ const props = defineProps({
 /* Columna 1: Vacía (más angosta) */
 .empty-column {
   /* Solo ocupa espacio */
-  background-image: url('./Recurso 3.png');
+  background-image: url('./Recurso3.png');
   background-size: cover; /* Cubre todo el contenedor */
   background-position: center; /* Centra la imagen */
   background-repeat: no-repeat; /* No repetir */
