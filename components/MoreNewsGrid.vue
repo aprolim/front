@@ -31,9 +31,9 @@
           class="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-110" />
         <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
       </div>
-      <div class="flex-grow min-h-[160px]"></div>
-      <div class="p-5 bg-[#E03636]/40 relative z-10 mx-0 mb-0 shadow-2xl border border-white/10 flex flex-col justify-between min-h-[150px]">
-        <h3 class="text-lg font-bold text-white mb-3 group-hover:text-red-200 transition-colors line-clamp-3">
+      <div class="flex-grow min-h-[180px]"></div>
+      <div class="p-5 bg-[#E03636]/40 relative z-10 mx-0 mb-0 shadow-2xl border border-white/10 flex flex-col justify-between min-h-[130px] ">
+        <h3 class="text-sm font-bold text-white mb-3 group-hover:text-red-200 transition-colors line-clamp-3">
           Reforma Educativa para áreas rurales aprobada Reforma Educativa para áreas rurales aprobada
         </h3>
         <NuxtLink :to="newsLink1" class="text-sm font-bold text-white hover:text-red-100 transition-colors inline-flex items-center gap-1 mt-auto">
@@ -49,9 +49,9 @@
           class="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-110" />
         <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
       </div>
-      <div class="flex-grow min-h-[160px]"></div>
-      <div class="p-5 bg-[#E03636]/40 relative z-10 mx-0 mb-0 shadow-2xl border border-white/10 flex flex-col justify-between min-h-[150px]">
-        <h3 class="text-lg font-bold text-white mb-3 group-hover:text-red-200 transition-colors line-clamp-3">
+      <div class="flex-grow min-h-[180px]"></div>
+      <div class="p-5 bg-[#E03636]/40 relative z-10 mx-0 mb-0 shadow-2xl border border-white/10 flex flex-col justify-between min-h-[130px]">
+        <h3 class="text-sm font-bold text-white mb-3 group-hover:text-red-200 transition-colors line-clamp-3">
           Plan Nacional de hidrocarburos 2024-2026: Fortalecimiento del sistema público
         </h3>
         <NuxtLink :to="newsLink2" class="text-sm font-bold text-white hover:text-red-100 transition-colors inline-flex items-center gap-1 mt-auto">
@@ -67,9 +67,9 @@
           class="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-110" />
         <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
       </div>
-      <div class="flex-grow min-h-[160px]"></div>
-      <div class="p-5 bg-[#E03636]/40 relative z-10 mx-0 mb-0 shadow-2xl border border-white/10 flex flex-col justify-between min-h-[150px]">
-        <h3 class="text-lg font-bold text-white mb-3 group-hover:text-red-200 transition-colors line-clamp-3">
+      <div class="flex-grow min-h-[180px]"></div>
+      <div class="p-5 bg-[#E03636]/40 relative z-10 mx-0 mb-0 shadow-2xl border border-white/10 flex flex-col justify-between min-h-[130px]">
+        <h3 class="text-sm font-bold text-white mb-3 group-hover:text-red-200 transition-colors line-clamp-3">
           Sesiones en pleno ampliada para mitigar el cambio climático
         </h3>
         <NuxtLink :to="newsLink3" class="text-sm font-bold text-white hover:text-red-100 transition-colors inline-flex items-center gap-1 mt-auto">
@@ -85,9 +85,9 @@
           class="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-110" />
         <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
       </div>
-      <div class="flex-grow min-h-[160px]"></div>
-      <div class="p-5 bg-[#E03636]/40 relative z-10 mx-0 mb-0 shadow-2xl border border-white/10 flex flex-col justify-between min-h-[150px]">
-        <h3 class="text-lg font-bold text-white mb-3 group-hover:text-red-200 transition-colors line-clamp-3">
+      <div class="flex-grow min-h-[180px]"></div>
+      <div class="p-5 bg-[#E03636]/40 relative z-10 mx-0 mb-0 shadow-2xl border border-white/10 flex flex-col justify-between min-h-[130px]">
+        <h3 class="text-sm font-bold text-white mb-3 group-hover:text-red-200 transition-colors line-clamp-3">
           Se reafirma la nueva constitucion sobre lo ultimo en referendum 
         </h3>
         <NuxtLink :to="newsLink4" class="text-sm font-bold text-white hover:text-red-100 transition-colors inline-flex items-center gap-1 mt-auto">
