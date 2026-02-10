@@ -3,7 +3,6 @@
     <!-- Header fijo y completamente transparente -->
     <header class="fixed top-0 left-0 right-0 z-50 bg-transparent">
       <!-- Línea roja superior -->
-      <div class="h-1 bg-gradient-to-r from-[#E03636] to-[#E03636]"></div>
       
       <!-- Contenedor del header con altura fija -->
       <div class="h-14 bg-transparent flex items-center px-4">
@@ -532,7 +531,7 @@ header {
   -webkit-backdrop-filter: none !important;
 }
 .back-image{
-  background-image: url('./footer-main.png');
+  background-image: url('/footer-main.png');
   background-size: cover; /* Cubre todo el contenedor */
   background-position: center; /* Centra la imagen */
   background-repeat: no-repeat; /* No repetir */

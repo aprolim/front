@@ -290,14 +290,14 @@ definePageMeta({
 }
 
 .background-l{
-  background-image: url('./Recurso_2.png');
+  background-image: url('/Recurso_2.png');
   background-size: cover; /* Cubre todo el contenedor */
   background-position: center; /* Centra la imagen */
   background-repeat: no-repeat; /* No repetir */
   background-attachment: fixed;
 }
 .museum-back{
-  background-image: url('./fondo_1.png');
+  background-image: url('/fondo1.png');
   background-size: cover; /* Cubre todo el contenedor */
   background-position: center; /* Centra la imagen */
   background-repeat: no-repeat; /* No repetir */

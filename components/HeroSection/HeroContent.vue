@@ -3,7 +3,7 @@
   <!-- Imagen en la derecha -->
   <div class="absolute top-4 right-6 md:right-4 z-30">
     <img 
-      src="/senadores.svg"
+      src="/senadores2.png"
       alt="Logo del Senado" 
       class="w-12 h-12 md:w-16 md:h-16 object-contain"
     />

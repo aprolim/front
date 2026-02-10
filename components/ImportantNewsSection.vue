@@ -29,6 +29,7 @@
             :to="link.path" 
             class="link-card"
           >
+            
             <div class="link-icon" v-html="link.icon"></div>
             <div class="link-content">
               <h3 class="link-title">{{ link.label }}</h3>
@@ -247,7 +248,7 @@ const gestionLinks = [
 .tab-button.active {
   color: white;
   font-weight: 700;
-  transform: translateY(-2px);
+  /* transform: translateY(-2px); */
   box-shadow: 0 4px 12px rgba(224, 54, 54, 0.2);
 }
 
@@ -258,7 +259,7 @@ const gestionLinks = [
   left: 0;
   right: 0;
   height: 4px;
-  background: #E4D294;
+  background: black;
   border-radius: 2px 2px 0 0;
 }
 
@@ -339,7 +340,7 @@ const gestionLinks = [
 
 .link-card:hover {
   transform: translateY(-6px);
-  border-color: #E4D294;
+  border-color: #E03636;
   box-shadow: 0 12px 24px rgba(224, 54, 54, 0.1);
 }
 
