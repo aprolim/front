@@ -71,7 +71,7 @@ const props = defineProps({
 }
 
 .museum-section {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Montserrat', Tahoma, Geneva, Verdana, sans-serif;
   position: relative;
   width: 100%;
 }
@@ -83,10 +83,10 @@ const props = defineProps({
 
 /* Sección con imagen de fondo */
 .background-image-section {
-  background-image: url('./Recurso2.png');
-  background-size: cover;
+  /* background-image: url('./Recurso2.png'); */
+  /* background-size: cover;
   background-position: center;
-  background-repeat: no-repeat;
+  background-repeat: no-repeat; */
   min-height: 600px;
   position: relative;
   width: 100%;
@@ -101,7 +101,7 @@ const props = defineProps({
   right: 0;
   width: 100%;
   height: 80px;
-  background-color: red;
+  background-color: #E03636;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -118,13 +118,12 @@ const props = defineProps({
 
 /* Título blanco dentro de la franja roja */
 .section-title {
-  color: var(--white);
   font-size: 2.5rem;
-  font-weight: 800;
+  font-weight: 700;
   margin: 0;
   text-align: center;
   /* text-transform: uppercase; */
-  letter-spacing: 1px;
+  /* letter-spacing: 1px; */
 }
 
 /* Wrapper principal - empieza después de la franja roja */
@@ -141,7 +140,7 @@ const props = defineProps({
 /* Columna 1: Vacía (más angosta) */
 .empty-column {
   /* Solo ocupa espacio */
-  background-image: url('./Recurso3.png');
+  /* background-image: url('./Recurso3.png'); */
   background-size: cover; /* Cubre todo el contenedor */
   background-position: center; /* Centra la imagen */
   background-repeat: no-repeat; /* No repetir */
@@ -175,7 +174,7 @@ const props = defineProps({
   color: var(--white);
   margin-bottom: 2.5rem;
   font-weight: 400;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  /* text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); */
   color: #575756;
 }
 
@@ -184,7 +183,7 @@ const props = defineProps({
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
-  background-color: var(--primary-red);
+  background-color: #E03636;
   color: white;
   border: none;
   padding: 1rem 2.5rem;
@@ -193,10 +192,9 @@ const props = defineProps({
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); */
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  background-color: red;
 }
 
 .continue-button:hover {

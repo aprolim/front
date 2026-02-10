@@ -944,7 +944,7 @@ onMounted(() => {
 }
 
 .museum-section {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Montserrat', Tahoma, Geneva, Verdana, sans-serif;
   background: var(--light-bg);
   color: var(--text-dark);
   position: relative;

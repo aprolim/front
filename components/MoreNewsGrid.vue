@@ -99,7 +99,7 @@
   </slot>
 </div>
 
-      <!-- Botón para más noticias -->
+      <!-- Botón para más noticias 5896 -->
       <slot name="footer">
         <div class="text-center mt-12">
           <NuxtLink 
@@ -107,11 +107,13 @@
             class="inline-flex items-center gap-3 px-8 py-3 bg-gradient-to-r from-[#E03636] to-[#E03636] text-white font-bold rounded-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 group"
           >
             <span>Ver todas las noticias</span>
+            
             <svg class="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
             </svg>
           </NuxtLink>
         </div>
+        <br>
       </slot>
     </div>
   </section>

@@ -1,6 +1,6 @@
 <!-- pages/index.vue - VERSIÓN COMPLETA CON TRANSICIONES -->
 <template>
-  <div class="min-h-screen">
+  <div class="min-h-screen text-style">
     <!-- Hero Section -->
     <section 
       class="relative h-screen flex items-center overflow-hidden transition-all duration-500"
@@ -41,7 +41,7 @@
     </section>
 
     <!-- Transición entre secciones -->
-    <div class="relative h-16 -mt-8 overflow-hidden">
+    <div class="relative h-6 -mt-8 overflow-hidden">
       <div class="absolute inset-0 bg-gradient-to-b from-transparent via-white/20 to-white"></div>
       <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#E03636]/30 to-transparent"></div>
     </div>
@@ -49,8 +49,11 @@
     <!-- Secciones con transiciones de scroll -->
     <div 
       ref="importantNewsRef" 
-      class="scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out"
+      class="scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out background-l"
     >
+      <br>
+      <br>
+      <br>
       <ImportantNewsSection />
     </div>
     
@@ -64,7 +67,7 @@
     <!-- Parte de los senadores -->
     <div 
       ref="senateRef" 
-      class="container mx-auto px-10 scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out delay-300"
+      class="w-full scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out delay-300"
     >
       <SenateChamber
         :show-footer="false"
@@ -84,7 +87,7 @@
     <!-- Museo -->
     <div 
       ref="museumRef" 
-      class="container mx-auto px-10 scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out delay-400"
+      class="w-full scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out delay-400 museum-back"
     >
       <MuseumSectionMinimal
         :dark-mode="darkMode"
@@ -278,6 +281,27 @@ definePageMeta({
 .carousel-fade-enter-active,
 .carousel-fade-leave-active {
   transition: opacity 1s ease-in-out;
+}
+.container{
+  width: 100% !important;
+}
+.text-style{
+  font-family: 'Montserrat', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.background-l{
+  background-image: url('./Recurso_2.png');
+  background-size: cover; /* Cubre todo el contenedor */
+  background-position: center; /* Centra la imagen */
+  background-repeat: no-repeat; /* No repetir */
+  background-attachment: fixed;
+}
+.museum-back{
+  background-image: url('./fondo_1.png');
+  background-size: cover; /* Cubre todo el contenedor */
+  background-position: center; /* Centra la imagen */
+  background-repeat: no-repeat; /* No repetir */
+  background-attachment: fixed;
 }
 
 .carousel-fade-enter-from,

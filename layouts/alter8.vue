@@ -409,27 +409,25 @@
       <slot />
     </main>
     <!-- Contenido footer -->
-    <footer class="bg-gradient-to-r from-[#E03636] to-[#E03636] py-6 text-white">
-      <div class="container mx-auto px-6">
+    <footer class="text-white back-image">
+      <div class="mx-auto">
         <div class="text-center">
           <div class="flex items-center justify-center gap-3 mb-6">
-            <div class="w-[100px] h-[100px] flex items-center justify-center overflow-hidden rounded-full shadow-2xl">
+            <div class=" flex items-center justify-center">
               <img
-                  src="/senadores.svg" 
+                  src="/senado-footer.png" 
                   alt="Escudo Senado Nacional" 
                   class="w-full h-full object-cover"
               />
             </div>
-            <div>
-              <h3 class="text-xl font-bold">Senado Nacional</h3>
-              <p class="text-sm text-white/80">Estado Plurinacional de Bolivia</p>
-            </div>
+            
           </div>
           
-          <p class="text-white/70 mb-6 max-w-2xl mx-auto">
-            © 2026 Senado Nacional de Bolivia. Todos los derechos reservados.<br>
-            Portal oficial de información legislativa.
-          </p>
+          <div class="sub-footer">
+            <br>
+            Calle Comercio esquina Colón - Telf.: (591) 2158701 - www.senado.gob.bo - La Paz - Bolivia 
+            <br>
+          </div>
           
          
         </div>
@@ -532,6 +530,17 @@ header {
   background: transparent !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
+}
+.back-image{
+  background-image: url('./footer-main.png');
+  background-size: cover; /* Cubre todo el contenedor */
+  background-position: center; /* Centra la imagen */
+  background-repeat: no-repeat; /* No repetir */
+  background-color: rgba(224, 54, 54, 0.7);
+  /* background-attachment: fixed; */
+}
+.sub-footer{
+  background-color: rgba(224, 54, 54, 0.7);
 }
 
 /* Asegurar que el contenido esté debajo */

@@ -957,7 +957,7 @@ onMounted(() => {
 .senate-chamber {
   min-height: 100vh;
   background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Montserrat', Tahoma, Geneva, Verdana, sans-serif;
   padding: 0.5rem;
 }
 

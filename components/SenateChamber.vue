@@ -13,7 +13,7 @@
       <!-- Contenedor con imagen de fondo -->
       <div class="background-container" :style="{ backgroundImage: `url('${backgroundImage}')` }">
         <!-- Contenedor principal CON GRID DE 3 COLUMNAS REALES -->
-        <div class="columns-container">
+        <div class="columns-container mx-12">
           <!-- COLUMNA IZQUIERDA: Panel de Controles -->
           <div v-if="showControls" class="column left-column">
             <div class="controls-panel transparent-panel">
@@ -662,7 +662,7 @@ watch(() => props.senators, () => {
   font-family: 'Montserrat';
   background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
   /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
-  padding: 0.5rem;
+  /* padding: 0.5rem; */
 }
 
 /* Header */
