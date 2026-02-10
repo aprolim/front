@@ -356,7 +356,7 @@ const props = defineProps({
   },
   backgroundImage: {
     type: String,
-    default: './Recurso 1.png'
+    default: './Recurso1.png'
   },
   viewBox: {
     type: String,

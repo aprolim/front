@@ -16,7 +16,6 @@
       <div class="content-wrapper">
         <!-- Columna 1 vacía (más angosta) -->
         <div class="empty-column">
-          <img src="./Recurso 3.png" alt="">
         </div>
         
         <!-- Columna 2 con contenido (más ancha) -->
@@ -84,7 +83,7 @@ const props = defineProps({
 
 /* Sección con imagen de fondo */
 .background-image-section {
-  background-image: url('./Recurso 2.png');
+  background-image: url('./Recurso2.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
