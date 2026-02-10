@@ -32,7 +32,7 @@
         <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
       </div>
       <div class="flex-grow min-h-[160px]"></div>
-      <div class="p-5 bg-red-800/20 backdrop-blur-md relative z-10 mx-0 mb-0 shadow-2xl border border-white/10 flex flex-col justify-between min-h-[150px]">
+      <div class="p-5 bg-[#E03636]/40 relative z-10 mx-0 mb-0 shadow-2xl border border-white/10 flex flex-col justify-between min-h-[150px]">
         <h3 class="text-lg font-bold text-white mb-3 group-hover:text-red-200 transition-colors line-clamp-3">
           Reforma Educativa para áreas rurales aprobada Reforma Educativa para áreas rurales aprobada
         </h3>
@@ -50,7 +50,7 @@
         <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
       </div>
       <div class="flex-grow min-h-[160px]"></div>
-      <div class="p-5 bg-red-800/20 backdrop-blur-md relative z-10 mx-0 mb-0 shadow-2xl border border-white/10 flex flex-col justify-between min-h-[150px]">
+      <div class="p-5 bg-[#E03636]/40 relative z-10 mx-0 mb-0 shadow-2xl border border-white/10 flex flex-col justify-between min-h-[150px]">
         <h3 class="text-lg font-bold text-white mb-3 group-hover:text-red-200 transition-colors line-clamp-3">
           Plan Nacional de Hospitales 2024-2026: Fortalecimiento del sistema público
         </h3>
@@ -68,7 +68,7 @@
         <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
       </div>
       <div class="flex-grow min-h-[160px]"></div>
-      <div class="p-5 bg-red-800/20 backdrop-blur-md relative z-10 mx-0 mb-0 shadow-2xl border border-white/10 flex flex-col justify-between min-h-[150px]">
+      <div class="p-5 bg-[#E03636]/40 relative z-10 mx-0 mb-0 shadow-2xl border border-white/10 flex flex-col justify-between min-h-[150px]">
         <h3 class="text-lg font-bold text-white mb-3 group-hover:text-red-200 transition-colors line-clamp-3">
           Protección de bosques nativos ampliada para mitigar el cambio climático
         </h3>
@@ -86,7 +86,7 @@
         <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
       </div>
       <div class="flex-grow min-h-[160px]"></div>
-      <div class="p-5 bg-red-800/20 backdrop-blur-md relative z-10 mx-0 mb-0 shadow-2xl border border-white/10 flex flex-col justify-between min-h-[150px]">
+      <div class="p-5 bg-[#E03636]/40 relative z-10 mx-0 mb-0 shadow-2xl border border-white/10 flex flex-col justify-between min-h-[150px]">
         <h3 class="text-lg font-bold text-white mb-3 group-hover:text-red-200 transition-colors line-clamp-3">
           Nueva Nueva Nueva Nueva Nueva Nueva NuevaNueva Nueva Nueva 
         </h3>

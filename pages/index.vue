@@ -69,10 +69,13 @@
       <SenateChamber
         :show-footer="false"
       >
-        <template #header>
+        <template #header >
           <div class="custom-header">
-            <h2>Distribución del Senado 2024</h2>
-            <p>Selecciona un senador para ver detalles</p>
+            <h2 class="text-3xl md:text-4xl font-bold text-white ">
+              Distribución del senado
+
+            </h2>
+            <h5 class="text-white">Selecci&oacute;na un senador para ver detalles</h5>
           </div>
         </template>
       </SenateChamber>
