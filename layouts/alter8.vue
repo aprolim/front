@@ -1,11 +1,12 @@
 <template>
   <div class="min-h-screen">
     <!-- Header fijo y completamente transparente -->
-    <header class="fixed top-0 left-0 right-0 z-50 bg-transparent">
+    <header class="fixed top-0 inline-flex z-50 bg-transparent">
       <!-- Línea roja superior -->
       
       <!-- Contenedor del header con altura fija -->
-      <div class="h-14 bg-transparent flex items-center px-4">
+       <!-- inline-flex border border-green-500 p-4 -->
+      <div class="h-14 bg-transparent inline-block items-center px-4">
         <!-- Botón del menú hamburguesa -->
         <button 
           @click="toggleSidebar"
