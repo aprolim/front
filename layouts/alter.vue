@@ -1,34 +1,25 @@
-<!-- layouts/alternative.vue - CON COLORES OFICIALES -->
+<!-- layouts/alternative.vue - HEADER ROJO FLOTANTE, 5 MENÚS SIN FLECHAS -->
 <template>
   <div class="min-h-screen bg-gray-50">
-    <!-- Header con colores oficiales -->
-    <header class="sticky top-0 z-50" :class="sidebarOpen ? 'bg-[#000000]' : 'bg-[#E03636]'">
+    <!-- Header rojo fijo y flotante (superpuesto) con menús a la derecha -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-[#E03636] shadow-lg">
       <div class="container mx-auto px-4 py-3">
         <div class="flex items-center justify-between">
-          <!-- Logo y botón hamburguesa -->
+          <!-- Logo y botón hamburguesa (solo móvil) -->
           <div class="flex items-center gap-4">
-            <!-- Botón hamburguesa -->
-            <button
+            <!-- Botón hamburguesa solo para móvil -->
+            <button 
               @click="toggleSidebar"
-              class="p-2 rounded-lg transition-colors group"
-              :class="sidebarOpen 
-                ? 'text-[#E4D294] hover:bg-[#575756]' 
-                : 'text-white hover:bg-[#C12F2F]'"
-              aria-label="Alternar menú"
+              class="p-2 rounded-lg hover:bg-[#C12F2F] transition-colors lg:hidden"
+              aria-label="Toggle menu"
             >
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path v-if="!sidebarOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                      d="M4 6h16M4 12h16M4 18h16"/>
-                <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                      d="M6 18L18 6M6 6l12 12"/>
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
               </svg>
             </button>
 
             <!-- Logo -->
             <NuxtLink to="/" class="flex items-center gap-3 no-underline group">
-              <!-- <div class="w-10 h-10 bg-gradient-to-br from-[#E03636] to-[#C12F2F] rounded-lg flex items-center justify-center group-hover:scale-105 transition-transform">
-                <span class="text-white font-bold text-lg">S</span>
-              </div> -->
               <div class="w-10 h-10 rounded-lg overflow-hidden flex items-center justify-center group-hover:scale-105 transition-transform">
                 <img 
                   src="/logo camsen.png" 
@@ -36,517 +27,391 @@
                   class="w-full h-full object-cover"
                 />
               </div>
-              <div>
-                <h1 class="text-lg font-bold text-white">Senado Nacional</h1>
-                <p class="text-xs" :class="sidebarOpen ? 'text-[#E4D294]' : 'text-[#E4D294]/90'">Bolivia</p>
-              </div>
+              <span class="text-white font-bold text-lg hidden sm:block">Cámara de Diputados</span>
             </NuxtLink>
           </div>
 
-          <!-- Indicador de estado -->
-          <div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full" 
-               :class="sidebarOpen ? 'bg-[#575756]' : 'bg-[#C12F2F]'">
-            <div class="w-2 h-2 rounded-full animate-pulse" :class="sidebarOpen ? 'bg-[#E4D294]' : 'bg-white'"></div>
-            <span class="text-sm font-medium" :class="sidebarOpen ? 'text-[#E4D294]' : 'text-white'">
-              {{ sidebarOpen ? 'Menú abierto' : 'Menú cerrado' }}
-            </span>
+          <!-- 5 MENÚS PRINCIPALES - ARRIBA A LA DERECHA (SIN FLECHAS) -->
+          <div class="hidden lg:flex items-center gap-1">
+            <!-- MENÚ 1: La institución -->
+            <div class="relative group">
+              <button class="px-4 py-2 text-white font-medium hover:bg-[#C12F2F] rounded-lg transition-colors">
+                La institución
+              </button>
+              <div class="absolute right-0 mt-1 w-64 bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                <div class="py-2">
+                  <NuxtLink to="/institucion/mandato" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                    📜 Mandato constitucional
+                  </NuxtLink>
+                  <NuxtLink to="/institucion/directiva" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                    📚 Directiva camaral
+                  </NuxtLink>
+                  <NuxtLink to="/institucion/resena" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                    🔄 Reseña histórica
+                  </NuxtLink>
+                  <NuxtLink to="/institucion/galeria" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                    🖼️ Galería de imágenes
+                  </NuxtLink>
+                </div>
+              </div>
+            </div>
+
+            <!-- MENÚ 2: Legisladores y representación -->
+            <div class="relative group">
+              <button class="px-4 py-2 text-white font-medium hover:bg-[#C12F2F] rounded-lg transition-colors">
+                Legisladores
+              </button>
+              <div class="absolute right-0 mt-1 w-64 bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                <div class="py-2">
+                  <NuxtLink to="/legisladores/mandato" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                    📜 Mandato constitucional
+                  </NuxtLink>
+                  <NuxtLink to="/legisladores/directiva" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                    📚 Directiva camaral
+                  </NuxtLink>
+                  <NuxtLink to="/legisladores/resena" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                    🔄 Reseña histórica
+                  </NuxtLink>
+                  <NuxtLink to="/legisladores/galeria" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                    🖼️ Galería de imágenes
+                  </NuxtLink>
+                </div>
+              </div>
+            </div>
+
+            <!-- MENÚ 3: Gestión Legislativa -->
+            <div class="relative group">
+              <button class="px-4 py-2 text-white font-medium hover:bg-[#C12F2F] rounded-lg transition-colors">
+                Gestión Legislativa
+              </button>
+              <div class="absolute right-0 mt-1 w-64 bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                <div class="py-2">
+                  <NuxtLink to="/gestion/sesion" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                    👨‍⚖️ Sesión del pleno
+                  </NuxtLink>
+                  <NuxtLink to="/gestion/proyectos" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                    👩‍⚖️ Proyectos de leyes
+                  </NuxtLink>
+                  <NuxtLink to="/gestion/gaceta" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                    📋 Gaceta Legislativa
+                  </NuxtLink>
+                </div>
+              </div>
+            </div>
+
+            <!-- MENÚ 4: Cultura y patrimonio -->
+            <div class="relative group">
+              <button class="px-4 py-2 text-white font-medium hover:bg-[#C12F2F] rounded-lg transition-colors">
+                Cultura
+              </button>
+              <div class="absolute right-0 mt-1 w-64 bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                <div class="py-2">
+                  <NuxtLink to="/cultura/sesion" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                    👨‍⚖️ Sesión del pleno
+                  </NuxtLink>
+                  <NuxtLink to="/cultura/proyectos" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                    👩‍⚖️ Proyectos de leyes
+                  </NuxtLink>
+                  <NuxtLink to="/cultura/gaceta" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                    📋 Gaceta Legislativa
+                  </NuxtLink>
+                </div>
+              </div>
+            </div>
+
+            <!-- MENÚ 5: Participación y transparencia -->
+            <div class="relative group">
+              <button class="px-4 py-2 text-white font-medium hover:bg-[#C12F2F] rounded-lg transition-colors">
+                Participación
+              </button>
+              <div class="absolute right-0 mt-1 w-64 bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                <div class="py-2">
+                  <NuxtLink to="/participacion/sesion" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                    👨‍⚖️ Sesión del pleno
+                  </NuxtLink>
+                  <NuxtLink to="/participacion/proyectos" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                    👩‍⚖️ Proyectos de leyes
+                  </NuxtLink>
+                  <NuxtLink to="/participacion/gaceta" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                    📋 Gaceta Legislativa
+                  </NuxtLink>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Versión móvil: texto simple -->
+          <div class="lg:hidden flex items-center">
+            <span class="text-white text-sm font-medium">Menú</span>
           </div>
         </div>
       </div>
     </header>
 
-    <!-- Contenedor principal -->
-    <div class="flex">
-      <!-- Sidebar desplegable con colores oficiales -->
-      <aside
-        ref="sidebarRef"
-        class="fixed lg:absolute top-0 left-0 h-screen shadow-xl z-40 transition-all duration-300 ease-in-out overflow-y-auto"
+    <!-- Espaciador para compensar header fijo (solo para que el contenido no quede debajo) -->
+    <div class="mt-2"></div>
+
+    <!-- Sidebar móvil (solo visible en móvil al hacer clic en hamburguesa) -->
+    <div 
+      :class="[
+        'fixed inset-0 z-40 transition-all duration-300 lg:hidden',
+        sidebarOpen ? 'visible' : 'invisible'
+      ]"
+    >
+      <!-- Overlay -->
+      <div 
         :class="[
-          sidebarOpen 
-            ? 'w-80 translate-x-0 opacity-100 bg-[#000000]' 
-            : 'w-0 -translate-x-full opacity-0'
+          'absolute inset-0 bg-black/50 transition-opacity duration-300',
+          sidebarOpen ? 'opacity-100' : 'opacity-0'
         ]"
-        :aria-hidden="!sidebarOpen"
+        @click="sidebarOpen = false"
+      ></div>
+
+      <!-- Sidebar móvil con fondo rojo -->
+      <aside 
+        :class="[
+          'absolute left-0 w-72 bg-gradient-to-b from-[#E03636] to-[#C12F2F] text-white shadow-2xl transform transition-transform duration-300 ease-in-out',
+          sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        ]"
+        :style="{ top: '72px', height: 'calc(100vh - 72px)' }"
       >
-        <!-- Contenido del sidebar -->
-        <div v-if="sidebarOpen" class="w-80 h-full flex flex-col py-4">
-          <!-- Encabezado del sidebar -->
-          <div class="px-6 py-4 border-b border-[#575756]">
-            <h2 class="text-xl font-bold text-[#E4D294] mb-1">Menú Principal</h2>
-            <p class="text-sm text-[#B1B1B1]">Navegación completa</p>
-          </div>
-
-          <!-- Navegación con submenús -->
-          <nav class="px-3 py-2 flex-1">
-            <ul class="space-y-1">
-              <!-- Inicio -->
-              <li>
-                <NuxtLink
-                  to="/alternative"
-                  class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 group"
-                  :class="isActive('/alternative') && !activeSubmenu 
-                    ? 'bg-[#E03636] text-white border-l-4 border-[#E4D294]' 
-                    : 'text-[#B1B1B1] hover:bg-[#575756] hover:text-white hover:border-l-4 hover:border-[#E03636]'"
-                  @click="closeSidebarOnMobile"
-                >
-                  <div class="flex-shrink-0 w-5 h-5" :class="isActive('/alternative') && !activeSubmenu ? 'text-white' : 'text-[#B1B1B1]'">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
-                    </svg>
-                  </div>
-                  <span class="font-medium flex-1">Inicio</span>
-                </NuxtLink>
-              </li>
-
-              <!-- La Institución (con submenú) -->
-              <li>
-                <button
-                  @click="toggleSubmenu('institucion')"
-                  class="w-full flex items-center justify-between px-4 py-3 rounded-lg transition-all duration-200 group"
-                  :class="activeSubmenu === 'institucion' 
-                    ? 'bg-[#E03636] text-white border-l-4 border-[#E4D294]' 
-                    : 'text-[#B1B1B1] hover:bg-[#575756] hover:text-white hover:border-l-4 hover:border-[#E03636]'"
-                >
-                  <div class="flex items-center gap-3">
-                    <div class="flex-shrink-0 w-5 h-5" :class="activeSubmenu === 'institucion' ? 'text-white' : 'text-[#B1B1B1]'">
-                      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-                      </svg>
-                    </div>
-                    <span class="font-medium">La Institución</span>
-                  </div>
-                  <svg class="w-4 h-4 transition-transform duration-200" :class="activeSubmenu === 'institucion' ? 'rotate-90 text-[#E4D294]' : 'text-[#B1B1B1]'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                  </svg>
-                </button>
-                
-                <!-- Submenú de La Institución -->
-                <div v-if="activeSubmenu === 'institucion'" class="ml-9 mt-1 space-y-1">
-                  <NuxtLink
-                    to="/alternative/institucion/mandato"
-                    class="block px-4 py-2 text-sm rounded-lg transition-colors hover:bg-[#575756] hover:text-white"
-                    :class="isActive('/alternative/institucion/mandato') ? 'text-white bg-[#575756]' : 'text-[#9D9D9C]'"
-                    @click="closeSidebarOnMobile"
-                  >
-                    • Mandato Constitucional
-                  </NuxtLink>
-                  <NuxtLink
-                    to="/alternative/institucion/directiva"
-                    class="block px-4 py-2 text-sm rounded-lg transition-colors hover:bg-[#575756] hover:text-white"
-                    :class="isActive('/alternative/institucion/directiva') ? 'text-white bg-[#575756]' : 'text-[#9D9D9C]'"
-                    @click="closeSidebarOnMobile"
-                  >
-                    • Directiva Camaral
-                  </NuxtLink>
-                  <NuxtLink
-                    to="/alternative/institucion/historia"
-                    class="block px-4 py-2 text-sm rounded-lg transition-colors hover:bg-[#575756] hover:text-white"
-                    :class="isActive('/alternative/institucion/historia') ? 'text-white bg-[#575756]' : 'text-[#9D9D9C]'"
-                    @click="closeSidebarOnMobile"
-                  >
-                    • Reseña Histórica
-                  </NuxtLink>
-                  <NuxtLink
-                    to="/alternative/institucion/galeria"
-                    class="block px-4 py-2 text-sm rounded-lg transition-colors hover:bg-[#575756] hover:text-white"
-                    :class="isActive('/alternative/institucion/galeria') ? 'text-white bg-[#575756]' : 'text-[#9D9D9C]'"
-                    @click="closeSidebarOnMobile"
-                  >
-                    • Galería de Imágenes
-                  </NuxtLink>
-                </div>
-              </li>
-
-              <!-- Legisladores (con submenú) -->
-              <li>
-                <button
-                  @click="toggleSubmenu('legisladores')"
-                  class="w-full flex items-center justify-between px-4 py-3 rounded-lg transition-all duration-200 group"
-                  :class="activeSubmenu === 'legisladores' 
-                    ? 'bg-[#E03636] text-white border-l-4 border-[#E4D294]' 
-                    : 'text-[#B1B1B1] hover:bg-[#575756] hover:text-white hover:border-l-4 hover:border-[#E03636]'"
-                >
-                  <div class="flex items-center gap-3">
-                    <div class="flex-shrink-0 w-5 h-5" :class="activeSubmenu === 'legisladores' ? 'text-white' : 'text-[#B1B1B1]'">
-                      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5 0a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                      </svg>
-                    </div>
-                    <span class="font-medium">Legisladores</span>
-                  </div>
-                  <svg class="w-4 h-4 transition-transform duration-200" :class="activeSubmenu === 'legisladores' ? 'rotate-90 text-[#E4D294]' : 'text-[#B1B1B1]'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                  </svg>
-                </button>
-                
-                <!-- Submenú de Legisladores -->
-                <div v-if="activeSubmenu === 'legisladores'" class="ml-9 mt-1 space-y-1">
-                  <NuxtLink
-                    to="/alternative/legisladores/directiva"
-                    class="block px-4 py-2 text-sm rounded-lg transition-colors hover:bg-[#575756] hover:text-white"
-                    :class="isActive('/alternative/legisladores/directiva') ? 'text-white bg-[#575756]' : 'text-[#9D9D9C]'"
-                    @click="closeSidebarOnMobile"
-                  >
-                    • Directiva Camara de Senadores
-                  </NuxtLink>
-                  <NuxtLink
-                    to="/alternative/legisladores/comisiones"
-                    class="block px-4 py-2 text-sm rounded-lg transition-colors hover:bg-[#575756] hover:text-white"
-                    :class="isActive('/alternative/legisladores/comisiones') ? 'text-white bg-[#575756]' : 'text-[#9D9D9C]'"
-                    @click="closeSidebarOnMobile"
-                  >
-                    • Comisiones y Comités
-                  </NuxtLink>
-                  <NuxtLink
-                    to="/alternative/legisladores/brigadas"
-                    class="block px-4 py-2 text-sm rounded-lg transition-colors hover:bg-[#575756] hover:text-white"
-                    :class="isActive('/alternative/legisladores/brigadas') ? 'text-white bg-[#575756]' : 'text-[#9D9D9C]'"
-                    @click="closeSidebarOnMobile"
-                  >
-                    • Brigadas Parlamentarias
-                  </NuxtLink>
-                  <NuxtLink
-                    to="/alternative/legisladores/supraestatales"
-                    class="block px-4 py-2 text-sm rounded-lg transition-colors hover:bg-[#575756] hover:text-white"
-                    :class="isActive('/alternative/legisladores/supraestatales') ? 'text-white bg-[#575756]' : 'text-[#9D9D9C]'"
-                    @click="closeSidebarOnMobile"
-                  >
-                    • Senadores Supraestatales
-                  </NuxtLink>
-                  <NuxtLink
-                    to="/alternative/legisladores/bancadas"
-                    class="block px-4 py-2 text-sm rounded-lg transition-colors hover:bg-[#575756] hover:text-white"
-                    :class="isActive('/alternative/legisladores/bancadas') ? 'text-white bg-[#575756]' : 'text-[#9D9D9C]'"
-                    @click="closeSidebarOnMobile"
-                  >
-                    • Bancadas Políticas
-                  </NuxtLink>
-                </div>
-              </li>
-
-              <!-- Gestión Legislativa -->
-              <li>
-                <NuxtLink
-                  to="/alternative/gestion-legislativa"
-                  class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 group"
-                  :class="isActive('/alternative/gestion-legislativa') 
-                    ? 'bg-[#E03636] text-white border-l-4 border-[#E4D294]' 
-                    : 'text-[#B1B1B1] hover:bg-[#575756] hover:text-white hover:border-l-4 hover:border-[#E03636]'"
-                  @click="closeSidebarOnMobile"
-                >
-                  <div class="flex-shrink-0 w-5 h-5" :class="isActive('/alternative/gestion-legislativa') ? 'text-white' : 'text-[#B1B1B1]'">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
-                    </svg>
-                  </div>
-                  <span class="font-medium flex-1">Gestión Legislativa</span>
-                </NuxtLink>
-              </li>
-
-              <!-- Cultura y Patrimonio -->
-              <li>
-                <NuxtLink
-                  to="/alternative/cultura"
-                  class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 group"
-                  :class="isActive('/alternative/cultura') 
-                    ? 'bg-[#E03636] text-white border-l-4 border-[#E4D294]' 
-                    : 'text-[#B1B1B1] hover:bg-[#575756] hover:text-white hover:border-l-4 hover:border-[#E03636]'"
-                  @click="closeSidebarOnMobile"
-                >
-                  <div class="flex-shrink-0 w-5 h-5" :class="isActive('/alternative/cultura') ? 'text-white' : 'text-[#B1B1B1]'">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-                    </svg>
-                  </div>
-                  <span class="font-medium flex-1">Cultura y Patrimonio</span>
-                </NuxtLink>
-              </li>
-
-              <!-- Participación -->
-              <li>
-                <NuxtLink
-                  to="/alternative/participacion"
-                  class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 group"
-                  :class="isActive('/alternative/participacion') 
-                    ? 'bg-[#E03636] text-white border-l-4 border-[#E4D294]' 
-                    : 'text-[#B1B1B1] hover:bg-[#575756] hover:text-white hover:border-l-4 hover:border-[#E03636]'"
-                  @click="closeSidebarOnMobile"
-                >
-                  <div class="flex-shrink-0 w-5 h-5" :class="isActive('/alternative/participacion') ? 'text-white' : 'text-[#B1B1B1]'">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path>
-                    </svg>
-                  </div>
-                  <span class="font-medium flex-1">Participación</span>
-                </NuxtLink>
-              </li>
-
-              <!-- Noticias -->
-              <li>
-                <NuxtLink
-                  to="/alternative/noticias"
-                  class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 group"
-                  :class="isActive('/alternative/noticias') 
-                    ? 'bg-[#E03636] text-white border-l-4 border-[#E4D294]' 
-                    : 'text-[#B1B1B1] hover:bg-[#575756] hover:text-white hover:border-l-4 hover:border-[#E03636]'"
-                  @click="closeSidebarOnMobile"
-                >
-                  <div class="flex-shrink-0 w-5 h-5" :class="isActive('/alternative/noticias') ? 'text-white' : 'text-[#B1B1B1]'">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
-                    </svg>
-                  </div>
-                  <span class="font-medium flex-1">Noticias</span>
-                </NuxtLink>
-              </li>
-
-              <!-- Contacto -->
-              <li>
-                <NuxtLink
-                  to="/alternative/contacto"
-                  class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 group"
-                  :class="isActive('/alternative/contacto') 
-                    ? 'bg-[#E03636] text-white border-l-4 border-[#E4D294]' 
-                    : 'text-[#B1B1B1] hover:bg-[#575756] hover:text-white hover:border-l-4 hover:border-[#E03636]'"
-                  @click="closeSidebarOnMobile"
-                >
-                  <div class="flex-shrink-0 w-5 h-5" :class="isActive('/alternative/contacto') ? 'text-white' : 'text-[#B1B1B1]'">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                    </svg>
-                  </div>
-                  <span class="font-medium flex-1">Contacto</span>
-                </NuxtLink>
-              </li>
-            </ul>
-          </nav>
-
-          <!-- Redes Sociales en Sidebar - CON COLORES OFICIALES -->
-          <div class="px-4 py-3 border-t border-[#575756]">
-            <h3 class="text-xs font-semibold text-[#E4D294] mb-2 uppercase tracking-wider">Síguenos</h3>
-            <div class="flex gap-1 justify-center">
-              <a
-                v-for="social in socialLinks"
-                :key="social.name"
-                :href="social.url"
-                target="_blank"
-                :title="social.name"
-                class="p-2 text-[#B1B1B1] hover:text-[#E4D294] hover:bg-[#575756] rounded-lg transition-colors"
+        <div class="p-4 overflow-y-auto h-full">
+          <div class="space-y-2">
+            <!-- Menú móvil: La institución -->
+            <div class="mb-2">
+              <button 
+                @click="toggleMobileMenu('institution')"
+                class="w-full flex items-center justify-between p-3 text-white hover:bg-white/10 rounded-lg transition-colors"
               >
-                <svg v-if="social.name === 'Twitter'" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                <span class="font-medium">La institución</span>
+                <svg 
+                  class="w-5 h-5 transition-transform duration-200"
+                  :class="{ 'rotate-180': mobileMenuState.institution }"
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                 </svg>
-                <svg v-else-if="social.name === 'Facebook'" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                </svg>
-                <svg v-else-if="social.name === 'YouTube'" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                </svg>
-              </a>
+              </button>
+              <div v-show="mobileMenuState.institution" class="ml-4 mt-1 space-y-1 border-l-2 border-white/30 pl-3">
+                <NuxtLink to="/institucion/mandato" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📜 Mandato constitucional</NuxtLink>
+                <NuxtLink to="/institucion/directiva" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📚 Directiva camaral</NuxtLink>
+                <NuxtLink to="/institucion/resena" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">🔄 Reseña histórica</NuxtLink>
+                <NuxtLink to="/institucion/galeria" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">🖼️ Galería de imágenes</NuxtLink>
+              </div>
             </div>
+            
+            <!-- Menú móvil: Legisladores -->
+            <div class="mb-2">
+              <button 
+                @click="toggleMobileMenu('legislators')"
+                class="w-full flex items-center justify-between p-3 text-white hover:bg-white/10 rounded-lg transition-colors"
+              >
+                <span class="font-medium">Legisladores</span>
+                <svg 
+                  class="w-5 h-5 transition-transform duration-200"
+                  :class="{ 'rotate-180': mobileMenuState.legislators }"
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </button>
+              <div v-show="mobileMenuState.legislators" class="ml-4 mt-1 space-y-1 border-l-2 border-white/30 pl-3">
+                <NuxtLink to="/legisladores/mandato" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📜 Mandato constitucional</NuxtLink>
+                <NuxtLink to="/legisladores/directiva" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📚 Directiva camaral</NuxtLink>
+                <NuxtLink to="/legisladores/resena" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">🔄 Reseña histórica</NuxtLink>
+                <NuxtLink to="/legisladores/galeria" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">🖼️ Galería de imágenes</NuxtLink>
+              </div>
+            </div>
+            
+            <!-- Menú móvil: Gestión Legislativa -->
+            <div class="mb-2">
+              <button 
+                @click="toggleMobileMenu('legislative')"
+                class="w-full flex items-center justify-between p-3 text-white hover:bg-white/10 rounded-lg transition-colors"
+              >
+                <span class="font-medium">Gestión Legislativa</span>
+                <svg 
+                  class="w-5 h-5 transition-transform duration-200"
+                  :class="{ 'rotate-180': mobileMenuState.legislative }"
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </button>
+              <div v-show="mobileMenuState.legislative" class="ml-4 mt-1 space-y-1 border-l-2 border-white/30 pl-3">
+                <NuxtLink to="/gestion/sesion" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👨‍⚖️ Sesión del pleno</NuxtLink>
+                <NuxtLink to="/gestion/proyectos" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👩‍⚖️ Proyectos de leyes</NuxtLink>
+                <NuxtLink to="/gestion/gaceta" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📋 Gaceta Legislativa</NuxtLink>
+              </div>
+            </div>
+            
+            <!-- Menú móvil: Cultura -->
+            <div class="mb-2">
+              <button 
+                @click="toggleMobileMenu('culture')"
+                class="w-full flex items-center justify-between p-3 text-white hover:bg-white/10 rounded-lg transition-colors"
+              >
+                <span class="font-medium">Cultura</span>
+                <svg 
+                  class="w-5 h-5 transition-transform duration-200"
+                  :class="{ 'rotate-180': mobileMenuState.culture }"
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </button>
+              <div v-show="mobileMenuState.culture" class="ml-4 mt-1 space-y-1 border-l-2 border-white/30 pl-3">
+                <NuxtLink to="/cultura/sesion" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👨‍⚖️ Sesión del pleno</NuxtLink>
+                <NuxtLink to="/cultura/proyectos" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👩‍⚖️ Proyectos de leyes</NuxtLink>
+                <NuxtLink to="/cultura/gaceta" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📋 Gaceta Legislativa</NuxtLink>
+              </div>
+            </div>
+            
+            <!-- Menú móvil: Participación -->
+            <div class="mb-2">
+              <button 
+                @click="toggleMobileMenu('participation')"
+                class="w-full flex items-center justify-between p-3 text-white hover:bg-white/10 rounded-lg transition-colors"
+              >
+                <span class="font-medium">Participación</span>
+                <svg 
+                  class="w-5 h-5 transition-transform duration-200"
+                  :class="{ 'rotate-180': mobileMenuState.participation }"
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </button>
+              <div v-show="mobileMenuState.participation" class="ml-4 mt-1 space-y-1 border-l-2 border-white/30 pl-3">
+                <NuxtLink to="/participacion/sesion" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👨‍⚖️ Sesión del pleno</NuxtLink>
+                <NuxtLink to="/participacion/proyectos" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👩‍⚖️ Proyectos de leyes</NuxtLink>
+                <NuxtLink to="/participacion/gaceta" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📋 Gaceta Legislativa</NuxtLink>
+              </div>
+            </div>
+            
+            <!-- Noticias -->
+            <NuxtLink to="/noticias" class="block p-3 text-white hover:bg-white/10 rounded-lg mt-4" @click="sidebarOpen = false">
+              📰 Noticias
+            </NuxtLink>
           </div>
         </div>
       </aside>
+    </div>
 
-      <!-- Overlay para móvil -->
-      <div
-        v-if="sidebarOpen"
-        class="fixed inset-0 bg-black bg-opacity-70 z-30 lg:hidden transition-opacity duration-300"
-        @click="sidebarOpen = false"
-        aria-label="Cerrar menú"
-      ></div>
+    <!-- Contenido principal (sin padding-top para que el header flote encima) -->
+    <main class="flex-1 min-w-0 relative z-10">
+      <div class="pt-0">
+        <slot />
+      </div>
 
-      <!-- Contenido principal -->
-      <main
-        class="flex-1 min-w-0 transition-all duration-300"
-        :class="sidebarOpen ? 'lg:ml-0' : ''"
-      >
-        <div class="container mx-auto px-4 py-8">
-          <slot />
+      <!-- Footer con colores oficiales -->
+      <footer class="bg-[#d34848] text-white mt-12 py-8">
+        <div class="container mx-auto px-4 text-center">
+          <p>Calle Comercio esquina Colón - Telf.: (591) 2158701 - La Paz - Bolivia</p>
+          <p class="mt-2 text-white/80 text-sm">www.senado.gob.bo</p>
         </div>
+      </footer>
+    </main>
 
-        <!-- Footer con colores oficiales -->
-        <footer class="bg-[#000000] text-white mt-12">
-          <div class="container mx-auto px-4 py-8">
-            <!-- Redes Sociales en Footer -->
-            <div class="text-center mb-6">
-              <h3 class="text-lg font-bold mb-4 text-[#E4D294]">Conéctate con nosotros</h3>
-              <div class="flex justify-center gap-3">
-                <a
-                  v-for="social in socialLinks"
-                  :key="social.name"
-                  :href="social.url"
-                  target="_blank"
-                  :title="social.name"
-                  class="p-2 bg-[#575756] hover:bg-[#E03636] rounded-full transition-all duration-300 hover:scale-110"
-                >
-                  <svg v-if="social.name === 'Twitter'" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                  </svg>
-                  <svg v-else-if="social.name === 'Facebook'" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                  </svg>
-                  <svg v-else-if="social.name === 'YouTube'" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                  </svg>
-                </a>
-              </div>
-            </div>
-
-            <div class="text-center text-[#B1B1B1] border-t border-[#575756] pt-6">
-              <p class="mb-2 text-lg font-medium">© 2024 Senado Nacional de Bolivia</p>
-              <p class="text-sm mb-4">Todos los derechos reservados</p>
-              <div class="flex justify-center gap-4">
-                <NuxtLink to="/" class="text-[#E4D294] hover:text-white underline flex items-center gap-1 text-sm">
-                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-                  </svg>
-                  Versión clásica
-                </NuxtLink>
-                <span class="text-[#575756]">•</span>
-                <button @click="toggleSidebar" class="text-[#E4D294] hover:text-white underline text-sm">
-                  {{ sidebarOpen ? 'Ocultar menú' : 'Mostrar menú' }}
-                </button>
-              </div>
-            </div>
-          </div>
-        </footer>
-      </main>
-
-      <!-- Redes Sociales Fijas (Derecha) - CON COLORES OFICIALES -->
-      <div class="hidden lg:block fixed right-0 top-1/2 transform -translate-y-1/2 z-40">
-        <div class="flex flex-col gap-2 p-2 bg-[#000000]/90 backdrop-blur-sm rounded-l-lg shadow-lg border border-[#575756]">
-          <a
-            v-for="social in socialLinks"
-            :key="social.name"
-            :href="social.url"
-            target="_blank"
-            :title="social.name"
-            class="p-2 text-[#B1B1B1] hover:text-white hover:bg-[#E03636] rounded-full transition-all duration-300 hover:scale-110"
-          >
-            <svg v-if="social.name === 'Twitter'" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-            </svg>
-            <svg v-else-if="social.name === 'Facebook'" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-            </svg>
-            <svg v-else-if="social.name === 'YouTube'" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-            </svg>
-          </a>
-        </div>
+    <!-- Redes Sociales Fijas (Derecha) -->
+    <div class="hidden lg:block fixed right-0 top-1/2 transform -translate-y-1/2 z-40">
+      <div class="flex flex-col gap-2 p-2 bg-[#fff]/20 backdrop-blur-sm rounded-l-lg shadow-lg">
+        <a v-for="social in socialLinks" :key="social.name" :href="social.url" target="_blank" :title="social.name" class="p-2 text-white hover:bg-[#C12F2F] rounded-full transition-all duration-300 hover:scale-110">
+          <svg v-if="social.name === 'Twitter'" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+          </svg>
+          <svg v-else-if="social.name === 'Facebook'" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+          </svg>
+          <svg v-else-if="social.name === 'YouTube'" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+          </svg>
+          <svg v-else-if="social.name === 'Instagram'" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/>
+          </svg>
+          <svg v-else-if="social.name === 'LinkedIn'" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+          </svg>
+          <svg v-else-if="social.name === 'TikTok'" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/>
+          </svg>
+        </a>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
-import { useRoute } from '#app'
+import { ref, reactive } from 'vue'
 
-const route = useRoute()
-const sidebarRef = ref(null)
 const sidebarOpen = ref(false)
-const activeSubmenu = ref(null)
 
-// Función para alternar sidebar
+// Estado para menús móviles
+const mobileMenuState = reactive({
+  institution: false,
+  legislators: false,
+  legislative: false,
+  culture: false,
+  participation: false
+})
+
 const toggleSidebar = () => {
-  window.scrollTo({ top: 0, behavior: 'smooth' })
   sidebarOpen.value = !sidebarOpen.value
-}
-
-// Función para alternar submenús
-const toggleSubmenu = (menu) => {
-  if (activeSubmenu.value === menu) {
-    activeSubmenu.value = null
-  } else {
-    activeSubmenu.value = menu
+  // Cerrar todos los submenús al abrir/cerrar sidebar
+  if (!sidebarOpen.value) {
+    Object.keys(mobileMenuState).forEach(key => {
+      mobileMenuState[key] = false
+    })
   }
 }
 
-// Cerrar sidebar en móvil al cambiar de ruta
-const closeSidebarOnMobile = () => {
-  if (window.innerWidth < 1024) {
-    sidebarOpen.value = false
-  }
+const toggleMobileMenu = (menu) => {
+  mobileMenuState[menu] = !mobileMenuState[menu]
 }
-
-// Manejar tecla ESC
-const handleKeydown = (e) => {
-  if (e.key === 'Escape' && sidebarOpen.value) {
-    sidebarOpen.value = false
-  }
-}
-
-// Setup event listeners
-onMounted(() => {
-  window.addEventListener('keydown', handleKeydown)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('keydown', handleKeydown)
-})
 
 // Redes sociales
 const socialLinks = [
-  {
-    name: 'Twitter',
-    url: 'https://twitter.com/senadobolivia'
-  },
-  {
-    name: 'Facebook',
-    url: 'https://facebook.com/senadobolivia'
-  },
-  {
-    name: 'YouTube',
-    url: 'https://youtube.com/senadobolivia'
-  }
+  { name: 'Twitter', url: 'https://twitter.com/senadobolivia' },
+  { name: 'Facebook', url: 'https://facebook.com/senadobolivia' },
+  { name: 'YouTube', url: 'https://youtube.com/senadobolivia' },
+  { name: 'Instagram', url: 'https://instagram.com/senadobolivia' },
+  { name: 'LinkedIn', url: 'https://linkedin.com/company/senadobolivia' },
+  { name: 'TikTok', url: 'https://tiktok.com/@senadobolivia' }
 ]
-
-const isActive = (path) => {
-  return route.path === path || route.path.startsWith(path + '/')
-}
 </script>
 
 <style scoped>
-/* Estilos para el sidebar */
-aside {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+/* Header fijo rojo */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: #E03636;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
-/* Scrollbar personalizado con colores oficiales */
-aside::-webkit-scrollbar {
-  width: 4px;
+/* Espaciador para compensar header fijo */
+.h-\[72px\] {
+  height: 72px;
 }
 
-aside::-webkit-scrollbar-track {
-  background: #575756;
+/* Rotación para flechas en móvil */
+.rotate-180 {
+  transform: rotate(180deg);
 }
 
-aside::-webkit-scrollbar-thumb {
-  background: #E03636;
-  border-radius: 4px;
-}
-
-aside::-webkit-scrollbar-thumb:hover {
-  background: #C12F2F;
-}
-
-/* Transición para submenús */
-.submenu-enter-active,
-.submenu-leave-active {
-  transition: all 0.2s ease;
-  max-height: 300px;
-  overflow: hidden;
-}
-
-.submenu-enter-from,
-.submenu-leave-to {
-  max-height: 0;
-  opacity: 0;
-}
-
-/* Estilos de selección de texto con colores oficiales */
+/* Estilos de selección de texto */
 ::selection {
   background-color: #E03636;
   color: white;
@@ -555,5 +420,21 @@ aside::-webkit-scrollbar-thumb:hover {
 ::-moz-selection {
   background-color: #E03636;
   color: white;
+}
+
+/* Hover en menús desktop */
+.group:hover .group-hover\:opacity-100 {
+  opacity: 1;
+}
+
+.group:hover .group-hover\:visible {
+  visibility: visible;
+}
+
+/* Transición suave */
+.transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 200ms;
 }
 </style>

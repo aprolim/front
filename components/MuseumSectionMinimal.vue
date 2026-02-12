@@ -163,9 +163,9 @@ const props = defineProps({
   -webkit-backdrop-filter: none;
   padding: 2rem 0;
   width: 100%;
-  max-width: 550px; /* Ancho máximo del contenido */
-  margin-left: auto; /* Empuja a la derecha */
-  margin-right: 8%; /* Más espacio del borde derecho */
+  max-width: 84%; /* Ancho máx8imo del contenido */
+  margin-left: auto; /* Empuja a la derecha*/
+  margin-right: auto;/* Más espacio del borde derecho*/
 }
 
 .museum-description {

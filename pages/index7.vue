@@ -16,7 +16,7 @@
       />
 
       <!-- Contenido del hero -->
-      <HeroContent :scrolled="scrolled" />
+      <HeroContent2 :scrolled="scrolled" />
       
 
       <!-- Indicadores del carrusel -->
@@ -109,7 +109,7 @@ import { useIntersection } from '@/composables/useIntersection'
 import SenateChamber from '@/components/SenateChamber.vue'
 import MuseumSectionMinimal from '@/components/MuseumSectionMinimal.vue'
 import HeroCarousel from '@/components/HeroSection/HeroCarousel.vue'
-import HeroContent from '@/components/HeroSection/HeroContent.vue'
+import HeroContent2 from '@/components/HeroSection/HeroContent2.vue'
 import ScrollProgress from '@/components/UI/ScrollProgress.vue'
 import SectionHeader from '@/components/UI/SectionHeader.vue'
 import NewsCard from '@/components/News/NewsCard.vue'
@@ -272,7 +272,7 @@ onUnmounted(() => {
 
 // Metadatos
 definePageMeta({
-  layout: 'alter8'
+  layout: 'alter'
 })
 </script>
 

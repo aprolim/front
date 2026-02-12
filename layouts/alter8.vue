@@ -412,10 +412,10 @@
     <footer class="text-white back-image">
       <div class="mx-auto">
         <div class="text-center">
-          <div class="flex items-center justify-center gap-3 mb-6">
-            <div class=" flex items-center justify-center">
-              <img
-                  src="/senado-footer.png" 
+          <div class="flex items-center justify-center gap-3 back-image">
+            <div class=" flex items-center justify-center w-40 h-40 pt-3 ">
+              <img 
+                  src="/2R.png" 
                   alt="Escudo Senado Nacional" 
                   class="w-full h-full object-cover"
               />
@@ -423,10 +423,36 @@
             
           </div>
           
-          <div class="sub-footer">
-            <br>
-            Calle Comercio esquina Colón - Telf.: (591) 2158701 - www.senado.gob.bo - La Paz - Bolivia 
-            <br>
+          <div class="sub-footer bg-gray-900 text-white py-8">
+            <div class="container mx-auto px-4">
+              <!-- Grid de 3 columnas con ancho personalizado -->
+              <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+                
+                <!-- Columna 1: Logo + texto (izquierda) - 2 fracciones -->
+                <div class="md:col-span-3 flex items-center justify-start space-x-3">
+                  <img src="/footer-img/Recurso 7.png" alt="Senado Bolivia" class="h-12 w-auto">
+                  <div>
+                    <p class="font-semibold">Senado de Bolivia</p>
+                  </div>
+                </div>
+                
+                <!-- Columna 2: Centro - 3 fracciones (más ancha) -->
+                <div class="md:col-span-6 text-center">  <!-- 🟢 col-span-2 -->
+                  <p>
+                    Calle Comercio esquina Colón - Telf.: (591) 2158701 - www.senado.gob.bo - La Paz - Bolivia 
+                  </p>
+                </div>
+                
+                <!-- Columna 3: Derecha - 2 fracciones -->
+                <div class="md:col-span-3 flex items-center justify-end space-x-3">
+                  <img src="/footer-img/Recurso 8.png" alt="Escudo Senado" class="h-12 w-auto">
+                  <div class="text-right">
+                    <p class="font-semibold">www.senado.gob.bo</p>
+                  </div>
+                </div>
+                
+              </div>
+            </div>
           </div>
           
          
@@ -540,7 +566,8 @@ header {
   /* background-attachment: fixed; */
 }
 .sub-footer{
-  background-color: rgba(224, 54, 54, 0.7);
+  background-color: rgba(198, 18, 16, 0.6);
+  font-size: .7em;
 }
 
 /* Asegurar que el contenido esté debajo */
