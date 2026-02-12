@@ -8,26 +8,16 @@
           <!-- Logo y botón hamburguesa (solo móvil) -->
           <div class="flex items-center gap-4">
             <!-- Botón hamburguesa solo para móvil -->
-            <button 
-              @click="toggleSidebar"
-              class="p-2 rounded-lg hover:bg-[#C12F2F] transition-colors lg:hidden"
-              aria-label="Toggle menu"
-            >
-              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-              </svg>
-            </button>
 
             <!-- Logo -->
-            <NuxtLink to="/" class="flex items-center gap-3 no-underline group">
-              <div class="w-10 h-10 rounded-lg overflow-hidden flex items-center justify-center group-hover:scale-105 transition-transform">
+            <NuxtLink to="/" class="ml-8 pl-8 flex items-center gap-3 no-underline group">
+              <div class="w-16 h-16 rounded-lg overflow-hidden flex items-center justify-center group-hover:scale-105 transition-transform">
                 <img 
-                  src="/logo camsen.png" 
+                  src="/senadores2.png" 
                   alt="Logo" 
                   class="w-full h-full object-cover"
                 />
               </div>
-              <span class="text-white font-bold text-lg hidden sm:block">Cámara de Diputados</span>
             </NuxtLink>
           </div>
 

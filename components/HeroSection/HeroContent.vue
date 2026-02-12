@@ -155,10 +155,12 @@
         <div class="container mx-auto px-4 md:px-12 relative z-10 text-center">
           <!-- Texto principal con efecto de gradiente -->
           <p class="text-2xl md:text-3xl font-bold text-white">
-            <span class="bg-clip-text text-transparent bg-gradient-to-r from-white via-yellow-100 to-yellow-200">
-              PRIMERA LEGISLATURA DEL TRICENTENARIO.
-            </span>
-          </p>
+    <span class="bg-clip-text text-transparent bg-gradient-to-r from-white via-yellow-100 to-yellow-200">
+      <span class="inline-flex items-center justify-center text-base -translate-y-1 text-white">⚪</span> 
+      PRIMERA LEGISLATURA DEL TRICENTENARIO 
+      <span class="inline-flex items-center justify-center text-base -translate-y-1 text-white">⚪</span>
+    </span>
+  </p>
 
           <!-- Línea decorativa central -->
           <div class="inline-block w-24 h-1 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-400 rounded-full my-4"></div>
