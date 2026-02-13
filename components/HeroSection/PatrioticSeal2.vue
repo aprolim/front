@@ -18,7 +18,7 @@
           <div class="text-xs md:text-sm font-semibold text-gray-700 mt-1">SENADO NACIONAL</div>
         </div>
       </div> -->
-        <div class="absolute inset-0 flex items-center justify-center overflow-hidden rounded-full shadow-2xl top-28">
+        <div class="absolute flex items-center justify-center overflow-hidden rounded-full shadow-2xl top-40">
           <img 
               src="/senadores.svg" 
               alt="Escudo Senado Nacional" 

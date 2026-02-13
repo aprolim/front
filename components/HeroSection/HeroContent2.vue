@@ -22,6 +22,12 @@
             :class="scrolled ? 'opacity-100' : 'opacity-0 h-0 overflow-hidden'"
           >
             <div>
+              <br>
+              <br>
+              <br>
+              <br>
+              <br><br><br><br>
+
               <h2 class="text-2xl md:text-3xl font-bold text-white">Camara de senadores</h2>
               <p class="text-sm text-white/80">Estado Plurinacional de Bolivia</p>
             </div>

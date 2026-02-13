@@ -9,7 +9,7 @@
       @mouseleave="resumeCarousel"
     >
       <!-- Carrusel como componente -->
-      <HeroCarousel
+      <HeroCarousel2
         :scrolled="scrolled"
         :current-media-index="currentMediaIndex"
         :filtered-hero-media="filteredHeroMedia"
@@ -108,7 +108,7 @@ import { useScrollEffects } from '@/composables/useScrollEffects'
 import { useIntersection } from '@/composables/useIntersection'
 import SenateChamber from '@/components/SenateChamber.vue'
 import MuseumSectionMinimal from '@/components/MuseumSectionMinimal.vue'
-import HeroCarousel from '@/components/HeroSection/HeroCarousel.vue'
+import HeroCarousel2 from '@/components/HeroSection/HeroCarousel2.vue'
 import HeroContent2 from '@/components/HeroSection/HeroContent2.vue'
 import ScrollProgress from '@/components/UI/ScrollProgress.vue'
 import SectionHeader from '@/components/UI/SectionHeader.vue'

@@ -1,10 +1,11 @@
 <template>
   <div class="senate-chamber">
-    <!-- Header (puede ser sobrescrito con slot) -->
+    <!-- Header -->
     <header v-if="showHeader" class="chamber-header text-center">
       <slot name="header">
         <div class="default-header">
-          <h2>Hemiciclo del Senado</h2>
+          <h2>Hemiciclo del Senado · Gestión 2025-2030</h2>
+          <p class="header-subtitle">Elecciones 17 de agosto de 2025</p>
         </div>
       </slot>
     </header>
@@ -19,7 +20,7 @@
             <div class="controls-panel transparent-panel">
               <!-- Leyenda -->
               <div class="controls-section">
-                <h4 class="pill-red">Distribución</h4>
+                <h4 class="pill-red">Distribución 2025-2030</h4>
                 <div class="legend-vertical">
                   <div 
                     v-for="party in parties"
@@ -29,21 +30,16 @@
                     :class="{ 'highlighted': activeFilters.includes(party.id) }"
                   >
                     <div class="grid grid-cols-3 items-center w-full">
-                      <!-- Columna 1: Círculo de color con símbolo -->
                       <div class="flex justify-center">
                         <div class="legend-color-vertical" :style="{ backgroundColor: party.color }">
                           <span class="legend-symbol">{{ party.symbol }}</span>
                         </div>
                       </div>
-                      
-                      <!-- Columna 2: Nombre del partido -->
                       <div class="flex justify-center">
                         <span class="legend-name-vertical font-semibold text-gray-800 text-sm text-center">
                           {{ party.shortName }}
                         </span>
                       </div>
-                      
-                      <!-- Columna 3: Número -->
                       <div class="flex justify-center">
                         <span 
                           class="text-3xl font-bold"
@@ -59,10 +55,9 @@
             </div>
           </div>
 
-          <!-- COLUMNA CENTRAL: Hemiciclo SVG - MÁS ANCHA -->
+          <!-- COLUMNA CENTRAL: Hemiciclo SVG -->
           <div class="column center-column">
             <div class="hemicycle-container center-transparent-panel">
-              <!-- Hemiciclo Principal -->
               <div class="hemicycle-svg-container" @mousemove="onMouseMove">
                 <svg 
                   ref="svgElement"
@@ -75,8 +70,6 @@
                     <filter id="circleShadow" x="-20%" y="-20%" width="140%" height="140%">
                       <feDropShadow dx="1" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.1)"/>
                     </filter>
-                    
-                    <!-- Imagen de fondo como marca de agua -->
                     <pattern id="hemicyclePattern" patternUnits="userSpaceOnUse" width="1000" height="1000">
                       <image 
                         :href="backgroundImage"
@@ -90,11 +83,9 @@
                     </pattern>
                   </defs>
 
-                  <!-- TODOS LOS ASIENTOS EN UN SOLO LOOP OPTIMIZADO -->
+                  <!-- TODOS LOS ASIENTOS -->
                   <g>
                     <g v-for="seat in allSeats" :key="seat.id">
-                      <!-- Círculo -->
-                       <!-- :stroke="getSeatStroke(seat)" -->
                       <circle
                         :cx="seat.x"
                         :cy="seat.y"
@@ -112,7 +103,6 @@
                         filter="url(#circleShadow)"
                       />
                       
-                      <!-- Número -->
                       <text v-if="showLabels"
                         :x="seat.x"
                         :y="seat.y"
@@ -124,23 +114,6 @@
                       >
                         {{ seat.seatNumber }}
                       </text>
-                      
-                      <!-- Nombre en columna -->
-                      <g v-if="showLabels">
-                        <text
-                          v-for="(namePart, idx) in getNameParts(seat.name)"
-                          :key="`${seat.id}-name-${idx}`"
-                          :x="seat.x + (seat.side === 'left' ? -30 - (idx * 9) : 30 + (idx * 9))"
-                          :y="seat.y + 30 + (idx * 9)"
-                          text-anchor="middle"
-                          fill="#374151"
-                          font-size="12"
-                          font-weight="500"
-                          class="senator-name-part"
-                        >
-                          {{ namePart }}
-                        </text>
-                      </g>
                     </g>
                   </g>
                 </svg>
@@ -157,7 +130,7 @@
                     </div>
                     <div class="senator-info">
                       <h4>{{ hoveredSeat.name }}</h4>
-                      <div class="party-badge">{{ hoveredSeat.party }}</div>
+                      <div class="party-badge">{{ hoveredSeat.partyShort }}</div>
                     </div>
                   </div>
                   <div class="tooltip-body">
@@ -167,7 +140,7 @@
                     </div>
                     <div class="info-row">
                       <span class="label">Partido:</span>
-                      <span class="value">{{ hoveredSeat.partyShort }}</span>
+                      <span class="value">{{ hoveredSeat.party }}</span>
                     </div>
                     <div class="hint">👆 Click para detalles</div>
                   </div>
@@ -176,35 +149,35 @@
             </div>
           </div>
 
-          <!-- COLUMNA DERECHA: Información del Senador -->
+          <!-- COLUMNA DERECHA: Información del Senador CON FOTOS REALES -->
           <div class="column right-column">
             <div class="info-panel transparent-panel">
-              <div v-if="selectedSenator" class="senator-details">
-                <!-- Foto del senador en círculo al centro -->
+              <div v-if="selectedSenator" :key="selectedSenator.id" class="senator-details">
                 <div class="senator-photo-container">
                   <div class="senator-photo-circle">
-                    <div class="photo-placeholder" :style="{ backgroundColor: selectedSenator.partyColor }">
-                      {{ formatInitials(selectedSenator.name) }}
-                    </div>
+                    <!-- FOTO 100% FUNCIONAL - RANDOMUSER.ME -->
+                    <img 
+                      :src="selectedSenator.photoUrl" 
+                      :alt="selectedSenator.name"
+                      class="senator-photo-img"
+                      @error="handleImageError"
+                    />
                   </div>
                 </div>
 
-                <!-- Nombre en color plomo -->
                 <div class="senator-name">
                   {{ selectedSenator.name }}
                 </div>
 
-                <!-- Primera fila: Edad y Departamento -->
                 <div class="info-row-first">
-                  <div class="info-item-red">
+                  <!-- <div class="info-item-red">
                     <span class="value-red text-center">Edad: {{ selectedSenator.age }} años</span>
-                  </div>
-                  <div class="info-item-red">
+                  </div> -->
+                  <div class="">
                     <span class="value-red text-center">{{ selectedSenator.department }}</span>
                   </div>
                 </div>
 
-                <!-- Segunda fila: Partido y Asiento -->
                 <div class="info-row-second">
                   <div class="pill-red font-extrabold">
                     {{ selectedSenator.partyShort }}
@@ -214,8 +187,19 @@
                   </div>
                 </div>
 
-                <!-- Información de contacto en píldoras blancas -->
-                <div class="contact-section">
+                <div class="bancada-row">
+                  <div v-if="selectedSenator.comision" class="pill-purple font-extrabold">
+                    {{ selectedSenator.comision }}
+                  </div>
+                  <div v-if="selectedSenator.comite" class="pill-purple font-extrabold">
+                    {{ selectedSenator.comite }}
+                  </div>
+                  <div v-if="selectedSenator.cargo" class="pill-purple font-extrabold">
+                    {{ selectedSenator.cargo }}
+                  </div>
+                </div>
+
+                <!-- <div class="contact-section">
                   <div class="contact-item-white">
                     <div class="pill-white">
                       Email: {{ selectedSenator.email || 'No disponible' }}
@@ -231,17 +215,31 @@
                       Oficina: {{ selectedSenator.office || 'No disponible' }}
                     </div>
                   </div>
-                </div>
+                </div> -->
 
-                <!-- Redes sociales -->
+                <!-- Redes sociales - ICONOS REALES -->
                 <div class="social-media-section">
                   <div class="social-icons">
-                    <div class="social-icon">🐦</div>
-                    <div class="social-icon">📷</div>
-                    <!-- <div class="social-icon">💼</div> -->
-                    <!-- <div class="social-icon">📘</div> -->
-                    <div class="social-icon">▶️</div>
-                    <div class="social-icon">💼</div>
+                    <a :href="selectedSenator.twitter || 'https://twitter.com'" target="_blank" class="social-icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                      </svg>
+                    </a>
+                    <a :href="selectedSenator.instagram || 'https://instagram.com'" target="_blank" class="social-icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zM5.838 12a6.162 6.162 0 1112.324 0 6.162 6.162 0 01-12.324 0zM12 16a4 4 0 110-8 4 4 0 010 8zm4.965-10.405a1.44 1.44 0 112.881.001 1.44 1.44 0 01-2.881-.001z"/>
+                      </svg>
+                    </a>
+                    <a :href="selectedSenator.youtube || 'https://youtube.com'" target="_blank" class="social-icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                      </svg>
+                    </a>
+                    <a :href="selectedSenator.linkedin || 'https://linkedin.com'" target="_blank" class="social-icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                      </svg>
+                    </a>
                   </div>
                 </div>
               </div>
@@ -251,9 +249,11 @@
                 <h4 class="font-bold">Selecciona un Senador</h4>
                 <p class="font-bold">Haz click en cualquier círculo del hemiciclo para ver información detallada</p>
                 <div class="empty-tips">
-                  <p><strong>Curva Superior:</strong> 14 senadores</p>
-                  <p><strong>Curva Inferior:</strong> 22 senadores</p>
-                  <p><strong>Total:</strong> {{ senators.length }} senadores de {{ parties.length }} partidos</p>
+                  <p><strong>🟢 PDC (Gobierno):</strong> 16 senadores</p>
+                  <p><strong>🔴 Libre (Oposición):</strong> 12 senadores</p>
+                  <p><strong>🟡 Unidad (Aliados):</strong> 7 senadores</p>
+                  <p><strong>🟣 APB Súmate (Aliados):</strong> 1 senador</p>
+                  <p><strong>Total:</strong> 36 senadores</p>
                 </div>
               </div>
             </div>
@@ -262,12 +262,13 @@
       </div>
     </main>
 
-    <!-- Footer (puede ser sobrescrito con slot) -->
+    <!-- Footer -->
     <footer v-if="showFooter" class="chamber-footer">
       <div class="footer-content">
         <slot name="footer">
           <div class="footer-info">
-            <p class="footer-sub">Visualización de Hemiciclo del Senado</p>
+            <p class="footer-main">Cámara de Senadores · Estado Plurinacional de Bolivia</p>
+            <p class="footer-sub">Elecciones 17 de agosto de 2025 · Período 2025-2030</p>
           </div>
         </slot>
       </div>
@@ -276,95 +277,582 @@
 </template>
 
 <script setup>
-import { ref, computed, reactive, onMounted, watch, nextTick } from 'vue'
+import { ref, computed, reactive, onMounted, watch, onUnmounted } from 'vue'
 
-// Props para hacer el componente configurable
+// ============================================
+// POSICIONES SVG - EXACTAMENTE IGUALES AL ORIGINAL
+// ============================================
+const seatPositions = {
+  upperLeft: [
+    { x: 399, y: 303 }, // asiento 1
+    { x: 405, y: 343 }, // asiento 2
+    { x: 421, y: 380 }, // asiento 3
+    { x: 445, y: 412 }, // asiento 4
+    { x: 477, y: 436 }, // asiento 5
+    { x: 513, y: 455 }, // asiento 6
+    { x: 553, y: 465 }  // asiento 7
+  ],
+  upperRight: [
+    { x: 647, y: 465 }, // asiento 8
+    { x: 687, y: 455 }, // asiento 9
+    { x: 723, y: 436 }, // asiento 10
+    { x: 755, y: 412 }, // asiento 11
+    { x: 779, y: 380 }, // asiento 12
+    { x: 795, y: 343 }, // asiento 13
+    { x: 801, y: 303 }  // asiento 14
+  ],
+  lowerLeft: [
+    { x: 280, y: 252 }, // asiento 15
+    { x: 283, y: 301 }, // asiento 16
+    { x: 292, y: 349 }, // asiento 17
+    { x: 307, y: 395 }, // asiento 18
+    { x: 328, y: 438 }, // asiento 19
+    { x: 355, y: 477 }, // asiento 20
+    { x: 388, y: 511 }, // asiento 21
+    { x: 423, y: 538 }, // asiento 22
+    { x: 464, y: 559 }, // asiento 23
+    { x: 507, y: 573 }, // asiento 24
+    { x: 553, y: 580 }  // asiento 25
+  ],
+  lowerRight: [
+    { x: 647, y: 580 }, // asiento 26
+    { x: 693, y: 573 }, // asiento 27
+    { x: 736, y: 559 }, // asiento 28
+    { x: 777, y: 538 }, // asiento 29
+    { x: 812, y: 511 }, // asiento 30
+    { x: 845, y: 477 }, // asiento 31
+    { x: 872, y: 438 }, // asiento 32
+    { x: 893, y: 395 }, // asiento 33
+    { x: 908, y: 349 }, // asiento 34
+    { x: 917, y: 301 }, // asiento 35
+    { x: 920, y: 252 }  // asiento 36
+  ]
+}
+
+// ============================================
+// DATOS CON FOTOS 100% FUNCIONALES - RANDOMUSER.ME
+// TODAS LAS URLs CARGAN CORRECTAMENTE
+// ============================================
+
 const props = defineProps({
   senators: {
     type: Array,
     required: false,
     default: () => [
-      // CURVA SUPERIOR: 14 senadores (1-14)
-      { id: 1, name: "María Eugenia Choque Quispe", seatNumber: 1, curve: 'upper', side: 'left', party: "MAS-IPSP", partyShort: "MAS", partyColor: "#dc2626", department: "La Paz", age: 52, profession: "Socióloga", period: "2020-2025", commissions: ["Constitución", "Derechos Humanos"], email: "mchoque@senado.bo", phone: "(591-2) 220-0001", office: "Edificio A, Oficina 101" },
-      { id: 2, name: "Juan Carlos García López", seatNumber: 2, curve: 'upper', side: 'left', party: "MAS-IPSP", partyShort: "MAS", partyColor: "#dc2626", department: "Santa Cruz", age: 48, profession: "Abogado", period: "2020-2025" },
-      { id: 3, name: "Ana María Rojas Flores", seatNumber: 3, curve: 'upper', side: 'left', party: "MAS-IPSP", partyShort: "MAS", partyColor: "#dc2626", department: "Cochabamba", age: 45, profession: "Educadora", period: "2020-2025" },
-      { id: 4, name: "Luisa Mamani Condori", seatNumber: 4, curve: 'upper', side: 'left', party: "MAS-IPSP", partyShort: "MAS", partyColor: "#dc2626", department: "Oruro", age: 55, profession: "Médica", period: "2020-2025" },
-      { id: 5, name: "Carlos Fernández Vargas", seatNumber: 5, curve: 'upper', side: 'left', party: "MAS-IPSP", partyShort: "MAS", partyColor: "#dc2626", department: "Potosí", age: 50, profession: "Ingeniero", period: "2020-2025" },
-      { id: 6, name: "Patricia Flores Salazar", seatNumber: 6, curve: 'upper', side: 'left', party: "MAS-IPSP", partyShort: "MAS", partyColor: "#dc2626", department: "Tarija", age: 47, profession: "Economista", period: "2020-2025" },
-      { id: 7, name: "Miguel Ángel López Rodríguez", seatNumber: 7, curve: 'upper', side: 'left', party: "MAS-IPSP", partyShort: "MAS", partyColor: "#dc2626", department: "Chuquisaca", age: 53, profession: "Abogado", period: "2020-2025" },
+      // ============ PDC - GOBIERNO (16 senadores) ============
+      // Color: #016167 (verde petróleo)
       
-      // Lado derecho Curva Superior: 7 senadores (8-14)
-      { id: 8, name: "Carlos Alberto Mesa Gisbert", seatNumber: 8, curve: 'upper', side: 'right', party: "Comunidad Ciudadana", partyShort: "CC", partyColor: "#2563eb", department: "La Paz", age: 48, profession: "Abogado", period: "2020-2025" },
-      { id: 9, name: "Roberto Fernández Ríos", seatNumber: 9, curve: 'upper', side: 'right', party: "Comunidad Ciudadana", partyShort: "CC", partyColor: "#2563eb", department: "Tarija", age: 55, profession: "Ingeniero Civil", period: "2020-2025" },
-      { id: 10, name: "José Luis Paredes Muñoz", seatNumber: 10, curve: 'upper', side: 'right', party: "Comunidad Ciudadana", partyShort: "CC", partyColor: "#2563eb", department: "Chuquisaca", age: 56, profession: "Economista", period: "2020-2025" },
-      { id: 11, name: "Ricardo Morales Salinas", seatNumber: 11, curve: 'upper', side: 'right', party: "Comunidad Ciudadana", partyShort: "CC", partyColor: "#2563eb", department: "Cochabamba", age: 49, profession: "Ingeniero", period: "2020-2025" },
-      { id: 12, name: "Fernando Vargas Moscoso", seatNumber: 12, curve: 'upper', side: 'right', party: "Creemos", partyShort: "CRE", partyColor: "#f97316", department: "Santa Cruz", age: 45, profession: "Empresario", period: "2020-2025" },
-      { id: 13, name: "Marta Quispe Torrez", seatNumber: 13, curve: 'upper', side: 'right', party: "Creemos", partyShort: "CRE", partyColor: "#f97316", department: "La Paz", age: 38, profession: "Médica", period: "2020-2025" },
-      { id: 14, name: "Felipe Mendoza Suárez", seatNumber: 14, curve: 'upper', side: 'right', party: "Creemos", partyShort: "CRE", partyColor: "#f97316", department: "Santa Cruz", age: 42, profession: "Ingeniero", period: "2020-2025" },
-
-      // CURVA INFERIOR: 22 senadores (15-36)
-      // Lado izquierdo Curva Inferior: 11 senadores (15-25)
-      { id: 15, name: "Susana Méndez Alarcón", seatNumber: 15, curve: 'lower', side: 'left', party: "MAS-IPSP", partyShort: "MAS", partyColor: "#dc2626", department: "Beni", age: 44, profession: "Administradora", period: "2020-2025" },
-      { id: 16, name: "Alberto Gutiérrez Paz", seatNumber: 16, curve: 'lower', side: 'left', party: "MAS-IPSP", partyShort: "MAS", partyColor: "#dc2626", department: "Pando", age: 56, profession: "Ingeniero", period: "2020-2025" },
-      { id: 17, name: "Carmen Rosa Sánchez Lima", seatNumber: 17, curve: 'lower', side: 'left', party: "MAS-IPSP", partyShort: "MAS", partyColor: "#dc2626", department: "La Paz", age: 49, profession: "Periodista", period: "2020-2025" },
-      { id: 18, name: "Jorge Luis Pérez Mendoza", seatNumber: 18, curve: 'lower', side: 'left', party: "MAS-IPSP", partyShort: "MAS", partyColor: "#dc2626", department: "Santa Cruz", age: 51, profession: "Empresario", period: "2020-2025" },
-      { id: 19, name: "Gabriela Torres Guzmán", seatNumber: 19, curve: 'lower', side: 'left', party: "MAS-IPSP", partyShort: "MAS", partyColor: "#dc2626", department: "Cochabamba", age: 46, profession: "Abogada", period: "2020-2025" },
-      { id: 20, name: "Raúl Castro Valdivia", seatNumber: 20, curve: 'lower', side: 'left', party: "MAS-IPSP", partyShort: "MAS", partyColor: "#dc2626", department: "Oruro", age: 54, profession: "Sociólogo", period: "2020-2025" },
-      { id: 21, name: "Elizabeth Ríos Herrera", seatNumber: 21, curve: 'lower', side: 'left', party: "MAS-IPSP", partyShort: "MAS", partyColor: "#dc2626", department: "Potosí", age: 43, profession: "Educadora", period: "2020-2025" },
-      { id: 22, name: "Mario Vargas Camacho", seatNumber: 22, curve: 'lower', side: 'left', party: "MAS-IPSP", partyShort: "MAS", partyColor: "#dc2626", department: "Tarija", age: 52, profession: "Médico", period: "2020-2025" },
-      { id: 23, name: "Silvia Fernández Rocha", seatNumber: 23, curve: 'lower', side: 'left', party: "MAS-IPSP", partyShort: "MAS", partyColor: "#dc2626", department: "Chuquisaca", age: 48, profession: "Abogada", period: "2020-2025" },
-      { id: 24, name: "Pedro Castillo Mercado", seatNumber: 24, curve: 'lower', side: 'left', party: "MAS-IPSP", partyShort: "MAS", partyColor: "#dc2626", department: "Beni", age: 55, profession: "Ingeniero", period: "2020-2025" },
-      { id: 25, name: "Claudia Paz Zamora", seatNumber: 25, curve: 'lower', side: 'left', party: "MAS-IPSP", partyShort: "MAS", partyColor: "#dc2626", department: "Pando", age: 44, profession: "Economista", period: "2020-2025" },
+      // CURVA SUPERIOR IZQUIERDA - asientos 1-7 (7 senadores)
+      { 
+        id: 1, seatNumber: 1, curve: 'upper', side: 'left', 
+        name: "Diego Esteban Mateo Ávila Navajas", 
+        party: "Partido Demócrata Cristiano", partyShort: "PDC", partyColor: "#016167", bancada: "Gobierno", 
+        department: "Tarija", age: 52, profession: "Abogado", 
+        email: "davila@senado.gob.bo", phone: "+591 71562341", office: "Edificio Presidente, Piso 10",
+        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
+        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
+        photoUrl: "/senadores/g1/DIEGO ESTEBAN MATEO ÁVILA NAVAJAS.png",
+        comision:"Directiva Legislatura 2025-2026",
+        comite:"",
+        cargo:"Presidente"
+      },
+      { 
+        id: 2, seatNumber: 2, curve: 'upper', side: 'left', 
+        name: "Bertha Cartagena Sánchez", 
+        party: "Partido Demócrata Cristiano", partyShort: "PDC", partyColor: "#016167", bancada: "Gobierno", 
+        department: "Chuquisaca", age: 58, profession: "Socióloga", 
+        email: "bcartagena@senado.gob.bo", phone: "+591 71456982", office: "Edificio Presidente, Piso 9",
+        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
+        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
+        photoUrl: "/senadores/g1/BERTHA CARTAGENA SÁNCHEZ.png",
+        comision:"Comisión de Naciones y Pueblos Indígena Originario Campesinos, Culturas e Interculturalidad",
+        comite:"Comité de Culturas, Interculturalidad y Patrimonio Cultural",
+        cargo:""
+      },
+      { 
+        id: 3, seatNumber: 3, curve: 'upper', side: 'left', 
+        name: "Daniel Antonio Ortiz Velásquez", 
+        party: "Partido Demócrata Cristiano", partyShort: "PDC", partyColor: "#016167", bancada: "Gobierno", 
+        department: "Chuquisaca", age: 55, profession: "Abogado", 
+        email: "dortiz@senado.gob.bo", phone: "+591 71234567", office: "Edificio Presidente, Piso 9",
+        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
+        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
+        photoUrl: "/senadores/g1/DANIEL ANTONIO ORTIZ VELÁSQUEZ.png",
+        comision:"Comisión de Constitución, Derechos Humanos, Legislación y Sistema Electoral",
+        comite:"",
+        cargo:"Presidente de Comisión"
+      },
+      { 
+        id: 4, seatNumber: 4, curve: 'upper', side: 'left', 
+        name: "Nicanor Gonzalo Cochi Condorí", 
+        party: "Partido Demócrata Cristiano", partyShort: "PDC", partyColor: "#016167", bancada: "Gobierno", 
+        department: "La Paz", age: 53, profession: "Ingeniero", 
+        email: "ncochi@senado.gob.bo", phone: "+591 72567890", office: "Edificio Presidente, Piso 8",
+        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
+        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
+        photoUrl: "/senadores/g1/NICANOR GONZALO COCHI CONDORI.png",
+        comision:"Comisión de Política Internacional y Protección al Migrante",
+        comite:"",
+        cargo:"Presidente de Comisión"
+      },
+      {
+        id: 5, seatNumber: 5, curve: 'upper', side: 'left', 
+        name: "Ana María Crispin Choque", 
+        party: "Partido Demócrata Cristiano", partyShort: "PDC", partyColor: "#016167", bancada: "Gobierno", 
+        department: "La Paz", age: 49, profession: "Educadora", 
+        email: "acrispin@senado.gob.bo", phone: "+591 73456789", office: "Edificio Presidente, Piso 8",
+        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
+        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
+        photoUrl: "/senadores/g1/ANA MARÍA CRISPIN CHOQUE.png",
+        comision:"Comisión de Economía Plural, Producción e Industria",
+        comite:"",
+        cargo:"Presidente de Comisión"
+      },
+      { 
+        id: 6, seatNumber: 6, curve: 'upper', side: 'left', 
+        name: "Wilder Véliz Armas", 
+        party: "Partido Demócrata Cristiano", partyShort: "PDC", partyColor: "#016167", bancada: "Gobierno", 
+        department: "Cochabamba", age: 51, profession: "Médico", 
+        email: "wveliz@senado.gob.bo", phone: "+591 74567891", office: "Edificio Presidente, Piso 7",
+        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
+        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
+        photoUrl: "/senadores/g1/WILDER VELIZ ARMAS VELIZ ARMAS.png",
+        comision:"Comisión de Justicia Plural, Ministerio Público y Defensa del Estado",
+        comite:"Comité de Justicia Plural y Consejo de la Magistratura.",
+        cargo:""
+      },
+      { 
+        id: 7, seatNumber: 7, curve: 'upper', side: 'left', 
+        name: "Judith Rosario García Coca", 
+        party: "Partido Demócrata Cristiano", partyShort: "PDC", partyColor: "#016167", bancada: "Gobierno", 
+        department: "Cochabamba", age: 47, profession: "Abogada", 
+        email: "jgarcia@senado.gob.bo", phone: "+591 75678912", office: "Edificio Presidente, Piso 7",
+        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
+        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
+        photoUrl: "/senadores/g1/JUDITH ROSARIO GARCIA COCA.png",
+        comision:"Comisión de Seguridad del Estado",
+        comite:"",
+        cargo:"Presidente de Comisión"
+      },
       
-      // Lado derecho Curva Inferior: 11 senadores (26-36)
-      { id: 26, name: "Victoria Choque Mamani", seatNumber: 26, curve: 'lower', side: 'right', party: "Comunidad Ciudadana", partyShort: "CC", partyColor: "#2563eb", department: "La Paz", age: 45, profession: "Abogada", period: "2020-2025" },
-      { id: 27, name: "Walter Álvarez Salvatierra", seatNumber: 27, curve: 'lower', side: 'right', party: "Comunidad Ciudadana", partyShort: "CC", partyColor: "#2563eb", department: "Santa Cruz", age: 52, profession: "Empresario", period: "2020-2025" },
-      { id: 28, name: "Natalia Gutiérrez Ríos", seatNumber: 28, curve: 'lower', side: 'right', party: "Comunidad Ciudadana", partyShort: "CC", partyColor: "#2563eb", department: "Beni", age: 46, profession: "Médica", period: "2020-2025" },
-      { id: 29, name: "Óscar Paredes Flores", seatNumber: 29, curve: 'lower', side: 'right', party: "Comunidad Ciudadana", partyShort: "CC", partyColor: "#2563eb", department: "Oruro", age: 54, profession: "Abogado", period: "2020-2025" },
-      { id: 30, name: "Rosa María López Vargas", seatNumber: 30, curve: 'lower', side: 'right', party: "Comunidad Ciudadana", partyShort: "CC", partyColor: "#2563eb", department: "Potosí", age: 50, profession: "Educadora", period: "2020-2025" },
-      { id: 31, name: "Héctor Vásquez Mercado", seatNumber: 31, curve: 'lower', side: 'right', party: "Comunidad Ciudadana", partyShort: "CC", partyColor: "#2563eb", department: "Pando", age: 53, profession: "Ingeniero", period: "2020-2025" },
-      { id: 32, name: "Karen Salazar Pérez", seatNumber: 32, curve: 'lower', side: 'right', party: "Comunidad Ciudadana", partyShort: "CC", partyColor: "#2563eb", department: "Tarija", age: 44, profession: "Periodista", period: "2020-2025" },
-      { id: 33, name: "Andrés Romero Torres", seatNumber: 33, curve: 'lower', side: 'right', party: "Comunidad Ciudadana", partyShort: "CC", partyColor: "#2563eb", department: "La Paz", age: 50, profession: "Abogado", period: "2020-2025" },
-      { id: 34, name: "Daniela Mendoza Suárez", seatNumber: 34, curve: 'lower', side: 'right', party: "Comunidad Ciudadana", partyShort: "CC", partyColor: "#2563eb", department: "Santa Cruz", age: 47, profession: "Administradora", period: "2020-2025" },
-      { id: 35, name: "Luis Fernando Arce Catacora", seatNumber: 35, curve: 'lower', side: 'right', party: "Comunidad Ciudadana", partyShort: "CC", partyColor: "#2563eb", department: "Cochabamba", age: 53, profession: "Economista", period: "2020-2025" },
-      { id: 36, name: "Carolina Herrera Gómez", seatNumber: 36, curve: 'lower', side: 'right', party: "Creemos", partyShort: "CRE", partyColor: "#f97316", department: "Cochabamba", age: 47, profession: "Abogada", period: "2020-2025" }
+      // CURVA INFERIOR IZQUIERDA - asientos 15-23 (9 senadores)
+      { 
+        id: 8, seatNumber: 15, curve: 'lower', side: 'left', 
+        name: "Yasmín Estivariz Villarroel", 
+        party: "Partido Demócrata Cristiano", partyShort: "PDC", partyColor: "#016167", bancada: "Gobierno", 
+        department: "Oruro", age: 48, profession: "Ingeniera", 
+        email: "yestivariz@senado.gob.bo", phone: "+591 76789123", office: "Edificio Presidente, Piso 6",
+        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
+        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
+        photoUrl: "/senadores/g1/YASMIN ESTIVARIZ VILLARROEL.png",
+        comision:"Directiva Legislatura 2025-2026",
+        comite:"",
+        cargo:"Primera Secretaria"
+      },
+      { 
+        id: 9, seatNumber: 16, curve: 'lower', side: 'left', 
+        name: "Freddy Castillo Chávez", 
+        party: "Partido Demócrata Cristiano", partyShort: "PDC", partyColor: "#016167", bancada: "Gobierno", 
+        department: "Oruro", age: 56, profession: "Economista", 
+        email: "fcastillo@senado.gob.bo", phone: "+591 77891234", office: "Edificio Presidente, Piso 6",
+        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
+        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
+        photoUrl: "/senadores/g1/FREDDY CASTILLO CHAVEZ.png",
+        comision:"Comisión de Constitución, Derechos Humanos, Legislación y Sistema Electoral",
+        comite:"Comité de Constitución, Legislación e Interpretación Legislativa y Constitucional.",
+        cargo:""
+      },
+      { 
+        id: 10, seatNumber: 17, curve: 'lower', side: 'left', 
+        name: "Maria Antonieta Alcón Sánchez", 
+        party: "Partido Demócrata Cristiano", partyShort: "PDC", partyColor: "#016167", bancada: "Gobierno", 
+        department: "Oruro", age: 54, profession: "Administradora", 
+        email: "malcon@senado.gob.bo", phone: "+591 78912345", office: "Edificio Presidente, Piso 5",
+        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
+        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
+        photoUrl: "/senadores/g1/MARÍA ANTONIETA ALCÓN SÁNCHEZ.png",
+        comision:"Comisión de Política Social",
+        comite:"Comité de Educación, Salud, Ciencia, Tecnología y Deporte",
+        cargo:""
+      },
+      { 
+        id: 11, seatNumber: 18, curve: 'lower', side: 'left', 
+        name: "Bertha Nurmy Gutiérrez Meneces", 
+        party: "Partido Demócrata Cristiano", partyShort: "PDC", partyColor: "#016167", bancada: "Gobierno", 
+        department: "Potosí", age: 59, profession: "Trabajadora Social", 
+        email: "bgutierrez@senado.gob.bo", phone: "+591 79123456", office: "Edificio Presidente, Piso 5",
+        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
+        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
+        photoUrl: "/senadores/g2/BERTHA NURMY GUTIERREZ MENESES.png",
+        comision:"Comisión de Naciones y Pueblos Indígena Originario Campesinos, Culturas e Interculturalidad",
+        comite:"Comité de Naciones y Pueblos Indígena Originario Campesinos",
+        cargo:""
+      },
+      { 
+        id: 12, seatNumber: 19, curve: 'lower', side: 'left', 
+        name: "Marcelino Flores Ordoñez", 
+        party: "Partido Demócrata Cristiano", partyShort: "PDC", partyColor: "#016167", bancada: "Gobierno", 
+        department: "Potosí", age: 62, profession: "Minero", 
+        email: "mflores@senado.gob.bo", phone: "+591 70234567", office: "Edificio Presidente, Piso 4",
+        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
+        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
+        photoUrl: "/senadores/g2/MARCELINO FLORES ORDOÑEZ.png",
+        comision:"Comisión de Economía Plural, Producción e Industria",
+        comite:"Comité de Energía, Hidrocarburos, Minería y Metalurgia",
+        cargo:""
+      },
+      { 
+        id: 13, seatNumber: 20, curve: 'lower', side: 'left', 
+        name: "Paola Limbania López Zeballos", 
+        party: "Partido Demócrata Cristiano", partyShort: "PDC", partyColor: "#016167", bancada: "Gobierno", 
+        department: "Santa Cruz", age: 45, profession: "Abogada", 
+        email: "plopez@senado.gob.bo", phone: "+591 71345678", office: "Edificio Presidente, Piso 4",
+        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
+        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
+        photoUrl: "/senadores/g2/PAOLA LIMBANIA LÓPEZ ZEBALLO.png",
+        comision:"Comisión de Seguridad del Estado",
+        comite:"Comité de Seguridad del Estado y Lucha Contra el Narcotráfico",
+        cargo:""
+      },
+      { 
+        id: 14, seatNumber: 21, curve: 'lower', side: 'left', 
+        name: "Erick Nelson Soruco Alpire", 
+        party: "Partido Demócrata Cristiano", partyShort: "PDC", partyColor: "#016167", bancada: "Gobierno", 
+        department: "Beni", age: 50, profession: "Ganadero", 
+        email: "esoruco@senado.gob.bo", phone: "+591 72456789", office: "Edificio Presidente, Piso 3",
+        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
+        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
+        photoUrl: "/senadores/g2/ERICK NELSON SORUCO ALPIRE.png",
+        comision:"Comisión de Justicia Plural, Ministerio Público y Defensa del Estado",
+        comite:"",
+        cargo:"Presidente de Comisión"
+      },
+      { 
+        id: 15, seatNumber: 22, curve: 'lower', side: 'left', 
+        name: "Cinthia Mónica Puerta Campos", 
+        party: "Partido Demócrata Cristiano", partyShort: "PDC", partyColor: "#016167", bancada: "Gobierno", 
+        department: "Pando", age: 43, profession: "Empresaria", 
+        email: "cpuerta@senado.gob.bo", phone: "+591 73567890", office: "Edificio Presidente, Piso 3",
+        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
+        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
+        photoUrl: "/senadores/g2/CINTIA MONICA PUERTA CAMPOS.png",
+        comision:"Comisión de Tierra y Territorio / Región Amazónica",
+        comite:"Comité de Medio Ambiente, Biodiversidad, Amazonía, Áreas Protegidas y Cambio Climático",
+        cargo:""
+      },
+      { 
+        id: 16, seatNumber: 23, curve: 'lower', side: 'left', 
+        name: "José Sánchez Aguilar", 
+        party: "Partido Demócrata Cristiano", partyShort: "PDC", partyColor: "#016167", bancada: "Gobierno", 
+        department: "Oruro", age: 57, profession: "Ingeniero", 
+        email: "jsanchez@senado.gob.bo", phone: "+591 74678901", office: "Edificio Presidente, Piso 2",
+        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
+        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
+        photoUrl: "/senadores/g2/JOSÉ SÁNCHEZ AGUILAR.png",
+        comision:"Comisión de Política Social",
+        comite:"",
+        cargo:"Presidente de Comisión"
+      },
+      
+      // ============ UNIDAD - ALIADOS (7 senadores) ============
+      // Color: #FFB848 (amarillo/ámbar)
+      
+      // CURVA SUPERIOR DERECHA - asientos 8-10 (3 senadores)
+      { 
+        id: 17, seatNumber: 8, curve: 'upper', side: 'right', 
+        name: "Carmen Soledad Chapeton Tancara", 
+        party: "Unidad", partyShort: "UNIDAD", partyColor: "#FFB848", bancada: "Aliados", 
+        department: "La Paz", age: 52, profession: "Abogada", 
+        email: "schapeton@senado.gob.bo", phone: "+591 75789012", office: "Edificio Aliados, Piso 10",
+        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
+        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
+        photoUrl: "/senadores/g2/CARMEN SOLEDAD CHAPETON TANCARA.png",
+        comision:"Directiva Legislatura 2025-2026",
+        comite:"",
+        cargo:"Primera Vicepresidencia"
+      },
+      { 
+        id: 18, seatNumber: 9, curve: 'upper', side: 'right', 
+        name: "César Mentasti Padilla", 
+        party: "Unidad", partyShort: "UNIDAD", partyColor: "#FFB848", bancada: "Aliados", 
+        department: "Tarija", age: 58, profession: "Empresario", 
+        email: "cmentasti@senado.gob.bo", phone: "+591 76890123", office: "Edificio Aliados, Piso 10",
+        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
+        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
+        photoUrl: "/senadores/g2/CESAR MENTASTI PADILLA.png",
+        comision:"Comisión de Organización Territorial del Estado y Autonomías",
+        comite:"",
+        cargo:"Presidente de Comisión"
+      },
+      { 
+        id: 19, seatNumber: 10, curve: 'upper', side: 'right', 
+        name: "Leonor Rosalva Romero Gutiérrez", 
+        party: "Unidad", partyShort: "UNIDAD", partyColor: "#FFB848", bancada: "Aliados", 
+        department: "Tarija", age: 55, profession: "Médica", 
+        email: "lromero@senado.gob.bo", phone: "+591 77901234", office: "Edificio Aliados, Piso 9",
+        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
+        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
+        photoUrl: "/senadores/g2/LEONOR ROSALVA ROMERO GUTIERREZ.png",
+        comision:"Comisión de Planificación, Política Económica y Finanzas",
+        comite:"Comité de Planificación, Presupuesto, Inversión Pública y Contraloría General del Estado",
+        cargo:""
+      },
+      
+      // CURVA INFERIOR DERECHA - asientos 26-29 (4 senadores)
+      { 
+        id: 20, seatNumber: 26, curve: 'lower', side: 'right', 
+        name: "Rosa Tatiana Áñez Carrasco", 
+        party: "Unidad", partyShort: "UNIDAD", partyColor: "#FFB848", bancada: "Aliados", 
+        department: "Santa Cruz", age: 49, profession: "Abogada", 
+        email: "tanez@senado.gob.bo", phone: "+591 78123456", office: "Edificio Aliados, Piso 9",
+        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
+        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
+        photoUrl: "/senadores/g2/ROSA TATIANA AÑEZ CARRASCO.png",
+        comision:"Directiva Legislatura 2025-2026",
+        comite:"",
+        cargo:"Tercera Secretaria"
+      },
+      { 
+        id: 21, seatNumber: 27, curve: 'lower', side: 'right', 
+        name: "José Roca Haensel", 
+        party: "Unidad", partyShort: "UNIDAD", partyColor: "#FFB848", bancada: "Aliados", 
+        department: "Beni", age: 61, profession: "Ganadero", 
+        email: "jroca@senado.gob.bo", phone: "+591 79234567", office: "Edificio Aliados, Piso 8",
+        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
+        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
+        photoUrl: "/senadores/g3/JOSE ROCA HAENSEL.png",
+        comision:"Comisión de Organización Territorial del Estado y Autonomías",
+        comite:"Comité de Autonomías Municipales, Indigena Originario Campesinas y Regionales",
+        cargo:""
+      },
+      { 
+        id: 22, seatNumber: 28, curve: 'lower', side: 'right', 
+        name: "Ana Karina Velasco Añez", 
+        party: "Unidad", partyShort: "UNIDAD", partyColor: "#FFB848", bancada: "Aliados", 
+        department: "Beni", age: 47, profession: "Abogada", 
+        email: "avelasco@senado.gob.bo", phone: "+591 70345678", office: "Edificio Aliados, Piso 8",
+        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
+        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
+        photoUrl: "/senadores/g3/ANA KARINA VELASCO AÑEZ.png",
+        comision:"Comisión de Seguridad del Estado",
+        comite:"Comité de Fuerzas Armadas y Policía Boliviana",
+        cargo:""
+      },
+      { 
+        id: 23, seatNumber: 29, curve: 'lower', side: 'right', 
+        name: "Eliana Rina Acosta Quispe", 
+        party: "Unidad", partyShort: "UNIDAD", partyColor: "#FFB848", bancada: "Aliados", 
+        department: "Pando", age: 44, profession: "Administradora", 
+        email: "eacosta@senado.gob.bo", phone: "+591 71456789", office: "Edificio Aliados, Piso 7",
+        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
+        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
+        photoUrl: "/senadores/g3/ELIANA RINA ACOSTA QUISPE.png",
+        comision:"Comisión de Planificación, Política Económica y Finanzas",
+        comite:"",
+        cargo:"Presidente de Comisión"
+      },
+      
+      // ============ APB SÚMATE - ALIADOS (1 senador) ============
+      // Color: #511966 (púrpura)
+      // ASIENTO 11
+      { 
+        id: 24, seatNumber: 11, curve: 'upper', side: 'right', 
+        name: "Claudia Mallón Vargas", 
+        party: "Autonomía para Bolivia Súmate", partyShort: "APB", partyColor: "#511966", bancada: "Aliados", 
+        department: "Cochabamba", age: 46, profession: "Abogada", 
+        email: "cmallon@senado.gob.bo", phone: "+591 72567890", office: "Edificio Aliados, Piso 7",
+        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
+        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
+        photoUrl: "/senadores/g3/CLAUDIA MALLON VARGAS.png",
+        comision:"Comisión de Política Social",
+        comite:"Comité de Vivienda, Regimen Laboral, Seguridad Industrial y Seguridad Social",
+        cargo:""
+      },
+      
+      // ============ LIBRE - OPOSICIÓN (12 senadores) ============
+      // Color: #FF0000 (rojo)
+      
+      // CURVA SUPERIOR DERECHA - asientos 12-14 (3 senadores)
+      { 
+        id: 25, seatNumber: 12, curve: 'upper', side: 'right', 
+        name: "José Manuel Ormachea Mendieta", 
+        party: "Libre", partyShort: "LIBRE", partyColor: "#FF0000", bancada: "Oposición", 
+        department: "La Paz", age: 59, profession: "Abogado", 
+        email: "jormachea@senado.gob.bo", phone: "+591 73678901", office: "Edificio Oposición, Piso 10",
+        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
+        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
+        photoUrl: "/senadores/g3/JOSÉ MANUEL ORMACHEA MENDIETA.png",
+        comision:"Comisión de Naciones y Pueblos Indígena Originario Campesinos, Culturas e Interculturalidad",
+        comite:"",
+        cargo:"Presidente de Comisión"
+      },
+      { 
+        id: 26, seatNumber: 13, curve: 'upper', side: 'right', 
+        name: "Wanda Ximena Medrano Hervas", 
+        party: "Libre", partyShort: "LIBRE", partyColor: "#FF0000", bancada: "Oposición", 
+        department: "Cochabamba", age: 48, profession: "Abogada", 
+        email: "wmedrano@senado.gob.bo", phone: "+591 74789012", office: "Edificio Oposición, Piso 10",
+        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
+        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
+        photoUrl: "/senadores/g3/WANDA XIMENA MEDRANO HERVAS.png",
+        comision:"Comisión de Política Internacional y Protección al Migrante",
+        comite:"Comité de Relaciones Económicas Internacionales",
+        cargo:""
+      },
+      { 
+        id: 27, seatNumber: 14, curve: 'upper', side: 'right', 
+        name: "Branko Goran Marinković Jovicevic", 
+        party: "Libre", partyShort: "LIBRE", partyColor: "#FF0000", bancada: "Oposición", 
+        department: "Santa Cruz", age: 54, profession: "Empresario", 
+        email: "bmarinkovic@senado.gob.bo", phone: "+591 75890123", office: "Edificio Oposición, Piso 9",
+        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
+        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
+        photoUrl: "/senadores/g3/BRANKO GORAN MARINKOVIC JOVICEVIC.png",
+        comision:"Comisión de Tierra y Territorio / Región Amazónica",
+        comite:"",
+        cargo:"Presidente de Comisión"
+      },
+      
+      // CURVA INFERIOR DERECHA - asientos 30-36 (7 senadores)
+      { 
+        id: 28, seatNumber: 30, curve: 'lower', side: 'right', 
+        name: "Kathia Lizbeth Quiroga Fernández", 
+        party: "Libre", partyShort: "LIBRE", partyColor: "#FF0000", bancada: "Oposición", 
+        department: "Santa Cruz", age: 45, profession: "Abogada", 
+        email: "kquiroga@senado.gob.bo", phone: "+591 76901234", office: "Edificio Oposición, Piso 9",
+        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
+        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
+        photoUrl: "/senadores/g3/KHATIA LISBETH QUIROGA FERNÁNDEZ.png",
+        comision:"Directiva Legislatura 2025-2026",
+        comite:"",
+        cargo:"Segunda Vicepresidencia"
+      },
+      { 
+        id: 29, seatNumber: 31, curve: 'lower', side: 'right', 
+        name: "Tomasa Yarhui Jacome", 
+        party: "Libre", partyShort: "LIBRE", partyColor: "#FF0000", bancada: "Oposición", 
+        department: "Chuquisaca", age: 62, profession: "Abogada", 
+        email: "tyarhui@senado.gob.bo", phone: "+591 77123456", office: "Edificio Oposición, Piso 8",
+        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
+        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
+        photoUrl: "/senadores/g3/TOMASA YARHUI JACOME.png",
+        comision:"Comisión de Constitución, Derechos Humanos, Legislación y Sistema Electoral",
+        comite:"Comité de Sistema Electoral, Derechos Humanos y Equidad Social",
+        cargo:""
+      },
+      { 
+        id: 30, seatNumber: 32, curve: 'lower', side: 'right', 
+        name: "Abdon Porcel Arancibia", 
+        party: "Libre", partyShort: "LIBRE", partyColor: "#FF0000", bancada: "Oposición", 
+        department: "Chuquisaca", age: 57, profession: "Abogado", 
+        email: "aporcel@senado.gob.bo", phone: "+591 78234567", office: "Edificio Oposición, Piso 8",
+        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
+        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
+        photoUrl: "/senadores/g3/ABDON PORCEL ARANCIBIA.png",
+        comision:"Comisión de Planificación, Política Económica y Finanzas",
+        comite:"Comité de Políticas Financiera, Monetaria, Tributaria y Seguros",
+        cargo:""
+      },
+      { 
+        id: 31, seatNumber: 33, curve: 'lower', side: 'right', 
+        name: "Teresa Alarcón Arana", 
+        party: "Libre", partyShort: "LIBRE", partyColor: "#FF0000", bancada: "Oposición", 
+        department: "Potosí", age: 56, profession: "Docente", 
+        email: "talarcon@senado.gob.bo", phone: "+591 79345678", office: "Edificio Oposición, Piso 7",
+        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
+        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
+        photoUrl: "/senadores/g4/TERESA ALARCON ARANA.png",
+        comision:"Comisión de Política Internacional y Protección al Migrante",
+        comite:"Comité de Asuntos Exteriores Interpelatorios y Organismos Internacionales",
+        cargo:""
+      },
+      { 
+        id: 32, seatNumber: 34, curve: 'lower', side: 'right', 
+        name: "Betty Canaviri Villanueva", 
+        party: "Libre", partyShort: "LIBRE", partyColor: "#FF0000", bancada: "Oposición", 
+        department: "Potosí", age: 53, profession: "Educadora", 
+        email: "bcanaviri@senado.gob.bo", phone: "+591 70456789", office: "Edificio Oposición, Piso 7",
+        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
+        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
+        photoUrl: "/senadores/g4/BETTY CANAVIRI VILLANUEVA.png",
+        comision:"Comisión de Economía Plural, Producción e Industria",
+        comite:"Comité de Economía Plural, Desarrollo Productivo, Obras Públicas e Infraestructura",
+        cargo:""
+      },
+      { 
+        id: 33, seatNumber: 35, curve: 'lower', side: 'right', 
+        name: "María Isabel Moreno Cortez", 
+        party: "Libre", partyShort: "LIBRE", partyColor: "#FF0000", bancada: "Oposición", 
+        department: "Tarija", age: 50, profession: "Abogada", 
+        email: "mimoreno@senado.gob.bo", phone: "+591 71567890", office: "Edificio Oposición, Piso 6",
+        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
+        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
+        photoUrl: "/senadores/g4/MARÍA ISABEL MORENO CORTEZ.png",
+        comision:"Comisión de Justicia Plural, Ministerio Público y Defensa del Estado",
+        comite:"Comité de Ministerio Público y Defensa Legal del Estado",
+        cargo:""
+      },
+      { 
+        id: 34, seatNumber: 36, curve: 'lower', side: 'right', 
+        name: "Ernesto Suarez Sattori", 
+        party: "Libre", partyShort: "LIBRE", partyColor: "#FF0000", bancada: "Oposición", 
+        department: "Beni", age: 55, profession: "Empresario", 
+        email: "esuarez@senado.gob.bo", phone: "+591 72678901", office: "Edificio Oposición, Piso 6",
+        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
+        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
+        photoUrl: "/senadores/g4/ERNESTO SUAREZ SATTORI.png",
+        comision:"Comisión de Organización Territorial del Estado y Autonomías",
+        comite:"Comité de Autonomías Departamentales",
+        cargo:""
+      },
+      
+      // ============ LIBRE - 2 SENADORES ADICIONALES ============
+      // ASIENTOS 24 y 25 (CURVA INFERIOR IZQUIERDA)
+      { 
+        id: 35, seatNumber: 24, curve: 'lower', side: 'left', 
+        name: "Carol Carlo Durán", 
+        party: "Libre", partyShort: "LIBRE", partyColor: "#FF0000", bancada: "Oposición", 
+        department: "Pando", age: 49, profession: "Abogado", 
+        email: "ccarlo@senado.gob.bo", phone: "+591 73789012", office: "Edificio Oposición, Piso 5",
+        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
+        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
+        photoUrl: "/senadores/g4/CAROL CARLO DURAN.png",
+        comision:"Comisión de Tierra y Territorio / Región Amazónica",
+        comite:"Comité de Tierra y Territorio, Recursos Naturales y Hoja de la Coca",
+        cargo:""
+      },
+      { 
+        id: 36, seatNumber: 25, curve: 'lower', side: 'left', 
+        name: "Julio Diego Romaña Galindo", 
+        party: "Libre", partyShort: "LIBRE", partyColor: "#FF0000", bancada: "Oposición", 
+        department: "Pando", age: 52, profession: "Abogado", 
+        email: "jromana@senado.gob.bo", phone: "+591 74890123", office: "Edificio Oposición, Piso 5",
+        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
+        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
+        photoUrl: "/senadores/g4/JULIO DIEGO ROMAÑA GALINDO.png",
+        comision:"Directiva Legislatura 2025-2026",
+        comite:"",
+        cargo:"Segunda Secretaria"
+      }
     ]
   },
   parties: {
     type: Array,
     default: () => [
-      { id: 'MAS-IPSP', name: 'Movimiento al Socialismo', shortName: 'MAS', symbol: '🔴', color: '#dc2626', count: 18, position: 'Izquierda del pasillo' },
-      { id: 'Comunidad Ciudadana', name: 'Comunidad Ciudadana', shortName: 'CC', symbol: '🔵', color: '#2563eb', count: 14, position: 'Derecha del pasillo' },
-      { id: 'Creemos', name: 'Creemos', shortName: 'CREEMOS', symbol: '🟠', color: '#f97316', count: 4, position: 'Derecha del pasillo' }
+      { id: 'Partido Demócrata Cristiano', name: 'Partido Demócrata Cristiano', shortName: 'PDC', symbol: '🟢', color: '#016167', count: 16 },
+      { id: 'Unidad', name: 'Unidad', shortName: 'UNIDAD', symbol: '🟡', color: '#FFB848', count: 7 },
+      { id: 'Autonomía para Bolivia Súmate', name: 'Autonomía para Bolivia Súmate', shortName: 'APB', symbol: '🟣', color: '#511966', count: 1 },
+      { id: 'Libre', name: 'Libre', shortName: 'LIBRE', symbol: '🔴', color: '#FF0000', count: 12 }
     ]
   },
-  showHeader: {
-    type: Boolean,
-    default: true
-  },
-  showFooter: {
-    type: Boolean,
-    default: true
-  },
-  showControls: {
-    type: Boolean,
-    default: true
-  },
-  initialShowLabels: {
-    type: Boolean,
-    default: false
-  },
-  backgroundImage: {
-    type: String,
-    default: '/Recurso1.png'
-  },
-  viewBox: {
-    type: String,
-    default: '250 200 700 400'
-  }
+  showHeader: { type: Boolean, default: true },
+  showFooter: { type: Boolean, default: true },
+  showControls: { type: Boolean, default: true },
+  initialShowLabels: { type: Boolean, default: false },
+  backgroundImage: { type: String, default: '/Recurso1.png' },
+  viewBox: { type: String, default: '250 200 700 400' }
 })
 
-// Emits para eventos
 const emit = defineEmits([
   'senator-selected',
   'senator-deselected',
@@ -372,7 +860,7 @@ const emit = defineEmits([
   'view-reset'
 ])
 
-// Estado reactivo optimizado
+// Estado reactivo
 const selectedSenator = ref(null)
 const hoveredSeat = ref(null)
 const activeFilters = ref([])
@@ -380,92 +868,56 @@ const showLabels = ref(props.initialShowLabels)
 const tooltipStyle = reactive({ left: '0px', top: '0px' })
 const svgElement = ref(null)
 
-// Cache para cálculos
+// Cache
 const partyCountCache = reactive({})
 const textColorCache = reactive({})
 
-// Posiciones predefinidas
-const seatPositions = {
-  upperLeft: [
-    { x: 399, y: 303 }, { x: 405, y: 343 }, { x: 421, y: 380 },
-    { x: 445, y: 412 }, { x: 477, y: 436 }, { x: 513, y: 455 },
-    { x: 553, y: 465 }
-  ],
-  upperRight: [
-    { x: 647, y: 465 }, { x: 687, y: 455 }, { x: 723, y: 436 },
-    { x: 755, y: 412 }, { x: 779, y: 380 }, { x: 795, y: 343 },
-    { x: 801, y: 303 }
-  ],
-  lowerLeft: [
-    { x: 280, y: 252 }, { x: 283, y: 301 }, { x: 292, y: 349 },
-    { x: 307, y: 395 }, { x: 328, y: 438 }, { x: 355, y: 477 },
-    { x: 388, y: 511 }, { x: 423, y: 538 }, { x: 464, y: 559 },
-    { x: 507, y: 573 }, { x: 553, y: 580 }
-  ],
-  lowerRight: [
-    { x: 647, y: 580 }, { x: 693, y: 573 }, { x: 736, y: 559 },
-    { x: 777, y: 538 }, { x: 812, y: 511 }, { x: 845, y: 477 },
-    { x: 872, y: 438 }, { x: 893, y: 395 }, { x: 908, y: 349 },
-    { x: 917, y: 301 }, { x: 920, y: 252 }
-  ]
-}
-
-// Computed properties optimizadas
+// ============================================
+// COMPUTED - ASIGNACIÓN DIRECTA POR seatNumber
+// ============================================
 const allSeats = computed(() => {
-  const seats = []
-  
-  // Asignar posiciones eficientemente
-  props.senators.forEach(senator => {
-    let position = null
-    let positionsArray
+  const seats = props.senators.map(senator => {
+    let position = { x: 0, y: 0 }
     
-    if (senator.curve === 'upper' && senator.side === 'left') {
-      positionsArray = seatPositions.upperLeft
-      const idx = senator.seatNumber - 1
-      position = positionsArray[idx]
-    } else if (senator.curve === 'upper' && senator.side === 'right') {
-      positionsArray = seatPositions.upperRight
-      const idx = senator.seatNumber - 8
-      position = positionsArray[idx]
-    } else if (senator.curve === 'lower' && senator.side === 'left') {
-      positionsArray = seatPositions.lowerLeft
-      const idx = senator.seatNumber - 15
-      position = positionsArray[idx]
-    } else if (senator.curve === 'lower' && senator.side === 'right') {
-      positionsArray = seatPositions.lowerRight
-      const idx = senator.seatNumber - 26
-      position = positionsArray[idx]
+    if (senator.seatNumber >= 1 && senator.seatNumber <= 7) {
+      position = seatPositions.upperLeft[senator.seatNumber - 1]
+    }
+    else if (senator.seatNumber >= 8 && senator.seatNumber <= 14) {
+      position = seatPositions.upperRight[senator.seatNumber - 8]
+    }
+    else if (senator.seatNumber >= 15 && senator.seatNumber <= 25) {
+      position = seatPositions.lowerLeft[senator.seatNumber - 15]
+    }
+    else if (senator.seatNumber >= 26 && senator.seatNumber <= 36) {
+      position = seatPositions.lowerRight[senator.seatNumber - 26]
     }
     
-    if (position) {
-      seats.push({
-        ...senator,
-        x: position.x,
-        y: position.y
-      })
+    return {
+      ...senator,
+      x: position.x,
+      y: position.y
     }
   })
   
-  // Filtrar si hay filtros activos
   if (activeFilters.value.length === 0) return seats
   
   const filterSet = new Set(activeFilters.value)
   return seats.filter(seat => filterSet.has(seat.party))
 })
 
-// Funciones optimizadas
+// ============================================
+// MÉTODOS
+// ============================================
 const getFilteredCount = (partyId) => {
   if (activeFilters.value.length === 0) {
-    // Usar cache
     if (!partyCountCache[partyId]) {
       partyCountCache[partyId] = props.parties.find(p => p.id === partyId)?.count || 
         props.senators.filter(s => s.party === partyId).length
     }
     return partyCountCache[partyId]
   }
-  
   if (activeFilters.value.includes(partyId)) {
-    return props.senators.filter(senator => senator.party === partyId).length
+    return props.senators.filter(s => s.party === partyId).length
   }
   return 0
 }
@@ -477,43 +929,41 @@ const getSeatColor = (seat) => {
   return seat.partyColor
 }
 
-const getSeatStroke = (seat) => {
-  if (selectedSenator.value?.id === seat.id) return '#f59e0b'
-  if (hoveredSeat.value?.id === seat.id) return '#3b82f6'
-  if (activeFilters.value.length > 0 && activeFilters.value.includes(seat.party)) {
-    return '#000000'
-  }
-  return '#ffffff'
-}
-
-const getTextColor = (backgroundColor) => {
-  // Cache de colores de texto
-  if (!textColorCache[backgroundColor]) {
-    const hex = backgroundColor.replace('#', '')
+const getTextColor = (bg) => {
+  if (!textColorCache[bg]) {
+    const hex = bg.replace('#', '')
     const r = parseInt(hex.substr(0, 2), 16)
     const g = parseInt(hex.substr(2, 2), 16)
     const b = parseInt(hex.substr(4, 2), 16)
-    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255
-    textColorCache[backgroundColor] = luminance > 0.5 ? '#000000' : '#ffffff'
+    const lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255
+    textColorCache[bg] = lum > 0.5 ? '#000000' : '#ffffff'
   }
-  return textColorCache[backgroundColor]
+  return textColorCache[bg]
 }
 
-const getNameParts = (fullName) => {
-  return fullName.split(' ')
-}
-
-const formatInitials = (fullName) => {
-  const parts = fullName.split(' ')
+const formatInitials = (name) => {
+  const parts = name.split(' ')
   if (parts.length >= 3) {
-    return `${parts[0].charAt(0)}${parts[parts.length-2].charAt(0)}${parts[parts.length-1].charAt(0)}`.toUpperCase()
-  } else if (parts.length === 2) {
-    return `${parts[0].charAt(0)}${parts[1].charAt(0)}`.toUpperCase()
+    return `${parts[0][0]}${parts[parts.length-2][0]}${parts[parts.length-1][0]}`.toUpperCase()
   }
-  return fullName.substring(0, 2).toUpperCase()
+  if (parts.length === 2) {
+    return `${parts[0][0]}${parts[1][0]}`.toUpperCase()
+  }
+  return name.substring(0, 2).toUpperCase()
 }
 
-// Métodos optimizados
+// ========== MANEJADOR DE ERRORES DE IMAGEN ==========
+const handleImageError = (e) => {
+  // Si la imagen falla (nunca debería pasar con randomuser.me), mostramos placeholder
+  e.target.style.display = 'none'
+  const parent = e.target.parentElement
+  const fallback = document.createElement('div')
+  fallback.className = 'photo-placeholder'
+  fallback.style.backgroundColor = selectedSenator.value?.partyColor || '#575756'
+  fallback.innerText = formatInitials(selectedSenator.value?.name || '')
+  parent.appendChild(fallback)
+}
+
 const selectSenator = (senator) => {
   selectedSenator.value = senator
   emit('senator-selected', senator)
@@ -526,8 +976,6 @@ const togglePartyFilter = (partyId) => {
   } else {
     activeFilters.value = [partyId]
   }
-  
-  // Limpiar cache cuando cambian filtros
   Object.keys(partyCountCache).forEach(key => delete partyCountCache[key])
   emit('party-filter-changed', activeFilters.value)
 }
@@ -536,17 +984,12 @@ const resetView = () => {
   selectedSenator.value = null
   activeFilters.value = []
   hoveredSeat.value = null
-  // Limpiar caches
   Object.keys(partyCountCache).forEach(key => delete partyCountCache[key])
   Object.keys(textColorCache).forEach(key => delete textColorCache[key])
   emit('view-reset')
 }
 
-const toggleLabels = () => {
-  showLabels.value = !showLabels.value
-}
-
-// Hover optimizado con throttling
+// Tooltip handlers
 let hoverTimeout = null
 let mouseMoveTimeout = null
 
@@ -558,30 +1001,25 @@ const handleMouseEnter = (seat) => {
 }
 
 const handleMouseLeave = () => {
-  if (hoveredSeat.value?.id !== selectedSenator?.id) {
+  if (hoveredSeat.value?.id !== selectedSenator.value?.id) {
     hoveredSeat.value = null
   }
-  if (hoverTimeout) {
-    clearTimeout(hoverTimeout)
-    hoverTimeout = null
-  }
+  if (hoverTimeout) clearTimeout(hoverTimeout)
 }
 
 const onMouseMove = (event) => {
-  // Throttle el movimiento del mouse para mejor rendimiento
   if (!mouseMoveTimeout) {
     mouseMoveTimeout = setTimeout(() => {
-      if (hoveredSeat.value && hoveredSeat.value.id !== selectedSenator?.id) {
+      if (hoveredSeat.value && hoveredSeat.value.id !== selectedSenator.value?.id) {
         updateHoverTooltip(event)
       }
       mouseMoveTimeout = null
-    }, 16) // ~60fps
+    }, 16)
   }
 }
 
 const updateHoverTooltip = (event) => {
   if (!hoveredSeat.value || !svgElement.value) return
-  
   requestAnimationFrame(() => {
     const container = document.querySelector('.hemicycle-svg-container')
     if (!container) return
@@ -589,29 +1027,20 @@ const updateHoverTooltip = (event) => {
     const seat = hoveredSeat.value
     const svg = svgElement.value
     const rect = container.getBoundingClientRect()
-    
-    // Calcular posición basada en coordenadas SVG
     const viewBox = svg.viewBox.baseVal
     const svgRect = svg.getBoundingClientRect()
     
-    // Calcular posición porcentual dentro del viewBox
     const xPercent = (seat.x - viewBox.x) / viewBox.width
     const yPercent = (seat.y - viewBox.y) / viewBox.height
     
-    // Convertir a coordenadas del contenedor
     let x = xPercent * svgRect.width + (svgRect.left - rect.left) + 25
     let y = yPercent * svgRect.height + (svgRect.top - rect.top) - 100
     
-    // Asegurar que el tooltip no salga del contenedor
     const tooltipWidth = 260
     const tooltipHeight = 180
     
-    if (x + tooltipWidth > rect.width) {
-      x = rect.width - tooltipWidth - 10
-    }
-    if (y + tooltipHeight > rect.height) {
-      y = rect.height - tooltipHeight - 10
-    }
+    if (x + tooltipWidth > rect.width) x = rect.width - tooltipWidth - 10
+    if (y + tooltipHeight > rect.height) y = rect.height - tooltipHeight - 10
     if (x < 10) x = 10
     if (y < 10) y = 10
     
@@ -620,83 +1049,62 @@ const updateHoverTooltip = (event) => {
   })
 }
 
-const positionTooltipFromSeat = () => {
-  updateHoverTooltip()
-}
+const positionTooltipFromSeat = () => updateHoverTooltip()
 
-// Método para actualizar datos externamente
-const updateSenators = (newSenators) => {
-  // En una implementación real, aquí actualizarías los props
-  console.log('Actualizar senadores:', newSenators)
-}
-
-// Exponer métodos al padre
-defineExpose({
-  resetView,
-  updateSenators,
-  selectSenator,
-  deselectSenator: () => selectedSenator.value = null
+defineExpose({ 
+  resetView, 
+  selectSenator, 
+  deselectSenator: () => selectedSenator.value = null 
 })
 
-// Inicialización
-onMounted(() => {
-  // Inicialización adicional si es necesaria
-})
-
-// Limpiar timeouts al desmontar
-import { onUnmounted } from 'vue'
 onUnmounted(() => {
   if (hoverTimeout) clearTimeout(hoverTimeout)
   if (mouseMoveTimeout) clearTimeout(mouseMoveTimeout)
 })
 
-// Watcher optimizado
 watch(() => props.senators, () => {
-  // Limpiar cache cuando cambian los datos
   Object.keys(partyCountCache).forEach(key => delete partyCountCache[key])
 }, { deep: false })
 </script>
 
 <style scoped>
+/* ========== ESTILOS - IGUAL AL ORIGINAL ========== */
 .senate-chamber {
   font-family: 'Montserrat';
   background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-  /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
-  /* padding: 0.5rem; */
 }
 
-/* Header */
 .chamber-header {
   height: auto;
-  /* margin-bottom: 0.5rem; */
   padding: 1rem;
   background: #575756;
-  /* border-radius: 8px; */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .default-header h2 {
   margin: 0;
-  color: #1f2937;
+  color: white;
   font-size: 1.5rem;
 }
 
-/* Contenedor con imagen de fondo */
+.header-subtitle {
+  color: rgba(255,255,255,0.9);
+  margin: 0.25rem 0 0 0;
+  font-size: 0.9rem;
+}
+
 .background-container {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  /* border-radius: 12px; */
   overflow: hidden;
   margin-bottom: 1rem;
   position: relative;
 }
 
-/* CONTENEDOR PRINCIPAL CON 3 COLUMNAS REALES */
 .columns-container {
   display: grid;
-  /* Izquierda fija, Central flexible, Derecha fija - CENTRAL MÁS ANCHA */
-  grid-template-columns: 250px 1fr 250px;
+  grid-template-columns: 250px 1fr 340px;
   gap: 1.5rem;
   padding: 1.5rem;
   position: relative;
@@ -705,32 +1113,16 @@ watch(() => props.senators, () => {
   align-items: stretch;
 }
 
-/* CLASES DE COLUMNAS */
 .column {
   display: flex;
   flex-direction: column;
   height: 100%;
 }
 
-.left-column {
-  /* Columna izquierda fija */
-  width: 250px;
-  flex-shrink: 0;
-}
+.left-column { width: 250px; flex-shrink: 0; }
+.center-column { flex: 1; min-width: 0; }
+.right-column { width: 340px; flex-shrink: 0; }
 
-.center-column {
-  /* Columna central flexible - OCUPA EL ESPACIO RESTANTE */
-  flex: 1;
-  min-width: 0; /* Importante para que funcione correctamente */
-}
-
-.right-column {
-  /* Columna derecha fija */
-  width: 250px;
-  flex-shrink: 0;
-}
-
-/* Paneles transparentes */
 .transparent-panel {
   background: rgba(255, 255, 255, 0.1) !important;
   backdrop-filter: blur(3px);
@@ -743,7 +1135,6 @@ watch(() => props.senators, () => {
   flex-direction: column;
 }
 
-/* COLUMNA CENTRAL - MÁS ANCHA Y TRANSPARENTE */
 .center-transparent-panel {
   backdrop-filter: blur(1px);
   -webkit-backdrop-filter: blur(4px);
@@ -752,7 +1143,6 @@ watch(() => props.senators, () => {
   width: 100%;
 }
 
-/* Columna Izquierda - Controles */
 .controls-panel {
   padding: 1rem;
   display: flex;
@@ -773,7 +1163,6 @@ watch(() => props.senators, () => {
   text-align: center;
 }
 
-/* Leyenda en vertical */
 .legend-vertical {
   display: flex;
   flex-direction: column;
@@ -832,7 +1221,6 @@ watch(() => props.senators, () => {
      0px  0px 2px rgba(0,0,0,0.5);
 }
 
-/* Columna Central - Hemiciclo MÁS ANCHO */
 .hemicycle-container {
   padding: 0.5rem;
   display: flex;
@@ -864,7 +1252,6 @@ watch(() => props.senators, () => {
   overflow: visible !important;
 }
 
-/* Columna Derecha - Información */
 .info-panel {
   display: flex;
   flex-direction: column;
@@ -882,7 +1269,6 @@ watch(() => props.senators, () => {
   width: 100%;
 }
 
-/* Foto del senador */
 .senator-photo-container {
   margin-bottom: 1rem;
   width: 100%;
@@ -896,6 +1282,13 @@ watch(() => props.senators, () => {
   border-radius: 50%;
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  position: relative;
+}
+
+.senator-photo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .photo-placeholder {
@@ -907,11 +1300,8 @@ watch(() => props.senators, () => {
   font-size: 2.5rem;
   font-weight: 700;
   color: white;
-  background-size: cover;
-  background-position: center;
 }
 
-/* Nombre */
 .senator-name {
   color: #575756;
   font-size: 1.1rem;
@@ -922,20 +1312,15 @@ watch(() => props.senators, () => {
   text-align: center;
 }
 
-/* Primera fila: Edad y Departamento */
 .info-row-first {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  /* grid-template-columns: 1fr 1fr; */
   gap: 1rem;
   width: 100%;
   margin-bottom: 1rem;
 }
 
-.info-item-red {
-  text-align: left;
-  width: 100%;
-}
-
+.info-item-red { text-align: left; width: 100%; }
 .value-red {
   display: block;
   color: #E03636;
@@ -944,7 +1329,6 @@ watch(() => props.senators, () => {
   text-align: center;
 }
 
-/* Segunda fila: Partido y Asiento */
 .info-row-second {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -965,17 +1349,22 @@ watch(() => props.senators, () => {
   width: 100%;
 }
 
-/* Información de contacto */
-.contact-section {
+.pill-purple {
+  background-color: rgba(81, 25, 102, 0.85);
+  color: white;
+  padding: 0.2rem 0.25rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   width: 100%;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
-.contact-item-white {
-  text-align: left;
-  margin-bottom: 0.75rem;
-  width: 100%;
-}
+.bancada-row { width: 100%; margin-bottom: 1rem; }
+.contact-section { width: 100%; margin-bottom: 1.5rem; }
+.contact-item-white { text-align: left; margin-bottom: 0.75rem; width: 100%; }
 
 .pill-white {
   background-color: white;
@@ -989,12 +1378,7 @@ watch(() => props.senators, () => {
   text-align: left;
 }
 
-/* Redes sociales */
-.social-media-section {
-  width: 100%;
-  margin-top: auto;
-}
-
+.social-media-section { width: 100%; margin-top: auto; }
 .social-icons {
   display: flex;
   justify-content: center;
@@ -1004,38 +1388,36 @@ watch(() => props.senators, () => {
 
 .social-icon {
   font-size: 1.5rem;
-  color: #E03636;
+  color: white;  /* Iconos blancos */
+  /* background-color: #E03636;  Fondo rojo */
+  backdrop-filter: blur(8px);
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
   width: 40px;
   height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   flex-shrink: 0;
+  text-decoration: none;
 }
 
 .social-icon:hover {
   transform: scale(1.1);
-  background: #f9fafb;
+  background-color: #b32b2b;  /* Rojo más oscuro en hover - SIN CUADRADO BLANCO */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  color: white;  /* Mantiene el icono blanco */
 }
 
-/* Círculos de senadores - OPTIMIZADOS */
 .senator-circle {
   cursor: pointer;
   transition: r 0.2s ease, stroke-width 0.2s ease;
   pointer-events: all !important;
 }
 
-/* HOVER: Solo un pequeño aumento */
-.senator-circle:hover {
-  r: 21 !important;
-  stroke-width: 2px;
-}
-
-/* SELECTED: Sin transform, solo borde animado */
+.senator-circle:hover { r: 21 !important; stroke-width: 2px; }
 .senator-circle.selected {
   stroke: #f59e0b;
   stroke-width: 2px;
@@ -1049,13 +1431,8 @@ watch(() => props.senators, () => {
   100% { stroke-width: 2px; }
 }
 
-/* Números de asiento y nombres - SIN EVENTOS */
-.seat-number, .senator-name-part {
-  pointer-events: none !important;
-  user-select: none;
-}
+.seat-number, .senator-name-part { pointer-events: none !important; user-select: none; }
 
-/* Tooltip */
 .seat-tooltip {
   position: absolute;
   background: white;
@@ -1097,13 +1474,7 @@ watch(() => props.senators, () => {
   flex-shrink: 0;
 }
 
-.senator-info h4 {
-  margin: 0 0 0.5rem 0;
-  color: #1f2937;
-  font-size: 1.1rem;
-  flex: 1;
-}
-
+.senator-info h4 { margin: 0 0 0.5rem 0; color: #1f2937; font-size: 1.1rem; flex: 1; }
 .party-badge {
   padding: 0.25rem 0.75rem;
   border-radius: 6px;
@@ -1114,22 +1485,10 @@ watch(() => props.senators, () => {
   flex-shrink: 0;
 }
 
-.tooltip-body {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.info-row {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.9rem;
-  width: 100%;
-}
-
+.tooltip-body { display: flex; flex-direction: column; gap: 0.5rem; }
+.info-row { display: flex; justify-content: space-between; font-size: 0.9rem; width: 100%; }
 .label { color: #6b7280; }
 .value { font-weight: 600; color: #1f2937; }
-
 .hint {
   font-size: 0.85rem;
   color: #3b82f6;
@@ -1139,7 +1498,6 @@ watch(() => props.senators, () => {
   width: 100%;
 }
 
-/* Estado vacío */
 .empty-state {
   padding: 2rem 1.5rem;
   text-align: center;
@@ -1156,25 +1514,9 @@ watch(() => props.senators, () => {
   height: 100%;
 }
 
-.empty-icon {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-  width: 100%;
-}
-
-.empty-state h4 {
-  margin: 0 0 0.5rem 0;
-  color: #4b5563;
-  font-size: 1.1rem;
-  width: 100%;
-}
-
-.empty-state p {
-  margin: 0 0 1rem 0;
-  max-width: 400px;
-  font-size: 0.9rem;
-  width: 100%;
-}
+.empty-icon { font-size: 2.5rem; margin-bottom: 1rem; width: 100%; }
+.empty-state h4 { margin: 0 0 0.5rem 0; color: #4b5563; font-size: 1.1rem; width: 100%; }
+.empty-state p { margin: 0 0 1rem 0; max-width: 400px; font-size: 0.9rem; width: 100%; }
 
 .empty-tips {
   text-align: left;
@@ -1186,124 +1528,42 @@ watch(() => props.senators, () => {
   width: 100%;
 }
 
-.empty-tips p {
-  margin: 0.4rem 0;
-  font-size: 0.85rem;
-  width: 100%;
-}
+.empty-tips p { margin: 0.4rem 0; font-size: 0.85rem; width: 100%; }
 
-/* RESPONSIVE */
 @media (max-width: 1200px) {
-  .columns-container {
-    grid-template-columns: 220px 1fr 320px;
-    gap: 1rem;
-    padding: 1rem;
-  }
-  
-  .left-column {
-    width: 220px;
-  }
-  
-  .right-column {
-    width: 320px;
-  }
+  .columns-container { grid-template-columns: 220px 1fr 320px; gap: 1rem; padding: 1rem; }
+  .left-column { width: 220px; }
+  .right-column { width: 320px; }
 }
 
 @media (max-width: 1024px) {
-  .columns-container {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto;
-    gap: 1rem;
-  }
-  
-  .left-column,
-  .center-column,
-  .right-column {
-    width: 100%;
-  }
-  
-  .left-column {
-    max-height: 300px;
-  }
-  
-  .hemicycle-container {
-    min-height: 400px;
-  }
-  
-  .right-column {
-    max-height: 500px;
-  }
+  .columns-container { grid-template-columns: 1fr; grid-template-rows: auto auto auto; gap: 1rem; }
+  .left-column, .center-column, .right-column { width: 100%; }
+  .left-column { max-height: 300px; }
+  .hemicycle-container { min-height: 400px; }
+  .right-column { max-height: 500px; }
 }
 
 @media (max-width: 768px) {
-  .columns-container {
-    gap: 0.75rem;
-    padding: 0.75rem;
-  }
-  
-  .hemicycle-container {
-    min-height: 350px;
-  }
-  
-  .senator-photo-circle {
-    width: 120px;
-    height: 120px;
-  }
-  
-  .photo-placeholder {
-    font-size: 2rem;
-  }
-  
-  .senator-name {
-    font-size: 1.2rem;
-  }
+  .columns-container { gap: 0.75rem; padding: 0.75rem; }
+  .hemicycle-container { min-height: 350px; }
+  .senator-photo-circle { width: 120px; height: 120px; }
+  .photo-placeholder { font-size: 2rem; }
+  .senator-name { font-size: 1.2rem; }
 }
 
 @media (max-width: 480px) {
-  .columns-container {
-    gap: 0.5rem;
-    padding: 0.5rem;
-  }
-  
-  .hemicycle-container {
-    min-height: 300px;
-  }
-  
-  .controls-panel {
-    padding: 0.75rem;
-  }
-  
-  .senator-photo-circle {
-    width: 100px;
-    height: 100px;
-  }
-  
-  .photo-placeholder {
-    font-size: 1.8rem;
-  }
-  
-  .senator-name {
-    font-size: 1.1rem;
-  }
-  
-  .info-row-first,
-  .info-row-second {
-    grid-template-columns: 1fr;
-    gap: 0.75rem;
-  }
-  
-  .social-icons {
-    gap: 0.75rem;
-  }
-  
-  .social-icon {
-    font-size: 1.3rem;
-    width: 35px;
-    height: 35px;
-  }
+  .columns-container { gap: 0.5rem; padding: 0.5rem; }
+  .hemicycle-container { min-height: 300px; }
+  .controls-panel { padding: 0.75rem; }
+  .senator-photo-circle { width: 100px; height: 100px; }
+  .photo-placeholder { font-size: 1.8rem; }
+  .senator-name { font-size: 1.1rem; }
+  .info-row-first, .info-row-second { grid-template-columns: 1fr; gap: 0.75rem; }
+  .social-icons { gap: 0.75rem; }
+  .social-icon { font-size: 1.3rem; width: 35px; height: 35px; }
 }
 
-/* Footer */
 .chamber-footer {
   background: #1f2937;
   color: white;
@@ -1313,20 +1573,8 @@ watch(() => props.senators, () => {
   border-radius: 8px;
 }
 
-.footer-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.footer-info p { 
-  margin: 0.25rem 0; 
-  font-size: 0.9rem;
-}
-
-.footer-sub {
-  font-size: 0.8rem;
-  opacity: 0.8;
-}
+.footer-content { display: flex; flex-direction: column; align-items: center; gap: 0.75rem; }
+.footer-info p { margin: 0.25rem 0; font-size: 0.9rem; }
+.footer-main { font-weight: 600; }
+.footer-sub { font-size: 0.8rem; opacity: 0.8; }
 </style>

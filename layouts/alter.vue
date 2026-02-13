@@ -305,12 +305,56 @@
       </div>
 
       <!-- Footer con colores oficiales -->
-      <footer class="bg-[#d34848] text-white mt-12 py-8">
-        <div class="container mx-auto px-4 text-center">
-          <p>Calle Comercio esquina Colón - Telf.: (591) 2158701 - La Paz - Bolivia</p>
-          <p class="mt-2 text-white/80 text-sm">www.senado.gob.bo</p>
+      <footer class="text-white back-image">
+      <div class="mx-auto">
+        <div class="text-center">
+          <div class="flex items-center justify-center gap-3 back-image">
+            <div class=" flex items-center justify-center w-40 h-40 pt-3 ">
+              <img 
+                  src="/2R.png" 
+                  alt="Escudo Senado Nacional" 
+                  class="w-full h-full object-cover"
+              />
+            </div>
+            
+          </div>
+          
+          <div class="sub-footer bg-gray-900 text-white py-8">
+            <div class="container mx-auto px-4">
+              <!-- Grid de 3 columnas con ancho personalizado -->
+              <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+                
+                <!-- Columna 1: Logo + texto (izquierda) - 2 fracciones -->
+                <div class="md:col-span-3 flex items-center justify-start space-x-3">
+                  <img src="/footer-img/Recurso 8.png" alt="Senado Bolivia" class="h-11 w-auto">
+                  <div>
+                    <a href="https://diputados.gob.bo/" target="_blank">https://diputados.gob.bo/</a>
+                  </div>
+                </div>
+                
+                <!-- Columna 2: Centro - 3 fracciones (más ancha) -->
+                <div class="md:col-span-6 text-center">  <!-- 🟢 col-span-2 -->
+                  <p>
+                    Calle Comercio esquina Colón - Telf.: (591) 2158701 - www.senado.gob.bo - La Paz - Bolivia 
+                  </p>
+                </div>
+                
+                <!-- Columna 3: Derecha - 2 fracciones -->
+                <div class="md:col-span-3 flex items-center justify-end space-x-3">
+                  <img src="/footer-img/Recurso 7.png" alt="Escudo Senado" class="h-14 w-auto">
+                  <div class="text-right">
+                    <a href="https://www.vicepresidencia.gob.bo/" target="_blank">https://www.vicepresidencia.gob.bo/</a>
+                  </div>
+                </div>
+                
+              </div>
+            </div>
+          </div>
+          
+         
         </div>
-      </footer>
+      </div>
+    </footer>
     </main>
 
     <!-- Redes Sociales Fijas (Derecha) -->
@@ -389,6 +433,19 @@ header {
   right: 0;
   background-color: #E03636;
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.back-image{
+  background-image: url('/footer-main.png');
+  background-size: cover; /* Cubre todo el contenedor */
+  background-position: center; /* Centra la imagen */
+  background-repeat: no-repeat; /* No repetir */
+  background-color: rgba(224, 54, 54, 0.7);
+  /* background-attachment: fixed; */
+}
+.sub-footer{
+  background-color: rgba(198, 18, 16, 0.6);
+  font-size: .7em;
 }
 
 /* Espaciador para compensar header fijo */

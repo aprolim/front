@@ -430,9 +430,9 @@
                 
                 <!-- Columna 1: Logo + texto (izquierda) - 2 fracciones -->
                 <div class="md:col-span-3 flex items-center justify-start space-x-3">
-                  <img src="/footer-img/Recurso 7.png" alt="Senado Bolivia" class="h-12 w-auto">
+                  <img src="/footer-img/Recurso 8.png" alt="Senado Bolivia" class="h-11 w-auto">
                   <div>
-                    <p class="font-semibold">Senado de Bolivia</p>
+                    <a href="https://diputados.gob.bo/" target="_blank">https://diputados.gob.bo/</a>
                   </div>
                 </div>
                 
@@ -445,9 +445,9 @@
                 
                 <!-- Columna 3: Derecha - 2 fracciones -->
                 <div class="md:col-span-3 flex items-center justify-end space-x-3">
-                  <img src="/footer-img/Recurso 8.png" alt="Escudo Senado" class="h-12 w-auto">
+                  <img src="/footer-img/Recurso 7.png" alt="Escudo Senado" class="h-14 w-auto">
                   <div class="text-right">
-                    <p class="font-semibold">www.senado.gob.bo</p>
+                    <a href="https://www.vicepresidencia.gob.bo/" target="_blank">https://www.vicepresidencia.gob.bo/</a>
                   </div>
                 </div>
                 
