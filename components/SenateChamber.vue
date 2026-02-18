@@ -188,13 +188,13 @@
                 </div>
 
                 <div class="bancada-row">
-                  <div v-if="selectedSenator.comision" class="pill-purple font-extrabold">
+                  <div v-if="selectedSenator.comision" class="pill-white font-extrabold text-center">
                     {{ selectedSenator.comision }}
                   </div>
-                  <div v-if="selectedSenator.comite" class="pill-purple font-extrabold">
+                  <div v-if="selectedSenator.comite" class="pill-white font-extrabold text-center">
                     {{ selectedSenator.comite }}
                   </div>
-                  <div v-if="selectedSenator.cargo" class="pill-purple font-extrabold">
+                  <div v-if="selectedSenator.cargo" class="pill-white font-extrabold text-center">
                     {{ selectedSenator.cargo }}
                   </div>
                 </div>
@@ -1375,7 +1375,7 @@ watch(() => props.senators, () => {
   border: 1px solid #e5e7eb;
   font-weight: 500;
   width: 100%;
-  text-align: left;
+  text-align: center;
 }
 
 .social-media-section { width: 100%; margin-top: auto; }

@@ -31,16 +31,16 @@
               <div class="absolute right-0 mt-1 w-64 bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                 <div class="py-2">
                   <NuxtLink to="/institucion/mandato" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    📜 Mandato constitucional
+                    Mandato constitucional
                   </NuxtLink>
                   <NuxtLink to="/institucion/directiva" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    📚 Directiva camaral
+                    Directiva camaral
                   </NuxtLink>
                   <NuxtLink to="/institucion/resena" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    🔄 Reseña histórica
+                    Reseña histórica
                   </NuxtLink>
                   <NuxtLink to="/institucion/galeria" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    🖼️ Galería de imágenes
+                    Galería de imágenes
                   </NuxtLink>
                 </div>
               </div>
@@ -54,16 +54,16 @@
               <div class="absolute right-0 mt-1 w-64 bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                 <div class="py-2">
                   <NuxtLink to="/legisladores/mandato" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    📜 Mandato constitucional
+                    Mandato constitucional
                   </NuxtLink>
                   <NuxtLink to="/legisladores/directiva" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    📚 Directiva camaral
+                    Directiva camaral
                   </NuxtLink>
                   <NuxtLink to="/legisladores/resena" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    🔄 Reseña histórica
+                    Reseña histórica
                   </NuxtLink>
                   <NuxtLink to="/legisladores/galeria" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    🖼️ Galería de imágenes
+                    Galería de imágenes
                   </NuxtLink>
                 </div>
               </div>
@@ -77,13 +77,13 @@
               <div class="absolute right-0 mt-1 w-64 bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                 <div class="py-2">
                   <NuxtLink to="/gestion/sesion" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    👨‍⚖️ Sesión del pleno
+                    Sesión del pleno
                   </NuxtLink>
                   <NuxtLink to="/gestion/proyectos" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    👩‍⚖️ Proyectos de leyes
+                    Proyectos de leyes
                   </NuxtLink>
                   <NuxtLink to="/gestion/gaceta" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    📋 Gaceta Legislativa
+                    Gaceta Legislativa
                   </NuxtLink>
                 </div>
               </div>
@@ -97,13 +97,13 @@
               <div class="absolute right-0 mt-1 w-64 bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                 <div class="py-2">
                   <NuxtLink to="/cultura/sesion" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    👨‍⚖️ Sesión del pleno
+                    Sesión del pleno
                   </NuxtLink>
                   <NuxtLink to="/cultura/proyectos" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    👩‍⚖️ Proyectos de leyes
+                    Proyectos de leyes
                   </NuxtLink>
                   <NuxtLink to="/cultura/gaceta" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    📋 Gaceta Legislativa
+                    Gaceta Legislativa
                   </NuxtLink>
                 </div>
               </div>
@@ -117,13 +117,13 @@
               <div class="absolute right-0 mt-1 w-64 bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                 <div class="py-2">
                   <NuxtLink to="/participacion/sesion" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    👨‍⚖️ Sesión del pleno
+                    Sesión del pleno
                   </NuxtLink>
                   <NuxtLink to="/participacion/proyectos" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    👩‍⚖️ Proyectos de leyes
+                    Proyectos de leyes
                   </NuxtLink>
                   <NuxtLink to="/participacion/gaceta" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    📋 Gaceta Legislativa
+                    Gaceta Legislativa
                   </NuxtLink>
                 </div>
               </div>

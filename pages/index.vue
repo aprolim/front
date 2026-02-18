@@ -341,7 +341,7 @@ definePageMeta({
 .scroll-section {
   will-change: transform, opacity;
   backface-visibility: hidden;
-  transform: translateZ(0);
+  /* transform: translateZ(0); */
 }
 
 .scroll-section.animate-in {
