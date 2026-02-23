@@ -1,6 +1,6 @@
 <template>
   <div class="tabs-container">
-    <!-- Encabezado de pestañas -->
+    <!-- Encabezado de pestañas - CON ESTILOS CORREGIDOS -->
     <div class="tabs-header">
       <button 
         v-for="tab in tabs" 
@@ -8,12 +8,13 @@
         :class="['tab-button', { 'active': activeTab === tab.id }]"
         @click="activeTab = tab.id"
         :disabled="pending"
+        :style="activeTab === tab.id ? activeTabStyle : {}"
       >
         <span class="tab-label">{{ tab.label }}</span>
       </button>
     </div>
 
-    <!-- Estado de carga (solo visible durante la navegación cliente) -->
+    <!-- Estado de carga -->
     <div v-if="pending" class="loading-state">
       <div class="spinner"></div>
       <p>Cargando información...</p>
@@ -66,27 +67,26 @@ import { ref, computed } from 'vue';
 // ==============================================
 const API_BASE_URL = 'http://localhost:3000/api/tabs';
 
+// Estilo para pestaña activa
+const activeTabStyle = computed(() => ({
+  background: '#706F6F',
+  color: 'white'
+}));
+
 // ==============================================
 // FETCH SSR - Se ejecuta en servidor y cliente
 // ==============================================
 const { data, pending, error, refresh } = await useFetch(API_BASE_URL, {
-  // SSR activado - se ejecuta en el servidor
   server: true,
-  // No lazy - espera los datos antes de renderizar
   lazy: false,
-  // Cachea por 60 segundos
   cache: 'default',
-  // Transforma la respuesta para obtener solo lo necesario
   transform: (response) => {
-    // Si la respuesta tiene estructura { success: true, data: {...} }
     if (response?.success && response?.data) {
       return response.data;
     }
-    // Si la respuesta es directamente los datos
     if (response?.tabs) {
       return response;
     }
-    // Fallback con estructura vacía
     console.warn('⚠️ Estructura de respuesta inesperada:', response);
     return {
       tabs: [],
@@ -168,18 +168,15 @@ const linksPorTab = computed(() => {
  */
 const generatePath = (tabId, item) => {
   try {
-    // Encontrar el tab correspondiente
     const tab = tabs.value.find(t => t.id === tabId);
     
-    // Crear slug del área
     const areaSlug = tab?.label
       ?.toLowerCase()
       .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '') // Eliminar acentos
+      .replace(/[\u0300-\u036f]/g, '')
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/^-+|-+$/g, '') || tabId;
     
-    // Crear slug del ítem
     const itemSlug = item.titulo
       ?.toLowerCase()
       .normalize('NFD')
@@ -211,7 +208,7 @@ if (tabs.value.length > 0 && !activeTab.value) {
 }
 
 // ==============================================
-// META TAGS PARA SEO (opcional)
+// META TAGS PARA SEO
 // ==============================================
 useHead({
   title: 'Gestión Legislativa - Senado de Bolivia',
@@ -249,12 +246,12 @@ if (import.meta.dev) {
   overflow: hidden;
 }
 
-/* Encabezado de pestañas */
+/* Encabezado de pestañas - CORREGIDO */
 .tabs-header {
   display: flex;
   background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
   padding: 0;
-  border-bottom: 2px solid #E03636;
+  border-bottom: 2px solid black;
 }
 
 .tab-button {
@@ -264,9 +261,9 @@ if (import.meta.dev) {
   justify-content: center;
   gap: 12px;
   padding: 22px 24px;
-  background: transparent;
+  background: #000;
   border: none;
-  color: #333;
+  color: #fff;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
@@ -276,42 +273,40 @@ if (import.meta.dev) {
 }
 
 .tab-button:disabled {
-  opacity: 0.5;
+  opacity: 0.7;
   cursor: not-allowed;
 }
 
 .tab-button:hover:not(:disabled) {
-  background: rgba(224, 54, 54, 0.05);
-  color: #E03636;
+  background: #575756;
 }
 
 .tab-button.active {
-  color: #E03636;
+  color: white;
   font-weight: 700;
-  background: white;
+  box-shadow: 0 4px 12px rgba(224, 54, 54, 0.2);
 }
 
-.tab-button.active::after {
+.tab-button.active::before {
   content: '';
   position: absolute;
-  bottom: -2px;
+  top: 0;
   left: 0;
   right: 0;
-  height: 3px;
-  background: #E03636;
-  border-radius: 3px 3px 0 0;
+  height: 4px;
+  background: black;
+  border-radius: 2px 2px 0 0;
 }
 
 /* Estados de carga y error */
 .loading-state, .error-state {
   text-align: center;
-  padding: 80px 20px;
-  min-height: 500px;
+  padding: 60px 20px;
+  min-height: 400px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: white;
 }
 
 .spinner {
@@ -333,7 +328,6 @@ if (import.meta.dev) {
   color: #E03636;
   margin-bottom: 20px;
   font-size: 16px;
-  max-width: 400px;
 }
 
 .retry-button {
@@ -345,62 +339,44 @@ if (import.meta.dev) {
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(224, 54, 54, 0.2);
+  transition: background 0.3s ease;
 }
 
 .retry-button:hover {
   background: #c02e2e;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(224, 54, 54, 0.3);
 }
 
 /* Contenido de pestañas */
 .tabs-content {
-  padding: 48px 36px;
-  background: white;
-  min-height: 600px;
+  padding: 36px;
+  background: transparent;
+  min-height: 500px;
 }
 
 .tab-pane {
-  animation: fadeIn 0.5s ease-out;
+  animation: fadeIn 0.4s ease-out;
 }
 
-/* Encabezado de sección */
+/* Encabezado de sección - CORREGIDO */
 .section-header {
   text-align: center;
-  margin-bottom: 48px;
+  margin-bottom: 40px;
   padding-bottom: 24px;
-  border-bottom: 1px solid #eee;
 }
 
 .section-title {
-  font-size: 32px;
+  font-size: 28px;
   font-weight: 700;
   color: #E03636;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   letter-spacing: 0.5px;
-  position: relative;
-  display: inline-block;
-}
-
-.section-title::after {
-  content: '';
-  position: absolute;
-  bottom: -12px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60px;
-  height: 4px;
-  background: #E03636;
-  border-radius: 2px;
 }
 
 .section-description {
   font-size: 16px;
   color: #666;
-  max-width: 700px;
-  margin: 24px auto 0;
+  max-width: 600px;
+  margin: 0 auto;
   line-height: 1.6;
 }
 
@@ -411,16 +387,16 @@ if (import.meta.dev) {
   gap: 24px;
 }
 
-/* Tarjetas de link */
+/* Tarjetas de link - CORREGIDAS */
 .link-card {
   display: flex;
   align-items: center;
   background: white;
-  border-radius: 16px;
+  border-radius: 12px;
   padding: 24px;
   text-decoration: none;
   color: inherit;
-  border: 1px solid #eaeaea;
+  border: 2px solid transparent;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
@@ -437,13 +413,12 @@ if (import.meta.dev) {
   background: #E03636;
   transform: scaleY(0);
   transition: transform 0.3s ease;
-  transform-origin: top;
 }
 
 .link-card:hover {
   transform: translateY(-6px);
   border-color: #E03636;
-  box-shadow: 0 12px 24px rgba(224, 54, 54, 0.15);
+  box-shadow: 0 12px 24px rgba(224, 54, 54, 0.1);
 }
 
 .link-card:hover::before {
@@ -452,16 +427,11 @@ if (import.meta.dev) {
 
 /* Icono */
 .link-icon {
-  font-size: 40px;
+  font-size: 32px;
   margin-right: 20px;
   color: #E03636;
   flex-shrink: 0;
   transition: transform 0.3s ease;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .link-icon :deep(svg) {
@@ -480,7 +450,7 @@ if (import.meta.dev) {
 }
 
 .link-title {
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 600;
   color: #333;
   margin-bottom: 8px;
@@ -502,7 +472,6 @@ if (import.meta.dev) {
   opacity: 0;
   transform: translateX(-10px);
   transition: all 0.3s ease;
-  font-weight: 300;
 }
 
 .link-card:hover .link-arrow {
@@ -514,7 +483,7 @@ if (import.meta.dev) {
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
@@ -523,7 +492,7 @@ if (import.meta.dev) {
 }
 
 .fade-in {
-  animation: fadeIn 0.5s ease-out;
+  animation: fadeIn 0.4s ease-out;
 }
 
 /* Responsive */
@@ -531,31 +500,22 @@ if (import.meta.dev) {
   .links-grid {
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   }
-  
-  .tabs-content {
-    padding: 40px 24px;
-  }
 }
 
 @media (max-width: 768px) {
   .tabs-header {
     flex-direction: column;
-    border-bottom: none;
   }
   
   .tab-button {
-    padding: 18px 24px;
+    padding: 20px;
     justify-content: flex-start;
-    border-bottom: 1px solid #eaeaea;
+    padding-left: 28px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   }
   
-  .tab-button.active::after {
-    height: 100%;
-    width: 4px;
-    bottom: 0;
-    top: 0;
-    right: auto;
-    left: 0;
+  .tab-button.active {
+    transform: translateX(4px);
   }
   
   .links-grid {
@@ -564,22 +524,18 @@ if (import.meta.dev) {
   }
   
   .tabs-content {
-    padding: 32px 20px;
+    padding: 28px 20px;
   }
   
   .section-title {
-    font-size: 28px;
-  }
-  
-  .section-description {
-    font-size: 15px;
+    font-size: 24px;
   }
 }
 
 @media (max-width: 480px) {
   .tab-button {
     font-size: 15px;
-    padding: 16px 20px;
+    padding: 18px 20px;
   }
   
   .link-card {
@@ -599,60 +555,18 @@ if (import.meta.dev) {
   
   .link-arrow {
     margin-left: 0;
-    transform: rotate(90deg);
-  }
-  
-  .link-card:hover .link-arrow {
-    transform: rotate(90deg) translateY(5px);
   }
   
   .section-header {
-    margin-bottom: 32px;
-    padding-bottom: 16px;
+    margin-bottom: 30px;
   }
   
   .section-title {
-    font-size: 24px;
-  }
-  
-  .section-title::after {
-    width: 40px;
-    bottom: -8px;
+    font-size: 22px;
   }
   
   .section-description {
     font-size: 14px;
-    margin-top: 16px;
-  }
-  
-  .tabs-content {
-    padding: 24px 16px;
-  }
-}
-
-/* Estilos para impresión */
-@media print {
-  .tabs-header {
-    border-bottom: 2px solid #000;
-  }
-  
-  .tab-button {
-    color: #000;
-    background: none;
-  }
-  
-  .tab-button.active {
-    font-weight: bold;
-  }
-  
-  .link-card {
-    break-inside: avoid;
-    border: 1px solid #ccc;
-    box-shadow: none;
-  }
-  
-  .link-arrow {
-    display: none;
   }
 }
 </style>

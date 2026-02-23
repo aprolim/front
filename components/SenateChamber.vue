@@ -20,7 +20,7 @@
             <div class="controls-panel transparent-panel">
               <!-- Leyenda -->
               <div class="controls-section">
-                <h4 class="pill-red">Distribución 2025-2030</h4>
+                <h4 class="pill-red">Distribución <br> 2025-2030</h4>
                 <div class="legend-vertical">
                   <div 
                     v-for="party in parties"
@@ -31,8 +31,39 @@
                   >
                     <div class="grid grid-cols-3 items-center w-full">
                       <div class="flex justify-center">
-                        <div class="legend-color-vertical" :style="{ backgroundColor: party.color }">
-                          <span class="legend-symbol">{{ party.symbol }}</span>
+                        <!-- CÍRCULO CON EFECTO CONCÉNTRICO: Color → Blanco → Color -->
+                        <div class="legend-color-vertical">
+                          <svg width="40" height="40" viewBox="0 0 40 40">
+                            <!-- Círculo exterior (color del partido) -->
+                            <circle 
+                              cx="20" 
+                              cy="20" 
+                              r="18" 
+                              :fill="party.color"
+                            />
+                            <!-- Círculo medio (blanco) -->
+                            <circle 
+                              cx="20" 
+                              cy="20" 
+                              r="12" 
+                              fill="white"
+                            />
+                            <!-- Círculo interior (color del partido) -->
+                            <circle 
+                              cx="20" 
+                              cy="20" 
+                              r="10" 
+                              :fill="party.color"
+                            />
+                            <!-- Pequeño brillo (opcional para dar efecto 3D) -->
+                            <circle 
+                              cx="16" 
+                              cy="16" 
+                              r="3" 
+                              fill="rgba(255,255,255,0.5)"
+                              opacity="0.7"
+                            />
+                          </svg>
                         </div>
                       </div>
                       <div class="flex justify-center">
@@ -170,9 +201,6 @@
                 </div>
 
                 <div class="info-row-first">
-                  <!-- <div class="info-item-red">
-                    <span class="value-red text-center">Edad: {{ selectedSenator.age }} años</span>
-                  </div> -->
                   <div class="">
                     <span class="value-red text-center">{{ selectedSenator.department }}</span>
                   </div>
@@ -188,10 +216,10 @@
                 </div>
 
                 <div class="bancada-row">
-                  <div v-if="selectedSenator.comision" class="pill-white font-extrabold text-center">
+                  <div v-if="selectedSenator.comision" class="pill-white font-extrabold text-center mb-4">
                     {{ selectedSenator.comision }}
                   </div>
-                  <div v-if="selectedSenator.comite" class="pill-white font-extrabold text-center">
+                  <div v-if="selectedSenator.comite" class="pill-white font-extrabold text-center mb-4">
                     {{ selectedSenator.comite }}
                   </div>
                   <div v-if="selectedSenator.cargo" class="pill-white font-extrabold text-center">
@@ -199,26 +227,8 @@
                   </div>
                 </div>
 
-                <!-- <div class="contact-section">
-                  <div class="contact-item-white">
-                    <div class="pill-white">
-                      Email: {{ selectedSenator.email || 'No disponible' }}
-                    </div>
-                  </div>
-                  <div class="contact-item-white">
-                    <div class="pill-white">
-                      Teléfono: {{ selectedSenator.phone || 'No disponible' }}
-                    </div>
-                  </div>
-                  <div class="contact-item-white">
-                    <div class="pill-white">
-                      Oficina: {{ selectedSenator.office || 'No disponible' }}
-                    </div>
-                  </div>
-                </div> -->
-
                 <!-- Redes sociales - ICONOS REALES -->
-                <div class="social-media-section">
+                <!-- <div class="social-media-section">
                   <div class="social-icons">
                     <a :href="selectedSenator.twitter || 'https://twitter.com'" target="_blank" class="social-icon">
                       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
@@ -241,7 +251,7 @@
                       </svg>
                     </a>
                   </div>
-                </div>
+                </div> -->
               </div>
 
               <div v-else class="empty-state">
@@ -249,10 +259,51 @@
                 <h4 class="font-bold">Selecciona un Senador</h4>
                 <p class="font-bold">Haz click en cualquier círculo del hemiciclo para ver información detallada</p>
                 <div class="empty-tips">
-                  <p><strong>🟢 PDC (Gobierno):</strong> 16 senadores</p>
-                  <p><strong>🔴 Libre (Oposición):</strong> 12 senadores</p>
-                  <p><strong>🟡 Unidad (Aliados):</strong> 7 senadores</p>
-                  <p><strong>🟣 APB Súmate (Aliados):</strong> 1 senador</p>
+                  <!-- CÍRCULOS CON EFECTO CONCÉNTRICO: Color → Blanco → Color -->
+                  <p class="party-indicator">
+                    <span class="color-dot">
+                      <svg width="28" height="28" viewBox="0 0 28 28">
+                        <circle cx="14" cy="14" r="12" fill="#016167"/>
+                        <circle cx="14" cy="14" r="8" fill="white"/>
+                        <circle cx="14" cy="14" r="7" fill="#016167"/>
+                        <circle cx="11" cy="11" r="2" fill="rgba(255,255,255,0.5)" opacity="0.7"/>
+                      </svg>
+                    </span>
+                    <strong>PDC (Gobierno):</strong> 16 senadores
+                  </p>
+                  <p class="party-indicator">
+                    <span class="color-dot">
+                      <svg width="28" height="28" viewBox="0 0 28 28">
+                        <circle cx="14" cy="14" r="12" fill="#FF0000"/>
+                        <circle cx="14" cy="14" r="8" fill="white"/>
+                        <circle cx="14" cy="14" r="7" fill="#FF0000"/>
+                        <circle cx="11" cy="11" r="2" fill="rgba(255,255,255,0.5)" opacity="0.7"/>
+                      </svg>
+                    </span>
+                    <strong>Libre (Oposición):</strong> 12 senadores
+                  </p>
+                  <p class="party-indicator">
+                    <span class="color-dot">
+                      <svg width="28" height="28" viewBox="0 0 28 28">
+                        <circle cx="14" cy="14" r="12" fill="#FFB848"/>
+                        <circle cx="14" cy="14" r="8" fill="white"/>
+                        <circle cx="14" cy="14" r="7" fill="#FFB848"/>
+                        <circle cx="11" cy="11" r="2" fill="rgba(255,255,255,0.5)" opacity="0.7"/>
+                      </svg>
+                    </span>
+                    <strong>Unidad (Aliados):</strong> 7 senadores
+                  </p>
+                  <p class="party-indicator">
+                    <span class="color-dot">
+                      <svg width="28" height="28" viewBox="0 0 28 28">
+                        <circle cx="14" cy="14" r="12" fill="#511966"/>
+                        <circle cx="14" cy="14" r="8" fill="white"/>
+                        <circle cx="14" cy="14" r="7" fill="#511966"/>
+                        <circle cx="11" cy="11" r="2" fill="rgba(255,255,255,0.5)" opacity="0.7"/>
+                      </svg>
+                    </span>
+                    <strong>APB Súmate (Aliados):</strong> 1 senador
+                  </p>
                   <p><strong>Total:</strong> 36 senadores</p>
                 </div>
               </div>
@@ -839,10 +890,10 @@ const props = defineProps({
   parties: {
     type: Array,
     default: () => [
-      { id: 'Partido Demócrata Cristiano', name: 'Partido Demócrata Cristiano', shortName: 'PDC', symbol: '🟢', color: '#016167', count: 16 },
-      { id: 'Unidad', name: 'Unidad', shortName: 'UNIDAD', symbol: '🟡', color: '#FFB848', count: 7 },
-      { id: 'Autonomía para Bolivia Súmate', name: 'Autonomía para Bolivia Súmate', shortName: 'APB', symbol: '🟣', color: '#511966', count: 1 },
-      { id: 'Libre', name: 'Libre', shortName: 'LIBRE', symbol: '🔴', color: '#FF0000', count: 12 }
+      { id: 'Partido Demócrata Cristiano', name: 'Partido Demócrata Cristiano', shortName: 'PDC', symbol: '', color: '#016167', count: 16 },
+      { id: 'Unidad', name: 'Unidad', shortName: 'UNIDAD', symbol: '', color: '#FFB848', count: 7 },
+      { id: 'Autonomía para Bolivia Súmate', name: 'Autonomía para Bolivia Súmate', shortName: 'APB', symbol: '', color: '#511966', count: 1 },
+      { id: 'Libre', name: 'Libre', shortName: 'LIBRE', symbol: '', color: '#FF0000', count: 12 }
     ]
   },
   showHeader: { type: Boolean, default: true },
@@ -1201,24 +1252,29 @@ watch(() => props.senators, () => {
 .legend-color-vertical {
   width: 40px;
   height: 40px;
-  border-radius: 1.2rem;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
 }
 
-.legend-symbol {
-  font-size: 1.7rem;
-  color: white;
-  text-shadow: 
-    -2px -2px 0 white,
-     2px -2px 0 white,
-    -2px  2px 0 white,
-     2px  2px 0 white,
-     0px  0px 0 black,
-     0px  0px 2px rgba(0,0,0,0.5);
+.legend-color-vertical svg {
+  width: 36px;
+  height: 36px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.legend-color-vertical circle {
+  transition: transform 0.2s ease;
+}
+
+.legend-item-vertical:hover .legend-color-vertical circle {
+  transform: scale(1.1);
+}
+
+.legend-name-vertical {
+  font-weight: 600;
+  color: #1f2937;
 }
 
 .hemicycle-container {
@@ -1314,7 +1370,6 @@ watch(() => props.senators, () => {
 
 .info-row-first {
   display: grid;
-  /* grid-template-columns: 1fr 1fr; */
   gap: 1rem;
   width: 100%;
   margin-bottom: 1rem;
@@ -1388,8 +1443,7 @@ watch(() => props.senators, () => {
 
 .social-icon {
   font-size: 1.5rem;
-  color: white;  /* Iconos blancos */
-  /* background-color: #E03636;  Fondo rojo */
+  color: white;
   backdrop-filter: blur(8px);
   cursor: pointer;
   transition: all 0.2s ease;
@@ -1406,9 +1460,9 @@ watch(() => props.senators, () => {
 
 .social-icon:hover {
   transform: scale(1.1);
-  background-color: #b32b2b;  /* Rojo más oscuro en hover - SIN CUADRADO BLANCO */
+  background-color: #b32b2b;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  color: white;  /* Mantiene el icono blanco */
+  color: white;
 }
 
 .senator-circle {
@@ -1577,4 +1631,39 @@ watch(() => props.senators, () => {
 .footer-info p { margin: 0.25rem 0; font-size: 0.9rem; }
 .footer-main { font-weight: 600; }
 .footer-sub { font-size: 0.8rem; opacity: 0.8; }
+/* Estilos para los indicadores de colores en empty-tips */
+.empty-tips p {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.4rem 0;
+  font-size: 0.85rem;
+  width: 100%;
+}
+
+.party-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.color-dot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.color-dot svg {
+  width: 20px;
+  height: 20px;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.2));
+}
+
+.empty-tips p strong {
+  min-width: 120px;
+  color: #1f2937;
+}
 </style>

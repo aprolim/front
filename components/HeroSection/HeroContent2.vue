@@ -42,7 +42,7 @@
 
     <!-- FRANJA ROJA DE ANCHO COMPLETO (dentro del mismo contenedor principal) -->
     <!-- Usamos posición absoluta para que salga del container pero esté dentro del mismo div padre -->
-    <div class="absolute left-0 right-0 -bottom-[20%] md:-bottom-[35%] lg:-bottom-[50%] xl:-bottom-[70%] 2xl:-bottom-[110%] 3xl:-bottom-[140%] 4xl:-bottom-[160%] 5xl:-bottom-[180%] z-20">
+    <div class="absolute left-0 right-0 -bottom-[20%] md:-bottom-[35%] lg:-bottom-[50%] xl:-bottom-[62%] 2xl:-bottom-[85%] 3xl:-bottom-[110%] 4xl:-bottom-[160%] 5xl:-bottom-[230%] z-20">
       <div class="relative bg-gradient-to-r from-red-700/70 via-red-800/70 to-red-900/70 py-0 md:py-4 lg:py-8 xl:py-14 2xl:py-24 3xl:py-28 4xl:py-32 5xl:py-32 shadow-2xl overflow-hidden group full-width-franja">
         
         <!-- Patrón de fondo sutil -->
@@ -59,12 +59,12 @@
         <div class="container mx-auto px-4 md:px-12 relative z-10 text-center">
           <!-- Texto principal con efecto de gradiente -->
           <p class="text-2xl md:text-3xl font-bold text-white">
-    <span class="bg-clip-text text-transparent bg-gradient-to-r from-white via-yellow-100 to-yellow-200">
-      <span class="inline-flex items-center justify-center text-base -translate-y-1 text-white">⚪</span> 
-      PRIMERA LEGISLATURA DEL TRICENTENARIO 
-      <span class="inline-flex items-center justify-center text-base -translate-y-1 text-white">⚪</span>
-    </span>
-  </p>
+            <span class="bg-clip-text text-transparent bg-gradient-to-r from-white via-yellow-100 to-yellow-200">
+              <span class="inline-flex items-center justify-center text-base -translate-y-1 text-white">⚪</span> 
+              PRIMERA LEGISLATURA DEL TRICENTENARIO 
+              <span class="inline-flex items-center justify-center text-base -translate-y-1 text-white">⚪</span>
+            </span>
+          </p>
 
           <!-- Línea decorativa central -->
           <div class="inline-block w-24 h-1 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-400 rounded-full my-4"></div>
