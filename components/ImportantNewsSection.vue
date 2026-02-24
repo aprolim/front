@@ -65,7 +65,7 @@ import { ref, computed } from 'vue';
 // ==============================================
 // CONFIGURACIÓN DE LA API
 // ==============================================
-const API_BASE_URL = 'http://localhost:3000/api/tabs';
+const API_BASE_URL = 'http://10.0.0.20/api/tabs';
 
 // Estilo para pestaña activa
 const activeTabStyle = computed(() => ({
