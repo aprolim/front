@@ -1,5 +1,5 @@
 // ============================================
-// REDES SOCIALES (con SVG incluidos)
+// REDES SOCIALES - IGUAL QUE TU ORIGINAL
 // ============================================
 export const socialLinks = [
   {
@@ -35,12 +35,26 @@ export const socialLinks = [
 ]
 
 // ============================================
-// ESTILOS DEL SIDEBAR - Responsive
+// ESTILOS DEL SIDEBAR - VERSIÓN OPTIMIZADA
 // ============================================
 export const sidebarStyles = {
-  width: 'w-64 xs:w-72 sm:w-80 md:w-96 lg:w-[28rem] xl:w-[32rem] 2xl:w-[36rem] 3xl:w-[40rem] 4xl:w-[48rem] 5xl:w-[56rem]',
-  top: 'top-[34px] xs:top-[50px] sm:top-[44px] md:top-[47px] lg:top-[63px] xl:top-[70px] 2xl:top-[80px] 3xl:top-[94px] 4xl:top-[145px] 5xl:top-[178px]',
-  height: 'h-[calc(100vh-34px)] xs:h-[calc(100vh-50px)] sm:h-[calc(100vh-44px)] md:h-[calc(100vh-47px)] lg:h-[calc(100vh-63px)] xl:h-[calc(100vh-70px)] 2xl:h-[calc(100vh-80px)] 3xl:h-[calc(100vh-94px)] 4xl:h-[calc(100vh-145px)] 5xl:h-[calc(100vh-178px)]',
-  menuText: 'font-medium text-sm xs:text-base sm:text-base md:text-lg lg:text-xl xl:text-2xl 2xl:text-3xl 3xl:text-4xl 4xl:text-5xl 5xl:text-6xl',
-  submenuText: 'block py-2 px-3 rounded hover:bg-gray-700/30 transition-colors text-xs xs:text-sm sm:text-sm md:text-base lg:text-lg xl:text-xl 2xl:text-2xl 3xl:text-3xl 4xl:text-4xl 5xl:text-5xl'
+  // ANCHO DEL SIDEBAR
+  width: 'w-[160px] min-[500px]:w-[240px] min-[640px]:w-[280px] min-[768px]:w-[320px] min-[1024px]:w-[380px] min-[1280px]:w-[440px] min-[1440px]:w-[480px] min-[1536px]:w-[520px] min-[1680px]:w-[560px] min-[1920px]:w-[600px] min-[2560px]:w-[700px] min-[3440px]:w-[820px] min-[3840px]:w-[900px]',
+  
+  // POSICIÓN TOP
+  top: 'top-[35px] min-[500px]:top-[35px] min-[640px]:top-[44px] min-[768px]:top-[47px] min-[1024px]:top-[63px] min-[1280px]:top-[70px] min-[1440px]:top-[75px] min-[1536px]:top-[80px] min-[1680px]:top-[85px] min-[1920px]:top-[94px] min-[2560px]:top-[120px] min-[3440px]:top-[150px] min-[3840px]:top-[178px]',
+  
+  // ALTURA
+  height: 'h-[calc(100vh-35px)] min-[500px]:h-[calc(100vh-35px)] min-[640px]:h-[calc(100vh-44px)] min-[768px]:h-[calc(100vh-47px)] min-[1024px]:h-[calc(100vh-63px)] min-[1280px]:h-[calc(100vh-70px)] min-[1440px]:h-[calc(100vh-75px)] min-[1536px]:h-[calc(100vh-80px)] min-[1680px]:h-[calc(100vh-85px)] min-[1920px]:h-[calc(100vh-94px)] min-[2560px]:h-[calc(100vh-120px)] min-[3440px]:h-[calc(100vh-150px)] min-[3840px]:h-[calc(100vh-178px)]',
+  // ICONOS DEL MENÚ
+  menuIcon: 'w-[10px] h-[10px] min-[500px]:w-[11px] min-[500px]:h-[11px] min-[640px]:w-[15px] min-[640px]:h-[15px] min-[768px]:w-[17px] min-[768px]:h-[17px] min-[1024px]:w-[22px] min-[1024px]:h-[22px] min-[1280px]:w-[25px] min-[1280px]:h-[25px] min-[1440px]:w-[28px] min-[1440px]:h-[28px] min-[1536px]:w-[30px] min-[1536px]:h-[30px] min-[1680px]:w-[38px] min-[1680px]:h-[38px] min-[1920px]:w-[40px] min-[1920px]:h-[40px] min-[2560px]:w-[43px] min-[2560px]:h-[43px] min-[3440px]:w-[52px] min-[3440px]:h-[52px] min-[3840px]:w-[58px] min-[3840px]:h-[58px]',
+  
+  // ✅ TEXTO PRINCIPAL DEL MENÚ (MODIFICADO)
+  menuText: 'font-medium text-[5px] min-[500px]:text-[6px] min-[640px]:text-[7px] min-[768px]:text-[9px] min-[1024px]:text-[12px] min-[1280px]:text-[13px] min-[1440px]:text-[15px] min-[1536px]:text-[18px] min-[1680px]:text-[23px] min-[1920px]:text-[25px] min-[2560px]:text-[33px] min-[3440px]:text-[34px] min-[3840px]:text-[42px]',
+  
+  // ✅ TEXTO DE SUBMENÚS (MODIFICADO)
+  submenuText: 'block py-2 px-3 rounded hover:bg-gray-700/30 transition-colors text-[10px] min-[500px]:text-[10px] min-[640px]:text-[11px] min-[768px]:text-[12px] min-[1024px]:text-[14px] min-[1280px]:text-[15px] min-[1440px]:text-[17px] min-[1536px]:text-[19px] min-[1680px]:text-[20px] min-[1920px]:text-[22px] min-[2560px]:text-[26px] min-[3440px]:text-[30px] min-[3840px]:text-[33px]',
+  
+  // FLECHAS
+  arrowIcon: 'w-[14px] h-[14px] min-[500px]:w-[14px] min-[500px]:h-[14px] min-[640px]:w-[18px] min-[640px]:h-[18px] min-[768px]:w-[20px] min-[768px]:h-[20px] min-[1024px]:w-[22px] min-[1024px]:h-[22px] min-[1280px]:w-[24px] min-[1280px]:h-[24px] min-[1440px]:w-[26px] min-[1440px]:h-[26px] min-[1536px]:w-[28px] min-[1536px]:h-[28px] min-[1680px]:w-[30px] min-[1680px]:h-[30px] min-[1920px]:w-[32px] min-[1920px]:h-[32px] min-[2560px]:w-[36px] min-[2560px]:h-[36px] min-[3440px]:w-[42px] min-[3440px]:h-[42px] min-[3840px]:w-[46px] min-[3840px]:h-[46px] transition-transform duration-200'
 }

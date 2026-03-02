@@ -1,20 +1,22 @@
 <template>
-  <!-- SECCIÓN: Más Noticias -->
+  <!-- SECCIÓN: Más Noticias - CON FONDO TRANSPARENTE -->
   <section 
-    class="bg-gradient-to-b from-white to-gray-50 relative overflow-hidden pt-6"
+    class="flex items-center h-screen relative overflow-hidden pt-6"
+    style="background: transparent !important;"
     ref="moreNewsSection"
   >
-    <!-- Elemento decorativo -->
-    <div class="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-[#8B1A1A]/10 to-transparent rounded-full blur-3xl"></div>
-    <div class="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-[#F9E076]/10 to-transparent rounded-full blur-3xl"></div>
+    <!-- Elementos decorativos ahora son más sutiles y transparentes -->
+    <div class="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-[#8B1A1A]/5 to-transparent rounded-full blur-3xl"></div>
+    <div class="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-[#F9E076]/5 to-transparent rounded-full blur-3xl"></div>
+    
     <div class="container mx-auto px-10 relative z-10">
-      <!-- Encabezado de la sección -->
+      <!-- Encabezado de la sección - con sombra para legibilidad -->
       <slot name="header">
         <div class="text-center mb-12">
-          <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Últimas <span class="text-[#E03636]">Noticias</span>
+          <h2 class="text-3xl md:text-4xl font-bold mb-4 text-white" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">
+            Últimas <span class="text-[#E03636]" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">Noticias</span>
           </h2>
-          <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p class="text-lg max-w-2xl mx-auto text-white" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
             Información actualizada sobre las actividades legislativas del Senado Nacional
           </p>
         </div>
@@ -22,84 +24,84 @@
 
       <!-- Grid de 4 noticias -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" ref="moreNewsGrid">
-  <slot name="news">
-    
-    <div class="news-card relative group opacity-0 translate-y-8 overflow-hidden rounded-2xl shadow-xl flex flex-col h-full"
-      :class="{ 'card-visible': isInView }" :style="{ transitionDelay: '0ms' }">
-      <div class="absolute inset-0 z-0">
-        <img src="https://cdn.correodelsur.com/img/contents/images_980/2025/11/06/e53d2037-62e5-4265-9dcc-0149f4d79306.jpg"
-          class="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-110" />
-        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
-      </div>
-      <div class="flex-grow min-h-[180px]"></div>
-      <div class="p-5 bg-[#E03636]/40 relative z-10 mx-0 mb-0 shadow-2xl border border-white/10 flex flex-col justify-between min-h-[130px] ">
-        <h3 class="text-sm font-bold text-white mb-3 group-hover:text-red-200 transition-colors line-clamp-3">
-          Reforma Educativa para áreas rurales aprobada Reforma Educativa para áreas rurales aprobada
-        </h3>
-        <NuxtLink :to="newsLink1" class="text-sm font-bold text-white hover:text-red-100 transition-colors inline-flex items-center gap-1 mt-auto">
-          Leer más <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-        </NuxtLink>
-      </div>
-    </div>
+        <slot name="news">
+          
+          <div class="news-card relative group opacity-0 translate-y-8 overflow-hidden rounded-2xl shadow-xl flex flex-col h-full"
+            :class="{ 'card-visible': isInView }" :style="{ transitionDelay: '0ms' }">
+            <div class="absolute inset-0 z-0">
+              <img src="https://cdn.correodelsur.com/img/contents/images_980/2025/11/06/e53d2037-62e5-4265-9dcc-0149f4d79306.jpg"
+                class="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-110" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
+            </div>
+            <div class="flex-grow min-h-[180px]"></div>
+            <div class="p-5 bg-[#E03636]/40 relative z-10 mx-0 mb-0 shadow-2xl border border-white/10 flex flex-col justify-between min-h-[130px] backdrop-blur-sm">
+              <h3 class="text-sm font-bold text-white mb-3 group-hover:text-red-200 transition-colors line-clamp-3">
+                Reforma Educativa para áreas rurales aprobada Reforma Educativa para áreas rurales aprobada
+              </h3>
+              <NuxtLink :to="newsLink1" class="text-sm font-bold text-white hover:text-red-100 transition-colors inline-flex items-center gap-1 mt-auto">
+                Leer más <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+              </NuxtLink>
+            </div>
+          </div>
 
-    <div class="news-card relative group opacity-0 translate-y-8 overflow-hidden rounded-2xl shadow-xl flex flex-col h-full"
-      :class="{ 'card-visible': isInView }" :style="{ transitionDelay: '150ms' }">
-      <div class="absolute inset-0 z-0">
-        <img src="https://apisi.senado.gob.bo/images/a063d8c8-02f3-442e-90b3-83694246b66e_1763506991.jpg"
-          class="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-110" />
-        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
-      </div>
-      <div class="flex-grow min-h-[180px]"></div>
-      <div class="p-5 bg-[#E03636]/40 relative z-10 mx-0 mb-0 shadow-2xl border border-white/10 flex flex-col justify-between min-h-[130px]">
-        <h3 class="text-sm font-bold text-white mb-3 group-hover:text-red-200 transition-colors line-clamp-3">
-          Plan Nacional de hidrocarburos 2024-2026: Fortalecimiento del sistema público
-        </h3>
-        <NuxtLink :to="newsLink2" class="text-sm font-bold text-white hover:text-red-100 transition-colors inline-flex items-center gap-1 mt-auto">
-          Leer más <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-        </NuxtLink>
-      </div>
-    </div>
+          <div class="news-card relative group opacity-0 translate-y-8 overflow-hidden rounded-2xl shadow-xl flex flex-col h-full"
+            :class="{ 'card-visible': isInView }" :style="{ transitionDelay: '150ms' }">
+            <div class="absolute inset-0 z-0">
+              <img src="https://apisi.senado.gob.bo/images/a063d8c8-02f3-442e-90b3-83694246b66e_1763506991.jpg"
+                class="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-110" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
+            </div>
+            <div class="flex-grow min-h-[180px]"></div>
+            <div class="p-5 bg-[#E03636]/40 relative z-10 mx-0 mb-0 shadow-2xl border border-white/10 flex flex-col justify-between min-h-[130px] backdrop-blur-sm">
+              <h3 class="text-sm font-bold text-white mb-3 group-hover:text-red-200 transition-colors line-clamp-3">
+                Plan Nacional de hidrocarburos 2024-2026: Fortalecimiento del sistema público
+              </h3>
+              <NuxtLink :to="newsLink2" class="text-sm font-bold text-white hover:text-red-100 transition-colors inline-flex items-center gap-1 mt-auto">
+                Leer más <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+              </NuxtLink>
+            </div>
+          </div>
 
-    <div class="news-card relative group opacity-0 translate-y-8 overflow-hidden rounded-2xl shadow-xl flex flex-col h-full"
-      :class="{ 'card-visible': isInView }" :style="{ transitionDelay: '300ms' }">
-      <div class="absolute inset-0 z-0">
-        <img src="https://pbs.twimg.com/media/G_1f4kRbUAwUDIK.jpg"
-          class="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-110" />
-        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
-      </div>
-      <div class="flex-grow min-h-[180px]"></div>
-      <div class="p-5 bg-[#E03636]/40 relative z-10 mx-0 mb-0 shadow-2xl border border-white/10 flex flex-col justify-between min-h-[130px]">
-        <h3 class="text-sm font-bold text-white mb-3 group-hover:text-red-200 transition-colors line-clamp-3">
-          Sesiones en pleno ampliada para mitigar el cambio climático
-        </h3>
-        <NuxtLink :to="newsLink3" class="text-sm font-bold text-white hover:text-red-100 transition-colors inline-flex items-center gap-1 mt-auto">
-          Leer más <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-        </NuxtLink>
-      </div>
-    </div>
+          <div class="news-card relative group opacity-0 translate-y-8 overflow-hidden rounded-2xl shadow-xl flex flex-col h-full"
+            :class="{ 'card-visible': isInView }" :style="{ transitionDelay: '300ms' }">
+            <div class="absolute inset-0 z-0">
+              <img src="https://pbs.twimg.com/media/G_1f4kRbUAwUDIK.jpg"
+                class="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-110" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
+            </div>
+            <div class="flex-grow min-h-[180px]"></div>
+            <div class="p-5 bg-[#E03636]/40 relative z-10 mx-0 mb-0 shadow-2xl border border-white/10 flex flex-col justify-between min-h-[130px] backdrop-blur-sm">
+              <h3 class="text-sm font-bold text-white mb-3 group-hover:text-red-200 transition-colors line-clamp-3">
+                Sesiones en pleno ampliada para mitigar el cambio climático
+              </h3>
+              <NuxtLink :to="newsLink3" class="text-sm font-bold text-white hover:text-red-100 transition-colors inline-flex items-center gap-1 mt-auto">
+                Leer más <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+              </NuxtLink>
+            </div>
+          </div>
 
-    <div class="news-card relative group opacity-0 translate-y-8 overflow-hidden rounded-2xl shadow-xl flex flex-col h-full"
-      :class="{ 'card-visible': isInView }" :style="{ transitionDelay: '450ms' }">
-      <div class="absolute inset-0 z-0">
-        <img src="https://apisi.senado.gob.bo/images/9d7ed6c2-ac43-4684-8838-e80b42c03529_1731680945.png"
-          class="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-110" />
-        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
-      </div>
-      <div class="flex-grow min-h-[180px]"></div>
-      <div class="p-5 bg-[#E03636]/40 relative z-10 mx-0 mb-0 shadow-2xl border border-white/10 flex flex-col justify-between min-h-[130px]">
-        <h3 class="text-sm font-bold text-white mb-3 group-hover:text-red-200 transition-colors line-clamp-3">
-          Se reafirma la nueva constitucion sobre lo ultimo en referendum 
-        </h3>
-        <NuxtLink :to="newsLink4" class="text-sm font-bold text-white hover:text-red-100 transition-colors inline-flex items-center gap-1 mt-auto">
-          Leer más <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-        </NuxtLink>
-      </div>
-    </div>
+          <div class="news-card relative group opacity-0 translate-y-8 overflow-hidden rounded-2xl shadow-xl flex flex-col h-full"
+            :class="{ 'card-visible': isInView }" :style="{ transitionDelay: '450ms' }">
+            <div class="absolute inset-0 z-0">
+              <img src="https://apisi.senado.gob.bo/images/9d7ed6c2-ac43-4684-8838-e80b42c03529_1731680945.png"
+                class="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-110" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
+            </div>
+            <div class="flex-grow min-h-[180px]"></div>
+            <div class="p-5 bg-[#E03636]/40 relative z-10 mx-0 mb-0 shadow-2xl border border-white/10 flex flex-col justify-between min-h-[130px] backdrop-blur-sm">
+              <h3 class="text-sm font-bold text-white mb-3 group-hover:text-red-200 transition-colors line-clamp-3">
+                Se reafirma la nueva constitucion sobre lo ultimo en referendum 
+              </h3>
+              <NuxtLink :to="newsLink4" class="text-sm font-bold text-white hover:text-red-100 transition-colors inline-flex items-center gap-1 mt-auto">
+                Leer más <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+              </NuxtLink>
+            </div>
+          </div>
 
-  </slot>
-</div>
+        </slot>
+      </div>
 
-      <!-- Botón para más noticias 5896 -->
+      <!-- Botón para más noticias -->
       <slot name="footer">
         <div class="text-center mt-12">
           <NuxtLink 
@@ -210,6 +212,11 @@ onMounted(() => {
 </script>
 
 <style scoped>
+/* Fondo transparente para la sección */
+section {
+  background: transparent !important;
+}
+
 /* Estilos para las tarjetas de noticias */
 .news-card {
   position: relative;

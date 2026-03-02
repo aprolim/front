@@ -1,5 +1,5 @@
 <template>
-  <div class="senate-chamber">
+  <div class="h-screen senate-chamber">
     <!-- Header -->
     <header v-if="showHeader" class="chamber-header text-center">
       <slot name="header">
@@ -10,9 +10,9 @@
       </slot>
     </header>
 
-    <main class="main-content">
+    <main class="h-screen main-content">
       <!-- Contenedor con imagen de fondo -->
-      <div class="background-container" :style="{ backgroundImage: `url('${backgroundImage}')` }">
+      <div class="h-screen background-container" :style="{ backgroundImage: `url('${backgroundImage}')` }">
         <!-- Contenedor principal CON GRID DE 3 COLUMNAS REALES -->
         <div class="columns-container mx-12">
           <!-- COLUMNA IZQUIERDA: Panel de Controles -->

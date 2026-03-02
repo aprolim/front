@@ -1,11 +1,8 @@
-<!-- pages/index.vue - VERSIÓN CON FONDO FIJO EN AMBAS SECCIONES - SIN LÍNEA ROJA -->
+<!-- pages/index.vue - VERSIÓN CON SNAP MEJORADO Y FONDO DEL MUSEO -->
 <template>
   <div class="min-h-screen text-style">
     <!-- Fondo fijo GLOBAL - SOLO para Important News -->
     <div class="global-fixed-background" :class="{ 'show-fixed': isImportantNewsVisible }"></div>
-    
-    <!-- Fondo fijo para More News -->
-    <div class="morenews-fixed-background" :class="{ 'show-fixed': isMoreNewsVisible }"></div>
     
     <!-- Hero Section -->
     <section 
@@ -26,7 +23,13 @@
       />
     </section>
 
-    <!-- Sección Important News - CON FONDO FIJO -->
+    <!-- Transición entre secciones -->
+    <div class="relative h-6 -mt-8 overflow-hidden z-20 snap-section">
+      <div class="absolute inset-0 bg-gradient-to-b from-transparent via-white/20 to-white"></div>
+      <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#E03636]/30 to-transparent"></div>
+    </div>
+
+    <!-- Sección Important News -->
     <div 
       ref="importantNewsRef" 
       class="scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out z-10 snap-section"
@@ -41,20 +44,17 @@
       </div>
     </div>
     
-    <!-- Más noticias - CON FONDO FIJO -->
+    <!-- Más noticias -->
     <div 
       ref="moreNewsRef" 
       class="h-screen scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out delay-200 z-10 snap-section"
       :class="{ 'animate-in': isMoreNewsVisible }"
-      style="position: relative;"
+      style="position: relative; background: white;"
     >
-      <!-- Contenedor del contenido con fondo transparente -->
-      <div style="position: relative; z-index: 2; background: transparent; height: 100%;">
-        <MoreNewsGrid />
-      </div>
+      <MoreNewsGrid />
     </div>
     
-    <!-- Parte de los senadores - SIN FONDO FIJO -->
+    <!-- Parte de los senadores -->
     <div 
       ref="senateRef" 
       class="h-screen w-full scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out delay-300 z-10 snap-section"
@@ -76,7 +76,7 @@
       </SenateChamber>
     </div>
     
-    <!-- Museo - CON SU PROPIO FONDO -->
+    <!-- Museo - CON SU PROPIO FONDO (AGREGADO DIRECTAMENTE) -->
     <div 
       ref="museumRef" 
       class="h-screen w-full scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out delay-400 z-10 snap-section"
@@ -249,21 +249,21 @@ html, body {
   scroll-padding-top: 0;
 }
 
-/* Cada sección con snap */
+/* Cada sección con snap - MÁS AGL UTILIZANDO SCROLL-SNAP-STOP */
 section, .scroll-section {
   scroll-snap-align: start;
   scroll-snap-stop: always;
-  transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.3, 1.2);
+  transition: transform 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.1);
 }
 
 /* El footer también hace snap */
 footer {
   scroll-snap-align: start;
   scroll-snap-stop: always;
-  transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.3, 1.2);
+  transition: transform 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.1);
 }
 
-/* ===== FONDO FIJO PARA IMPORTANT NEWS ===== */
+/* ===== FONDO FIJO - SOLO PARA IMPORTANT NEWS ===== */
 .global-fixed-background {
   position: fixed;
   top: 0;
@@ -307,50 +307,6 @@ footer {
   visibility: visible;
 }
 
-/* ===== FONDO FIJO PARA MORE NEWS ===== */
-.morenews-fixed-background {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-image: url('/Recurso_2.png');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-color: #f1f1f3;
-  z-index: 0;
-  pointer-events: none;
-  will-change: transform;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.5s ease, visibility 0.5s ease;
-}
-
-/* Overlay elegante */
-.morenews-fixed-background::after {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: radial-gradient(
-    circle at 50% 30%,
-    transparent 0%,
-    rgba(0, 0, 0, 0.25) 80%,
-    rgba(0, 0, 0, 0.35) 100%
-  );
-  pointer-events: none;
-  z-index: 1;
-}
-
-/* Mostrar solo cuando estamos en More News */
-.morenews-fixed-background.show-fixed {
-  opacity: 1;
-  visibility: visible;
-}
-
 /* Todas las secciones */
 .scroll-section {
   position: relative;
@@ -363,30 +319,40 @@ footer {
   background: transparent !important;
 }
 
-/* More News debe ser transparente para mostrar su fondo fijo */
+/* Las otras secciones tienen fondos sólidos */
 [ref="moreNewsRef"] {
-  background: transparent !important;
+  background: white !important;
 }
 
-/* Las otras secciones tienen fondos sólidos */
 [ref="senateRef"] {
   background: #f5f5f5 !important;
 }
 
 /* Museo - SIN FONDO AQUÍ PORQUE YA LO TIENE EN EL STYLE INLINE */
 [ref="museumRef"] {
-  background: transparent !important;
+  background: transparent !important; /* El fondo viene del style inline */
 }
 
 .news-container {
-  width: 85%;
+  width: 90%;
   margin: 0 auto;
+  max-width: 1400px;
   background: transparent !important;
   position: relative;
   z-index: 10;
 }
 
+@media (max-width: 768px) {
+  .news-container {
+    width: 95%;
+  }
+}
 
+@media (max-width: 480px) {
+  .news-container {
+    width: 98%;
+  }
+}
 </style>
 
 <style>

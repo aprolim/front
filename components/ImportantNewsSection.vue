@@ -1,11 +1,17 @@
 <template>
-  <div class="tabs-container">
-    <!-- Encabezado de pestañas - CON ESTILOS CORREGIDOS -->
-    <div class="tabs-header">
+  <div class="tabs-container font-montserrat mx-auto rounded-[24px] overflow-hidden isolate">
+    <!-- Header de Tabs -->
+    <div class="tabs-header flex flex-row border-b-2 border-black">
       <button 
         v-for="tab in tabs" 
         :key="tab.id"
-        :class="['tab-button', { 'active': activeTab === tab.id }]"
+        :class="[
+          'tab-button w-full sm:flex-1 flex items-center justify-center bg-black border-none text-white font-semibold cursor-pointer transition-all duration-300',
+          'gap-0.5 sm:gap-1',
+          'px-1 py-1 sm:px-2 sm:py-1.5 md:px-3 md:py-2 lg:px-4 lg:py-3 xl:px-5 xl:py-4',
+          'text-[7px] sm:text-[8px] md:text-[11px] lg:text-[14px] xl:text-[17px]',
+          { 'active bg-[#706F6F]': activeTab === tab.id }
+        ]"
         @click="activeTab = tab.id"
         :disabled="pending"
         :style="activeTab === tab.id ? activeTabStyle : {}"
@@ -14,44 +20,75 @@
       </button>
     </div>
 
-    <!-- Estado de carga -->
-    <div v-if="pending" class="loading-state">
-      <div class="spinner"></div>
-      <p>Cargando información...</p>
+    <!-- Estado de Carga -->
+    <div v-if="pending" class="loading-state flex flex-col items-center justify-center min-h-[80px]">
+      <div class="spinner w-4 h-4 border-2 border-gray-200 border-t-[#E03636] rounded-full animate-spin mb-0.5"></div>
+      <p class="text-[6px] sm:text-[7px] md:text-[8px]">Cargando...</p>
     </div>
 
-    <!-- Estado de error -->
-    <div v-else-if="error" class="error-state">
-      <p>{{ error }}</p>
-      <button @click="refresh" class="retry-button">Reintentar</button>
+    <!-- Estado de Error -->
+    <div v-else-if="error" class="error-state text-center min-h-[80px] flex flex-col items-center justify-center">
+      <p class="text-red-600 text-[6px] sm:text-[7px] md:text-[8px] mb-0.5">{{ error }}</p>
+      <button @click="refresh" class="retry-button bg-[#E03636] text-white rounded hover:bg-opacity-90 transition px-1 py-0.5 text-[5px] sm:text-[6px] md:text-[7px]">
+        Reintentar
+      </button>
     </div>
 
-    <!-- Contenido de pestañas -->
-    <div v-else class="tabs-content">
+    <!-- Contenido de Tabs -->
+    <div v-else class="tabs-content px-1 sm:px-2 md:px-3 lg:px-4 xl:px-5 py-2 sm:py-3 md:py-4 lg:py-5 xl:py-6 min-h-[150px] md:min-h-[180px] lg:min-h-[250px]">
       <div 
         v-for="tab in tabs" 
         :key="tab.id"
         v-show="activeTab === tab.id"
         class="tab-pane fade-in"
       >
-        <div class="section-header">
-          <h2 class="section-title">{{ areas[tab.id]?.titulo || tab.label }}</h2>
-          <p class="section-description">{{ areas[tab.id]?.descripcion || '' }}</p>
+        <!-- Header de Sección -->
+        <div class="section-header text-center pb-0.5 sm:pb-1 mb-1 sm:mb-2 border-b border-[#E03636] border-opacity-30">
+          <h2 class="section-title font-bold text-[#E03636] text-[9px] sm:text-[10px] md:text-[10px] lg:text-[12px] xl:text-[14px] 2xl:text-[19px] 3xl:text-[24px] 4xl:text-[35px] 5xl:text-[52px] mb-0">
+            {{ areas[tab.id]?.titulo || tab.label }}
+          </h2>
+          <p class="section-description text-gray-600 text-[6px] sm:text-[7px] md:text-[8px] lg:text-[9px] xl:text-[11px] 2xl:text-[16px] 3xl:text-[19px] 4xl:text-[30px] 5xl:text-[45px] mx-auto">
+            {{ areas[tab.id]?.descripcion || '' }}
+          </p>
         </div>
         
-        <div class="links-grid">
+        <!-- Grid de Tarjetas -->
+        <div class="links-grid grid gap-1 sm:gap-1.5 md:gap-2 grid-cols-3">
           <NuxtLink 
             v-for="link in getLinksForTab(tab.id)" 
             :key="link.id"
             :to="link.path" 
-            class="link-card"
+            class="link-card flex items-center bg-white bg-opacity-85 backdrop-blur-[10px] 
+              rounded-sm sm:rounded-md md:rounded-lg lg:rounded-xl shadow-sm hover:shadow-md 
+              p-1 sm:p-1.5 md:p-2
+              hover:-translate-y-0.5 hover:bg-opacity-95 transition-all duration-300
+              text-gray-900 no-underline"
           >
-            <div class="link-icon" v-html="link.icono"></div>
-            <div class="link-content">
-              <h3 class="link-title">{{ link.titulo }}</h3>
-              <p class="link-description">{{ link.descripcion }}</p>
+            <!-- Icono con control de tamaño responsivo usando solo Tailwind -->
+            <div 
+              class="link-icon text-[#E03636] mr-1 flex-shrink-0
+                text-[15px] sm:text-[16px] md:text-[21px] lg:text-[27px] xl:text-[38px] 2xl:text-[18px]
+                w-6 h-6 sm:w-4 sm:h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 xl:w-7 xl:h-7 2xl:w-8 2xl:h-8"
+              v-html="link.icono"
+            ></div>
+            
+            <div class="link-content flex-1 min-w-0">
+              <h3 class="link-title font-semibold text-gray-900 
+                text-[7px] sm:text-[8px] md:text-[9px] lg:text-[10px] xl:text-[13px] 2xl:text-[17px] 3xl:text-[22px] 4xl:text-[32px] 5xl:text-[50px] 
+                mb-0 leading-tight truncate">
+                {{ link.titulo }}
+              </h3>
+              <p class="link-description text-gray-600 
+                text-[5px] sm:text-[7px] md:text-[8px] lg:text-[9px] xl:text-[12px] 2xl:text-[16px] 3xl:text-[19px] 4xl:text-[30px] 5xl:text-[45px]
+                leading-tight line-clamp-2">
+                {{ link.descripcion }}
+              </p>
             </div>
-            <div class="link-arrow">›</div>
+            
+            <div class="link-arrow text-[#E03636] ml-0.5 flex-shrink-0
+              text-[10px] sm:text-[12px] md:text-[13px] lg:text-[15px] xl:text-[18px] 2xl:text-[22px] 3xl:text-[27px] 4xl:text-[35px] 5xl:text-[70px]">
+              ›
+            </div>
           </NuxtLink>
         </div>
       </div>
@@ -62,91 +99,32 @@
 <script setup>
 import { ref, computed } from 'vue';
 
-// ==============================================
-// CONFIGURACIÓN DE LA API
-// ==============================================
 const API_BASE_URL = 'http://10.0.0.20/api/tabs';
 
-// Estilo para pestaña activa
 const activeTabStyle = computed(() => ({
   background: '#706F6F',
   color: 'white'
 }));
 
-// ==============================================
-// FETCH SSR - Se ejecuta en servidor y cliente
-// ==============================================
 const { data, pending, error, refresh } = await useFetch(API_BASE_URL, {
   server: true,
   lazy: false,
   cache: 'default',
   transform: (response) => {
-    if (response?.success && response?.data) {
-      return response.data;
-    }
-    if (response?.tabs) {
-      return response;
-    }
-    console.warn('⚠️ Estructura de respuesta inesperada:', response);
-    return {
-      tabs: [],
-      areas: {},
-      links: {}
-    };
+    if (response?.success && response?.data) return response.data;
+    if (response?.tabs) return response;
+    return { tabs: [], areas: {}, links: {} };
   }
 });
 
-// ==============================================
-// ESTADO REACTIVO
-// ==============================================
 const activeTab = ref('');
 
-// ==============================================
-// COMPUTED PROPERTIES
-// ==============================================
+const tabs = computed(() => data.value?.tabs || []);
+const areas = computed(() => data.value?.areas || {});
+const rawLinks = computed(() => data.value?.links || {});
 
-// Tabs desde la API
-const tabs = computed(() => {
-  return data.value?.tabs || [
-    { id: 'legislacion', label: 'Legislación', icono: '📋' },
-    { id: 'fiscalizacion', label: 'Fiscalización', icono: '🔍' },
-    { id: 'gestion', label: 'Gestión', icono: '⚙️' }
-  ];
-});
-
-// Áreas desde la API
-const areas = computed(() => {
-  return data.value?.areas || {
-    legislacion: {
-      titulo: 'Área de Legislación',
-      descripcion: 'Acceda a toda la información relacionada con los proyectos de ley y legislación'
-    },
-    fiscalizacion: {
-      titulo: 'Área de Fiscalización',
-      descripcion: 'Sistema de control y seguimiento de actividades institucionales'
-    },
-    gestion: {
-      titulo: 'Área de Gestión',
-      descripcion: 'Documentación y resoluciones de gestión institucional'
-    }
-  };
-});
-
-// Links desde la API
-const rawLinks = computed(() => {
-  return data.value?.links || {
-    legislacion: [],
-    fiscalizacion: [],
-    gestion: []
-  };
-});
-
-// ==============================================
-// PROCESAR LINKS CON PATHS GENERADOS
-// ==============================================
 const linksPorTab = computed(() => {
   const processed = {};
-  
   if (rawLinks.value) {
     Object.keys(rawLinks.value).forEach(tabId => {
       processed[tabId] = (rawLinks.value[tabId] || []).map(item => ({
@@ -155,418 +133,97 @@ const linksPorTab = computed(() => {
       }));
     });
   }
-  
   return processed;
 });
 
-// ==============================================
-// FUNCIONES AUXILIARES
-// ==============================================
-
-/**
- * Genera un path amigable para SEO basado en el título
- */
 const generatePath = (tabId, item) => {
   try {
     const tab = tabs.value.find(t => t.id === tabId);
-    
-    const areaSlug = tab?.label
-      ?.toLowerCase()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-+|-+$/g, '') || tabId;
-    
-    const itemSlug = item.titulo
-      ?.toLowerCase()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-+|-+$/g, '') || 'item';
-    
+    const areaSlug = tab?.label?.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || tabId;
+    const itemSlug = item.titulo?.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'item';
     return `/${areaSlug}/${itemSlug}`;
-  } catch (err) {
-    console.warn('Error generando path:', err);
-    return `/${tabId}/item`;
-  }
+  } catch (err) { return `/${tabId}/item`; }
 };
 
-/**
- * Obtiene los links para una pestaña específica
- */
-const getLinksForTab = (tabId) => {
-  return linksPorTab.value[tabId] || [];
-};
+const getLinksForTab = (tabId) => linksPorTab.value[tabId] || [];
 
-// ==============================================
-// INICIALIZACIÓN
-// ==============================================
+if (tabs.value.length > 0 && !activeTab.value) activeTab.value = tabs.value[0].id;
 
-// Establecer la primera pestaña como activa si hay tabs disponibles
-if (tabs.value.length > 0 && !activeTab.value) {
-  activeTab.value = tabs.value[0].id;
-}
-
-// ==============================================
-// META TAGS PARA SEO
-// ==============================================
 useHead({
   title: 'Gestión Legislativa - Senado de Bolivia',
-  meta: [
-    {
-      name: 'description',
-      content: 'Acceda a toda la información sobre legislación, fiscalización y gestión del Senado de Bolivia'
-    }
-  ]
+  meta: [{ name: 'description', content: 'Acceda a toda la información sobre legislación...' }]
 });
-
-// ==============================================
-// LOG DE DEPURACIÓN (solo en desarrollo)
-// ==============================================
-if (import.meta.dev) {
-  watchEffect(() => {
-    console.log('📊 Tabs Component - Datos cargados:', {
-      tabs: tabs.value.length,
-      areas: Object.keys(areas.value).length,
-      links: Object.keys(rawLinks.value).reduce((acc, key) => {
-        acc[key] = rawLinks.value[key]?.length || 0;
-        return acc;
-      }, {})
-    });
-  });
-}
 </script>
 
 <style scoped>
-.tabs-container {
-  font-family: 'Montserrat', system-ui, -apple-system, sans-serif;
-  max-width: 1200px;
-  margin: 0 auto;
-  border-radius: 16px;
-  overflow: hidden;
+/* Animación de fade in */
+@keyframes fadeIn { 
+  from { 
+    opacity: 0; 
+    transform: translateY(5px); 
+  } 
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  } 
 }
 
-/* Encabezado de pestañas - CORREGIDO */
-.tabs-header {
-  display: flex;
-  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-  padding: 0;
-  border-bottom: 2px solid black;
+.fade-in { 
+  animation: fadeIn 0.2s ease-out; 
 }
 
-.tab-button {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  padding: 22px 24px;
-  background: #000;
-  border: none;
-  color: #fff;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  letter-spacing: 0.5px;
-}
-
-.tab-button:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-.tab-button:hover:not(:disabled) {
-  background: #575756;
-}
-
-.tab-button.active {
-  color: white;
-  font-weight: 700;
-  box-shadow: 0 4px 12px rgba(224, 54, 54, 0.2);
-}
-
-.tab-button.active::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: black;
-  border-radius: 2px 2px 0 0;
-}
-
-/* Estados de carga y error */
-.loading-state, .error-state {
-  text-align: center;
-  padding: 60px 20px;
-  min-height: 400px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
+/* Spinner personalizado */
 .spinner {
-  width: 50px;
-  height: 50px;
-  border: 3px solid #f3f3f3;
-  border-top: 3px solid #E03636;
   border-radius: 50%;
+  border: 2px solid #e2e8f0;
+  border-top-color: #E03636;
   animation: spin 1s linear infinite;
-  margin-bottom: 20px;
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  to { transform: rotate(360deg); }
 }
 
-.error-state p {
-  color: #E03636;
-  margin-bottom: 20px;
-  font-size: 16px;
+/* Para compatibilidad con navegadores antiguos */
+.tabs-container {
+  isolation: isolate;
 }
 
-.retry-button {
-  background: #E03636;
-  color: white;
-  border: none;
-  padding: 12px 30px;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.3s ease;
+/* Soporte para backdrop-filter */
+@supports (backdrop-filter: blur(10px)) {
+  .backdrop-blur-\[10px\] {
+    backdrop-filter: blur(10px);
+  }
 }
 
-.retry-button:hover {
-  background: #c02e2e;
-}
-
-/* Contenido de pestañas */
-.tabs-content {
-  padding: 36px;
-  background: transparent;
-  min-height: 500px;
-}
-
-.tab-pane {
-  animation: fadeIn 0.4s ease-out;
-}
-
-/* Encabezado de sección - CORREGIDO */
-.section-header {
-  text-align: center;
-  margin-bottom: 40px;
-  padding-bottom: 24px;
-}
-
-.section-title {
-  font-size: 28px;
-  font-weight: 700;
-  color: #E03636;
-  margin-bottom: 12px;
-  letter-spacing: 0.5px;
-}
-
-.section-description {
-  font-size: 16px;
-  color: #666;
-  max-width: 600px;
-  margin: 0 auto;
-  line-height: 1.6;
-}
-
-/* Grid de links */
-.links-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 24px;
-}
-
-/* Tarjetas de link - CORREGIDAS */
-.link-card {
-  display: flex;
-  align-items: center;
-  background: white;
-  border-radius: 12px;
-  padding: 24px;
-  text-decoration: none;
-  color: inherit;
-  border: 2px solid transparent;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-
-.link-card::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 4px;
-  background: #E03636;
-  transform: scaleY(0);
-  transition: transform 0.3s ease;
-}
-
-.link-card:hover {
-  transform: translateY(-6px);
-  border-color: #E03636;
-  box-shadow: 0 12px 24px rgba(224, 54, 54, 0.1);
-}
-
-.link-card:hover::before {
-  transform: scaleY(1);
-}
-
-/* Icono */
+/* ESTILOS PARA ICONOS SVG - heredan tamaño del contenedor */
 .link-icon {
-  font-size: 32px;
-  margin-right: 20px;
-  color: #E03636;
-  flex-shrink: 0;
-  transition: transform 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .link-icon :deep(svg) {
-  width: 100%;
-  height: 100%;
-  fill: currentColor;
+  width: 1em;
+  height: 1em;
+  transition: all 0.2s ease;
 }
 
-.link-card:hover .link-icon {
-  transform: scale(1.1) rotate(5deg);
+/* Utilidades adicionales de Tailwind que necesitamos */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-/* Contenido del link */
-.link-content {
-  flex: 1;
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.link-title {
-  font-size: 17px;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 8px;
-  line-height: 1.4;
-}
-
-.link-description {
-  font-size: 14px;
-  color: #666;
-  line-height: 1.5;
-  margin: 0;
-}
-
-/* Flecha indicadora */
-.link-arrow {
-  font-size: 28px;
-  color: #E03636;
-  margin-left: 16px;
-  opacity: 0;
-  transform: translateX(-10px);
-  transition: all 0.3s ease;
-}
-
-.link-card:hover .link-arrow {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-/* Animaciones */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.fade-in {
-  animation: fadeIn 0.4s ease-out;
-}
-
-/* Responsive */
-@media (max-width: 1024px) {
-  .links-grid {
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  }
-}
-
-@media (max-width: 768px) {
-  .tabs-header {
-    flex-direction: column;
-  }
-  
-  .tab-button {
-    padding: 20px;
-    justify-content: flex-start;
-    padding-left: 28px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-  }
-  
-  .tab-button.active {
-    transform: translateX(4px);
-  }
-  
-  .links-grid {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-  
-  .tabs-content {
-    padding: 28px 20px;
-  }
-  
-  .section-title {
-    font-size: 24px;
-  }
-}
-
-@media (max-width: 480px) {
-  .tab-button {
-    font-size: 15px;
-    padding: 18px 20px;
-  }
-  
-  .link-card {
-    padding: 20px;
-    flex-direction: column;
-    text-align: center;
-  }
-  
-  .link-icon {
-    margin-right: 0;
-    margin-bottom: 16px;
-  }
-  
-  .link-content {
-    margin-bottom: 16px;
-  }
-  
-  .link-arrow {
-    margin-left: 0;
-  }
-  
-  .section-header {
-    margin-bottom: 30px;
-  }
-  
-  .section-title {
-    font-size: 22px;
-  }
-  
-  .section-description {
-    font-size: 14px;
-  }
+.min-w-0 {
+  min-width: 0;
 }
 </style>
