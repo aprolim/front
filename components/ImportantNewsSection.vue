@@ -9,7 +9,7 @@
           'tab-button w-full sm:flex-1 flex items-center justify-center bg-black border-none text-white font-semibold cursor-pointer transition-all duration-300',
           'gap-0.5 sm:gap-1',
           'px-1 py-1 sm:px-2 sm:py-1.5 md:px-3 md:py-2 lg:px-4 lg:py-3 xl:px-5 xl:py-4',
-          'text-[7px] sm:text-[8px] md:text-[11px] lg:text-[14px] xl:text-[17px]',
+          'text-[7px] sm:text-[8px] md:text-[11px] lg:text-[14px] xl:text-[17px] 2xl:text-[20px] 3xl:text-[26px] 4xl:text-[38px] 5xl:text-[57px]',
           { 'active bg-[#706F6F]': activeTab === tab.id }
         ]"
         @click="activeTab = tab.id"
@@ -35,7 +35,7 @@
     </div>
 
     <!-- Contenido de Tabs -->
-    <div v-else class="tabs-content px-1 sm:px-2 md:px-3 lg:px-4 xl:px-5 py-2 sm:py-3 md:py-4 lg:py-5 xl:py-6 min-h-[150px] md:min-h-[180px] lg:min-h-[250px]">
+    <div v-else class="tabs-content px-1 sm:px-2 md:px-3 lg:px-4 xl:px-5 py-2 sm:py-3 md:py-4 lg:py-5 xl:py-6 min-h-[150px] md:min-h-[180px] lg:min-h-[250px] 2xl:min-h-[320px] 3xl:min-h-[360px] 4xl:min-h-[450px] 5xl:min-h-[550px]">
       <div 
         v-for="tab in tabs" 
         :key="tab.id"
@@ -53,7 +53,7 @@
         </div>
         
         <!-- Grid de Tarjetas -->
-        <div class="links-grid grid gap-1 sm:gap-1.5 md:gap-2 grid-cols-3">
+        <div class="links-grid grid gap-1 sm:gap-1.5 md:gap-2 xl:gap-4 3xl:gap-6 5xl:gap-9 grid-cols-3">
           <NuxtLink 
             v-for="link in getLinksForTab(tab.id)" 
             :key="link.id"
@@ -66,9 +66,25 @@
           >
             <!-- Icono con control de tamaño responsivo usando solo Tailwind -->
             <div 
-              class="link-icon text-[#E03636] mr-1 flex-shrink-0
-                text-[15px] sm:text-[16px] md:text-[21px] lg:text-[27px] xl:text-[38px] 2xl:text-[18px]
-                w-6 h-6 sm:w-4 sm:h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 xl:w-7 xl:h-7 2xl:w-8 2xl:h-8"
+              class="link-icon text-[#E03636] flex-shrink-0 
+                m-2.5
+                sm:m-3
+                md:m-3
+                lg:m-4
+                xl:m-5
+                2xl:m-6
+                3xl:m-8
+                4xl:m-10
+                5xl:m-12
+                w-4 h-4
+                sm:w-6 sm:h-6              
+                md:w-7 md:h-7           
+                lg:w-8 lg:h-8           
+                xl:w-10 xl:h-10            
+                2xl:w-12 2xl:h-12          
+                3xl:w-16 3xl:h-16
+                4xl:w-20 4xl:h-20
+                5xl:w-28 5xl:h-28"
               v-html="link.icono"
             ></div>
             
@@ -202,11 +218,11 @@ useHead({
   align-items: center;
   justify-content: center;
 }
-
-.link-icon :deep(svg) {
-  width: 1em;
-  height: 1em;
-  transition: all 0.2s ease;
+.link-icon svg {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  transition: cubic-bezier(0.785, 0.135, 0.15, 0.86);
 }
 
 /* Utilidades adicionales de Tailwind que necesitamos */

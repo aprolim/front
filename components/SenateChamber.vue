@@ -329,6 +329,7 @@
 
 <script setup>
 import { ref, computed, reactive, onMounted, watch, onUnmounted } from 'vue'
+import { responsiveStyles } from './data/senateChamberStyles'
 
 // ============================================
 // POSICIONES SVG - EXACTAMENTE IGUALES AL ORIGINAL
@@ -1102,6 +1103,13 @@ const updateHoverTooltip = (event) => {
 
 const positionTooltipFromSeat = () => updateHoverTooltip()
 
+// Inyectar estilos responsivos
+onMounted(() => {
+  const style = document.createElement('style')
+  style.textContent = responsiveStyles
+  document.head.appendChild(style)
+})
+
 defineExpose({ 
   resetView, 
   selectSenator, 
@@ -1584,53 +1592,6 @@ watch(() => props.senators, () => {
 
 .empty-tips p { margin: 0.4rem 0; font-size: 0.85rem; width: 100%; }
 
-@media (max-width: 1200px) {
-  .columns-container { grid-template-columns: 220px 1fr 320px; gap: 1rem; padding: 1rem; }
-  .left-column { width: 220px; }
-  .right-column { width: 320px; }
-}
-
-@media (max-width: 1024px) {
-  .columns-container { grid-template-columns: 1fr; grid-template-rows: auto auto auto; gap: 1rem; }
-  .left-column, .center-column, .right-column { width: 100%; }
-  .left-column { max-height: 300px; }
-  .hemicycle-container { min-height: 400px; }
-  .right-column { max-height: 500px; }
-}
-
-@media (max-width: 768px) {
-  .columns-container { gap: 0.75rem; padding: 0.75rem; }
-  .hemicycle-container { min-height: 350px; }
-  .senator-photo-circle { width: 120px; height: 120px; }
-  .photo-placeholder { font-size: 2rem; }
-  .senator-name { font-size: 1.2rem; }
-}
-
-@media (max-width: 480px) {
-  .columns-container { gap: 0.5rem; padding: 0.5rem; }
-  .hemicycle-container { min-height: 300px; }
-  .controls-panel { padding: 0.75rem; }
-  .senator-photo-circle { width: 100px; height: 100px; }
-  .photo-placeholder { font-size: 1.8rem; }
-  .senator-name { font-size: 1.1rem; }
-  .info-row-first, .info-row-second { grid-template-columns: 1fr; gap: 0.75rem; }
-  .social-icons { gap: 0.75rem; }
-  .social-icon { font-size: 1.3rem; width: 35px; height: 35px; }
-}
-
-.chamber-footer {
-  background: #1f2937;
-  color: white;
-  padding: 1rem 1.5rem;
-  text-align: center;
-  margin-top: 1rem;
-  border-radius: 8px;
-}
-
-.footer-content { display: flex; flex-direction: column; align-items: center; gap: 0.75rem; }
-.footer-info p { margin: 0.25rem 0; font-size: 0.9rem; }
-.footer-main { font-weight: 600; }
-.footer-sub { font-size: 0.8rem; opacity: 0.8; }
 /* Estilos para los indicadores de colores en empty-tips */
 .empty-tips p {
   display: flex;
@@ -1666,4 +1627,18 @@ watch(() => props.senators, () => {
   min-width: 120px;
   color: #1f2937;
 }
+
+.chamber-footer {
+  background: #1f2937;
+  color: white;
+  padding: 1rem 1.5rem;
+  text-align: center;
+  margin-top: 1rem;
+  border-radius: 8px;
+}
+
+.footer-content { display: flex; flex-direction: column; align-items: center; gap: 0.75rem; }
+.footer-info p { margin: 0.25rem 0; font-size: 0.9rem; }
+.footer-main { font-weight: 600; }
+.footer-sub { font-size: 0.8rem; opacity: 0.8; }
 </style>

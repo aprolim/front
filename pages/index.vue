@@ -66,11 +66,29 @@
         class="h-screen"
       >
         <template #header>
-          <div class="custom-header">
-            <h2 class="text-3xl md:text-4xl font-bold text-white">
+          <div class="px-1 xs:px-2 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16 3xl:px-20 4xl:px-24 5xl:px-32 text-center sm:text-left">
+            
+            <!-- Título solo con clases Tailwind -->
+            <h2 class="font-bold text-white leading-tight
+                      text-[11px] xs:text-[14px] sm:text-[28px] md:text-[36px] 
+                      lg:text-[42px] xl:text-[48px] 2xl:text-[56px] 
+                      3xl:text-[64px] 4xl:text-[72px] 5xl:text-[80px] text-center
+                      ">
               Distribución del senado
             </h2>
-            <h5 class="text-white">Selecciona un senador para ver detalles</h5>
+            
+            <!-- Subtítulo solo con clases Tailwind -->
+            <!-- <h5 class="text-white/80
+                      text-[7px] xs:text-[9px] sm:text-[16px] md:text-[18px] 
+                      lg:text-[20px] xl:text-[22px] 2xl:text-[24px] 
+                      3xl:text-[28px] 4xl:text-[32px] 5xl:text-[36px]
+                      max-w-[250px] xs:max-w-[300px] sm:max-w-[400px] 
+                      md:max-w-[500px] lg:max-w-[600px] xl:max-w-[700px] 
+                      2xl:max-w-[800px] 3xl:max-w-[900px] 4xl:max-w-[1000px] 5xl:max-w-[1200px] 
+                      mx-auto sm:mx-0">
+              Selecciona un senador para ver detalles
+            </h5> -->
+            
           </div>
         </template>
       </SenateChamber>
