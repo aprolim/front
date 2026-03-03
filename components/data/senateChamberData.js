@@ -1,5 +1,7 @@
 // components/data/senateChamberStyles.js
 export const senateChamberStyles = {
+  senatorPhoto:'w-[14em] h-[14em]',
+  senatorDetails:'text-[6px] sm:text-[8px]',
   // Sección principal
   section: 'relative min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 py-8 sm:py-12 lg:py-16 overflow-hidden',
   

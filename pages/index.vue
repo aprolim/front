@@ -70,9 +70,10 @@
             
             <!-- Título solo con clases Tailwind -->
             <h2 class="font-bold text-white leading-tight
-                      text-[11px] xs:text-[14px] sm:text-[28px] md:text-[36px] 
-                      lg:text-[42px] xl:text-[48px] 2xl:text-[56px] 
-                      3xl:text-[64px] 4xl:text-[72px] 5xl:text-[80px] text-center
+                      text-[11px] xs:text-[14px] sm:text-[18px] md:text-[22px] 
+                      lg:text-[26px] xl:text-[30px] 2xl:text-[39px] 
+                      3xl:text-[58px] 4xl:text-[80px] 5xl:text-[102px] text-center
+                      p-1
                       ">
               Distribución del senado
             </h2>

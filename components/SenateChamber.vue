@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen senate-chamber">
+  <div class="h-full senate-chamber"> <!-- SOLO CAMBIO: h-screen por h-full -->
     <!-- Header -->
     <header v-if="showHeader" class="chamber-header text-center">
       <slot name="header">
@@ -10,17 +10,27 @@
       </slot>
     </header>
 
-    <main class="h-screen main-content">
+    <main class="h-full"> <!-- SOLO CAMBIO: h-screen por h-full -->
       <!-- Contenedor con imagen de fondo -->
-      <div class="h-screen background-container" :style="{ backgroundImage: `url('${backgroundImage}')` }">
+      <div class="h-full background-container" :style="{ backgroundImage: `url('${backgroundImage}')` }"> <!-- SOLO CAMBIO: h-screen por h-full -->
         <!-- Contenedor principal CON GRID DE 3 COLUMNAS REALES -->
-        <div class="columns-container mx-12">
+        <div class="columns-container
+        mx-12
+        grid
+        gap-1.5
+        grid-cols-[320px_1fr]
+        sm:grid-cols-[440px_1fr]
+        md:grid-cols-[160px_1fr_180px]
+        lg:grid-cols-[220px_1fr_300px]
+        xl:grid-cols-[250px_1fr_340px]
+        2xl:grid-cols-[280px_1fr_380px]
+        ">
           <!-- COLUMNA IZQUIERDA: Panel de Controles -->
           <div v-if="showControls" class="column left-column">
             <div class="controls-panel transparent-panel">
               <!-- Leyenda -->
               <div class="controls-section">
-                <h4 class="pill-red">Distribución <br> 2025-2030</h4>
+                <h3 class="pill-red">Distribución <br> 2025-2030</h3>
                 <div class="legend-vertical">
                   <div 
                     v-for="party in parties"
@@ -30,10 +40,10 @@
                     :class="{ 'highlighted': activeFilters.includes(party.id) }"
                   >
                     <div class="grid grid-cols-3 items-center w-full">
-                      <div class="flex justify-center">
+                      <div class="flex justify-center w-full">
                         <!-- CÍRCULO CON EFECTO CONCÉNTRICO: Color → Blanco → Color -->
-                        <div class="legend-color-vertical">
-                          <svg width="40" height="40" viewBox="0 0 40 40">
+                        <div class="legend-color-vertical w-full p-1">
+                          <svg viewBox="0 0 40 40" class="w-full">
                             <!-- Círculo exterior (color del partido) -->
                             <circle 
                               cx="20" 
@@ -152,7 +162,9 @@
                 <!-- Tooltip -->
                 <div 
                   v-if="hoveredSeat && hoveredSeat.id !== selectedSenator?.id" 
-                  class="seat-tooltip"
+                  class="seat-tooltip 
+                  text-[6px] xs:text-[8px] sm:text-[9px] md:text-[10px] lg:text-[12px] xl:text-[15px] 2xl:text-[17px] 3xl:text-[19px] 4xl:text-[23px] 5xl:text-[33px]
+                  "
                   :style="tooltipStyle"
                 >
                   <div class="tooltip-header">
@@ -183,11 +195,11 @@
           <!-- COLUMNA DERECHA: Información del Senador CON FOTOS REALES -->
           <div class="column right-column">
             <div class="info-panel transparent-panel">
-              <div v-if="selectedSenator" :key="selectedSenator.id" class="senator-details">
+              <div v-if="selectedSenator" :key="selectedSenator.id" class="senator-details" :class="senateChamberStyles.senatorDetails" >
                 <div class="senator-photo-container">
-                  <div class="senator-photo-circle">
+                  <div class="senator-photo-circle" :class="senateChamberStyles.senatorPhoto">
                     <!-- FOTO 100% FUNCIONAL - RANDOMUSER.ME -->
-                    <img 
+                    <img
                       :src="selectedSenator.photoUrl" 
                       :alt="selectedSenator.name"
                       class="senator-photo-img"
@@ -216,10 +228,10 @@
                 </div>
 
                 <div class="bancada-row">
-                  <div v-if="selectedSenator.comision" class="pill-white font-extrabold text-center mb-4">
+                  <div v-if="selectedSenator.comision" class="pill-white font-extrabold text-center mb-[1em]">
                     {{ selectedSenator.comision }}
                   </div>
-                  <div v-if="selectedSenator.comite" class="pill-white font-extrabold text-center mb-4">
+                  <div v-if="selectedSenator.comite" class="pill-white font-extrabold text-center mb-[1em]">
                     {{ selectedSenator.comite }}
                   </div>
                   <div v-if="selectedSenator.cargo" class="pill-white font-extrabold text-center">
@@ -227,7 +239,7 @@
                   </div>
                 </div>
 
-                <!-- Redes sociales - ICONOS REALES -->
+                <!-- Redes sociales - ICONOS REALES (comentado) -->
                 <!-- <div class="social-media-section">
                   <div class="social-icons">
                     <a :href="selectedSenator.twitter || 'https://twitter.com'" target="_blank" class="social-icon">
@@ -269,7 +281,7 @@
                         <circle cx="11" cy="11" r="2" fill="rgba(255,255,255,0.5)" opacity="0.7"/>
                       </svg>
                     </span>
-                    <strong>PDC (Gobierno):</strong> 16 senadores
+                    <strong>PDC:</strong> 16 senadores
                   </p>
                   <p class="party-indicator">
                     <span class="color-dot">
@@ -280,7 +292,7 @@
                         <circle cx="11" cy="11" r="2" fill="rgba(255,255,255,0.5)" opacity="0.7"/>
                       </svg>
                     </span>
-                    <strong>Libre (Oposición):</strong> 12 senadores
+                    <strong>Libre:</strong> 12 senadores
                   </p>
                   <p class="party-indicator">
                     <span class="color-dot">
@@ -291,7 +303,7 @@
                         <circle cx="11" cy="11" r="2" fill="rgba(255,255,255,0.5)" opacity="0.7"/>
                       </svg>
                     </span>
-                    <strong>Unidad (Aliados):</strong> 7 senadores
+                    <strong>Unidad:</strong> 7 senadores
                   </p>
                   <p class="party-indicator">
                     <span class="color-dot">
@@ -302,7 +314,7 @@
                         <circle cx="11" cy="11" r="2" fill="rgba(255,255,255,0.5)" opacity="0.7"/>
                       </svg>
                     </span>
-                    <strong>APB Súmate (Aliados):</strong> 1 senador
+                    <strong>APB:</strong> 1 senador
                   </p>
                   <p><strong>Total:</strong> 36 senadores</p>
                 </div>
@@ -329,7 +341,7 @@
 
 <script setup>
 import { ref, computed, reactive, onMounted, watch, onUnmounted } from 'vue'
-import { responsiveStyles } from './data/senateChamberStyles'
+import { senateChamberStyles } from './data/senateChamberData'
 
 // ============================================
 // POSICIONES SVG - EXACTAMENTE IGUALES AL ORIGINAL
@@ -652,7 +664,7 @@ const props = defineProps({
       
       // CURVA INFERIOR DERECHA - asientos 26-29 (4 senadores)
       { 
-        id: 20, seatNumber: 26, curve: 'lower', side: 'right', 
+        id: 20, seatNumber: 14, curve: 'lower', side: 'right', 
         name: "Rosa Tatiana Áñez Carrasco", 
         party: "Unidad", partyShort: "UNIDAD", partyColor: "#FFB848", bancada: "Aliados", 
         department: "Santa Cruz", age: 49, profession: "Abogada", 
@@ -665,7 +677,7 @@ const props = defineProps({
         cargo:"Tercera Secretaria"
       },
       { 
-        id: 21, seatNumber: 27, curve: 'lower', side: 'right', 
+        id: 21, seatNumber: 13, curve: 'lower', side: 'right', 
         name: "José Roca Haensel", 
         party: "Unidad", partyShort: "UNIDAD", partyColor: "#FFB848", bancada: "Aliados", 
         department: "Beni", age: 61, profession: "Ganadero", 
@@ -678,7 +690,7 @@ const props = defineProps({
         cargo:""
       },
       { 
-        id: 22, seatNumber: 28, curve: 'lower', side: 'right', 
+        id: 22, seatNumber: 11, curve: 'lower', side: 'right', 
         name: "Ana Karina Velasco Añez", 
         party: "Unidad", partyShort: "UNIDAD", partyColor: "#FFB848", bancada: "Aliados", 
         department: "Beni", age: 47, profession: "Abogada", 
@@ -691,7 +703,7 @@ const props = defineProps({
         cargo:""
       },
       { 
-        id: 23, seatNumber: 29, curve: 'lower', side: 'right', 
+        id: 23, seatNumber: 12, curve: 'lower', side: 'right', 
         name: "Eliana Rina Acosta Quispe", 
         party: "Unidad", partyShort: "UNIDAD", partyColor: "#FFB848", bancada: "Aliados", 
         department: "Pando", age: 44, profession: "Administradora", 
@@ -708,7 +720,7 @@ const props = defineProps({
       // Color: #511966 (púrpura)
       // ASIENTO 11
       { 
-        id: 24, seatNumber: 11, curve: 'upper', side: 'right', 
+        id: 24, seatNumber: 36, curve: 'upper', side: 'right', 
         name: "Claudia Mallón Vargas", 
         party: "Autonomía para Bolivia Súmate", partyShort: "APB", partyColor: "#511966", bancada: "Aliados", 
         department: "Cochabamba", age: 46, profession: "Abogada", 
@@ -726,7 +738,7 @@ const props = defineProps({
       
       // CURVA SUPERIOR DERECHA - asientos 12-14 (3 senadores)
       { 
-        id: 25, seatNumber: 12, curve: 'upper', side: 'right', 
+        id: 25, seatNumber: 29, curve: 'upper', side: 'right', 
         name: "José Manuel Ormachea Mendieta", 
         party: "Libre", partyShort: "LIBRE", partyColor: "#FF0000", bancada: "Oposición", 
         department: "La Paz", age: 59, profession: "Abogado", 
@@ -739,7 +751,7 @@ const props = defineProps({
         cargo:"Presidente de Comisión"
       },
       { 
-        id: 26, seatNumber: 13, curve: 'upper', side: 'right', 
+        id: 26, seatNumber: 27, curve: 'upper', side: 'right', 
         name: "Wanda Ximena Medrano Hervas", 
         party: "Libre", partyShort: "LIBRE", partyColor: "#FF0000", bancada: "Oposición", 
         department: "Cochabamba", age: 48, profession: "Abogada", 
@@ -752,7 +764,7 @@ const props = defineProps({
         cargo:""
       },
       { 
-        id: 27, seatNumber: 14, curve: 'upper', side: 'right', 
+        id: 27, seatNumber: 26, curve: 'upper', side: 'right', 
         name: "Branko Goran Marinković Jovicevic", 
         party: "Libre", partyShort: "LIBRE", partyColor: "#FF0000", bancada: "Oposición", 
         department: "Santa Cruz", age: 54, profession: "Empresario", 
@@ -845,7 +857,7 @@ const props = defineProps({
         cargo:""
       },
       { 
-        id: 34, seatNumber: 36, curve: 'lower', side: 'right', 
+        id: 34, seatNumber: 24, curve: 'lower', side: 'right', 
         name: "Ernesto Suarez Sattori", 
         party: "Libre", partyShort: "LIBRE", partyColor: "#FF0000", bancada: "Oposición", 
         department: "Beni", age: 55, profession: "Empresario", 
@@ -861,7 +873,7 @@ const props = defineProps({
       // ============ LIBRE - 2 SENADORES ADICIONALES ============
       // ASIENTOS 24 y 25 (CURVA INFERIOR IZQUIERDA)
       { 
-        id: 35, seatNumber: 24, curve: 'lower', side: 'left', 
+        id: 35, seatNumber: 28, curve: 'lower', side: 'left', 
         name: "Carol Carlo Durán", 
         party: "Libre", partyShort: "LIBRE", partyColor: "#FF0000", bancada: "Oposición", 
         department: "Pando", age: 49, profession: "Abogado", 
@@ -1103,12 +1115,7 @@ const updateHoverTooltip = (event) => {
 
 const positionTooltipFromSeat = () => updateHoverTooltip()
 
-// Inyectar estilos responsivos
-onMounted(() => {
-  const style = document.createElement('style')
-  style.textContent = responsiveStyles
-  document.head.appendChild(style)
-})
+
 
 defineExpose({ 
   resetView, 
@@ -1131,13 +1138,15 @@ watch(() => props.senators, () => {
 .senate-chamber {
   font-family: 'Montserrat';
   background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  display: flex; /* AÑADIDO: para estructura de columna */
+  flex-direction: column; /* AÑADIDO: para que header, main, footer se apilen */
 }
 
 .chamber-header {
   height: auto;
-  padding: 1rem;
   background: #575756;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  flex-shrink: 0; /* AÑADIDO: evita que el header se encoja */
 }
 
 .default-header h2 {
@@ -1152,6 +1161,11 @@ watch(() => props.senators, () => {
   font-size: 0.9rem;
 }
 
+.main-content {
+  flex: 1 1 auto; /* AÑADIDO: toma el espacio disponible */
+  min-height: 0; /* AÑADIDO: importante para flexbox */
+}
+
 .background-container {
   background-size: cover;
   background-position: center;
@@ -1159,28 +1173,32 @@ watch(() => props.senators, () => {
   overflow: hidden;
   margin-bottom: 1rem;
   position: relative;
+  height: 100%; /* CAMBIADO: h-screen por h-full, pero ya hereda de main-content */
+  display: flex; /* AÑADIDO: para centrar verticalmente */
+  align-items: center; /* AÑADIDO: centra verticalmente el contenido */
+  justify-content: center; /* AÑADIDO: centra horizontalmente (opcional) */
 }
 
 .columns-container {
-  display: grid;
-  grid-template-columns: 250px 1fr 340px;
-  gap: 1.5rem;
   padding: 1.5rem;
   position: relative;
   z-index: 1;
-  min-height: 70vh;
-  align-items: stretch;
+  width: 100%;
+  margin: 0 auto; /* AÑADIDO: centrado horizontal */
+  /* ELIMINADO: min-height: 70vh */
 }
 
 .column {
   display: flex;
-  flex-direction: column;
-  height: 100%;
 }
 
-.left-column { width: 250px; flex-shrink: 0; }
-.center-column { flex: 1; min-width: 0; }
-.right-column { width: 340px; flex-shrink: 0; }
+@media (max-width: 767px) {
+  .left-column {
+    display: none;
+  }
+}
+.center-column { flex: 1; min-width: 0; z-index: 11}
+.right-column { z-index: 10 }
 
 .transparent-panel {
   background: rgba(255, 255, 255, 0.1) !important;
@@ -1198,7 +1216,6 @@ watch(() => props.senators, () => {
   backdrop-filter: blur(1px);
   -webkit-backdrop-filter: blur(4px);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  height: 100%;
   width: 100%;
 }
 
@@ -1212,12 +1229,13 @@ watch(() => props.senators, () => {
 }
 
 .controls-section h4 {
-  margin: 0 0 1rem 0;
+  display: no;
+  margin: 0 0 1em 0;
   color: white;
-  font-size: 1.2rem;
+  font-size: 1.2em;
   font-weight: 700;
-  padding: 0.75rem;
-  border-radius: .6rem;
+  padding: 0.75em;
+  border-radius: .6em;
   background-color: rgba(224, 54, 54, 0.85);
   text-align: center;
 }
@@ -1225,10 +1243,10 @@ watch(() => props.senators, () => {
 .legend-vertical {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.5em;
   background-color: rgba(255, 255, 255, 0.5);
-  border-radius: .6rem;
-  padding: .75rem;
+  border-radius: .6em;
+  padding: .75em;
   width: 100%;
 }
 
@@ -1258,8 +1276,6 @@ watch(() => props.senators, () => {
 }
 
 .legend-color-vertical {
-  width: 40px;
-  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1267,8 +1283,6 @@ watch(() => props.senators, () => {
 }
 
 .legend-color-vertical svg {
-  width: 36px;
-  height: 36px;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
@@ -1286,22 +1300,16 @@ watch(() => props.senators, () => {
 }
 
 .hemicycle-container {
-  padding: 0.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: visible !important;
   width: 100%;
-  height: 100%;
-  min-height: 500px;
 }
 
 .hemicycle-svg-container {
   position: relative;
   width: 100%;
-  height: 100%;
-  min-height: 450px;
-  max-height: 550px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1310,20 +1318,17 @@ watch(() => props.senators, () => {
 
 .hemicycle-svg {
   width: 100%;
-  height: 100%;
   max-width: 100%;
-  max-height: 100%;
   overflow: visible !important;
 }
 
 .info-panel {
   display: flex;
   flex-direction: column;
-  height: 100%;
 }
 
 .senator-details {
-  padding: 1.5rem;
+  padding: 1.5em;
   overflow-y: auto;
   flex: 1;
   display: flex;
@@ -1341,8 +1346,6 @@ watch(() => props.senators, () => {
 }
 
 .senator-photo-circle {
-  width: 150px;
-  height: 150px;
   border-radius: 50%;
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -1361,16 +1364,15 @@ watch(() => props.senators, () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2.5rem;
+  font-size: 2.5em;
   font-weight: 700;
   color: white;
 }
 
 .senator-name {
   color: #575756;
-  font-size: 1.1rem;
   font-weight: 600;
-  margin-bottom: 1rem;
+  margin-bottom: .2em;
   line-height: 1.3;
   width: 100%;
   text-align: center;
@@ -1378,16 +1380,16 @@ watch(() => props.senators, () => {
 
 .info-row-first {
   display: grid;
-  gap: 1rem;
+  gap: 1em;
   width: 100%;
-  margin-bottom: 1rem;
+  margin-bottom: .4em;
 }
 
 .info-item-red { text-align: left; width: 100%; }
 .value-red {
   display: block;
   color: #E03636;
-  font-size: .8rem;
+  font-size: 1.0em;
   font-weight: 700;
   text-align: center;
 }
@@ -1395,17 +1397,17 @@ watch(() => props.senators, () => {
 .info-row-second {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+  gap: 1em;
   width: 100%;
-  margin-bottom: 1rem;
+  margin-bottom: 1em;
 }
 
 .pill-red {
   background-color: rgba(224, 54, 54, 0.85);
   color: white;
-  padding: 0.2rem 0.25rem;
+  padding: 0.2em 0.25em;
   border-radius: 20px;
-  font-size: 0.8rem;
+  font-size: 0.8em;
   font-weight: 600;
   text-align: center;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -1425,16 +1427,16 @@ watch(() => props.senators, () => {
   margin-bottom: 1rem;
 }
 
-.bancada-row { width: 100%; margin-bottom: 1rem; }
+.bancada-row { width: 100%; margin-bottom: 1em; }
 .contact-section { width: 100%; margin-bottom: 1.5rem; }
 .contact-item-white { text-align: left; margin-bottom: 0.75rem; width: 100%; }
 
 .pill-white {
   background-color: white;
   color: #575756;
-  padding: 0.15rem 0.75rem;
+  padding: 0.15em 0.75em;
   border-radius: 7px;
-  font-size: 0.8rem;
+  font-size: 0.8em;
   border: 1px solid #e5e7eb;
   font-weight: 500;
   width: 100%;
@@ -1502,8 +1504,6 @@ watch(() => props.senators, () => {
   padding: 1rem;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   border: 2px solid rgba(59, 130, 246, 0.5);
-  z-index: 100;
-  min-width: 260px;
   pointer-events: none;
   animation: fadeIn 0.15s ease;
 }
@@ -1536,11 +1536,10 @@ watch(() => props.senators, () => {
   flex-shrink: 0;
 }
 
-.senator-info h4 { margin: 0 0 0.5rem 0; color: #1f2937; font-size: 1.1rem; flex: 1; }
+.senator-info h4 { margin: 0 0 0.5rem 0; color: #1f2937; flex: 1; }
 .party-badge {
   padding: 0.25rem 0.75rem;
   border-radius: 6px;
-  font-size: 0.85rem;
   font-weight: 600;
   background: #f3f4f6;
   color: #4b5563;
@@ -1548,11 +1547,10 @@ watch(() => props.senators, () => {
 }
 
 .tooltip-body { display: flex; flex-direction: column; gap: 0.5rem; }
-.info-row { display: flex; justify-content: space-between; font-size: 0.9rem; width: 100%; }
+.info-row { display: flex; justify-content: space-between; width: 100%; }
 .label { color: #6b7280; }
 .value { font-weight: 600; color: #1f2937; }
 .hint {
-  font-size: 0.85rem;
   color: #3b82f6;
   font-style: italic;
   margin-top: 0.5rem;
@@ -1577,12 +1575,11 @@ watch(() => props.senators, () => {
 }
 
 .empty-icon { font-size: 2.5rem; margin-bottom: 1rem; width: 100%; }
-.empty-state h4 { margin: 0 0 0.5rem 0; color: #4b5563; font-size: 1.1rem; width: 100%; }
-.empty-state p { margin: 0 0 1rem 0; max-width: 400px; font-size: 0.9rem; width: 100%; }
+.empty-state h4 { margin: 0 0 0.5rem 0; color: #4b5563; font-size: 1.1em; width: 100%; }
+.empty-state p { margin: 0 0 1rem 0; font-size: 0.9rem; width: 100%; }
 
 .empty-tips {
   text-align: left;
-  max-width: 400px;
   background: #f9fafb;
   padding: 0.75rem;
   border-radius: 6px;
@@ -1624,7 +1621,6 @@ watch(() => props.senators, () => {
 }
 
 .empty-tips p strong {
-  min-width: 120px;
   color: #1f2937;
 }
 
@@ -1635,6 +1631,7 @@ watch(() => props.senators, () => {
   text-align: center;
   margin-top: 1rem;
   border-radius: 8px;
+  flex-shrink: 0; /* AÑADIDO: evita que el footer se encoja */
 }
 
 .footer-content { display: flex; flex-direction: column; align-items: center; gap: 0.75rem; }
