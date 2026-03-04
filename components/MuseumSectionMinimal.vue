@@ -1,12 +1,12 @@
 <template>
-  <section class="museum-section">
+  <section class="museum-section text-[.4em] sm:text-[.6em] md:text-[clamp(6px,1.2vw,90px)]">
     <!-- Sección con imagen de fondo -->
     <div class="background-image-section">
       
       <!-- Título: franja roja completa con texto blanco -->
       <div class="title-red-stripe">
         <div class="title-container">
-          <h1 class="section-title">
+          <h1 class="section-title py-[.40em]">
             Museo Hist&oacute;rico
           </h1>
         </div>
@@ -19,7 +19,7 @@
         </div>
         
         <!-- Columna 2 con contenido (más ancha) -->
-        <div class="content-column">
+        <div class="content-column pr-[5em]">
           <!-- Contenido TRANSPARENTE (sin fondo, sin blur) -->
           <div class="transparent-content">
             <h3 class="sub-title">Institución Oficial del Senado</h3>
@@ -64,11 +64,6 @@ const props = defineProps({
 }
 
 /* Reset y base */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
 
 .museum-section {
   font-family: 'Montserrat', Tahoma, Geneva, Verdana, sans-serif;
@@ -76,7 +71,7 @@ const props = defineProps({
   width: 100%;
 }
 .sub-title{
-  font-size: 2rem;
+  font-size: 2em;
   font-weight: 700;
   color: #575756;
 }
@@ -90,17 +85,10 @@ const props = defineProps({
   min-height: 600px;
   position: relative;
   width: 100%;
-  padding-top: 80px; /* Espacio para la franja roja */
 }
 
 /* FRANJA ROJA COMPLETA para el título */
 .title-red-stripe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
-  height: 80px;
   background-color: #E03636;
   display: flex;
   align-items: center;
@@ -111,14 +99,13 @@ const props = defineProps({
 
 /* Contenedor para centrar el texto dentro de la franja */
 .title-container {
-  max-width: 1200px;
   width: 100%;
-  padding: 0 2rem;
+  padding: 0 2em;
 }
 
 /* Título blanco dentro de la franja roja */
 .section-title {
-  font-size: 2.5rem;
+  font-size: 2.5em;
   font-weight: 700;
   margin: 0;
   text-align: center;
@@ -132,7 +119,7 @@ const props = defineProps({
   z-index: 2;
   width: 100%;
   display: grid;
-  grid-template-columns: 40% 60%; /* Col 1: 40%, Col 2: 60% */
+  grid-template-columns: 38% 62%; /* Col 1: 40%, Col 2: 60% */
   gap: 0;
   min-height: 520px; /* Altura total menos la franja */
 }
@@ -161,18 +148,17 @@ const props = defineProps({
   background: transparent; /* Sin fondo */
   backdrop-filter: none; /* Sin blur */
   -webkit-backdrop-filter: none;
-  padding: 2rem 0;
+  padding: 2em 0;
   width: 100%;
-  max-width: 84%; /* Ancho máx8imo del contenido */
   margin-left: auto; /* Empuja a la derecha*/
   margin-right: auto;/* Más espacio del borde derecho*/
 }
 
 .museum-description {
-  font-size: 1.2rem;
+  font-size: 1.2em;
   line-height: 1.7;
   color: var(--white);
-  margin-bottom: 2.5rem;
+  margin-bottom: 2.5em;
   font-weight: 400;
   /* text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); */
   color: #575756;
@@ -182,13 +168,13 @@ const props = defineProps({
 .continue-button {
   display: inline-flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.75em;
   background-color: #E03636;
   color: white;
   border: none;
-  padding: 1rem 2.5rem;
+  padding: .5em .8em;
   border-radius: 8px;
-  font-size: 1.1rem;
+  font-size: 1.1em;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -213,133 +199,4 @@ const props = defineProps({
   transform: translateX(5px);
 }
 
-/* Responsive */
-@media (max-width: 1200px) {
-  .content-wrapper {
-    grid-template-columns: 35% 65%;
-  }
-  
-  .transparent-content {
-    margin-right: 5%;
-    max-width: 500px;
-  }
-  
-  .section-title {
-    font-size: 2.2rem;
-  }
-}
-
-@media (max-width: 1024px) {
-  .background-image-section {
-    min-height: 550px;
-    padding-top: 70px;
-  }
-  
-  .title-red-stripe {
-    height: 70px;
-  }
-  
-  .content-wrapper {
-    grid-template-columns: 1fr;
-    min-height: 480px;
-  }
-  
-  .empty-column {
-    display: none;
-  }
-  
-  .content-column {
-    justify-content: flex-end;
-    padding-right: 40px;
-  }
-  
-  .transparent-content {
-    margin-right: 0;
-    max-width: 500px;
-    text-align: left;
-  }
-  
-  .section-title {
-    font-size: 2rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .background-image-section {
-    min-height: 500px;
-    padding-top: 60px;
-  }
-  
-  .title-red-stripe {
-    height: 60px;
-  }
-  
-  .content-wrapper {
-    min-height: 440px;
-  }
-  
-  .content-column {
-    padding-right: 30px;
-    padding-left: 30px;
-    justify-content: center;
-  }
-  
-  .transparent-content {
-    max-width: 100%;
-    text-align: center;
-  }
-  
-  .section-title {
-    font-size: 1.8rem;
-  }
-  
-  .museum-description {
-    font-size: 1.1rem;
-  }
-  
-  .continue-button {
-    padding: 0.875rem 2rem;
-    font-size: 1rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .background-image-section {
-    min-height: 450px;
-    padding-top: 50px;
-  }
-  
-  .title-red-stripe {
-    height: 50px;
-  }
-  
-  .content-wrapper {
-    min-height: 400px;
-  }
-  
-  .content-column {
-    padding-right: 20px;
-    padding-left: 20px;
-  }
-  
-  .section-title {
-    font-size: 1.6rem;
-    letter-spacing: 0.5px;
-  }
-  
-  .transparent-content {
-    padding: 1.5rem 0;
-  }
-  
-  .museum-description {
-    font-size: 1rem;
-    margin-bottom: 2rem;
-  }
-  
-  .continue-button {
-    width: 100%;
-    justify-content: center;
-    padding: 1rem;
-  }
-}
 </style>

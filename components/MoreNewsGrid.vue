@@ -17,7 +17,7 @@
       <!-- ENCABEZADO -->
       <slot name="header">
         <div class="text-center" :class="clases.header">
-          <h2 class="font-bold text-white leading-tight">
+          <h2 class="font-bold text-white leading-tight [text-shadow:_0_0_2px_#000]">
             <span :class="clases.titulo">
               {{ title }}
             </span>

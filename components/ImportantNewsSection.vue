@@ -1,6 +1,22 @@
 <template>
   <div class="tabs-container font-montserrat mx-auto rounded-[24px] overflow-hidden isolate">
     <!-- Header de Tabs -->
+    <div class="text-center mb-4 xs:mb-5 sm:mb-6 md:mb-8 lg:mb-10 xl:mb-12 2xl:mb-16" >
+      <h2 class="font-bold text-white leading-tight [text-shadow:_0_0_2px_#000] 
+      inline-block text-[16px] xs:text-[14px] sm:text-[22px] md:text-[28px] lg:text-[36px] xl:text-[42px] 2xl:text-[60px] 3xl:text-[70px] 4xl:text-[90px] 5xl:text-[120px] 
+      ">
+        <span>
+          Gesti&oacute;n
+        </span>
+        <span class="text-[#E03636] ml-1 sm:ml-2">
+          Legislativa
+        </span>
+      </h2>
+      <p class="mx-auto text-gray-600 text-[12px] xs:text-[10px] sm:text-[14px] md:text-[15px] lg:text-[16px] xl:text-[18px] 2xl:text-[28px] 4xl:text-[36px] 5xl:text-[52px] px-4" 
+          style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+        {{ subtitle }}
+      </p>
+    </div>
     <div class="tabs-header flex flex-row border-b-2 border-black">
       <button 
         v-for="tab in tabs" 

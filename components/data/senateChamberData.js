@@ -1,7 +1,34 @@
 // components/data/senateChamberStyles.js
 export const senateChamberStyles = {
+  senator:`text-[6px] 
+        sm:text-[8px]
+        md:text-[10px]
+        lg:text-[13px]
+        xl:text-[16px]
+        2xl:text-[19px]
+        3xl:text-[22px]
+        4xl:text-[32px]
+        5xl:text-[55px]
+        xs:mx-[2em]
+        md:mx-[2.3em]
+        lg:mx-[2.5em]
+        xl:mx-[3em]
+        2xl:mx-[3.2em]
+        3xl:mx-[3.5em]
+        4xl:mx-[3em]
+        5xl:mx-[2.5em]
+        grid
+        gap-1.5
+        grid-cols-[320px_1fr]
+        sm:grid-cols-[440px_1fr]
+        md:grid-cols-[150px_1fr_260px]
+        lg:grid-cols-[160px_1fr_320px]
+        xl:grid-cols-[230px_1fr_370px]
+        2xl:grid-cols-[260px_1fr_440px]
+        3xl:grid-cols-[280px_1fr_540px]
+        4xl:grid-cols-[380px_1fr_780px]
+        5xl:grid-cols-[520px_1fr_1350px]`,
   senatorPhoto:'w-[14em] h-[14em]',
-  senatorDetails:'text-[6px] sm:text-[8px]',
   // Sección principal
   section: 'relative min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 py-8 sm:py-12 lg:py-16 overflow-hidden',
   

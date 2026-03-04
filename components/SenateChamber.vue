@@ -14,19 +14,9 @@
       <!-- Contenedor con imagen de fondo -->
       <div class="h-full background-container" :style="{ backgroundImage: `url('${backgroundImage}')` }"> <!-- SOLO CAMBIO: h-screen por h-full -->
         <!-- Contenedor principal CON GRID DE 3 COLUMNAS REALES -->
-        <div class="columns-container
-        mx-12
-        grid
-        gap-1.5
-        grid-cols-[320px_1fr]
-        sm:grid-cols-[440px_1fr]
-        md:grid-cols-[160px_1fr_180px]
-        lg:grid-cols-[220px_1fr_300px]
-        xl:grid-cols-[250px_1fr_340px]
-        2xl:grid-cols-[280px_1fr_380px]
-        ">
+        <div :class="senateChamberStyles.senator" class="columns-container">
           <!-- COLUMNA IZQUIERDA: Panel de Controles -->
-          <div v-if="showControls" class="column left-column">
+          <div v-if="showControls" class="column left-column text-[1.4em]">
             <div class="controls-panel transparent-panel">
               <!-- Leyenda -->
               <div class="controls-section">
@@ -39,10 +29,10 @@
                     @click="togglePartyFilter(party.id)"
                     :class="{ 'highlighted': activeFilters.includes(party.id) }"
                   >
-                    <div class="grid grid-cols-3 items-center w-full">
+                    <div class="grid grid-cols-[20px_1fr_20px] 2xl:grid-cols-[40px_1fr_40px] 3xl:grid-cols-[50px_1fr_50px] 4xl:grid-cols-[70px_1fr_70px] 5xl:grid-cols-[90px_1fr_90px] items-center w-full">
                       <div class="flex justify-center w-full">
                         <!-- CÍRCULO CON EFECTO CONCÉNTRICO: Color → Blanco → Color -->
-                        <div class="legend-color-vertical w-full p-1">
+                        <div class="legend-color-vertical w-full">
                           <svg viewBox="0 0 40 40" class="w-full">
                             <!-- Círculo exterior (color del partido) -->
                             <circle 
@@ -77,13 +67,13 @@
                         </div>
                       </div>
                       <div class="flex justify-center">
-                        <span class="legend-name-vertical font-semibold text-gray-800 text-sm text-center">
+                        <span class="legend-name-vertical font-semibold text-gray-800 text-[.8em] text-center">
                           {{ party.shortName }}
                         </span>
                       </div>
                       <div class="flex justify-center">
                         <span 
-                          class="text-3xl font-bold"
+                          class="font-bold text-[1.1em]"
                           :style="{ color: party.color }"
                         >
                           {{ getFilteredCount(party.id) }}
@@ -193,9 +183,9 @@
           </div>
 
           <!-- COLUMNA DERECHA: Información del Senador CON FOTOS REALES -->
-          <div class="column right-column">
-            <div class="info-panel transparent-panel">
-              <div v-if="selectedSenator" :key="selectedSenator.id" class="senator-details" :class="senateChamberStyles.senatorDetails" >
+          <div class="column right-column w-full">
+            <div class="info-panel transparent-panel w-full">
+              <div v-if="selectedSenator" :key="selectedSenator.id" class="senator-details">
                 <div class="senator-photo-container">
                   <div class="senator-photo-circle" :class="senateChamberStyles.senatorPhoto">
                     <!-- FOTO 100% FUNCIONAL - RANDOMUSER.ME -->
@@ -268,7 +258,7 @@
 
               <div v-else class="empty-state">
                 <div class="empty-icon">👆</div>
-                <h4 class="font-bold">Selecciona un Senador</h4>
+                <h2 class="font-bold">Selecciona un Senador</h2>
                 <p class="font-bold">Haz click en cualquier círculo del hemiciclo para ver información detallada</p>
                 <div class="empty-tips">
                   <!-- CÍRCULOS CON EFECTO CONCÉNTRICO: Color → Blanco → Color -->
@@ -1053,26 +1043,30 @@ const resetView = () => {
   emit('view-reset')
 }
 
-// Tooltip handlers
+// ========== TOOLTIP HANDLERS CORREGIDOS ==========
 let hoverTimeout = null
 let mouseMoveTimeout = null
+let lastHoveredSeatId = null
+let isUpdatingTooltip = false
 
 const handleMouseEnter = (seat) => {
-  if (selectedSenator.value?.id !== seat.id) {
-    hoveredSeat.value = seat
-    positionTooltipFromSeat()
-  }
+  if (!seat || selectedSenator.value?.id === seat.id) return
+  
+  hoveredSeat.value = seat
+  lastHoveredSeatId = seat.id
+  positionTooltipFromSeat()
 }
 
 const handleMouseLeave = () => {
   if (hoveredSeat.value?.id !== selectedSenator.value?.id) {
     hoveredSeat.value = null
+    lastHoveredSeatId = null
   }
   if (hoverTimeout) clearTimeout(hoverTimeout)
 }
 
 const onMouseMove = (event) => {
-  if (!mouseMoveTimeout) {
+  if (!mouseMoveTimeout && !isUpdatingTooltip) {
     mouseMoveTimeout = setTimeout(() => {
       if (hoveredSeat.value && hoveredSeat.value.id !== selectedSenator.value?.id) {
         updateHoverTooltip(event)
@@ -1083,39 +1077,86 @@ const onMouseMove = (event) => {
 }
 
 const updateHoverTooltip = (event) => {
-  if (!hoveredSeat.value || !svgElement.value) return
+  // Verificaciones de seguridad
+  if (!hoveredSeat.value || !svgElement.value || hoveredSeat.value.id !== lastHoveredSeatId) {
+    return
+  }
+  
+  if (isUpdatingTooltip) return
+  isUpdatingTooltip = true
+  
   requestAnimationFrame(() => {
-    const container = document.querySelector('.hemicycle-svg-container')
-    if (!container) return
-    
-    const seat = hoveredSeat.value
-    const svg = svgElement.value
-    const rect = container.getBoundingClientRect()
-    const viewBox = svg.viewBox.baseVal
-    const svgRect = svg.getBoundingClientRect()
-    
-    const xPercent = (seat.x - viewBox.x) / viewBox.width
-    const yPercent = (seat.y - viewBox.y) / viewBox.height
-    
-    let x = xPercent * svgRect.width + (svgRect.left - rect.left) + 25
-    let y = yPercent * svgRect.height + (svgRect.top - rect.top) - 100
-    
-    const tooltipWidth = 260
-    const tooltipHeight = 180
-    
-    if (x + tooltipWidth > rect.width) x = rect.width - tooltipWidth - 10
-    if (y + tooltipHeight > rect.height) y = rect.height - tooltipHeight - 10
-    if (x < 10) x = 10
-    if (y < 10) y = 10
-    
-    tooltipStyle.left = `${x}px`
-    tooltipStyle.top = `${y}px`
+    try {
+      // Verificar nuevamente dentro del requestAnimationFrame
+      if (!hoveredSeat.value || !svgElement.value) {
+        isUpdatingTooltip = false
+        return
+      }
+      
+      const container = document.querySelector('.hemicycle-svg-container')
+      if (!container) {
+        isUpdatingTooltip = false
+        return
+      }
+      
+      const seat = hoveredSeat.value
+      const svg = svgElement.value
+      
+      // Verificar que el seat tiene coordenadas
+      if (typeof seat.x !== 'number' || typeof seat.y !== 'number') {
+        isUpdatingTooltip = false
+        return
+      }
+      
+      const rect = container.getBoundingClientRect()
+      
+      // Verificar que el SVG tiene viewBox
+      if (!svg.viewBox || !svg.viewBox.baseVal) {
+        isUpdatingTooltip = false
+        return
+      }
+      
+      const viewBox = svg.viewBox.baseVal
+      const svgRect = svg.getBoundingClientRect()
+      
+      // Evitar división por cero
+      if (viewBox.width === 0 || viewBox.height === 0) {
+        isUpdatingTooltip = false
+        return
+      }
+      
+      const xPercent = (seat.x - viewBox.x) / viewBox.width
+      const yPercent = (seat.y - viewBox.y) / viewBox.height
+      
+      let x = xPercent * svgRect.width + (svgRect.left - rect.left) + 25
+      let y = yPercent * svgRect.height + (svgRect.top - rect.top) - 100
+      
+      const tooltipWidth = 260
+      const tooltipHeight = 180
+      
+      if (x + tooltipWidth > rect.width) x = rect.width - tooltipWidth - 10
+      if (y + tooltipHeight > rect.height) y = rect.height - tooltipHeight - 10
+      if (x < 10) x = 10
+      if (y < 10) y = 10
+      
+      tooltipStyle.left = `${x}px`
+      tooltipStyle.top = `${y}px`
+    } catch (error) {
+      console.warn('Error actualizando tooltip:', error)
+    } finally {
+      isUpdatingTooltip = false
+    }
   })
 }
 
-const positionTooltipFromSeat = () => updateHoverTooltip()
-
-
+const positionTooltipFromSeat = () => {
+  // Crear un evento sintético para updateHoverTooltip
+  const syntheticEvent = {
+    clientX: 0,
+    clientY: 0
+  }
+  updateHoverTooltip(syntheticEvent)
+}
 
 defineExpose({ 
   resetView, 
@@ -1180,11 +1221,10 @@ watch(() => props.senators, () => {
 }
 
 .columns-container {
-  padding: 1.5rem;
+  padding: 1.5em;
   position: relative;
   z-index: 1;
   width: 100%;
-  margin: 0 auto; /* AÑADIDO: centrado horizontal */
   /* ELIMINADO: min-height: 70vh */
 }
 
@@ -1246,21 +1286,21 @@ watch(() => props.senators, () => {
   gap: 0.5em;
   background-color: rgba(255, 255, 255, 0.5);
   border-radius: .6em;
-  padding: .75em;
+  padding: .35em;
   width: 100%;
 }
 
 .legend-item-vertical {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem;
+  gap: 0.75em;
   background: rgba(255, 255, 255, 0.3);
   border-radius: 8px;
   border: 1px solid #e5e7eb;
   cursor: pointer;
   transition: all 0.2s;
   width: 100%;
+  padding: 0em 0.3em;
 }
 
 .legend-item-vertical:hover {
@@ -1405,13 +1445,14 @@ watch(() => props.senators, () => {
 .pill-red {
   background-color: rgba(224, 54, 54, 0.85);
   color: white;
-  padding: 0.2em 0.25em;
-  border-radius: 20px;
+  padding: 0.2em 0.15em;
+  border-radius: 1em;
   font-size: 0.8em;
   font-weight: 600;
   text-align: center;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   width: 100%;
+  margin-bottom: .5em;
 }
 
 .pill-purple {
@@ -1506,6 +1547,7 @@ watch(() => props.senators, () => {
   border: 2px solid rgba(59, 130, 246, 0.5);
   pointer-events: none;
   animation: fadeIn 0.15s ease;
+  z-index: 1000;
 }
 
 @keyframes fadeIn {
@@ -1559,7 +1601,7 @@ watch(() => props.senators, () => {
 }
 
 .empty-state {
-  padding: 2rem 1.5rem;
+  padding: 2em 1.5rem;
   text-align: center;
   color: #6b7280;
   flex: 1;
@@ -1572,37 +1614,38 @@ watch(() => props.senators, () => {
   border-radius: 12px;
   width: 100%;
   height: 100%;
+  font-size: 1.0em;
 }
 
-.empty-icon { font-size: 2.5rem; margin-bottom: 1rem; width: 100%; }
+.empty-icon { font-size: 2.5em; margin-bottom: 1em; width: 100%; }
 .empty-state h4 { margin: 0 0 0.5rem 0; color: #4b5563; font-size: 1.1em; width: 100%; }
-.empty-state p { margin: 0 0 1rem 0; font-size: 0.9rem; width: 100%; }
+.empty-state p { margin: 0 0 1rem 0; font-size: 0.9em; width: 100%; }
 
 .empty-tips {
   text-align: left;
   background: #f9fafb;
-  padding: 0.75rem;
+  padding: 0.75em;
   border-radius: 6px;
   border-left: 3px solid #3b82f6;
   width: 100%;
 }
 
-.empty-tips p { margin: 0.4rem 0; font-size: 0.85rem; width: 100%; }
+.empty-tips p { margin: 0.4rem 0; font-size: 0.85em; width: 100%; }
 
 /* Estilos para los indicadores de colores en empty-tips */
 .empty-tips p {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin: 0.4rem 0;
-  font-size: 0.85rem;
+  gap: 0.5em;
+  margin: 0.4em 0;
+  font-size: 0.85em;
   width: 100%;
 }
 
 .party-indicator {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.5em;
 }
 
 .color-dot {
