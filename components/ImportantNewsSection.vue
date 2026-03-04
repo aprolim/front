@@ -1,5 +1,5 @@
 <template>
-  <div class="tabs-container font-montserrat mx-auto overflow-hidden isolate">
+  <div class="tabs-container font-montserrat mx-auto rounded-[24px] overflow-hidden isolate">
     <!-- Header de Tabs -->
     <div class="text-center mb-4 xs:mb-5 sm:mb-6 md:mb-8 lg:mb-10 xl:mb-12 2xl:mb-16">
       <h2 class="font-bold text-white leading-tight [text-shadow:_0_0_2px_#000] 
@@ -16,9 +16,9 @@
         {{ subtitle }}
       </p>
     </div>
-    
+
     <!-- Header de Tabs con bordes redondeados -->
-    <div class="tabs-header flex flex-row border-black">
+    <div class="tabs-header flex flex-row">
       <button 
         v-for="(tab, index) in tabs" 
         :key="tab.id"
@@ -27,13 +27,11 @@
           'gap-0.5 sm:gap-1',
           'px-1 py-1 sm:px-2 sm:py-1.5 md:px-3 md:py-2 lg:px-4 lg:py-3 xl:px-5 xl:py-4',
           'text-[7px] sm:text-[8px] md:text-[11px] lg:text-[14px] xl:text-[17px] 2xl:text-[20px] 3xl:text-[26px] 4xl:text-[38px] 5xl:text-[57px]',
-          // Bordes redondeados para el primer y último tab
           index === 0 ? 'rounded-le-[24px]' : '',
           index === tabs.length - 1 ? 'rounded-ri-[24px]' : '',
-          // Estados del tab
           { 
             'active bg-[#706F6F]': activeTab === tab.id,
-            'hover:bg-[#3A3A3A]': activeTab !== tab.id // Color mezcla entre negro y plomo (#3A3A3A)
+            'hover:bg-[#3A3A3A]': activeTab !== tab.id
           }
         ]"
         @click="activeTab = tab.id"
@@ -85,48 +83,51 @@
             class="link-card flex items-center bg-white bg-opacity-85 backdrop-blur-[10px] 
               rounded-sm sm:rounded-md md:rounded-lg lg:rounded-xl shadow-sm hover:shadow-md 
               p-1 sm:p-1.5 md:p-2
-              hover:-translate-y-0.5 hover:bg-opacity-95 transition-all duration-300
-              text-gray-900 no-underline"
+              hover:-translate-y-0.5 transition-all duration-300
+              text-gray-900 no-underline
+              group"
+            @mouseenter="hoveredCard = link.id"
+            @mouseleave="hoveredCard = null"
           >
-            <!-- Icono con control de tamaño responsivo usando solo Tailwind -->
+            <!-- Contenedor del icono con tamaño fijo -->
             <div 
-              class="link-icon text-[#E03636] flex-shrink-0 
-                m-2.5
-                sm:m-3
-                md:m-3
-                lg:m-4
-                xl:m-5
-                2xl:m-6
-                3xl:m-8
-                4xl:m-10
-                5xl:m-12
-                w-4 h-4
-                sm:w-6 sm:h-6              
-                md:w-7 md:h-7           
-                lg:w-8 lg:h-8           
-                xl:w-10 xl:h-10            
-                2xl:w-12 2xl:h-12          
-                3xl:w-16 3xl:h-16
-                4xl:w-20 4xl:h-20
-                5xl:w-28 5xl:h-28"
-              v-html="link.icono"
-            ></div>
+              class="icon-container flex-shrink-0 
+                m-2.5 sm:m-3 md:m-3 lg:m-4 xl:m-5 2xl:m-6 3xl:m-8 4xl:m-10 5xl:m-12
+                w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 xl:w-16 xl:h-16 
+                2xl:w-20 2xl:h-20 3xl:w-24 3xl:h-24 4xl:w-28 4xl:h-28 5xl:w-32 5xl:h-32
+                rounded-full transition-all duration-300"
+              :class="{
+                'bg-[#E03636]': hoveredCard === link.id,
+                'scale-110': hoveredCard === link.id
+              }"
+            >
+              <div 
+                class="w-full h-full flex items-center justify-center transition-colors duration-300"
+                :class="hoveredCard === link.id ? 'text-white' : 'text-[#E03636]'"
+              >
+                <!-- Inyectamos el SVG y forzamos su tamaño -->
+                <div class="svg-wrapper w-[97%] h--[97%]" v-html="link.icono"></div>
+              </div>
+            </div>
             
             <div class="link-content flex-1 min-w-0">
-              <h3 class="link-title font-semibold text-gray-900 
-                text-[7px] sm:text-[8px] md:text-[9px] lg:text-[10px] xl:text-[13px] 2xl:text-[17px] 3xl:text-[22px] 4xl:text-[32px] 5xl:text-[50px] 
+              <h3 class="link-title font-semibold text-gray-900
+                text-[7px] sm:text-[8px] md:text-[9px] lg:text-[10px] xl:text-[13px] 
+                2xl:text-[17px] 3xl:text-[22px] 4xl:text-[32px] 5xl:text-[50px] 
                 mb-0 leading-tight truncate">
                 {{ link.titulo }}
               </h3>
-              <p class="link-description text-gray-600 
-                text-[5px] sm:text-[7px] md:text-[8px] lg:text-[9px] xl:text-[12px] 2xl:text-[16px] 3xl:text-[19px] 4xl:text-[30px] 5xl:text-[45px]
+              <p class="link-description text-gray-600
+                text-[5px] sm:text-[7px] md:text-[8px] lg:text-[9px] xl:text-[12px] 
+                2xl:text-[16px] 3xl:text-[19px] 4xl:text-[30px] 5xl:text-[45px]
                 leading-tight line-clamp-2">
                 {{ link.descripcion }}
               </p>
             </div>
             
             <div class="link-arrow text-[#E03636] ml-0.5 flex-shrink-0
-              text-[10px] sm:text-[12px] md:text-[13px] lg:text-[15px] xl:text-[18px] 2xl:text-[22px] 3xl:text-[27px] 4xl:text-[35px] 5xl:text-[70px]">
+              text-[10px] sm:text-[12px] md:text-[13px] lg:text-[15px] xl:text-[18px] 
+              2xl:text-[22px] 3xl:text-[27px] 4xl:text-[35px] 5xl:text-[70px]">
               ›
             </div>
           </NuxtLink>
@@ -138,6 +139,9 @@
 
 <script setup>
 import { ref, computed } from 'vue';
+
+// Estado para controlar qué tarjeta está en hover
+const hoveredCard = ref(null);
 
 const API_BASE_URL = 'http://10.0.0.20/api/tabs';
 
@@ -236,20 +240,58 @@ useHead({
   }
 }
 
-/* ESTILOS PARA ICONOS SVG - heredan tamaño del contenedor */
-.link-icon {
-  display: inline-flex;
+/* ESTILOS PARA ICONOS SVG */
+.icon-container {
+  display: flex;
   align-items: center;
   justify-content: center;
 }
-.link-icon svg {
-  width: 100% !important;
-  height: 100% !important;
-  display: block !important;
-  transition: cubic-bezier(0.785, 0.135, 0.15, 0.86);
+
+/* Wrapper para forzar el tamaño del SVG */
+.svg-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* Utilidades adicionales de Tailwind que necesitamos */
+.svg-wrapper svg {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  display: block !important;
+}
+
+/* Eliminamos los width/height fijos de los SVG inyectados */
+.svg-wrapper svg[width],
+.svg-wrapper svg[height] {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Clases para el hover - basado en el estado de la tarjeta */
+.bg-\[\#E03636\] {
+  background-color: #E03636 !important;
+}
+
+.scale-110 {
+  transform: scale(1.1) !important;
+}
+
+.text-white {
+  color: white !important;
+}
+
+.text-\[\#E03636\] {
+  color: #E03636 !important;
+}
+
+/* Aseguramos que el hover funcione en toda la tarjeta */
+.link-card {
+  cursor: pointer;
+}
+
+/* Utilidades adicionales */
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -267,7 +309,7 @@ useHead({
   min-width: 0;
 }
 
-/* Estilos adicionales para los bordes redondeados */
+/* Bordes redondeados */
 .rounded-le-\[24px\] {
   border-top-left-radius: 24px;
 }
