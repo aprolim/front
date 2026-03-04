@@ -1,10 +1,9 @@
 <template>
-  <div class="tabs-container font-montserrat mx-auto rounded-[24px] overflow-hidden isolate">
+  <div class="tabs-container font-montserrat mx-auto overflow-hidden isolate">
     <!-- Header de Tabs -->
-    <div class="text-center mb-4 xs:mb-5 sm:mb-6 md:mb-8 lg:mb-10 xl:mb-12 2xl:mb-16" >
+    <div class="text-center mb-4 xs:mb-5 sm:mb-6 md:mb-8 lg:mb-10 xl:mb-12 2xl:mb-16">
       <h2 class="font-bold text-white leading-tight [text-shadow:_0_0_2px_#000] 
-      inline-block text-[16px] xs:text-[14px] sm:text-[22px] md:text-[28px] lg:text-[36px] xl:text-[42px] 2xl:text-[60px] 3xl:text-[70px] 4xl:text-[90px] 5xl:text-[120px] 
-      ">
+      inline-block text-[16px] xs:text-[14px] sm:text-[22px] md:text-[28px] lg:text-[36px] xl:text-[42px] 2xl:text-[60px] 3xl:text-[70px] 4xl:text-[90px] 5xl:text-[120px]">
         <span>
           Gesti&oacute;n
         </span>
@@ -17,16 +16,25 @@
         {{ subtitle }}
       </p>
     </div>
-    <div class="tabs-header flex flex-row border-b-2 border-black">
+    
+    <!-- Header de Tabs con bordes redondeados -->
+    <div class="tabs-header flex flex-row border-black">
       <button 
-        v-for="tab in tabs" 
+        v-for="(tab, index) in tabs" 
         :key="tab.id"
         :class="[
           'tab-button w-full sm:flex-1 flex items-center justify-center bg-black border-none text-white font-semibold cursor-pointer transition-all duration-300',
           'gap-0.5 sm:gap-1',
           'px-1 py-1 sm:px-2 sm:py-1.5 md:px-3 md:py-2 lg:px-4 lg:py-3 xl:px-5 xl:py-4',
           'text-[7px] sm:text-[8px] md:text-[11px] lg:text-[14px] xl:text-[17px] 2xl:text-[20px] 3xl:text-[26px] 4xl:text-[38px] 5xl:text-[57px]',
-          { 'active bg-[#706F6F]': activeTab === tab.id }
+          // Bordes redondeados para el primer y último tab
+          index === 0 ? 'rounded-le-[24px]' : '',
+          index === tabs.length - 1 ? 'rounded-ri-[24px]' : '',
+          // Estados del tab
+          { 
+            'active bg-[#706F6F]': activeTab === tab.id,
+            'hover:bg-[#3A3A3A]': activeTab !== tab.id // Color mezcla entre negro y plomo (#3A3A3A)
+          }
         ]"
         @click="activeTab = tab.id"
         :disabled="pending"
@@ -257,5 +265,14 @@ useHead({
 
 .min-w-0 {
   min-width: 0;
+}
+
+/* Estilos adicionales para los bordes redondeados */
+.rounded-le-\[24px\] {
+  border-top-left-radius: 24px;
+}
+
+.rounded-ri-\[24px\] {
+  border-top-right-radius: 24px;
 }
 </style>
