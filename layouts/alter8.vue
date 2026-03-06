@@ -19,7 +19,7 @@
             </button>
 
             <!-- Logo -->
-            <div class="w-[2.5em] h-[2.5em] rounded-lg overflow-hidden flex items-center justify-center group-hover:scale-105 transition-transform">
+            <div class="ml-[1em] w-[2.5em] h-[2.5em] rounded-lg overflow-hidden flex items-center justify-center group-hover:scale-105 transition-transform">
               <img 
                 src="/senadores2.png" 
                 alt="Logo" 

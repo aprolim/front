@@ -466,7 +466,6 @@ footer {
   display: block !important;
   position: relative !important;
   z-index: 100 !important;
-  min-height: 250px;
   background-image: url('/footer-main.png') !important;
   background-size: cover !important;
   background-position: center !important;
