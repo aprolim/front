@@ -1,62 +1,11 @@
-<template>
-  <!-- Imagen en la derecha (también escala hasta 5XL) -->
-  <div class="absolute top-4 right-6 md:right-4 z-30">
-    <img 
-      src="/senadores2.png"
-      alt="Logo del Senado" 
-      class="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 xl:w-24 xl:h-24 2xl:w-28 2xl:h-28 3xl:w-32 3xl:h-32 4xl:w-52 4xl:h-52 5xl:w-72 5xl:h-72 object-contain"
-    />
-  </div>
-  
+<template>  
   <!-- Contenedor principal con flex column -->
   <div class="relative z-10 mx-auto md:pt-20 md:mt-32 min-h-screen flex flex-col">
     <!-- Contenido superior que empuja los botones hacia abajo -->
     <div class="flex-grow"></div>
     
     <!-- Botones del hero -->
-    <div class="container px-6 md:px-12">
-      <div class="max-w-[80vw] mx-auto">
-        <!-- Botones del hero - TAMAÑO QUE ESCALA PROGRESIVAMENTE HASTA 5XL -->
-        <div 
-          class="grid grid-cols-5 gap-4 md:gap-6 xl:gap-16 3xl:gap-30 transition-all duration-500 relative"
-          ref="heroButtonsRef"
-          :class="{ 'opacity-0 h-0 overflow-hidden': scrolled }"
-        >
-          <NuxtLink 
-            v-for="(button, index) in heroButtonsData"
-            :key="index"
-            :to="button.to"
-            class="px-4 py-3 text-white font-semibold rounded-xl transition-all duration-300 hover:-translate-y-1 flex items-center justify-center group relative"
-            :title="button.title"
-          >
-            <div class="backdrop-blur-sm relative">
-              <!-- SVG con escalado progresivo -->
-              <div 
-                v-html="button.svg" 
-                :class="['w-full h-full', svgSizeClasses]"
-              ></div>
-              <div class="absolute -inset-1 rounded-xl bg-gradient-to-r from-[#8B1A1A]/20 to-[#F9E076]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            </div>
-            
-            <!-- Tooltip -->
-            <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full mb-2">
-              <div class="relative">
-                <div 
-                  :class="[
-                    'bg-[#E03636] backdrop-blur-sm text-white font-medium rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300 transform -translate-y-2 group-hover:translate-y-0 shadow-xl border border-white/10',
-                    tooltipPaddingClasses,
-                    tooltipTextClasses
-                  ]"
-                >
-                  {{ button.text }}
-                  <div :class="['absolute bottom-full left-1/2 transform -translate-x-1/2 border-transparent border-b-[#E03636]', triangleSize]"></div>
-                </div>
-              </div>
-            </div>
-          </NuxtLink>
-        </div>
-      </div>
-    </div>
+    
 
     <!-- ESPACIADOR ENTRE BOTONES Y FRANJA -->
     <div :class="spacerClasses"></div>

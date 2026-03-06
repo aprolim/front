@@ -1,282 +1,336 @@
-<!-- layouts/alter8.vue - VERSIÓN CON TRANSICIÓN MÁS LENTA -->
+<!-- layouts/alter8.vue - VERSIÓN CON HEADER ROJO FLOTANTE (CONSERVANDO SNAP SCROLL Y EFECTOS) -->
 <template>
   <div class="h-screen snap-container">
-    <!-- Header -->
-    <header class="fixed top-0 inline-flex z-50 bg-transparent">
-      <div class="h-14 bg-transparent inline-block items-center px-4">
-        <button 
-          @click="toggleSidebar"
-          class="p-2 rounded-lg hover:bg-white/20 transition-colors relative z-50"
-          aria-label="Toggle menu"
-        >
-          <span v-html="menuIcons.menu" />
-        </button>
+    <!-- Header rojo fijo y flotante (superpuesto) con menús a la derecha -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-[#E03636] shadow-lg">
+      <div class="mx-auto px-[1px] py-[.3vw] text-[1.5vw]">
+        <div class="flex items-center justify-between">
+          <!-- Logo y botón hamburguesa (solo móvil) -->
+          <div class="flex items-center gap-4">
+            <!-- Botón hamburguesa solo para móvil -->
+            <button 
+              @click="toggleSidebar"
+              class="sm:hidden p-2 text-white hover:bg-[#C12F2F] rounded-lg transition-colors"
+              aria-label="Toggle menu"
+            >
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+              </svg>
+            </button>
+
+            <!-- Logo -->
+            <div class="w-[2.5em] h-[2.5em] rounded-lg overflow-hidden flex items-center justify-center group-hover:scale-105 transition-transform">
+              <img 
+                src="/senadores2.png" 
+                alt="Logo" 
+                class="w-full h-full object-cover"
+              />
+            </div>
+          </div>
+
+          <!-- 5 MENÚS PRINCIPALES - ARRIBA A LA DERECHA (SIN FLECHAS) -->
+          <div class="hidden sm:flex items-center gap-[0.5vw] text-[.8em]">
+            <!-- MENÚ 1: La institución -->
+            <div class="relative group/menu">
+              <button class="px-[1vw] py-2 text-white font-medium hover:bg-[#C12F2F] rounded-lg transition-colors">
+                La institución
+              </button>
+              <div class="absolute right-0 mt-1 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all duration-200 z-50">
+                <div class="py-2">
+                  <NuxtLink to="/alternative/constitucion/texto-completo" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                    📜 Mandato constitucional
+                  </NuxtLink>
+                  <NuxtLink to="/alternative/constitucion/historia" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                    📚 Directiva camaral
+                  </NuxtLink>
+                  <NuxtLink to="/alternative/constitucion/reformas" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                    🔄 Reseña histórica
+                  </NuxtLink>
+                  <NuxtLink to="/alternative/constitucion/reformas" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                    🖼️ Galería de imágenes
+                  </NuxtLink>
+                </div>
+              </div>
+            </div>
+
+            <!-- MENÚ 2: Legisladores y representación -->
+            <div class="relative group/menu">
+              <button class="px-[1vw] py-2 text-white font-medium hover:bg-[#C12F2F] rounded-lg transition-colors">
+                Legisladores
+              </button>
+              <div class="absolute right-0 mt-1 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all duration-200 z-50">
+                <div class="py-2">
+                  <NuxtLink to="/alternative/constitucion/texto-completo" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                    📜 Mandato constitucional
+                  </NuxtLink>
+                  <NuxtLink to="/alternative/constitucion/historia" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                    📚 Directiva camaral
+                  </NuxtLink>
+                  <NuxtLink to="/alternative/constitucion/reformas" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                    🔄 Reseña histórica
+                  </NuxtLink>
+                  <NuxtLink to="/alternative/constitucion/reformas" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                    🖼️ Galería de imágenes
+                  </NuxtLink>
+                </div>
+              </div>
+            </div>
+
+            <!-- MENÚ 3: Gestión Legislativa -->
+            <div class="relative group/menu">
+              <button class="px-[1vw] py-2 text-white font-medium hover:bg-[#C12F2F] rounded-lg transition-colors">
+                Gestión Legislativa
+              </button>
+              <div class="absolute right-0 mt-1 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all duration-200 z-50">
+                <div class="py-2">
+                  <NuxtLink to="/alternative/legisladores/senadores" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                    👨‍⚖️ Sesión del pleno
+                  </NuxtLink>
+                  <NuxtLink to="/alternative/legisladores/diputados" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                    👩‍⚖️ Proyectos de leyes
+                  </NuxtLink>
+                  <NuxtLink to="/alternative/legisladores/comisiones" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                    📋 Gaceta Legislativa
+                  </NuxtLink>
+                </div>
+              </div>
+            </div>
+
+            <!-- MENÚ 4: Cultura y patrimonio -->
+            <div class="relative group/menu">
+              <button class="px-[1vw] py-2 text-white font-medium hover:bg-[#C12F2F] rounded-lg transition-colors">
+                Cultura
+              </button>
+              <div class="absolute right-0 mt-1 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all duration-200 z-50">
+                <div class="py-2">
+                  <NuxtLink to="/alternative/legisladores/senadores" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                    👨‍⚖️ Sesión del pleno
+                  </NuxtLink>
+                  <NuxtLink to="/alternative/legisladores/diputados" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                    👩‍⚖️ Proyectos de leyes
+                  </NuxtLink>
+                  <NuxtLink to="/alternative/legisladores/comisiones" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                    📋 Gaceta Legislativa
+                  </NuxtLink>
+                </div>
+              </div>
+            </div>
+
+            <!-- MENÚ 5: Participación y transparencia -->
+            <div class="relative group/menu">
+              <button class="px-[1vw] py-2 text-white font-medium hover:bg-[#C12F2F] rounded-lg transition-colors">
+                Participación
+              </button>
+              <div class="absolute right-0 mt-1 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all duration-200 z-50">
+                <div class="py-2">
+                  <NuxtLink to="/alternative/legisladores/senadores" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                    👨‍⚖️ Sesión del pleno
+                  </NuxtLink>
+                  <NuxtLink to="/alternative/legisladores/diputados" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                    👩‍⚖️ Proyectos de leyes
+                  </NuxtLink>
+                  <NuxtLink to="/alternative/legisladores/comisiones" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                    📋 Gaceta Legislativa
+                  </NuxtLink>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Versión móvil: texto simple -->
+          <div class="sm:hidden flex items-center">
+            <span class="text-white text-sm font-medium">Menú</span>
+          </div>
+        </div>
       </div>
     </header>
 
-    <!-- Sidebar -->
+    <!-- Sidebar móvil (solo visible en móvil) -->
     <div 
       :class="[
-        'fixed inset-0 z-40 transition-all duration-300',
+        'fixed inset-0 z-40 transition-all duration-300 lg:hidden',
         sidebarOpen ? 'visible' : 'invisible'
       ]"
     >
       <!-- Overlay -->
       <div 
         :class="[
-          'absolute inset-0 transition-opacity duration-300',
-          sidebarOpen ? 'bg-black/30' : 'bg-transparent'
+          'absolute inset-0 bg-black/50 transition-opacity duration-300',
+          sidebarOpen ? 'opacity-100' : 'opacity-0'
         ]"
         @click="sidebarOpen = false"
       ></div>
-      
-      <!-- Menú lateral -->
+
+      <!-- Sidebar móvil con fondo rojo -->
       <aside 
         :class="[
-          'absolute left-0 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 text-white shadow-2xl transform transition-transform duration-300 ease-in-out border-r border-gray-700/50',
-          sidebarStyles.width,
-          sidebarStyles.top,
-          sidebarStyles.height,
+          'absolute left-0 w-72 bg-gradient-to-b from-[#E03636] to-[#C12F2F] text-white shadow-2xl transform transition-transform duration-300 ease-in-out',
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         ]"
+        :style="{ top: '72px', height: 'calc(100vh - 72px)' }"
       >
-        <div class="p-2 sm:p-4 overflow-y-auto h-[calc(100%-32.5px)] sm:h-[calc(100%-51.5px)]">
-          
-          <!-- MENÚ 1: LA INSTITUCIÓN -->
-          <div class="mb-1 sm:mb-3">
-            <button 
-              @click="toggleInstitution"
-              class="w-full flex items-center justify-between p-0.5 sm:p-1 md:p-3 rounded-lg hover:bg-gray-700/50 transition-colors text-left"
-            >
-              <div class="flex items-center gap-3">
-                <span :class="sidebarStyles.menuIcon" v-html="menuIcons.institution" />
-                <span :class="sidebarStyles.menuText">La institución</span>
+        <div class="p-4 overflow-y-auto h-full">
+          <div class="space-y-2">
+            <!-- Menú móvil: La institución -->
+            <div class="mb-2">
+              <button 
+                @click="toggleMobileMenu('institution')"
+                class="w-full flex items-center justify-between p-3 text-white hover:bg-white/10 rounded-lg transition-colors"
+              >
+                <span class="font-medium">La institución</span>
+                <svg 
+                  class="w-5 h-5 transition-transform duration-200"
+                  :class="{ 'rotate-180': mobileMenuState.institution }"
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </button>
+              <div v-show="mobileMenuState.institution" class="ml-4 mt-1 space-y-1 border-l-2 border-white/30 pl-3">
+                <NuxtLink to="/alternative/constitucion/texto-completo" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📜 Mandato constitucional</NuxtLink>
+                <NuxtLink to="/alternative/constitucion/historia" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📚 Directiva camaral</NuxtLink>
+                <NuxtLink to="/alternative/constitucion/reformas" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">🔄 Reseña histórica</NuxtLink>
+                <NuxtLink to="/alternative/constitucion/reformas" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">🖼️ Galería de imágenes</NuxtLink>
               </div>
-              <span :class="sidebarStyles.arrowIcon" v-html="menuIcons.arrow(institutionOpen)" />
-            </button>
-            
-            <div v-if="institutionOpen" class="ml-9 mt-2 mb-3 space-y-2 border-l border-gray-600/50 pl-3">
-              <NuxtLink to="/alternative/constitucion/texto-completo" 
-                        :class="sidebarStyles.menuText"
-                        @click="sidebarOpen = false">
-                📜 Mandato constitucional
-              </NuxtLink>
-              <br>
-              <NuxtLink to="/alternative/constitucion/historia" 
-                        :class="sidebarStyles.menuText"
-                        @click="sidebarOpen = false">
-                📚 Directiva camaral
-              </NuxtLink>
-              <br>
-              <NuxtLink to="/alternative/constitucion/reformas" 
-                        :class="sidebarStyles.menuText"
-                        @click="sidebarOpen = false">
-                🔄 Reseña historica
-              </NuxtLink>
-              <br>
-              <NuxtLink to="/alternative/constitucion/reformas" 
-                        :class="sidebarStyles.menuText"
-                        @click="sidebarOpen = false">
-                🔄 Galeria de imagenes
-              </NuxtLink>
             </div>
-          </div>
-
-          <!-- MENÚ 2: LEGISLADORES Y REPRESENTACIÓN -->
-          <div class="mb-1 sm:mb-3">
-            <button 
-              @click="toggleLegislators"
-              class="w-full flex items-center justify-between p-0.5 sm:p-1 md:p-3 rounded-lg hover:bg-gray-700/50 transition-colors text-left"
-            >
-              <div class="flex items-center gap-3">
-                <span :class="sidebarStyles.menuIcon" v-html="menuIcons.legislators" />
-                <span :class="sidebarStyles.menuText">Legisladores y representación</span>
+            
+            <!-- Menú móvil: Legisladores -->
+            <div class="mb-2">
+              <button 
+                @click="toggleMobileMenu('legislators')"
+                class="w-full flex items-center justify-between p-3 text-white hover:bg-white/10 rounded-lg transition-colors"
+              >
+                <span class="font-medium">Legisladores</span>
+                <svg 
+                  class="w-5 h-5 transition-transform duration-200"
+                  :class="{ 'rotate-180': mobileMenuState.legislators }"
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </button>
+              <div v-show="mobileMenuState.legislators" class="ml-4 mt-1 space-y-1 border-l-2 border-white/30 pl-3">
+                <NuxtLink to="/alternative/constitucion/texto-completo" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📜 Mandato constitucional</NuxtLink>
+                <NuxtLink to="/alternative/constitucion/historia" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📚 Directiva camaral</NuxtLink>
+                <NuxtLink to="/alternative/constitucion/reformas" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">🔄 Reseña histórica</NuxtLink>
+                <NuxtLink to="/alternative/constitucion/reformas" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">🖼️ Galería de imágenes</NuxtLink>
               </div>
-              <span :class="sidebarStyles.arrowIcon" v-html="menuIcons.arrow(legislatorsOpen)" />
-            </button>
-            
-            <div v-if="legislatorsOpen" class="ml-9 mt-2 mb-3 space-y-2 border-l border-gray-600/50 pl-3">
-              <NuxtLink to="/alternative/constitucion/texto-completo" 
-                        :class="sidebarStyles.menuText"
-                        @click="sidebarOpen = false">
-                📜 Mandato constitucional
-              </NuxtLink>
-              <br>
-              <NuxtLink to="/alternative/constitucion/historia" 
-                        :class="sidebarStyles.menuText"
-                        @click="sidebarOpen = false">
-                📚 Directiva camaral
-              </NuxtLink>
-              <br>
-              <NuxtLink to="/alternative/constitucion/reformas" 
-                        :class="sidebarStyles.menuText"
-                        @click="sidebarOpen = false">
-                🔄 Reseña historica
-              </NuxtLink>
-              <br>
-              <NuxtLink to="/alternative/constitucion/reformas" 
-                        :class="sidebarStyles.menuText"
-                        @click="sidebarOpen = false">
-                🔄 Galeria de imagenes
-              </NuxtLink>
             </div>
-          </div>
-
-          <!-- MENÚ 3: GESTIÓN LEGISLATIVA -->
-          <div class="mb-1 sm:mb-3">
-            <button 
-              @click="toggleLegislativeManagement"
-              class="w-full flex items-center justify-between p-0.5 sm:p-1 md:p-3 rounded-lg hover:bg-gray-700/50 transition-colors text-left"
-            >
-              <div class="flex items-center gap-3">
-                <span :class="sidebarStyles.menuIcon" v-html="menuIcons.gavel" />
-                <span :class="sidebarStyles.menuText">Gestión Legislativa</span>
+            
+            <!-- Menú móvil: Gestión Legislativa -->
+            <div class="mb-2">
+              <button 
+                @click="toggleMobileMenu('legislative')"
+                class="w-full flex items-center justify-between p-3 text-white hover:bg-white/10 rounded-lg transition-colors"
+              >
+                <span class="font-medium">Gestión Legislativa</span>
+                <svg 
+                  class="w-5 h-5 transition-transform duration-200"
+                  :class="{ 'rotate-180': mobileMenuState.legislative }"
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </button>
+              <div v-show="mobileMenuState.legislative" class="ml-4 mt-1 space-y-1 border-l-2 border-white/30 pl-3">
+                <NuxtLink to="/alternative/legisladores/senadores" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👨‍⚖️ Sesión del pleno</NuxtLink>
+                <NuxtLink to="/alternative/legisladores/diputados" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👩‍⚖️ Proyectos de leyes</NuxtLink>
+                <NuxtLink to="/alternative/legisladores/comisiones" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📋 Gaceta Legislativa</NuxtLink>
               </div>
-              <span :class="sidebarStyles.arrowIcon" v-html="menuIcons.arrow(legislativeManagementOpen)" />
-            </button>
-            
-            <div v-if="legislativeManagementOpen" class="ml-9 mt-2 mb-3 space-y-2 border-l border-gray-600/50 pl-3">
-              <NuxtLink to="/alternative/legisladores/senadores" 
-                        :class="sidebarStyles.menuText"
-                        @click="sidebarOpen = false">
-                👨‍⚖️ Sesion del pleno
-              </NuxtLink>
-              <br>
-              <NuxtLink to="/alternative/legisladores/diputados" 
-                        :class="sidebarStyles.menuText"
-                        @click="sidebarOpen = false">
-                👩‍⚖️ Proyectos de leyes
-              </NuxtLink>
-              <br>
-              <NuxtLink to="/alternative/legisladores/comisiones" 
-                        :class="sidebarStyles.menuText"
-                        @click="sidebarOpen = false">
-                📋 Gaceta Legislativa
-              </NuxtLink>
             </div>
-          </div>
-
-          <!-- MENÚ 4: NOTICIAS -->
-          <NuxtLink to="/alternative/participacion" 
-                    class="flex items-center gap-3 p-0.5 sm:p-1 md:p-3 rounded-lg hover:bg-gray-700/50 transition-colors mb-2"
-                    @click="sidebarOpen = false">
-            <span :class="sidebarStyles.menuIcon" v-html="menuIcons.news" />
-            <span :class="sidebarStyles.menuText">Noticias</span>
-          </NuxtLink>
-
-          <!-- MENÚ 5: PARTICIPACIÓN Y TRANSPARENCIA -->
-          <div class="mb-1 sm:mb-3">
-            <button 
-              @click="toggleParticipation"
-              class="w-full flex items-center justify-between p-0.5 sm:p-1 md:p-3 rounded-lg hover:bg-gray-700/50 transition-colors text-left"
-            >
-              <div class="flex items-center gap-3">
-                <span :class="sidebarStyles.menuIcon" v-html="menuIcons.hands" />
-                <span :class="sidebarStyles.menuText">Participación y transparencia</span>
+            
+            <!-- Menú móvil: Cultura -->
+            <div class="mb-2">
+              <button 
+                @click="toggleMobileMenu('culture')"
+                class="w-full flex items-center justify-between p-3 text-white hover:bg-white/10 rounded-lg transition-colors"
+              >
+                <span class="font-medium">Cultura</span>
+                <svg 
+                  class="w-5 h-5 transition-transform duration-200"
+                  :class="{ 'rotate-180': mobileMenuState.culture }"
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </button>
+              <div v-show="mobileMenuState.culture" class="ml-4 mt-1 space-y-1 border-l-2 border-white/30 pl-3">
+                <NuxtLink to="/alternative/legisladores/senadores" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👨‍⚖️ Sesión del pleno</NuxtLink>
+                <NuxtLink to="/alternative/legisladores/diputados" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👩‍⚖️ Proyectos de leyes</NuxtLink>
+                <NuxtLink to="/alternative/legisladores/comisiones" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📋 Gaceta Legislativa</NuxtLink>
               </div>
-              <span :class="sidebarStyles.arrowIcon" v-html="menuIcons.arrow(participationOpen)" />
-            </button>
-            
-            <div v-if="participationOpen" class="ml-9 mt-2 mb-3 space-y-2 border-l border-gray-600/50 pl-3">
-              <NuxtLink to="/alternative/legisladores/senadores" 
-                        :class="sidebarStyles.menuText"
-                        @click="sidebarOpen = false">
-                👨‍⚖️ Sesion del pleno
-              </NuxtLink>
-              <br>
-              <NuxtLink to="/alternative/legisladores/diputados" 
-                        :class="sidebarStyles.menuText"
-                        @click="sidebarOpen = false">
-                👩‍⚖️ Proyectos de leyes
-              </NuxtLink>
-              <br>
-              <NuxtLink to="/alternative/legisladores/comisiones" 
-                        :class="sidebarStyles.menuText"
-                        @click="sidebarOpen = false">
-                📋 Gaceta Legislativa
-              </NuxtLink>
             </div>
-          </div>
-
-          <!-- MENÚ 6: CULTURA Y PATRIMONIO -->
-          <div class="mb-1 sm:mb-3">
-            <button 
-              @click="toggleCulture"
-              class="w-full flex items-center justify-between p-0.5 sm:p-1 md:p-3 rounded-lg hover:bg-gray-700/50 transition-colors text-left"
-            >
-              <div class="flex items-center gap-3">
-                <span :class="sidebarStyles.menuIcon" v-html="menuIcons.culture" />
-                <span :class="sidebarStyles.menuText">Cultura y patrimonio</span>
+            
+            <!-- Menú móvil: Participación -->
+            <div class="mb-2">
+              <button 
+                @click="toggleMobileMenu('participation')"
+                class="w-full flex items-center justify-between p-3 text-white hover:bg-white/10 rounded-lg transition-colors"
+              >
+                <span class="font-medium">Participación</span>
+                <svg 
+                  class="w-5 h-5 transition-transform duration-200"
+                  :class="{ 'rotate-180': mobileMenuState.participation }"
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </button>
+              <div v-show="mobileMenuState.participation" class="ml-4 mt-1 space-y-1 border-l-2 border-white/30 pl-3">
+                <NuxtLink to="/alternative/legisladores/senadores" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👨‍⚖️ Sesión del pleno</NuxtLink>
+                <NuxtLink to="/alternative/legisladores/diputados" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👩‍⚖️ Proyectos de leyes</NuxtLink>
+                <NuxtLink to="/alternative/legisladores/comisiones" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📋 Gaceta Legislativa</NuxtLink>
               </div>
-              <span :class="sidebarStyles.arrowIcon" v-html="menuIcons.arrow(cultureOpen)" />
-            </button>
-            
-            <div v-if="cultureOpen" class="ml-9 mt-2 mb-3 space-y-2 border-l border-gray-600/50 pl-3">
-              <NuxtLink to="/alternative/legisladores/senadores" 
-                        :class="sidebarStyles.menuText"
-                        @click="sidebarOpen = false">
-                👨‍⚖️ Sesion del pleno
-              </NuxtLink>
-              <br>
-              <NuxtLink to="/alternative/legisladores/diputados" 
-                        :class="sidebarStyles.menuText"
-                        @click="sidebarOpen = false">
-                👩‍⚖️ Proyectos de leyes
-              </NuxtLink>
-              <br>
-              <NuxtLink to="/alternative/legisladores/comisiones" 
-                        :class="sidebarStyles.menuText"
-                        @click="sidebarOpen = false">
-                📋 Gaceta Legislativa
-              </NuxtLink>
             </div>
-          </div>
-        </div>
-
-        <!-- Pie del sidebar -->
-        <div class="absolute bottom-0 left-0 right-0 p-2 sm:p-4 border-t border-gray-700/50 bg-gray-800/50">
-          <div class="flex items-center justify-between" :class="sidebarStyles.menuText">
-            <p class="text-gray-300"></p>
-            <button 
-              @click="sidebarOpen = false"
-              class="text-gray-300 hover:text-white transition-colors px-3 py-1 rounded hover:bg-gray-700/50"
-            >
-              ✕ Cerrar
-            </button>
+            
+            <!-- Noticias -->
+            <NuxtLink to="/alternative/participacion" class="block p-3 text-white hover:bg-white/10 rounded-lg mt-4" @click="sidebarOpen = false">
+              📰 Noticias
+            </NuxtLink>
           </div>
         </div>
       </aside>
     </div>
 
-    <!-- Contenido principal -->
-    <main class="relative z-10 pt-0 snap-main">
+    <!-- Contenido principal - CON SERVICIO DE LAS CLASES ORIGINALES -->
+    <main class="relative z-10 pt-[72px] snap-main">
       <slot />
     </main>
 
-    <!-- Footer -->
-    <footer class="text-white back-image snap-footer">
+    <!-- Footer (original) -->
+    <footer class="text-white back-image snap-footer text-[4px] sm:text-[6px] md:text-[7px] lg:text-[10px] xl:text-[14px] 2xl:text-[16px] 3xl:text-[21px] 4xl:text-[28px] 5xl:text-[40px]">
       <div class="mx-auto">
         <div class="text-center">
           <div class="flex items-center justify-center gap-3 back-image">
-            <div class="flex items-center justify-center w-40 h-40 pt-3">
+            <div class="flex items-center justify-center w-24 h-24 2xl:w-36 2xl:h-32 3xl:w-52 3xl:h-52 4xl:w-52 4xl:h-52 5xl:w-96 5xl:h-96 pt-3">
               <img src="/2R.png" alt="Escudo Senado Nacional" class="w-full h-full object-cover" />
             </div>
           </div>
           
           <div class="sub-footer bg-gray-900 text-white py-8">
             <div class="container mx-auto px-4">
-              <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-                <div class="md:col-span-3 flex items-center justify-start space-x-3">
-                  <img src="/footer-img/Recurso 8.png" alt="Senado Bolivia" class="h-11 w-auto">
+              <div class="grid grid-cols-12 gap-6 items-center">
+                <div class="col-span-3 flex items-center justify-start space-x-3">
+                  <img src="/footer-img/Recurso 8.png" alt="Senado Bolivia" class="h-6 2xl:h-9 4xl:h-16 5xl:h-24 w-auto">
                   <div>
                     <a href="https://diputados.gob.bo/" target="_blank">https://diputados.gob.bo/</a>
                   </div>
                 </div>
-                <div class="md:col-span-6 text-center">
+                <div class="col-span-6 text-center">
                   <p>Calle Comercio esquina Colón - Telf.: (591) 2158701 - www.senado.gob.bo - La Paz - Bolivia</p>
                 </div>
-                <div class="md:col-span-3 flex items-center justify-end space-x-3">
-                  <img src="/footer-img/Recurso 7.png" alt="Escudo Senado" class="h-14 w-auto">
+                <div class="col-span-3 flex items-center justify-end space-x-3">
+                  <img src="/footer-img/Recurso 7.png" alt="Escudo Senado" class="h-9 2xl:h-24 5xl:h-32 w-auto">
                   <div class="text-right">
                     <a href="https://www.vicepresidencia.gob.bo/" target="_blank">https://www.vicepresidencia.gob.bo/</a>
                   </div>
@@ -288,7 +342,7 @@
       </div>
     </footer>
 
-    <!-- Widget de Redes Sociales -->
+    <!-- Widget de Redes Sociales (original - con animaciones) -->
     <div class="fixed right-[clamp(8px,1.8vw,24px)] 2xl:right-8 3xl:right-9 4xl:right-10 5xl:right-16 top-1/2 transform -translate-y-1/2 z-40">
       <div class="flex flex-col gap-[clamp(6px,1.2vh,16px)] items-end">
         <div class="flex flex-col gap-2 lg:gap-4 4xl:gap-8 items-end">
@@ -308,39 +362,32 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue'
-import { menuIcons } from './data/menuIcons'
-import { socialLinks, sidebarStyles } from './data/config'
+import { ref, reactive, onMounted, onBeforeUnmount } from 'vue'
+import { socialLinks } from './data/config'
 
 const sidebarOpen = ref(false)
-const institutionOpen = ref(false)
-const legislatorsOpen = ref(false)
-const legislativeManagementOpen = ref(false)
-const participationOpen = ref(false)
-const cultureOpen = ref(false)
+
+// Estado para menús móviles
+const mobileMenuState = reactive({
+  institution: false,
+  legislators: false,
+  legislative: false,
+  culture: false,
+  participation: false
+})
 
 const toggleSidebar = () => {
   sidebarOpen.value = !sidebarOpen.value
+  // Cerrar todos los submenús al abrir/cerrar sidebar
+  if (!sidebarOpen.value) {
+    Object.keys(mobileMenuState).forEach(key => {
+      mobileMenuState[key] = false
+    })
+  }
 }
 
-const toggleInstitution = () => {
-  institutionOpen.value = !institutionOpen.value
-}
-
-const toggleLegislators = () => {
-  legislatorsOpen.value = !legislatorsOpen.value
-}
-
-const toggleLegislativeManagement = () => {
-  legislativeManagementOpen.value = !legislativeManagementOpen.value
-}
-
-const toggleParticipation = () => {
-  participationOpen.value = !participationOpen.value
-}
-
-const toggleCulture = () => {
-  cultureOpen.value = !cultureOpen.value
+const toggleMobileMenu = (menu) => {
+  mobileMenuState[menu] = !mobileMenuState[menu]
 }
 
 // Cerrar menú con tecla Escape
@@ -360,7 +407,7 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-/* ===== SNAP SCROLL CONFIGURACIÓN ===== */
+/* ===== SNAP SCROLL CONFIGURACIÓN (ORIGINAL) ===== */
 .snap-container {
   height: 100vh;
   overflow-y: scroll;
@@ -377,15 +424,32 @@ onBeforeUnmount(() => {
   scroll-snap-align: start;
 }
 
-/* Asegurar header transparente */
+/* Header rojo fijo (nuevo) */
 header {
-  background: transparent !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
   position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: #E03636;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   z-index: 50;
 }
 
+/* Rotación para flechas en móvil */
+.rotate-180 {
+  transform: rotate(180deg);
+}
+
+/* Hover en menús desktop */
+.group\/menu:hover .group-hover\/menu\:opacity-100 {
+  opacity: 1;
+}
+
+.group\/menu:hover .group-hover\/menu\:visible {
+  visibility: visible;
+}
+
+/* Footer original */
 .back-image {
   background-image: url('/footer-main.png');
   background-size: cover;
@@ -396,21 +460,9 @@ header {
 
 .sub-footer {
   background-color: rgba(198, 18, 16, 0.6);
-  font-size: .7em;
 }
 
-/* Asegurar que el contenido esté debajo */
-main {
-  padding-top: 0 !important;
-  margin-top: 0 !important;
-}
-
-/* Estilos para enlaces activos */
-.router-link-active {
-  @apply bg-gray-700/70;
-}
-
-/* Scrollbar personalizado */
+/* Scrollbar personalizado (original) */
 aside::-webkit-scrollbar {
   width: 4px;
 }
@@ -428,7 +480,7 @@ aside::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.3);
 }
 
-/* Animaciones para redes sociales */
+/* Animaciones para redes sociales (original) */
 @keyframes bounceIn {
   0% {
     opacity: 0;
@@ -450,7 +502,7 @@ aside::-webkit-scrollbar-thumb:hover {
   animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
-/* Estilos para iconos de redes sociales */
+/* Estilos para iconos de redes sociales (original) */
 .social-icon-wrapper {
   display: flex;
   align-items: center;
@@ -464,7 +516,6 @@ aside::-webkit-scrollbar-thumb:hover {
   transform: translateX(-4px) scale(1.1);
 }
 
-/* Efecto sutil de brillo al hover */
 .social-svg {
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
   transition: filter 0.3s ease;
@@ -474,29 +525,31 @@ aside::-webkit-scrollbar-thumb:hover {
   filter: drop-shadow(0 4px 8px rgba(224, 54, 54, 0.3));
 }
 
-/* Asegurar que los SVGs tengan las propiedades correctas */
 .social-svg :deep(svg) {
   width: 100%;
   height: 100%;
   transition: all 0.3s ease;
 }
 
-/* Efecto de pulso sutil */
-@keyframes subtle-pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.8;
-  }
+/* Asegurar que el contenido esté debajo */
+main {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
 }
 
-.group:hover .animate-ping {
-  animation: subtle-pulse 1.5s ease-in-out infinite;
+/* Estilos para enlaces activos */
+.router-link-active {
+  @apply bg-gray-700/70;
 }
 
-/* Corrección para el fill de los SVGs */
-.social-svg :deep(svg path) {
-  transition: fill 0.3s ease, stroke 0.3s ease;
+/* Estilos de selección de texto */
+::selection {
+  background-color: #E03636;
+  color: white;
+}
+
+::-moz-selection {
+  background-color: #E03636;
+  color: white;
 }
 </style>

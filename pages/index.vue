@@ -34,7 +34,7 @@
       style="min-height: 100vh; position: relative; background: transparent;"
     >
       <!-- Contenedor del contenido -->
-      <div class="relative z-20 flex items-center justify-center min-h-screen">
+      <div class="pt-1 relative z-20 flex items-center justify-center min-h-screen">
         <div class="news-container">
           <ImportantNewsSection />
         </div>
@@ -49,7 +49,7 @@
       style="position: relative;"
     >
       <!-- Contenedor del contenido con fondo transparente -->
-      <div style="position: relative; z-index: 2; background: transparent; height: 100%;">
+      <div style="position: relative; z-index: 2; background: transparent; height: 100%;" class="pt-3">
         <MoreNewsGrid />
       </div>
     </div>
@@ -61,6 +61,7 @@
       :class="{ 'animate-in': isSenateVisible }"
       style="position: relative; background: #f5f5f5;"
     >
+      <div class="h-[4.4vw]"></div>
       <SenateChamber
         :show-footer="false"
         class="h-screen"
@@ -102,6 +103,7 @@
       :class="{ 'animate-in': isMuseumVisible }"
       style="background-image: url('/fondo1.png'); background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed;"
     >
+      <div class="h-[4.2vw]"></div>
       <MuseumSectionMinimal
         :dark-mode="darkMode"
         @collection-selected="handleCollectionSelect"
