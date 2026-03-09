@@ -1,4 +1,4 @@
-<!-- layouts/alter8.vue - VERSIÓN CON HEADER ROJO FLOTANTE (CONSERVANDO SNAP SCROLL Y EFECTOS) -->
+<!-- layouts/alter8.vue - VERSIÓN CON HEADER ROJO FLOTANTE Y LOGO CORREGIDO -->
 <template>
   <div class="h-screen snap-container">
     <!-- Header rojo fijo y flotante (superpuesto) con menús a la derecha -->
@@ -18,14 +18,18 @@
               </svg>
             </button>
 
-            <!-- Logo -->
-            <div class="ml-[1em] w-[2.5em] h-[2.5em] rounded-lg overflow-hidden flex items-center justify-center group-hover:scale-105 transition-transform">
+            <!-- Logo como botón para ir al inicio -->
+            <button 
+              @click="goToHome"
+              class="ml-[1em] w-[2.5em] h-[2.5em] rounded-lg overflow-hidden flex items-center justify-center group-hover:scale-105 transition-transform cursor-pointer"
+              aria-label="Ir al inicio"
+            >
               <img 
                 src="/senadores2.png" 
                 alt="Logo" 
                 class="w-full h-full object-cover"
               />
-            </div>
+            </button>
           </div>
 
           <!-- 5 MENÚS PRINCIPALES - ARRIBA A LA DERECHA (SIN FLECHAS) -->
@@ -37,18 +41,18 @@
               </button>
               <div class="absolute right-0 mt-1 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all duration-200 z-50">
                 <div class="py-2">
-                  <NuxtLink to="/alternative/constitucion/texto-completo" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                  <a href="/la-institucion" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors cursor-pointer">
                     📜 Mandato constitucional
-                  </NuxtLink>
-                  <NuxtLink to="/alternative/constitucion/historia" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                  </a>
+                  <a href="/la-institucion#directiva-camaral" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors cursor-pointer">
                     📚 Directiva camaral
-                  </NuxtLink>
-                  <NuxtLink to="/alternative/constitucion/reformas" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                  </a>
+                  <a href="/la-institucion#reseña-historica" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors cursor-pointer">
                     🔄 Reseña histórica
-                  </NuxtLink>
-                  <NuxtLink to="/alternative/constitucion/reformas" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                  </a>
+                  <a href="/la-institucion#museo" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors cursor-pointer">
                     🖼️ Galería de imágenes
-                  </NuxtLink>
+                  </a>
                 </div>
               </div>
             </div>
@@ -60,17 +64,14 @@
               </button>
               <div class="absolute right-0 mt-1 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all duration-200 z-50">
                 <div class="py-2">
-                  <NuxtLink to="/alternative/constitucion/texto-completo" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    📜 Mandato constitucional
+                  <NuxtLink to="/alternative/legisladores/senadores" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                    👨‍⚖️ Senadores
                   </NuxtLink>
-                  <NuxtLink to="/alternative/constitucion/historia" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    📚 Directiva camaral
+                  <NuxtLink to="/alternative/legisladores/diputados" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                    👩‍⚖️ Diputados
                   </NuxtLink>
-                  <NuxtLink to="/alternative/constitucion/reformas" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    🔄 Reseña histórica
-                  </NuxtLink>
-                  <NuxtLink to="/alternative/constitucion/reformas" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    🖼️ Galería de imágenes
+                  <NuxtLink to="/alternative/legisladores/comisiones" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                    📋 Comisiones
                   </NuxtLink>
                 </div>
               </div>
@@ -104,13 +105,13 @@
               <div class="absolute right-0 mt-1 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all duration-200 z-50">
                 <div class="py-2">
                   <NuxtLink to="/alternative/legisladores/senadores" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    👨‍⚖️ Sesión del pleno
+                    👨‍⚖️ Patrimonio histórico
                   </NuxtLink>
                   <NuxtLink to="/alternative/legisladores/diputados" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    👩‍⚖️ Proyectos de leyes
+                    👩‍⚖️ Eventos culturales
                   </NuxtLink>
                   <NuxtLink to="/alternative/legisladores/comisiones" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    📋 Gaceta Legislativa
+                    📋 Biblioteca
                   </NuxtLink>
                 </div>
               </div>
@@ -124,13 +125,13 @@
               <div class="absolute right-0 mt-1 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all duration-200 z-50">
                 <div class="py-2">
                   <NuxtLink to="/alternative/legisladores/senadores" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    👨‍⚖️ Sesión del pleno
+                    👨‍⚖️ Audiencias públicas
                   </NuxtLink>
                   <NuxtLink to="/alternative/legisladores/diputados" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    👩‍⚖️ Proyectos de leyes
+                    👩‍⚖️ Rendición de cuentas
                   </NuxtLink>
                   <NuxtLink to="/alternative/legisladores/comisiones" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    📋 Gaceta Legislativa
+                    📋 Transparencia
                   </NuxtLink>
                 </div>
               </div>
@@ -189,10 +190,10 @@
                 </svg>
               </button>
               <div v-show="mobileMenuState.institution" class="ml-4 mt-1 space-y-1 border-l-2 border-white/30 pl-3">
-                <NuxtLink to="/alternative/constitucion/texto-completo" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📜 Mandato constitucional</NuxtLink>
-                <NuxtLink to="/alternative/constitucion/historia" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📚 Directiva camaral</NuxtLink>
-                <NuxtLink to="/alternative/constitucion/reformas" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">🔄 Reseña histórica</NuxtLink>
-                <NuxtLink to="/alternative/constitucion/reformas" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">🖼️ Galería de imágenes</NuxtLink>
+                <a href="/la-institucion" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📜 Mandato constitucional</a>
+                <a href="/la-institucion#directiva-camaral" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📚 Directiva camaral</a>
+                <a href="/la-institucion#reseña-historica" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">🔄 Reseña histórica</a>
+                <a href="/la-institucion#museo" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">🖼️ Galería de imágenes</a>
               </div>
             </div>
             
@@ -214,10 +215,9 @@
                 </svg>
               </button>
               <div v-show="mobileMenuState.legislators" class="ml-4 mt-1 space-y-1 border-l-2 border-white/30 pl-3">
-                <NuxtLink to="/alternative/constitucion/texto-completo" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📜 Mandato constitucional</NuxtLink>
-                <NuxtLink to="/alternative/constitucion/historia" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📚 Directiva camaral</NuxtLink>
-                <NuxtLink to="/alternative/constitucion/reformas" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">🔄 Reseña histórica</NuxtLink>
-                <NuxtLink to="/alternative/constitucion/reformas" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">🖼️ Galería de imágenes</NuxtLink>
+                <NuxtLink to="/alternative/legisladores/senadores" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👨‍⚖️ Senadores</NuxtLink>
+                <NuxtLink to="/alternative/legisladores/diputados" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👩‍⚖️ Diputados</NuxtLink>
+                <NuxtLink to="/alternative/legisladores/comisiones" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📋 Comisiones</NuxtLink>
               </div>
             </div>
             
@@ -263,9 +263,9 @@
                 </svg>
               </button>
               <div v-show="mobileMenuState.culture" class="ml-4 mt-1 space-y-1 border-l-2 border-white/30 pl-3">
-                <NuxtLink to="/alternative/legisladores/senadores" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👨‍⚖️ Sesión del pleno</NuxtLink>
-                <NuxtLink to="/alternative/legisladores/diputados" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👩‍⚖️ Proyectos de leyes</NuxtLink>
-                <NuxtLink to="/alternative/legisladores/comisiones" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📋 Gaceta Legislativa</NuxtLink>
+                <NuxtLink to="/alternative/legisladores/senadores" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👨‍⚖️ Patrimonio histórico</NuxtLink>
+                <NuxtLink to="/alternative/legisladores/diputados" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👩‍⚖️ Eventos culturales</NuxtLink>
+                <NuxtLink to="/alternative/legisladores/comisiones" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📋 Biblioteca</NuxtLink>
               </div>
             </div>
             
@@ -287,9 +287,9 @@
                 </svg>
               </button>
               <div v-show="mobileMenuState.participation" class="ml-4 mt-1 space-y-1 border-l-2 border-white/30 pl-3">
-                <NuxtLink to="/alternative/legisladores/senadores" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👨‍⚖️ Sesión del pleno</NuxtLink>
-                <NuxtLink to="/alternative/legisladores/diputados" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👩‍⚖️ Proyectos de leyes</NuxtLink>
-                <NuxtLink to="/alternative/legisladores/comisiones" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📋 Gaceta Legislativa</NuxtLink>
+                <NuxtLink to="/alternative/legisladores/senadores" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👨‍⚖️ Audiencias públicas</NuxtLink>
+                <NuxtLink to="/alternative/legisladores/diputados" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👩‍⚖️ Rendición de cuentas</NuxtLink>
+                <NuxtLink to="/alternative/legisladores/comisiones" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📋 Transparencia</NuxtLink>
               </div>
             </div>
             
@@ -302,7 +302,7 @@
       </aside>
     </div>
 
-    <!-- Contenido principal - CON SERVICIO DE LAS CLASES ORIGINALES -->
+    <!-- Contenido principal -->
     <main class="relative z-10 pt-[72px] snap-main">
       <slot />
     </main>
@@ -363,6 +363,7 @@
 
 <script setup>
 import { ref, reactive, onMounted, onBeforeUnmount } from 'vue'
+import { navigateTo } from '#app'
 import { socialLinks } from './data/config'
 
 const sidebarOpen = ref(false)
@@ -375,6 +376,31 @@ const mobileMenuState = reactive({
   culture: false,
   participation: false
 })
+
+// Función para ir al inicio de la página principal
+const goToHome = () => {
+  // Cerrar sidebar si está abierto
+  sidebarOpen.value = false
+  
+  // Navegar a la página principal
+  navigateTo('/')
+  
+  // Múltiples intentos de scroll al contenedor con snap
+  const scrollToTop = () => {
+    const snapContainer = document.querySelector('.snap-container')
+    if (snapContainer) {
+      snapContainer.scrollTop = 0
+      snapContainer.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+    // Por si acaso
+    window.scrollTo(0, 0)
+  }
+  
+  // Intentar varias veces para asegurar
+  setTimeout(scrollToTop, 50)
+  setTimeout(scrollToTop, 150)
+  setTimeout(scrollToTop, 300)
+}
 
 const toggleSidebar = () => {
   sidebarOpen.value = !sidebarOpen.value

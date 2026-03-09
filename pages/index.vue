@@ -244,6 +244,29 @@ onMounted(async () => {
   await nextTick();
   showSection.value = true;
   initScrollObserver();
+  
+  // 👇 ESTO ES LO NUEVO - Forzar scroll al inicio
+  // Múltiples intentos para asegurar que funcione
+  setTimeout(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'auto' // 'auto' es más rápido y seguro
+    })
+  }, 10)
+  
+  setTimeout(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'auto'
+    })
+  }, 100)
+  
+  setTimeout(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'auto'
+    })
+  }, 300)
 });
 
 onUnmounted(() => {

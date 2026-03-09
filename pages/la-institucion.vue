@@ -1,15 +1,15 @@
-<!-- pages/index.vue - VERSIÓN CON HERO WITH CAROUSEL -->
+<!-- pages/la-institucion.vue - VERSIÓN CON SECCIONES Y ANCLAS -->
 <template>
   <div class="min-h-screen text-style">
-    <!-- Fondo fijo GLOBAL - SOLO para Important News (AHORA PARA SENATE DIRECTORS) -->
-    <div class="global-fixed-background" :class="{ 'show-fixed': isSenateDirectorsVisible }"></div>
+    <!-- Fondo fijo GLOBAL - PARA Senate Directors Y Reseña Histórica -->
+    <div class="global-fixed-background" :class="{ 'show-fixed': isSenateDirectorsVisible || isHistoricalReviewVisible }"></div>
     
-    <!-- Fondo fijo para More News -->
-    <div class="morenews-fixed-background" :class="{ 'show-fixed': isMoreNewsVisible }"></div>
+    <!-- Fondo fijo para Museo -->
+    <!-- <div class="museum-fixed-background" :class="{ 'show-fixed': isMuseumVisible }"></div> -->
     
     <!-- Hero Section - CON PADDING SUPERIOR -->
     <section 
-      class="relative h-screen flex items-start overflow-hidden transition-all duration-500 snap-section"
+      class="relative h-screen flex items-start overflow-hidden transition-all duration-500"
       :class="{ 'min-h-[40vh] md:min-h-[45vh]': scrolled }"
       ref="heroSection"
       @mouseleave="resumeCarousel"
@@ -24,47 +24,37 @@
       />
     </section>
 
-    <!-- Sección directiva camaral -->
+    <!-- Sección Directiva Camaral - CON ID -->
     <div 
+      id="directiva-camaral"
       ref="senateDirectorsRef" 
-      class="scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out z-10 snap-section"
+      class="scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out z-10"
       :class="{ 'animate-in': isSenateDirectorsVisible }"
       style="min-height: 100vh; position: relative; background: transparent;"
     >
       <SenateDirectors />
     </div>
     
-    <!-- Más noticias - CON PADDING -->
+    <!-- Sección Reseña Histórica - CON ID -->
     <div 
-      ref="moreNewsRef" 
-      class="h-screen scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out delay-200 z-10 snap-section pt-[80px]"
-      :class="{ 'animate-in': isMoreNewsVisible }"
-      style="position: relative;"
+      id="reseña-historica"
+      ref="historicalReviewRef" 
+      class="scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out delay-200 z-10"
+      :class="{ 'animate-in': isHistoricalReviewVisible }"
+      style="min-height: 100vh; position: relative; background: transparent;"
     >
-      <div style="position: relative; z-index: 2; background: transparent; height: 100%;">
-        <div class="flex items-center justify-center h-full">
-          <p class="text-2xl text-gray-800">Más noticias</p>
-        </div>
-      </div>
+      <HistoricalReview />
     </div>
     
-    <!-- Museo - CON PADDING -->
+    <!-- Sección Museo - CON ID -->
     <div 
+      id="museo"
       ref="museumRef" 
-      class="h-screen w-full scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out delay-400 z-10 snap-section"
+      class="h-screen w-full scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out delay-400 z-10"
       :class="{ 'animate-in': isMuseumVisible }"
       style="background-color: #eeeeee; background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed;"
     >
-      <div class="pt-[80px] h-full">
-        <MuseumSectionMinimal
-          :dark-mode="darkMode"
-          @collection-selected="handleCollectionSelect"
-          @exhibition-selected="handleExhibitionSelect"
-          @program-registration="handleProgramRegistration"
-          @virtual-tour-started="handleVirtualTour"
-          @donation-clicked="handleDonationClick"
-        />
-      </div>
+      <HorizontalCarousel />
     </div>
   </div>
 </template>
@@ -73,10 +63,11 @@
 import { ref, onMounted, onUnmounted, nextTick } from 'vue'
 import { useCarousel } from '@/composables/useCarousel'
 import { useScrollEffects } from '@/composables/useScrollEffects'
-import MuseumSectionMinimal from '@/components/MuseumSectionMinimal.vue'
 import ScrollProgress from '@/components/UI/ScrollProgress.vue'
 import HeroWithCarousel from '~/components/HeroWithCarousel.vue'
 import SenateDirectors from '~/components/SenateDirectors.vue'
+import HistoricalReview from '~/components/HistoricalReview.vue'
+import HorizontalCarousel from '~/components/HorizontalCarousel.vue'
 
 const heroMedia = ref([
   {
@@ -117,11 +108,11 @@ const heroSection = ref(null)
 const showSection = ref(true)
 
 const senateDirectorsRef = ref(null)
-const moreNewsRef = ref(null)
+const historicalReviewRef = ref(null)
 const museumRef = ref(null)
 
 const isSenateDirectorsVisible = ref(false)
-const isMoreNewsVisible = ref(false)
+const isHistoricalReviewVisible = ref(false)
 const isMuseumVisible = ref(false)
 
 const handleCollectionSelect = (collection) => {
@@ -153,8 +144,8 @@ const initScrollObserver = () => {
         if (entry.isIntersecting) {
           if (entry.target === senateDirectorsRef.value) {
             isSenateDirectorsVisible.value = true;
-          } else if (entry.target === moreNewsRef.value) {
-            isMoreNewsVisible.value = true;
+          } else if (entry.target === historicalReviewRef.value) {
+            isHistoricalReviewVisible.value = true;
           } else if (entry.target === museumRef.value) {
             isMuseumVisible.value = true;
           }
@@ -172,7 +163,7 @@ const initScrollObserver = () => {
   
   const sections = [
     senateDirectorsRef.value,
-    moreNewsRef.value,
+    historicalReviewRef.value,
     museumRef.value
   ];
   
@@ -271,8 +262,8 @@ footer {
   visibility: visible;
 }
 
-/* ===== FONDO FIJO PARA MORE NEWS ===== */
-.morenews-fixed-background {
+/* ===== FONDO FIJO PARA RESEÑA HISTÓRICA ===== */
+.historical-fixed-background {
   position: fixed;
   top: 0;
   left: 0;
@@ -291,7 +282,7 @@ footer {
   transition: opacity 0.5s ease, visibility 0.5s ease;
 }
 
-.morenews-fixed-background::after {
+.historical-fixed-background::after {
   content: '';
   position: fixed;
   top: 0;
@@ -308,7 +299,49 @@ footer {
   z-index: 1;
 }
 
-.morenews-fixed-background.show-fixed {
+.historical-fixed-background.show-fixed {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ===== FONDO FIJO PARA MUSEO ===== */
+.museum-fixed-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: url('/fondo-museo.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: #eeeeee;
+  z-index: 0;
+  pointer-events: none;
+  will-change: transform;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.museum-fixed-background::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(
+    circle at 50% 30%,
+    transparent 0%,
+    rgba(0, 0, 0, 0.25) 80%,
+    rgba(0, 0, 0, 0.35) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.museum-fixed-background.show-fixed {
   opacity: 1;
   visibility: visible;
 }
@@ -320,17 +353,15 @@ footer {
   z-index: 5;
 }
 
-/* SenateDirectors debe ser transparente */
+/* Transparencias para cada sección */
 [ref="senateDirectorsRef"] {
   background: transparent !important;
 }
 
-/* More News debe ser transparente */
-[ref="moreNewsRef"] {
+[ref="historicalReviewRef"] {
   background: transparent !important;
 }
 
-/* Museo */
 [ref="museumRef"] {
   background: transparent !important;
 }
