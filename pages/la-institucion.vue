@@ -1,8 +1,8 @@
 <!-- pages/index.vue - VERSIÓN CON HERO WITH CAROUSEL -->
 <template>
   <div class="min-h-screen text-style">
-    <!-- Fondo fijo GLOBAL - SOLO para Important News -->
-    <div class="global-fixed-background" :class="{ 'show-fixed': isImportantNewsVisible }"></div>
+    <!-- Fondo fijo GLOBAL - SOLO para Important News (AHORA PARA SENATE DIRECTORS) -->
+    <div class="global-fixed-background" :class="{ 'show-fixed': isSenateDirectorsVisible }"></div>
     
     <!-- Fondo fijo para More News -->
     <div class="morenews-fixed-background" :class="{ 'show-fixed': isMoreNewsVisible }"></div>
@@ -24,21 +24,14 @@
       />
     </section>
 
-    <!-- Sección Important News - CON PADDING -->
+    <!-- Sección directiva camaral -->
     <div 
-      ref="importantNewsRef" 
-      class="scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out z-10 snap-section pt-[80px]"
-      :class="{ 'show': showSection, 'animate-in': isImportantNewsVisible }"
+      ref="senateDirectorsRef" 
+      class="scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out z-10 snap-section"
+      :class="{ 'animate-in': isSenateDirectorsVisible }"
       style="min-height: 100vh; position: relative; background: transparent;"
     >
-      <!-- Contenedor del contenido -->
-      <div class="relative z-20 flex items-center justify-center min-h-screen">
-        <div class="news-container">
-          <p class="text-2xl text-gray-800">
-            Contenido de Important News
-          </p>
-        </div>
-      </div>
+      <SenateDirectors />
     </div>
     
     <!-- Más noticias - CON PADDING -->
@@ -48,7 +41,6 @@
       :class="{ 'animate-in': isMoreNewsVisible }"
       style="position: relative;"
     >
-      <!-- Contenedor del contenido con fondo transparente -->
       <div style="position: relative; z-index: 2; background: transparent; height: 100%;">
         <div class="flex items-center justify-center h-full">
           <p class="text-2xl text-gray-800">Más noticias</p>
@@ -84,6 +76,7 @@ import { useScrollEffects } from '@/composables/useScrollEffects'
 import MuseumSectionMinimal from '@/components/MuseumSectionMinimal.vue'
 import ScrollProgress from '@/components/UI/ScrollProgress.vue'
 import HeroWithCarousel from '~/components/HeroWithCarousel.vue'
+import SenateDirectors from '~/components/SenateDirectors.vue'
 
 const heroMedia = ref([
   {
@@ -123,11 +116,11 @@ const darkMode = ref(false)
 const heroSection = ref(null)
 const showSection = ref(true)
 
-const importantNewsRef = ref(null)
+const senateDirectorsRef = ref(null)
 const moreNewsRef = ref(null)
 const museumRef = ref(null)
 
-const isImportantNewsVisible = ref(false)
+const isSenateDirectorsVisible = ref(false)
 const isMoreNewsVisible = ref(false)
 const isMuseumVisible = ref(false)
 
@@ -158,8 +151,8 @@ const initScrollObserver = () => {
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          if (entry.target === importantNewsRef.value) {
-            isImportantNewsVisible.value = true;
+          if (entry.target === senateDirectorsRef.value) {
+            isSenateDirectorsVisible.value = true;
           } else if (entry.target === moreNewsRef.value) {
             isMoreNewsVisible.value = true;
           } else if (entry.target === museumRef.value) {
@@ -178,7 +171,7 @@ const initScrollObserver = () => {
   );
   
   const sections = [
-    importantNewsRef.value,
+    senateDirectorsRef.value,
     moreNewsRef.value,
     museumRef.value
   ];
@@ -236,7 +229,7 @@ footer {
   transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.3, 1.2);
 }
 
-/* ===== FONDO FIJO PARA IMPORTANT NEWS ===== */
+/* ===== FONDO FIJO PARA SENATE DIRECTORS ===== */
 .global-fixed-background {
   position: fixed;
   top: 0;
@@ -285,7 +278,7 @@ footer {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-image: url('/Recurso_2.png');
+  background-image: url('/la-institucion/Recurso 1.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -327,8 +320,8 @@ footer {
   z-index: 5;
 }
 
-/* Important News debe ser transparente */
-[ref="importantNewsRef"] {
+/* SenateDirectors debe ser transparente */
+[ref="senateDirectorsRef"] {
   background: transparent !important;
 }
 
