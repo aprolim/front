@@ -565,11 +565,6 @@ main {
   margin-top: 0 !important;
 }
 
-/* Estilos para enlaces activos */
-.router-link-active {
-  @apply bg-gray-700/70;
-}
-
 /* Estilos de selección de texto */
 ::selection {
   background-color: #E03636;

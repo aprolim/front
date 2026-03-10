@@ -34,7 +34,7 @@
         </div>
 
         <!-- COLUMNA CENTRAL (rojo transparente) -->
-        <div class="w-[40%] bg-[#E03636]/70 rounded-2xl shadow-2xl border border-white/20 p-[.5em]">
+        <div class="w-[40%] bg-[#E03636]/80 rounded-2xl shadow-2xl border border-white/20 p-[.5em]">
           <!-- Grid de 2 columnas con 6 fotos -->
           <div class="grid grid-cols-2 h-full content-center">
             <div 
