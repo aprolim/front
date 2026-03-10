@@ -4,7 +4,7 @@
     <div class="h-[4.4vw]"></div>
 
     <!-- Dos columnas: 65% y 35% -->
-    <div class="container mx-auto px-4 flex-1">
+    <div class="mx-auto px-[4.5vw] flex-1">
       <div class="flex gap-8 h-full">
         
         <!-- COLUMNA IZQUIERDA (65%) - Carrusel de imágenes -->
@@ -78,7 +78,7 @@
         </div>
 
         <!-- COLUMNA DERECHA (35%) - Texto fijo y botones -->
-        <div class="w-[35%] bg-white/10 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-8 flex flex-col">
+        <div class="text-[1.3vw] w-[35%] bg-white/10 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-8 flex flex-col">
           <!-- Título fijo -->
           <h3 class="font-bold text-[1.0em] text-[#E03636] mb-6 tracking-wide border-b-2 border-[#E03636]/30 pb-3">
             Reseña Histórica del Senado

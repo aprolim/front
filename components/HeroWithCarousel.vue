@@ -38,10 +38,10 @@
 
     <!-- DOS COLUMNAS: Texto (izquierda) + Carrusel (derecha) - MÁS COMPACTO -->
     <div class="container mx-auto px-4 mt-4 md:mt-6 flex-1 w-full pb-6">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 h-full">
+      <div class="grid grid-cols-2 gap-4 lg:gap-6 h-full">
         
         <!-- COLUMNA IZQUIERDA: Texto y controles - MÁS PEQUEÑA -->
-        <div class="flex flex-col h-full relative" style="min-height: 350px;">
+        <div class="flex flex-col h-full relative" style="min-height: 33vw;">
           <!-- Texto - TAMAÑOS REDUCIDOS -->
           <div class="space-y-3">
             <h1 class="font-extrabold text-[#E03636] text-[clamp(1.0vw,2.0vw,3.0vw)] text-center">
@@ -76,7 +76,7 @@
         </div>
 
         <!-- COLUMNA DERECHA: Carrusel de imágenes - MÁS PEQUEÑO -->
-        <div class="relative w-full overflow-hidden rounded-lg shadow-xl" style="height: 350px;">
+        <div class="relative w-full overflow-hidden rounded-lg shadow-xl" style="height: 29vw;">
           <!-- Imágenes del carrusel -->
           <div 
             v-for="(slide, index) in slides" 
@@ -99,8 +99,8 @@
             
             <!-- Título de la imagen - MÁS PEQUEÑO -->
             <div v-if="slide.image.title" class="absolute bottom-0 left-0 right-0 p-3 text-white">
-              <h3 class="font-bold text-lg">{{ slide.image.title }}</h3>
-              <p v-if="slide.image.caption" class="text-white/80 text-sm">{{ slide.image.caption }}</p>
+              <h3 class="font-bold text-[1.4vw]">{{ slide.image.title }}</h3>
+              <p v-if="slide.image.caption" class="text-white/80  text-[1.15vw]">{{ slide.image.caption }}</p>
             </div>
           </div>
 

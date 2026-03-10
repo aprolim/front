@@ -21,7 +21,7 @@
         
         <!-- COLUMNA IZQUIERDA (transparente, 5% más pequeña) -->
         <div class="w-[30%] bg-transparent rounded-2xl shadow-xl border border-white/20 p-4 scale-95 origin-right text-[#000]">
-          <div class="h-full flex flex-col justify-center items-center text-[.8em] text-justify">
+          <div class="h-full flex flex-col justify-center items-center text-[.7em] text-justify">
             <p class="text-center text-[1.2em] font-bold text-[#E03636]">Rol Institucional de la Directiva</p>
             <br>
             <p>
@@ -60,7 +60,7 @@
         </div>
 
         <!-- COLUMNA DERECHA (transparente, 5% más pequeña) -->
-        <div class="w-[30%] bg-transparent rounded-2xl shadow-xl border border-white/20 p-4 scale-95 origin-left text-[#000]">
+        <div class="w-[30%] bg-transparent rounded-2xl shadow-xl border border-white/20 p-4 scale-95 origin-left text-[#000] text-[1.4vw]">
           <div v-if="selectedSenador" class="h-full flex flex-col items-center justify-center">
             <!-- Foto del senador seleccionado -->
             <div class="w-28 h-28 md:w-32 md:h-32 rounded-full overflow-hidden border-4 border-[#E4D294] shadow-2xl mb-4">
@@ -73,7 +73,7 @@
             <!-- Cargo en negro -->
             <p class="text-[#E03636] text-center mt-2 font-extrabold uppercase ">{{ selectedSenador.cargo }}</p>
             <!-- Nombre en rojo -->
-            <h3 class="text-[#E03636] font-light text-lg md:text-xl text-center">{{ selectedSenador.nombre }}</h3>
+            <h3 class="text-[#E03636] font-light text-[.9em] text-center">{{ selectedSenador.nombre }}</h3>
             <!-- Función específica en texto blanco -->
             <p class="text-center mt-4 text-[.7em]">{{ selectedSenador.funcion }}</p>
           </div>

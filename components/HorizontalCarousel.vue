@@ -1,5 +1,5 @@
 <template>
-  <div class="relative w-full h-full flex flex-col items-center justify-center">
+  <div class="relative w-full h-full flex flex-col items-center justify-center px-[4vw]">
     <div class="h-[4.4vw]"></div>
     
     <!-- Título (opcional) -->
@@ -8,7 +8,7 @@
     </h2>
 
     <!-- Contenedor del carrusel -->
-    <div class="relative w-full max-w-6xl mx-auto px-12">
+    <div class="relative w-full mx-auto px-12">
       
       <!-- Flecha izquierda -->
       <button 
