@@ -5,25 +5,25 @@ export const modeNewsGridData = {
     { 
       id: 1, 
       titulo: 'Reforma Educativa para áreas rurales aprobada', 
-      imagen: 'https://cdn.correodelsur.com/img/contents/images_980/2025/11/06/e53d2037-62e5-4265-9dcc-0149f4d79306.jpg', 
+      imagen: '/sesiones-portada/image1.png', 
       enlace: '/noticias/reforma-educativa' 
     },
     { 
       id: 2, 
       titulo: 'Plan Nacional de hidrocarburos 2024-2026', 
-      imagen: 'https://apisi.senado.gob.bo/images/a063d8c8-02f3-442e-90b3-83694246b66e_1763506991.jpg', 
+      imagen: '/sesiones-portada/image2.png', 
       enlace: '/noticias/plan-hospitalario' 
     },
     { 
       id: 3, 
       titulo: 'Sesiones en pleno ampliada para mitigar el cambio climático', 
-      imagen: 'https://pbs.twimg.com/media/G_1f4kRbUAwUDIK.jpg', 
+      imagen: '/sesiones-portada/image3.png', 
       enlace: '/noticias/proteccion-bosques' 
     },
     { 
       id: 4, 
       titulo: 'Se reafirma la nueva constitucion', 
-      imagen: 'https://apisi.senado.gob.bo/images/9d7ed6c2-ac43-4684-8838-e80b42c03529_1731680945.png', 
+      imagen: '/sesiones-portada/image4.png', 
       enlace: '/noticias/plataforma-digital' 
     }
   ],

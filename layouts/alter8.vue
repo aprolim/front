@@ -42,22 +42,41 @@
               <div class="absolute right-0 mt-1 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all duration-200 z-50">
                 <div class="py-2">
                   <a href="/la-institucion" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors cursor-pointer">
-                    📜 Mandato constitucional
+                    Mandato constitucional
                   </a>
                   <a href="/la-institucion#directiva-camaral" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors cursor-pointer">
-                    📚 Directiva camaral
+                    Directiva camaral
                   </a>
                   <a href="/la-institucion#reseña-historica" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors cursor-pointer">
-                    🔄 Reseña histórica
+                    Reseña histórica
                   </a>
                   <a href="/la-institucion#museo" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors cursor-pointer">
-                    🖼️ Galería de imágenes
+                    Galería de imágenes
                   </a>
                 </div>
               </div>
             </div>
-
-            <!-- MENÚ 2: Legisladores y representación -->
+            
+            <!-- MENÚ 2: Gestión Legislativa -->
+            <div class="relative group/menu">
+              <button class="px-[1vw] py-2 text-white font-medium hover:bg-[#C12F2F] rounded-lg transition-colors">
+                Gestión Legislativa
+              </button>
+              <div class="absolute right-0 mt-1 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all duration-200 z-50">
+                <div class="py-2">
+                  <NuxtLink to="/gestion-legislativa" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                    Sesiónes del pleno
+                  </NuxtLink>
+                  <NuxtLink to="/gestion-legislativa#" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                    Gestión legislativa
+                  </NuxtLink>
+                  <NuxtLink to="/gestion-legislativa#" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                    Gaceta Legislativa
+                  </NuxtLink>
+                </div>
+              </div>
+            </div>
+            <!-- MENÚ 3: Legisladores y representación -->
             <div class="relative group/menu">
               <button class="px-[1vw] py-2 text-white font-medium hover:bg-[#C12F2F] rounded-lg transition-colors">
                 Legisladores
@@ -72,26 +91,6 @@
                   </NuxtLink>
                   <NuxtLink to="/alternative/legisladores/comisiones" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
                     📋 Comisiones
-                  </NuxtLink>
-                </div>
-              </div>
-            </div>
-
-            <!-- MENÚ 3: Gestión Legislativa -->
-            <div class="relative group/menu">
-              <button class="px-[1vw] py-2 text-white font-medium hover:bg-[#C12F2F] rounded-lg transition-colors">
-                Gestión Legislativa
-              </button>
-              <div class="absolute right-0 mt-1 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all duration-200 z-50">
-                <div class="py-2">
-                  <NuxtLink to="/alternative/legisladores/senadores" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    👨‍⚖️ Sesión del pleno
-                  </NuxtLink>
-                  <NuxtLink to="/alternative/legisladores/diputados" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    👩‍⚖️ Proyectos de leyes
-                  </NuxtLink>
-                  <NuxtLink to="/alternative/legisladores/comisiones" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    📋 Gaceta Legislativa
                   </NuxtLink>
                 </div>
               </div>
@@ -125,13 +124,13 @@
               <div class="absolute right-0 mt-1 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all duration-200 z-50">
                 <div class="py-2">
                   <NuxtLink to="/alternative/legisladores/senadores" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    👨‍⚖️ Audiencias públicas
+                    Audiencias públicas
                   </NuxtLink>
                   <NuxtLink to="/alternative/legisladores/diputados" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    👩‍⚖️ Rendición de cuentas
+                    Rendición de cuentas
                   </NuxtLink>
                   <NuxtLink to="/alternative/legisladores/comisiones" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    📋 Transparencia
+                    Transparencia
                   </NuxtLink>
                 </div>
               </div>
