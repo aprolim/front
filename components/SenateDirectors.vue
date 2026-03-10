@@ -21,8 +21,8 @@
         
         <!-- COLUMNA IZQUIERDA (transparente, 5% más pequeña) -->
         <div class="w-[30%] bg-transparent rounded-2xl shadow-xl border border-white/20 p-4 scale-95 origin-right text-[#000]">
-          <div class="h-full flex flex-col justify-center items-center text-[.7em] text-justify">
-            <p class="text-center text-[1.2em] font-bold text-[#E03636]">Rol Institucional de la Directiva</p>
+          <div class="h-full flex flex-col text-[.7em] text-justify">
+            <p class="text-center text-[1.2em] text-[#E03636]">Rol Institucional de la Directiva</p>
             <br>
             <p>
                 La Directiva de la Cámara de Senadores de Bolivia es el órgano colegiado responsable de la conducción política del ente legislativo. Conformada por una presidencia, dos vicepresidencias y tres secretarías, su estructura garantiza la pluralidad al integrar tanto al bloque de mayoría como al de minoría.
@@ -75,7 +75,7 @@
             <!-- Nombre en rojo -->
             <h3 class="text-[#E03636] font-light text-[.9em] text-center">{{ selectedSenador.nombre }}</h3>
             <!-- Función específica en texto blanco -->
-            <p class="text-center mt-4 text-[.7em]">{{ selectedSenador.funcion }}</p>
+            <p class="text-justify mt-4 text-[.7em]">{{ selectedSenador.funcion }}</p>
           </div>
           <div v-else class="h-full flex items-center justify-center">
             <p class="text-center">Selecciona un senador para ver sus detalles</p>

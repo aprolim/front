@@ -67,11 +67,11 @@
                   <NuxtLink to="/gestion-legislativa" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
                     Sesiónes del pleno
                   </NuxtLink>
-                  <NuxtLink to="/gestion-legislativa#" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                  <NuxtLink to="/gestion-legislativa#gestion-legislativa" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
                     Gestión legislativa
                   </NuxtLink>
-                  <NuxtLink to="/gestion-legislativa#" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    Gaceta Legislativa
+                  <NuxtLink to="/gestion-legislativa#gaceta-legislativa" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                    Gaceta legislativa
                   </NuxtLink>
                 </div>
               </div>
@@ -433,6 +433,9 @@ onBeforeUnmount(() => {
 
 <style scoped>
 /* ===== SNAP SCROLL CONFIGURACIÓN (ORIGINAL) ===== */
+*{
+  font-family: 'Montserrat';
+}
 .snap-container {
   height: 100vh;
   overflow-y: scroll;

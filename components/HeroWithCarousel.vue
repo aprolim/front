@@ -48,7 +48,7 @@
               {{ slides[currentSlide].title }}
               <br>
             </h1>
-            <p class="text-gray-700 leading-relaxed text-[clamp(0.8vw,1.10vw,1.4vw)] text-center" v-html="slides[currentSlide].description">
+            <p class="text-gray-700 leading-relaxed text-[clamp(0.8vw,1.10vw,1.4vw)] text-justify" v-html="slides[currentSlide].description">
             </p>
             <div v-if="slides[currentSlide].additionalText" class="text-gray-600 text-[clamp(0.8rem,1.2vw,1rem)]">
               {{ slides[currentSlide].additionalText }}
@@ -105,7 +105,7 @@
           </div>
 
           <!-- Flechas de navegación - MÁS PEQUEÑAS -->
-          <button 
+          <!-- <button 
             @click="prevSlide"
             class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white rounded-full w-8 h-8 flex items-center justify-center transition-all duration-300 z-10 text-lg"
             aria-label="Imagen anterior"
@@ -118,7 +118,7 @@
             aria-label="Siguiente imagen"
           >
             →
-          </button>
+          </button> -->
         </div>
       </div>
     </div>

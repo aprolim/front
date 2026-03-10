@@ -72,21 +72,11 @@
       </button>
     </div>
 
-    <!-- Indicadores (puntitos) -->
-    <div v-if="hasImages" class="flex justify-center mt-6 space-x-2">
-      <button 
-        v-for="(_, index) in imageGroups.length" 
-        :key="index"
-        @click="currentIndex = index"
-        class="transition-all duration-300 rounded-full"
-        :class="[
-          currentIndex === index 
-            ? 'w-8 h-2 bg-[#E03636]' 
-            : 'w-2 h-2 bg-gray-400 hover:bg-[#E03636]/50'
-        ]"
-        :aria-label="`Ir a página ${index + 1}`"
-      ></button>
-    </div>
+    <button 
+      class="text-[.8em] mt-[.5em] bg-[#E03636] hover:bg-[#E03636]/80 text-white font-bold py-[.5em] px-8 rounded-lg transition-all duration-300 transform hover:scale-105 uppercase tracking-wider shadow-lg"
+    >
+      Ver más
+    </button>
   </div>
 </template>
 
