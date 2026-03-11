@@ -1,29 +1,30 @@
-<!-- pages/la-institucion.vue - VERSIÓN LIMPIADA -->
+<!-- pages/gestion-legislativa.vue - VERSIÓN COMPLETA CON TODAS LAS SECCIONES -->
 <template>
   <div class="min-h-screen text-style">
-    <!-- Fondo fijo GLOBAL - PARA Senate Directors Y Reseña Histórica -->
-    <div class="global-fixed-background" :class="{ 'show-fixed': isSenateDirectorsVisible || isHistoricalReviewVisible || isHistoricalReview2Visible }"></div>
+    <!-- Fondo fijo GLOBAL - PARA las secciones que lo necesiten -->
+    <div class="global-fixed-background" :class="{ 'show-fixed': isSection2Visible || isSection3Visible || isSection4Visible }"></div>
     
-    <!-- Hero Section -->
+    <!-- Hero Section - Sesiones del Pleno (PRIMERA SECCIÓN) -->
     <section 
+      id="sesiones-pleno"
       class="relative h-screen flex items-start overflow-hidden transition-all duration-500"
       :class="{ 'min-h-[40vh] md:min-h-[45vh]': scrolled }"
-      ref="heroSection"
+      ref="plenarySessionsRef"
       style="background-color: #eeeeee; background-size: cover"
     >
-      <PlenarySessions></PlenarySessions>
+      <PlenarySessions />
       <ScrollProgress
         :scrolled="scrolled"
         :scroll-progress="scrollProgress"
       />
     </section>
 
-    <!-- Sección Directiva Camaral -->
+    <!-- Sección Directiva Camaral (SEGUNDA SECCIÓN) - VACÍA -->
     <div 
-      id="directiva-camaral"
-      ref="senateDirectorsRef" 
+      id="gestion-legislativa"
+      ref="section2Ref" 
       class="scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out z-10"
-      :class="{ 'animate-in': isSenateDirectorsVisible }"
+      :class="{ 'animate-in': isSection2Visible }"
       style="min-height: 100vh; position: relative; background: transparent;"
     >
       <div class="w-full h-full flex items-center justify-center">
@@ -31,12 +32,12 @@
       </div>
     </div>
     
-    <!-- Sección Reseña Histórica Original -->
+    <!-- Sección Reseña Histórica Original (TERCERA SECCIÓN) - VACÍA -->
     <div 
       id="reseña-historica"
-      ref="historicalReviewRef" 
+      ref="section3Ref" 
       class="scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out delay-200 z-10"
-      :class="{ 'animate-in': isHistoricalReviewVisible }"
+      :class="{ 'animate-in': isSection3Visible }"
       style="min-height: 100vh; position: relative; background: transparent;"
     >
       <div class="w-full h-full flex items-center justify-center">
@@ -44,12 +45,12 @@
       </div>
     </div>
 
-    <!-- Sección Reseña Histórica Duplicada -->
+    <!-- Sección Reseña Histórica Duplicada (CUARTA SECCIÓN) - VACÍA -->
     <div 
       id="reseña-historica-2"
-      ref="historicalReviewRef2" 
+      ref="section4Ref" 
       class="scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out delay-200 z-10"
-      :class="{ 'animate-in': isHistoricalReview2Visible }"
+      :class="{ 'animate-in': isSection4Visible }"
       style="min-height: 100vh; position: relative; background: transparent;"
     >
       <div class="w-full h-full flex items-center justify-center">
@@ -57,41 +58,75 @@
       </div>
     </div>
     
-    <!-- Sección Museo -->
+    <!-- Sección Museo / Gaceta Legislativa (QUINTA SECCIÓN) -->
     <div 
-      id="museo"
-      ref="museumRef" 
+      id="gaceta-legislativa"
+      ref="section5Ref" 
       class="h-screen w-full scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out delay-400 z-10"
-      :class="{ 'animate-in': isMuseumVisible }"
+      :class="{ 'animate-in': isSection5Visible }"
       style="background-color: #eeeeee; background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed;"
     >
-      <div class="w-full h-full flex items-center justify-center">
-        <p class="text-2xl text-gray-500">Sección Museo - Gacetas</p>
-      </div>
+      <LegislativeGazette />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, nextTick } from 'vue'
+import { ref, onMounted, onUnmounted, nextTick, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import { useScrollEffects } from '@/composables/useScrollEffects'
 import ScrollProgress from '@/components/UI/ScrollProgress.vue'
 import PlenarySessions from '~/components/PlenarySessions.vue'
+import LegislativeGazette from '~/components/LegislativeGazette.vue'
 
 const { scrolled, scrollProgress, initScrollListener, removeScrollListener } = useScrollEffects()
+const route = useRoute()
 
-const heroSection = ref(null)
-const showSection = ref(true)
+const plenarySessionsRef = ref(null)
+const section2Ref = ref(null)
+const section3Ref = ref(null)
+const section4Ref = ref(null)
+const section5Ref = ref(null)
 
-const senateDirectorsRef = ref(null)
-const historicalReviewRef = ref(null)
-const historicalReviewRef2 = ref(null)
-const museumRef = ref(null)
+const isSection2Visible = ref(false)
+const isSection3Visible = ref(false)
+const isSection4Visible = ref(false)
+const isSection5Visible = ref(false)
 
-const isSenateDirectorsVisible = ref(false)
-const isHistoricalReviewVisible = ref(false)
-const isHistoricalReview2Visible = ref(false)
-const isMuseumVisible = ref(false)
+// Mapa de secciones para scroll
+const sections = {
+  'sesiones-pleno': plenarySessionsRef,
+  'gestion-legislativa': section2Ref,
+  'reseña-historica': section3Ref,
+  'reseña-historica-2': section4Ref,
+  'gaceta-legislativa': section5Ref
+}
+
+// Función mejorada para hacer scroll a una sección
+const scrollToSection = (id) => {
+  const sectionRef = sections[id]
+  if (sectionRef?.value) {
+    // Desactivar scroll-snap temporalmente
+    const container = document.querySelector('.snap-container')
+    if (container) {
+      container.style.scrollSnapType = 'none'
+    }
+    
+    // Hacer scroll a la sección
+    sectionRef.value.scrollIntoView({ 
+      behavior: 'smooth', 
+      block: 'start',
+      inline: 'nearest'
+    })
+    
+    // Reactivar scroll-snap después del scroll
+    setTimeout(() => {
+      if (container) {
+        container.style.scrollSnapType = 'y mandatory'
+      }
+    }, 800)
+  }
+}
 
 let scrollObserver = null
 
@@ -100,14 +135,14 @@ const initScrollObserver = () => {
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          if (entry.target === senateDirectorsRef.value) {
-            isSenateDirectorsVisible.value = true;
-          } else if (entry.target === historicalReviewRef.value) {
-            isHistoricalReviewVisible.value = true;
-          } else if (entry.target === historicalReviewRef2.value) {
-            isHistoricalReview2Visible.value = true;
-          } else if (entry.target === museumRef.value) {
-            isMuseumVisible.value = true;
+          if (entry.target === section2Ref.value) {
+            isSection2Visible.value = true;
+          } else if (entry.target === section3Ref.value) {
+            isSection3Visible.value = true;
+          } else if (entry.target === section4Ref.value) {
+            isSection4Visible.value = true;
+          } else if (entry.target === section5Ref.value) {
+            isSection5Visible.value = true;
           }
           
           entry.target.classList.add('animate-in');
@@ -121,14 +156,14 @@ const initScrollObserver = () => {
     }
   );
   
-  const sections = [
-    senateDirectorsRef.value,
-    historicalReviewRef.value,
-    historicalReviewRef2.value,
-    museumRef.value
+  const sectionsToObserve = [
+    section2Ref.value,
+    section3Ref.value,
+    section4Ref.value,
+    section5Ref.value
   ];
   
-  sections.forEach(section => {
+  sectionsToObserve.forEach(section => {
     if (section) {
       scrollObserver.observe(section);
     }
@@ -138,9 +173,24 @@ const initScrollObserver = () => {
 onMounted(async () => {
   initScrollListener();
   await nextTick();
-  showSection.value = true;
   initScrollObserver();
+  
+  // Si hay hash al cargar la página, hacer scroll
+  if (route.hash) {
+    const id = route.hash.replace('#', '')
+    setTimeout(() => {
+      scrollToSection(id)
+    }, 500)
+  }
 });
+
+// Detectar cambios en el hash (navegación desde el menú)
+watch(() => route.hash, (newHash) => {
+  if (newHash) {
+    const id = newHash.replace('#', '')
+    scrollToSection(id)
+  }
+})
 
 onUnmounted(() => {
   removeScrollListener();
@@ -223,10 +273,11 @@ section, .scroll-section {
 }
 
 /* Transparencias para cada sección */
-[ref="senateDirectorsRef"],
-[ref="historicalReviewRef"],
-[ref="historicalReviewRef2"],
-[ref="museumRef"] {
+[ref="plenarySessionsRef"],
+[ref="section2Ref"],
+[ref="section3Ref"],
+[ref="section4Ref"],
+[ref="section5Ref"] {
   background: transparent !important;
 }
 </style>

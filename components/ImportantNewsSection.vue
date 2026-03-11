@@ -143,8 +143,7 @@ import { ref, computed } from 'vue';
 // Estado para controlar qué tarjeta está en hover
 const hoveredCard = ref(null);
 
-const API_BASE_URL = 'http://10.0.0.20/api/tabs';
-
+const API_BASE_URL = 'http://demoback.senado.gob.bo/api/tabs';
 const activeTabStyle = computed(() => ({
   background: '#706F6F',
   color: 'white'

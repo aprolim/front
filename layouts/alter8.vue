@@ -1,4 +1,4 @@
-<!-- layouts/alter8.vue - VERSIÓN CON HEADER ROJO FLOTANTE Y LOGO CORREGIDO -->
+<!-- layouts/alter8.vue - VERSIÓN COMPLETA CORREGIDA -->
 <template>
   <div class="h-screen snap-container">
     <!-- Header rojo fijo y flotante (superpuesto) con menús a la derecha -->
@@ -41,18 +41,33 @@
               </button>
               <div class="absolute right-0 mt-1 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all duration-200 z-50">
                 <div class="py-2">
-                  <a href="/la-institucion" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors cursor-pointer">
+                  <NuxtLink 
+                    to="/la-institucion#mandato" 
+                    class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors"
+                  >
                     Mandato constitucional
-                  </a>
-                  <a href="/la-institucion#directiva-camaral" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors cursor-pointer">
+                  </NuxtLink>
+
+                  <NuxtLink 
+                    to="/la-institucion#directiva-camaral" 
+                    class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors"
+                  >
                     Directiva camaral
-                  </a>
-                  <a href="/la-institucion#reseña-historica" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors cursor-pointer">
+                  </NuxtLink>
+
+                  <NuxtLink 
+                    to="/la-institucion#resena-historica" 
+                    class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors"
+                  >
                     Reseña histórica
-                  </a>
-                  <a href="/la-institucion#museo" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors cursor-pointer">
+                  </NuxtLink>
+
+                  <NuxtLink 
+                    to="/la-institucion#museo" 
+                    class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors"
+                  >
                     Galería de imágenes
-                  </a>
+                  </NuxtLink>
                 </div>
               </div>
             </div>
@@ -64,7 +79,7 @@
               </button>
               <div class="absolute right-0 mt-1 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all duration-200 z-50">
                 <div class="py-2">
-                  <NuxtLink to="/gestion-legislativa" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                  <NuxtLink to="/gestion-legislativa#sesiones-pleno" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
                     Sesiónes del pleno
                   </NuxtLink>
                   <NuxtLink to="/gestion-legislativa#gestion-legislativa" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
@@ -191,7 +206,7 @@
               <div v-show="mobileMenuState.institution" class="ml-4 mt-1 space-y-1 border-l-2 border-white/30 pl-3">
                 <a href="/la-institucion" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📜 Mandato constitucional</a>
                 <a href="/la-institucion#directiva-camaral" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📚 Directiva camaral</a>
-                <a href="/la-institucion#reseña-historica" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">🔄 Reseña histórica</a>
+                <a href="/la-institucion#resena-historica" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">🔄 Reseña histórica</a>
                 <a href="/la-institucion#museo" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">🖼️ Galería de imágenes</a>
               </div>
             </div>
@@ -436,12 +451,14 @@ onBeforeUnmount(() => {
 *{
   font-family: 'Montserrat';
 }
+
 .snap-container {
   height: 100vh;
   overflow-y: scroll;
   scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
   scroll-snap-stop: always;
+  /* scroll-padding-top: 80px; Añadido para respetar el header */
 }
 
 .snap-main {
@@ -574,5 +591,11 @@ main {
 ::-moz-selection {
   background-color: #E03636;
   color: white;
+}
+
+/* Ajuste para el scroll-padding en toda la página */
+html {
+  /* scroll-padding-top: 80px; */
+  scroll-behavior: smooth;
 }
 </style>

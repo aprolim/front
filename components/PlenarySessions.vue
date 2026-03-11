@@ -2,14 +2,49 @@
 <template>
   <div class="w-full min-h-screen flex flex-col bg-gray-50">
     <!-- Encabezado de la sección (solo texto rojo, sin fondo) -->
-    <div class="text-center mt-[4.4vw]">
-      <h2 class="text-[#E03636] text-[clamp(1.2em,4vw,2.5em)] ">
+    <!-- FRANJA ROJA DE ANCHO COMPLETO (superior) - CON MARGEN PARA HEADER -->
+    <div class="relative w-screen left-1/2 right-1/2 -mx-[50vw] mt-[4.4vw]">
+      <div class="relative bg-gradient-to-r from-red-700/70 via-red-800/70 to-red-900/70 py-2 sm:py-3 md:py-4 shadow-2xl overflow-hidden group full-width-franja">
+        
+        <!-- Patrón de fondo sutil (más pequeño) -->
+        <div class="absolute inset-0 opacity-5">
+          <div class="absolute top-0 left-0 w-16 h-16 border-t-2 border-l-2 border-yellow-300 rounded-tl-lg"></div>
+          <div class="absolute bottom-0 right-0 w-16 h-16 border-b-2 border-r-2 border-yellow-300 rounded-br-lg"></div>
+        </div>
+
+        <!-- Líneas decorativas animadas (más delgadas) -->
+        <div class="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-yellow-400 to-transparent animate-pulse"></div>
+        <div class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-yellow-400 to-transparent animate-pulse"></div>
+
+        <!-- Contenido principal centrado -->
+        <div class="container mx-auto px-4 relative z-10 text-center">
+          <!-- Texto principal - MÁS PEQUEÑO -->
+          <p class="font-bold text-white text-[clamp(0.8rem,2vw,1.5rem)]">
+            <span class="bg-clip-text text-transparent bg-gradient-to-r from-white via-yellow-100 to-yellow-200">
+              <span class="inline-flex items-center justify-center text-white text-[clamp(0.5rem,1vw,0.9rem)] mx-1">⚪</span> 
+              PRIMERA LEGISLATURA DEL TRICENTENARIO
+              <span class="inline-flex items-center justify-center text-white text-[clamp(0.5rem,1vw,0.9rem)] mx-1">⚪</span>
+            </span>
+          </p>
+
+         
+        </div>
+
+        <!-- Elementos decorativos en las esquinas - MÁS PEQUEÑOS -->
+        <div class="absolute top-2 left-2 w-2 h-2 border border-yellow-300/50 rounded-full animate-ping"></div>
+        <div class="absolute top-2 right-2 w-2 h-2 border border-yellow-300/50 rounded-full animate-ping" style="animation-delay: 0.5s;"></div>
+        <div class="absolute bottom-2 left-2 w-2 h-2 border border-yellow-300/50 rounded-full animate-ping" style="animation-delay: 1s;"></div>
+        <div class="absolute bottom-2 right-2 w-2 h-2 border border-yellow-300/50 rounded-full animate-ping" style="animation-delay: 1.5s;"></div>
+      </div>
+    </div>
+    <div class="text-center">
+      <h2 class="text-[#E03636] text-[clamp(1.2em,2.8vw,2.5em)] ">
         Sesiones del Pleno
       </h2>
     </div>
 
     <!-- Contenedor de 3 columnas con ancho en vw -->
-    <div class="flex-1 mx-auto px-[2vw]  w-[90vw] text-[1.1vw]">
+    <div class="flex-1 mx-auto px-[2vw]  w-[90vw] text-[1.1vw] h-[20vw]">
       <div class="grid grid-cols-3 gap-[2vw] h-[38vw]">
         
         <!-- COLUMNA 1: CALENDARIO COMPLETO -->
@@ -18,7 +53,7 @@
           <h3 class="text-[#E03636] text-[1.8em] md:text-[2em] text-center py-[0.8em] font-medium">Calendario de sesiones</h3>
           
           <div class="flex-1 text-[1.2vw]">
-            <div class="mx-[2vw] shadow-xl">
+            <div class="mx-[2.8vw] shadow-xl">
                 <!-- Selector de mes/año -->
                 <div class="bg-[#E03636] text-white flex items-center justify-between">
                 <button 
@@ -86,9 +121,9 @@
         <div class="bg-transparent rounded-xl overflow-hidden flex flex-col">
           <h3 class="text-[#E03636] text-[1.8em] md:text-[2em] text-center py-[0.8em] font-medium">Orden del día</h3>
           
-          <div class="px-[2em] flex-1">
+          <div class="px-[3em] flex-1">
             <!-- Imagen que funciona como link -->
-            <NuxtLink to="/orden-del-dia" class="block w-full h-full">
+            <NuxtLink to="/orden-del-dia" class="block w-full h-[25vw]">
               <div class="relative w-full h-full rounded-lg overflow-hidden group bg-white p-[0.6em] shadow-lg">
                 <img 
                   src="/images/orden-del-dia.jpg" 
@@ -105,20 +140,20 @@
         <div class="bg-transparent rounded-xl overflow-hidden flex flex-col h-full">
           <h3 class="text-[#E03636] text-[1.8em] md:text-[2em] text-center py-[0.8em] font-medium">Actas oficiales</h3>
           
-          <div class="px-[2em] pb-[2em] flex-1">
+          <div class="px-[4em]  flex-1">
             <!-- Contenedor de imagen con botón que sobresale -->
-            <div class="relative w-full h-full px-[1vw] rounded-lg bg-white p-[0.6em] shadow-lg">
+            <div class="relative px-[1vw] rounded-lg bg-white p-[0.6em] shadow-lg w-full h-[23vw]">
               <img 
                 src="/images/actas-oficiales.jpg" 
                 alt="Actas oficiales" 
-                class="w-full h-full object-cover"
+                class="w-full h-full"
               />
               
               <!-- Botón Ver más con posición exacta -->
               <div class="absolute left-0 right-0 flex justify-center" style="top: 100%; transform: translateY(-50%);">
                 <NuxtLink 
                   to="/actas-oficiales" 
-                  class="bg-[#E03636] hover:bg-[#C12F2F] text-white font-bold py-[0.8em] px-[2em] rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg z-10 text-[1em]"
+                  class="bg-[#E03636] hover:bg-[#C12F2F] text-white font-bold py-[0.8em] px-[2em] rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg z-10 text-[1em] "
                 >
                   Ver más
                 </NuxtLink>
@@ -228,7 +263,7 @@ const isSessionDay = (date) => {
 
 /* Estilo para los días del calendario */
 .grid-cols-7 > div {
-  aspect-ratio: 1;
+  /* aspect-ratio: 1; */
   display: flex;
   align-items: center;
   justify-content: center;

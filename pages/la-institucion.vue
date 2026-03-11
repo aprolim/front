@@ -1,14 +1,12 @@
-<!-- pages/la-institucion.vue - VERSIÓN CON SECCIONES Y ANCLAS -->
+<!-- pages/la-institucion.vue - VERSIÓN COMPLETA CORREGIDA -->
 <template>
   <div class="min-h-screen text-style">
     <!-- Fondo fijo GLOBAL - PARA Senate Directors Y Reseña Histórica -->
     <div class="global-fixed-background" :class="{ 'show-fixed': isSenateDirectorsVisible || isHistoricalReviewVisible }"></div>
     
-    <!-- Fondo fijo para Museo -->
-    <!-- <div class="museum-fixed-background" :class="{ 'show-fixed': isMuseumVisible }"></div> -->
-    
-    <!-- Hero Section - CON PADDING SUPERIOR -->
+    <!-- Hero Section -->
     <section 
+      id="mandato"
       class="relative h-screen flex items-start overflow-hidden transition-all duration-500"
       :class="{ 'min-h-[40vh] md:min-h-[45vh]': scrolled }"
       ref="heroSection"
@@ -35,9 +33,9 @@
       <SenateDirectors />
     </div>
     
-    <!-- Sección Reseña Histórica - CON ID -->
+    <!-- Sección Reseña Histórica - CON ID CORREGIDO (sin ñ) -->
     <div 
-      id="reseña-historica"
+      id="resena-historica"
       ref="historicalReviewRef" 
       class="scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out delay-200 z-10"
       :class="{ 'animate-in': isHistoricalReviewVisible }"
@@ -60,7 +58,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, nextTick } from 'vue'
+import { ref, onMounted, onUnmounted, nextTick, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import { useCarousel } from '@/composables/useCarousel'
 import { useScrollEffects } from '@/composables/useScrollEffects'
 import ScrollProgress from '@/components/UI/ScrollProgress.vue'
@@ -93,15 +92,12 @@ const heroMedia = ref([
 ])
 
 const {
-  currentMediaIndex,
-  filteredHeroMedia,
   startCarousel,
-  goToMedia,
-  pauseCarousel,
   resumeCarousel
 } = useCarousel(heroMedia.value)
 
 const { scrolled, scrollProgress, initScrollListener, removeScrollListener } = useScrollEffects()
+const route = useRoute()
 
 const darkMode = ref(false)
 const heroSection = ref(null)
@@ -115,24 +111,38 @@ const isSenateDirectorsVisible = ref(false)
 const isHistoricalReviewVisible = ref(false)
 const isMuseumVisible = ref(false)
 
-const handleCollectionSelect = (collection) => {
-  console.log('Colección seleccionada:', collection)
+// Mapa de secciones para scroll
+const sections = {
+  'mandato': heroSection, 
+  'directiva-camaral': senateDirectorsRef,
+  'resena-historica': historicalReviewRef,
+  'museo': museumRef
 }
 
-const handleExhibitionSelect = (exhibition) => {
-  console.log('Exhibición seleccionada:', exhibition)
-}
-
-const handleProgramRegistration = (program) => {
-  console.log('Registro a programa:', program)
-}
-
-const handleVirtualTour = () => {
-  console.log('Tour virtual iniciado')
-}
-
-const handleDonationClick = () => {
-  console.log('Donación solicitada')
+// Función mejorada para hacer scroll a una sección
+const scrollToSection = (id) => {
+  const sectionRef = sections[id]
+  if (sectionRef?.value) {
+    // Desactivar scroll-snap temporalmente
+    const container = document.querySelector('.snap-container')
+    if (container) {
+      container.style.scrollSnapType = 'none'
+    }
+    
+    // Hacer scroll a la sección
+    sectionRef.value.scrollIntoView({ 
+      behavior: 'smooth', 
+      block: 'start',
+      inline: 'nearest'
+    })
+    
+    // Reactivar scroll-snap después del scroll
+    setTimeout(() => {
+      if (container) {
+        container.style.scrollSnapType = 'y mandatory'
+      }
+    }, 800)
+  }
 }
 
 let scrollObserver = null
@@ -180,7 +190,23 @@ onMounted(async () => {
   await nextTick();
   showSection.value = true;
   initScrollObserver();
+  
+  // Si hay hash al cargar la página, hacer scroll
+  if (route.hash) {
+    const id = route.hash.replace('#', '')
+    setTimeout(() => {
+      scrollToSection(id)
+    }, 500) // Pequeño delay para asegurar que todo está renderizado
+  }
 });
+
+// Detectar cambios en el hash (navegación desde el menú)
+watch(() => route.hash, (newHash) => {
+  if (newHash) {
+    const id = newHash.replace('#', '')
+    scrollToSection(id)
+  }
+})
 
 onUnmounted(() => {
   removeScrollListener();
@@ -203,7 +229,7 @@ definePageMeta({
 html, body {
   scroll-behavior: smooth;
   scroll-snap-type: y mandatory;
-  scroll-padding-top: 80px;
+  /* scroll-padding-top: 80px; */
 }
 
 /* Cada sección con snap */
