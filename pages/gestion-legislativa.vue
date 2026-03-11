@@ -11,9 +11,7 @@
       ref="heroSection"
       style="background-color: #eeeeee; background-size: cover"
     >
-      <div class="w-full h-full flex items-center justify-center">
-        <p class="text-2xl text-gray-500">Sección Hero - Sesiones del Pleno</p>
-      </div>
+      <PlenarySessions></PlenarySessions>
       <ScrollProgress
         :scrolled="scrolled"
         :scroll-progress="scrollProgress"
@@ -78,6 +76,7 @@
 import { ref, onMounted, onUnmounted, nextTick } from 'vue'
 import { useScrollEffects } from '@/composables/useScrollEffects'
 import ScrollProgress from '@/components/UI/ScrollProgress.vue'
+import PlenarySessions from '~/components/PlenarySessions.vue'
 
 const { scrolled, scrollProgress, initScrollListener, removeScrollListener } = useScrollEffects()
 
