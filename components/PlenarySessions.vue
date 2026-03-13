@@ -4,7 +4,8 @@
     <!-- Encabezado de la sección (solo texto rojo, sin fondo) -->
     <!-- FRANJA ROJA DE ANCHO COMPLETO (superior) - CON MARGEN PARA HEADER -->
     <div class="relative w-screen left-1/2 right-1/2 -mx-[50vw] mt-[4.4vw]">
-      <div class="relative bg-gradient-to-r from-red-700/70 via-red-800/70 to-red-900/70 py-2 sm:py-3 md:py-4 shadow-2xl overflow-hidden group full-width-franja">
+      <!-- <div class="relative bg-gradient-to-r from-red-700/70 via-red-800/70 to-red-900/70 py-2 sm:py-3 md:py-4 shadow-2xl overflow-hidden group full-width-franja"> -->
+      <div class="relative bg-[#E03636] py-2 sm:py-3 md:py-4 shadow-2xl overflow-hidden group full-width-franja">
         
         <!-- Patrón de fondo sutil (más pequeño) -->
         <div class="absolute inset-0 opacity-5">

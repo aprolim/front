@@ -2,7 +2,8 @@
   <div class="relative z-10 mx-auto min-h-screen flex flex-col w-full">
     <!-- FRANJA ROJA DE ANCHO COMPLETO (superior) - CON MARGEN PARA HEADER -->
     <div class="relative w-screen left-1/2 right-1/2 -mx-[50vw] mt-[4.4vw]">
-      <div class="relative bg-gradient-to-r from-red-700/70 via-red-800/70 to-red-900/70 py-2 sm:py-3 md:py-4 shadow-2xl overflow-hidden group full-width-franja">
+      <!-- <div class="relative bg-gradient-to-r from-red-700/70 via-red-800/70 to-red-900/70 py-2 sm:py-3 md:py-4 shadow-2xl overflow-hidden group full-width-franja"> -->
+      <div class="relative bg-[#E03636] py-2 sm:py-3 md:py-4 shadow-2xl overflow-hidden group full-width-franja">
         
         <!-- Patrón de fondo sutil (más pequeño) -->
         <div class="absolute inset-0 opacity-5">
@@ -37,8 +38,8 @@
     </div>
 
     <!-- DOS COLUMNAS: Texto (izquierda) + Carrusel (derecha) - MÁS COMPACTO -->
-    <div class="container mx-auto px-4 mt-4 md:mt-6 flex-1 w-full pb-6">
-      <div class="grid grid-cols-2 gap-4 lg:gap-6 h-full">
+    <div class="container mx-auto px-[5vw] mt-[3vw] flex-1 w-full ">
+      <div class="grid grid-cols-2 gap-[3vw] h-full">
         
         <!-- COLUMNA IZQUIERDA: Texto y controles - MÁS PEQUEÑA -->
         <div class="flex flex-col h-full relative" style="min-height: 33vw;">
@@ -138,7 +139,7 @@ const props = defineProps({
     default: () => [
       {
         title: 'Mandato Constitucional Senado',
-        description: 'La Constitución Política del Estado establece: <br> <b>Artículo 12.</b><br> <b>I. </b>	El Estado se organiza y estructura su poder público a través de los órganos Legislativo, Ejecutivo, Judicial y Electoral. La organización del Estado está fundamentada en la independencia, separación, coordinación y cooperación de estos órganos. <br> <b>Artículo 148.</b> <br> <b>I. </b> La Cámara de Senadores estará conformada por un total de 36 miembros.<br> <b>II. </b> En cada departamento se eligen 4 Senadores en circunscripción departamental, por votación universal, directa y secreta.<br> <b>III. </b> La asignación de los escaños de Senadores en cada departamento se hará mediante el sistema proporcional, de acuerdo a la Ley.',
+        description: 'La Constitución Política del Estado establece: <br> <br> <b>&nbsp;&nbsp;&nbsp;Artículo 12.</b><br> <b>I. </b>	El Estado se organiza y estructura su poder público a través de los órganos Legislativo, Ejecutivo, Judicial y Electoral. La organización del Estado está fundamentada en la independencia, separación, coordinación y cooperación de estos órganos. <br> <br> <b>&nbsp;&nbsp;&nbsp;Artículo 148.</b> <br> <b>I. </b> La Cámara de Senadores estará conformada por un total de 36 miembros.<br> <b>II. </b> En cada departamento se eligen 4 Senadores en circunscripción departamental, por votación universal, directa y secreta.<br> <b>III. </b> La asignación de los escaños de Senadores en cada departamento se hará mediante el sistema proporcional, de acuerdo a la Ley.',
         additionalText: '',
         image: {
           url: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f',
