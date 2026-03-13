@@ -3,7 +3,7 @@
     <!-- FRANJA ROJA DE ANCHO COMPLETO (superior) - CON MARGEN PARA HEADER -->
     <div class="relative w-screen left-1/2 right-1/2 -mx-[50vw] mt-[4.4vw]">
       <!-- <div class="relative bg-gradient-to-r from-red-700/70 via-red-800/70 to-red-900/70 py-2 sm:py-3 md:py-4 shadow-2xl overflow-hidden group full-width-franja"> -->
-      <div class="relative bg-[#E03636] py-2 sm:py-3 md:py-4 shadow-2xl overflow-hidden group full-width-franja">
+      <div class="relative bg-[#E03636] py-[0.8vw] shadow-2xl overflow-hidden group full-width-franja">
         
         <!-- Patrón de fondo sutil (más pequeño) -->
         <div class="absolute inset-0 opacity-5">
@@ -12,17 +12,17 @@
         </div>
 
         <!-- Líneas decorativas animadas (más delgadas) -->
-        <div class="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-yellow-400 to-transparent animate-pulse"></div>
-        <div class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-yellow-400 to-transparent animate-pulse"></div>
+        <div class="absolute top-0 left-0 right-0 h-[.2vw] bg-gradient-to-r from-transparent via-yellow-400 to-transparent animate-pulse"></div>
+        <div class="absolute bottom-0 left-0 right-0 h-[.2vw] bg-gradient-to-r from-transparent via-yellow-400 to-transparent animate-pulse"></div>
 
         <!-- Contenido principal centrado -->
         <div class="container mx-auto px-4 relative z-10 text-center">
           <!-- Texto principal - MÁS PEQUEÑO -->
-          <p class="font-bold text-white text-[clamp(0.8rem,2vw,1.5rem)]">
+          <p class="font-bold text-white text-[2vw]">
             <span class="bg-clip-text text-transparent bg-gradient-to-r from-white via-yellow-100 to-yellow-200">
-              <span class="inline-flex items-center justify-center text-white text-[clamp(0.5rem,1vw,0.9rem)] mx-1">⚪</span> 
+              <span class="inline-flex items-center justify-center text-white text-[.8em] mx-[.8em]">⚪</span> 
               PRIMERA LEGISLATURA DEL TRICENTENARIO
-              <span class="inline-flex items-center justify-center text-white text-[clamp(0.5rem,1vw,0.9rem)] mx-1">⚪</span>
+              <span class="inline-flex items-center justify-center text-white text-[.8em] mx-[.8em]">⚪</span>
             </span>
           </p>
 
@@ -38,27 +38,30 @@
     </div>
 
     <!-- DOS COLUMNAS: Texto (izquierda) + Carrusel (derecha) - MÁS COMPACTO -->
-    <div class="container mx-auto px-[5vw] mt-[3vw] flex-1 w-full ">
+    <div class="mx-auto px-[5vw] mt-[1vw] flex-1 w-full ">
       <div class="grid grid-cols-2 gap-[3vw] h-full">
         
         <!-- COLUMNA IZQUIERDA: Texto y controles - MÁS PEQUEÑA -->
-        <div class="flex flex-col h-full relative" style="min-height: 33vw;">
-          <!-- Texto - TAMAÑOS REDUCIDOS -->
-          <div class="space-y-3">
-            <h1 class="font-extrabold text-[#E03636] text-[clamp(1.0vw,2.0vw,3.0vw)] text-center">
-              {{ slides[currentSlide].title }}
-              <br>
-            </h1>
-            <p class="text-gray-700 leading-relaxed text-[clamp(0.8vw,1.10vw,1.4vw)] text-justify" v-html="slides[currentSlide].description">
-            </p>
-            <div v-if="slides[currentSlide].additionalText" class="text-gray-600 text-[clamp(0.8rem,1.2vw,1rem)]">
-              {{ slides[currentSlide].additionalText }}
+        <div class="flex flex-col h-full relative text-[1.4vw]" style="min-height: 37.1vw;">
+          <!-- CONTENIDO PRINCIPAL - OCUPA TODO EL ESPACIO DISPONIBLE -->
+          <div class="flex-1 flex flex-col justify-center">
+            <!-- Texto - TAMAÑOS REDUCIDOS -->
+            <div class="space-y-3">
+              <h1 class="font-extrabold text-[#E03636] text-[1.6em] text-center">
+                {{ slides[currentSlide].title }}
+                <br>
+              </h1>
+              <p class="text-gray-700 leading-relaxed text-[.75em] text-justify" v-html="slides[currentSlide].description">
+              </p>
+              <div v-if="slides[currentSlide].additionalText" class="text-gray-600 text-[clamp(0.8rem,1.2vw,1rem)]">
+                {{ slides[currentSlide].additionalText }}
+              </div>
             </div>
           </div>
 
-          <!-- CONTROLES DEL CAROUSEL - MÁS PEQUEÑOS Y CENTRADOS -->
-          <div class="absolute bottom-0 left-0 right-0 flex justify-center z-50">
-            <div class="flex justify-center space-x-3 bg-transparent py-2 px-5 rounded-full">
+          <!-- CONTROLES DEL CAROUSEL - SIEMPRE AL FONDO -->
+          <div class="flex justify-center z-50 py-[0.0em]">
+            <div class="flex justify-center space-x-[1.5em] bg-transparent py-[.6em] px-5 rounded-full">
               <button 
                 v-for="(_, index) in slides" 
                 :key="index"
@@ -66,10 +69,10 @@
                 class="transition-all duration-300 rounded-full"
                 :class="[
                   currentSlide === index 
-                    ? 'bg-[#E03636] ring-2 ring-white outline outline-3 outline-[#E03636] outline-offset-2' 
+                    ? 'bg-[#E03636] ring-[.45em] ring-white outline outline-[.17em] outline-[#E03636] outline-offset-[.17em]' 
                     : 'bg-[#E03636] hover:bg-[#E03636]/50'
                 ]"
-                :style="{ width: '14px', height: '14px' }"
+                :style="{ width: '.8em', height: '.8em' }"
                 :aria-label="`Ir a imagen ${index + 1}`"
               ></button>
             </div>
@@ -77,7 +80,7 @@
         </div>
 
         <!-- COLUMNA DERECHA: Carrusel de imágenes - MÁS PEQUEÑO -->
-        <div class="relative w-full overflow-hidden rounded-lg shadow-xl" style="height: 29vw;">
+        <div class="relative w-full overflow-hidden rounded-lg shadow-xl" style="height: 36vw;">
           <!-- Imágenes del carrusel -->
           <div 
             v-for="(slide, index) in slides" 
@@ -139,7 +142,7 @@ const props = defineProps({
     default: () => [
       {
         title: 'Mandato Constitucional Senado',
-        description: 'La Constitución Política del Estado establece: <br> <br> <b>&nbsp;&nbsp;&nbsp;Artículo 12.</b><br> <b>I. </b>	El Estado se organiza y estructura su poder público a través de los órganos Legislativo, Ejecutivo, Judicial y Electoral. La organización del Estado está fundamentada en la independencia, separación, coordinación y cooperación de estos órganos. <br> <br> <b>&nbsp;&nbsp;&nbsp;Artículo 148.</b> <br> <b>I. </b> La Cámara de Senadores estará conformada por un total de 36 miembros.<br> <b>II. </b> En cada departamento se eligen 4 Senadores en circunscripción departamental, por votación universal, directa y secreta.<br> <b>III. </b> La asignación de los escaños de Senadores en cada departamento se hará mediante el sistema proporcional, de acuerdo a la Ley.',
+        description: 'La Constitución Política del Estado establece: <br> <br> <b>Artículo 12.</b><br><br> <b>I. </b>	El Estado se organiza y estructura su poder público a través de los órganos Legislativo, Ejecutivo, Judicial y Electoral. La organización del Estado está fundamentada en la independencia, separación, coordinación y cooperación de estos órganos. <br> <br> <b>Artículo 148.</b> <br><br> <b>I. </b> La Cámara de Senadores estará conformada por un total de 36 miembros.<br> <b>II. </b> En cada departamento se eligen 4 Senadores en circunscripción departamental, por votación universal, directa y secreta.<br> <b>III. </b> La asignación de los escaños de Senadores en cada departamento se hará mediante el sistema proporcional, de acuerdo a la Ley.',
         additionalText: '',
         image: {
           url: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f',
@@ -150,7 +153,7 @@ const props = defineProps({
       },
       {
         title: 'La Asamblea Legislativa Plurinacional',
-        description: 'La Constitución Política del Estado establece: <br>  <b>Artículo 145.</b> La Asamblea Legislativa Plurinacional está compuesta por dos cámaras, la Cámara de Diputados y la Cámara de Senadores, y es la única con facultad de aprobar y sancionar leyes que rigen para todo el territorio boliviano.',
+        description: 'La Constitución Política del Estado establece: <br><br>  <b>Artículo 145.</b><br><br> La Asamblea Legislativa Plurinacional está compuesta por dos cámaras, la Cámara de Diputados y la Cámara de Senadores, y es la única con facultad de aprobar y sancionar leyes que rigen para todo el territorio boliviano.',
         additionalText: '',
         image: {
           url: 'https://images.unsplash.com/photo-1541872703-74c5e44368f9',
@@ -161,7 +164,7 @@ const props = defineProps({
       },
       {
         title: 'El Rol del Senado en la Asamblea Legislativa Plurinacional',
-        description: 'El Reglamento General de la Cámara de Senadores establece: <br> <b>Artículo 2.</b>(Marco Constitucional). En el marco de lo establecido por la Constitución Política del Estado, la Cámara de Senadores de la Asamblea Legislativa Plurinacional reside en el Órgano Legislativo y ejerce las atribuciones de legislación, fiscalización y gestión, bajo los principios de coordinación y cooperación, promoviendo la participación activa de la ciudadanía en todo el territorio boliviano.',
+        description: 'El Reglamento General de la Cámara de Senadores establece: <br><br> <b>Artículo 2.</b><br><br>(Marco Constitucional). En el marco de lo establecido por la Constitución Política del Estado, la Cámara de Senadores de la Asamblea Legislativa Plurinacional reside en el Órgano Legislativo y ejerce las atribuciones de legislación, fiscalización y gestión, bajo los principios de coordinación y cooperación, promoviendo la participación activa de la ciudadanía en todo el territorio boliviano.',
         additionalText: '',
         image: {
           url: 'https://images.unsplash.com/photo-1627556592933-ffe99c1cd9eb',

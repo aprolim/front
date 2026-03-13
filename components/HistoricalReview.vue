@@ -1,11 +1,11 @@
 <template>
-  <div class="relative z-10 mx-auto min-h-screen flex flex-col w-full">
+  <div class="relative z-10 mx-auto min-h-screen flex flex-col w-full text-[1.5vw]">
     <!-- Espaciador superior para el header -->
     <div class="h-[4.4vw]"></div>
 
     <!-- Dos columnas: 65% y 35% -->
     <div class="mx-auto px-[4.5vw] flex-1">
-      <div class="flex gap-8 h-full">
+      <div class="flex gap-[2em] h-full pt-[2em]">
         
         <!-- COLUMNA IZQUIERDA (65%) - Carrusel de imágenes -->
         <div class="w-[65%] bg-transparent rounded-2xl shadow-2xl border border-white/20 p-6">
@@ -121,18 +121,20 @@
         </div>
 
         <!-- COLUMNA DERECHA (35%) - Texto fijo y botones -->
-        <div class="text-[1.3vw] w-[35%] bg-white/10 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-8 flex flex-col">
+        <div class="text-[1.3vw] w-[35%] bg-white/10 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-[1.5em] flex flex-col">
           <!-- Título fijo -->
-          <h3 class="font-bold text-[1.0em] text-[#E03636] mb-6 tracking-wide border-b-2 border-[#E03636]/30 pb-3">
+          <h3 class="font-bold text-[1.0em] text-[#E03636] mb-[1.1em] tracking-wide border-b-[.10em] border-[#E03636]/30 pb-[0.5em]">
             Reseña Histórica del Senado
           </h3>
           
           <!-- Texto descriptivo fijo con scroll -->
-          <div class="pr-2 custom-scroll flex-1">
-            <p class="text-[#000] text-[.65em] leading-relaxed mb-[.5em] text-justify">
+          <div class="custom-scroll flex-1">
+            <p class="text-[#000] text-[.70em] leading-relaxed mb-[.0em] text-justify">
                 El 9 de febrero de 1825 por decreto del Mariscal Antonio José de Sucre se convoca a la primera Asamblea Nacional con el objetivo de dirimir el destino de las provincias de la futura República de Bolivia, por lo cual se establece la fundación del Poder Legislativo un 10 de julio del 1825.
                 <br>
+                <br>
                 El día 6 de agosto de 1825, se aprobó la independencia de la República de Bolívar por amplia mayoría, en consecuencia, en la sesión del 13 de agosto de 1825, Bolivia es declarada como una República representativa, la cual contaría con tres poderes: Ejecutivo, Judicial y Legislativo.
+                <br>
                 <br>
                 Luego de varias interrupciones del orden democrático en el país, el día: 10 de octubre del 1982 se posesiona al congreso electo en las elecciones realizadas en 1980, desde entonces, la Asamblea legislativa y el Senado trabajan de manera continua en favor de la legislación, fiscalización y gestión de la nación. 
             </p>

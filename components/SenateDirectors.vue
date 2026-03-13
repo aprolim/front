@@ -1,13 +1,11 @@
 <template>
-  <div class="relative z-10 mx-auto min-h-screen flex flex-col w-full">
+  <div class="relative z-10 mx-auto min-h-screen flex flex-col w-full text-[1.5vw]">
     <!-- Espaciador superior -->
     <div class="h-[4.4vw]"></div>
     
     <!-- Título -->
     <h2 class="font-bold text-white leading-tight text-center bg-[#575756]
-              text-[11px] xs:text-[14px] sm:text-[18px] md:text-[22px] 
-              lg:text-[26px] xl:text-[30px] 2xl:text-[39px] 
-              3xl:text-[58px] 4xl:text-[80px] 5xl:text-[102px]
+              text-[1.4em]
               p-1">
       Directiva Camaral
       <small class="font-normal block text-[.4em] mt-0 leading-none text-[#ccc]">
@@ -16,37 +14,38 @@
     </h2>
 
     <!-- Tres columnas -->
-    <div class="mx-auto px-[2.5vw] mt-[2vh] flex-1">
-      <div class="flex justify-center items-stretch gap-6 h-full">
+    <div class="mx-auto px-[2.5vw] mt-[2vw] flex-1">
+      <div class="flex justify-center items-stretch gap-[1.25em] h-full">
         
         <!-- COLUMNA IZQUIERDA (transparente, 5% más pequeña) -->
-        <div class="w-[30%] bg-transparent rounded-2xl shadow-xl border border-white/20 p-4 scale-95 origin-right text-[#000]">
+        <div class="w-[30%] bg-transparent rounded-2xl shadow-xl border border-white/20 p-[1.25em] origin-right text-[#000]">
           <div class="h-full flex flex-col text-[.7em] text-justify">
             <p class="text-center text-[1.2em] text-[#E03636]">Rol Institucional de la Directiva</p>
             <br>
-            <p>
-                La Directiva de la Cámara de Senadores de Bolivia es el órgano colegiado responsable de la conducción política del ente legislativo. Conformada por una presidencia, dos vicepresidencias y tres secretarías, su estructura garantiza la pluralidad al integrar tanto al bloque de mayoría como al de minoría.
-            </p>
-            <p>
+            <div class="font-extralight">
+              La Directiva de la Cámara de Senadores de Bolivia es el órgano colegiado responsable de la conducción política del ente legislativo. Conformada por una presidencia, dos vicepresidencias y tres secretarías, su estructura garantiza la pluralidad al integrar tanto al bloque de mayoría como al de minoría.
+            </div>
+            <br>
+            <div>
                 Sus funciones institucionales son determinantes: coordina las relaciones con otros órganos del Estado, elabora la agenda semanal y fija el calendario de actividades. Además, tiene la potestad de supervisar el sistema administrativo y dictar resoluciones de cumplimiento obligatorio para las comisiones, asegurando siempre el respeto a las normas constitucionales.
-            </p>
+            </div>
           </div>
         </div>
 
         <!-- COLUMNA CENTRAL (rojo transparente) -->
-        <div class="w-[40%] bg-[#E03636]/80 rounded-2xl shadow-2xl border border-white/20 p-[.5em]">
+        <div class="w-[40%] bg-[#E03636]/80 rounded-2xl shadow-2xl border border-white/20 p-[.5em] scale-105">
           <!-- Grid de 2 columnas con 6 fotos -->
           <div class="grid grid-cols-2 h-full content-center">
             <div 
               v-for="(senador, index) in senadores" 
               :key="index"
               @click="selectedSenador = senador"
-              class="flex flex-col items-center cursor-pointer transition-all duration-300 hover:scale-105 pb-[.2em]"
-              :class="{ 'rounded-lg scale-105 m-1 border border-[#E4D294]': selectedSenador?.nombre === senador.nombre }"
+              class="flex flex-col items-center cursor-pointer transition-all duration-300 hover:scale-105 pt-[.25em]"
+              :class="{ 'rounded-[.45em] scale-105 m-[.8em] border border-[#E4D294]': selectedSenador?.nombre === senador.nombre }"
               >
               <!-- :class="{ 'ring-4 ring-yellow-600/50 rounded-lg scale-105': selectedSenador?.nombre === senador.nombre }" -->
               <!-- Foto circular con borde dorado opaco -->
-              <div class="w-[15vh] h-[15vh] rounded-full overflow-hidden border-3 border-[#E4D294] shadow-lg mb-[.1em]">
+              <div class="w-[5em] h-[5em] rounded-full overflow-hidden border-[.20em] border-[#E4D294] shadow-lg mb-[.1em]">
                 <img 
                   :src="senador.foto" 
                   :alt="senador.nombre"
@@ -54,16 +53,16 @@
                 />
               </div>
               <!-- Texto blanco (cargo) -->
-              <p class="text-white text-xs md:text-sm text-center font-medium">{{ senador.cargo }}</p>
+              <p class="text-white text-[0.7em] text-center font-medium " >{{ senador.cargo }}</p>
             </div>
           </div>
         </div>
 
         <!-- COLUMNA DERECHA (transparente, 5% más pequeña) -->
-        <div class="w-[30%] bg-transparent rounded-2xl shadow-xl border border-white/20 p-4 scale-95 origin-left text-[#000] text-[1.4vw]">
+        <div class="w-[30%] bg-transparent rounded-2xl shadow-xl border border-white/20 p-4 origin-left text-[#000] text-[1.4vw]">
           <div v-if="selectedSenador" class="h-full flex flex-col items-center justify-center">
             <!-- Foto del senador seleccionado -->
-            <div class="w-28 h-28 md:w-32 md:h-32 rounded-full overflow-hidden border-4 border-[#E4D294] shadow-2xl mb-4">
+            <div class="w-[9em] h-[9em] rounded-full overflow-hidden border-[.25em] border-[#E4D294] shadow-2xl mb-[.50em]">
               <img 
                 :src="selectedSenador.foto" 
                 :alt="selectedSenador.nombre"
