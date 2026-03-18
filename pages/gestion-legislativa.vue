@@ -21,20 +21,23 @@
 
     <!-- Sección Directiva Camaral (SEGUNDA SECCIÓN) - VACÍA -->
     <div 
-      id="gestion-legislativa"
+      id="area-de-legislacion"
       ref="section2Ref" 
       class="scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out z-10"
       :class="{ 'animate-in': isSection2Visible }"
       style="min-height: 100vh; position: relative; background: transparent;"
     >
-      <div class="w-full h-full flex items-center justify-center">
-        <p class="text-2xl text-gray-500">Sección Directiva Camaral</p>
-      </div>
+      <!-- <div class="w-full h-full flex items-center justify-center">
+        <p><strong>Parámetros:</strong> {{hashParams}}</p>
+        <p>{{ JSON.stringify($route.query) }}</p>
+      </div> -->
+      <div class="pt-[5em]"></div>
+      <LegislationTable class=""></LegislationTable>
     </div>
     
     <!-- Sección Reseña Histórica Original (TERCERA SECCIÓN) - VACÍA -->
     <div 
-      id="reseña-historica"
+      id="area-de-fiscalizacion"
       ref="section3Ref" 
       class="scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out delay-200 z-10"
       :class="{ 'animate-in': isSection3Visible }"
@@ -47,7 +50,7 @@
 
     <!-- Sección Reseña Histórica Duplicada (CUARTA SECCIÓN) - VACÍA -->
     <div 
-      id="reseña-historica-2"
+      id="area-de-gestion"
       ref="section4Ref" 
       class="scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out delay-200 z-10"
       :class="{ 'animate-in': isSection4Visible }"
@@ -78,6 +81,13 @@ import { useScrollEffects } from '@/composables/useScrollEffects'
 import ScrollProgress from '@/components/UI/ScrollProgress.vue'
 import PlenarySessions from '~/components/PlenarySessions.vue'
 import LegislativeGazette from '~/components/LegislativeGazette.vue'
+import LegislationTable from '~/components/LegislationTable.vue'
+
+const hashParams = computed(() => {
+  const hash = route.hash
+  if (!hash) return {}
+  return  hash.substring(1)
+})
 
 const { scrolled, scrollProgress, initScrollListener, removeScrollListener } = useScrollEffects()
 const route = useRoute()
@@ -96,9 +106,9 @@ const isSection5Visible = ref(false)
 // Mapa de secciones para scroll
 const sections = {
   'sesiones-pleno': plenarySessionsRef,
-  'gestion-legislativa': section2Ref,
-  'reseña-historica': section3Ref,
-  'reseña-historica-2': section4Ref,
+  'area-de-legislacion': section2Ref,
+  'area-de-fiscalizacion': section3Ref,
+  'area-de-gestion': section4Ref,
   'gaceta-legislativa': section5Ref
 }
 

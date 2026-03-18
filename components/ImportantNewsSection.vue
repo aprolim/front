@@ -180,14 +180,26 @@ const linksPorTab = computed(() => {
 });
 
 const generatePath = (tabId, item) => {
+  // ✅ PRIORIDAD 1: Si el item ya tiene un path, usarlo directamente
+  if (item.path) {
+    console.log('📌 Usando path existente:', item.path);
+    return item.path;
+  }
+  
+  // ✅ PRIORIDAD 2: Si no hay path, generar uno (solo por si acaso)
   try {
     const tab = tabs.value.find(t => t.id === tabId);
-    const areaSlug = tab?.label?.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || tabId;
-    const itemSlug = item.titulo?.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'item';
+    const areaSlug = tab?.label?.toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || tabId;
+    const itemSlug = item.titulo?.toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'item';
     return `/${areaSlug}/${itemSlug}`;
-  } catch (err) { return `/${tabId}/item`; }
+  } catch (err) { 
+    return `/${tabId}/item`; 
+  }
 };
-
 const getLinksForTab = (tabId) => linksPorTab.value[tabId] || [];
 
 if (tabs.value.length > 0 && !activeTab.value) activeTab.value = tabs.value[0].id;
