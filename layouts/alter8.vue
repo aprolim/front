@@ -98,13 +98,13 @@
               </button>
               <div class="absolute right-0 mt-1 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all duration-200 z-50">
                 <div class="py-2">
-                  <NuxtLink to="/alternative/legisladores/senadores" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                  <NuxtLink to="/" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
                     👨‍⚖️ Senadores
                   </NuxtLink>
-                  <NuxtLink to="/alternative/legisladores/diputados" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                  <NuxtLink to="/" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
                     👩‍⚖️ Diputados
                   </NuxtLink>
-                  <NuxtLink to="/alternative/legisladores/comisiones" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                  <NuxtLink to="/" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
                     📋 Comisiones
                   </NuxtLink>
                 </div>
@@ -118,13 +118,13 @@
               </button>
               <div class="absolute right-0 mt-1 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all duration-200 z-50">
                 <div class="py-2">
-                  <NuxtLink to="/alternative/legisladores/senadores" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                  <NuxtLink to="/" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
                     👨‍⚖️ Patrimonio histórico
                   </NuxtLink>
-                  <NuxtLink to="/alternative/legisladores/diputados" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                  <NuxtLink to="/" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
                     👩‍⚖️ Eventos culturales
                   </NuxtLink>
-                  <NuxtLink to="/alternative/legisladores/comisiones" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                  <NuxtLink to="/" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
                     📋 Biblioteca
                   </NuxtLink>
                 </div>
@@ -138,13 +138,13 @@
               </button>
               <div class="absolute right-0 mt-1 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all duration-200 z-50">
                 <div class="py-2">
-                  <NuxtLink to="/alternative/legisladores/senadores" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                  <NuxtLink to="/" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
                     Audiencias públicas
                   </NuxtLink>
-                  <NuxtLink to="/alternative/legisladores/diputados" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                  <NuxtLink to="/" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
                     Rendición de cuentas
                   </NuxtLink>
-                  <NuxtLink to="/alternative/legisladores/comisiones" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                  <NuxtLink to="/" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
                     Transparencia
                   </NuxtLink>
                 </div>
@@ -308,7 +308,7 @@
             </div>
             
             <!-- Noticias -->
-            <NuxtLink to="/alternative/participacion" class="block p-3 text-white hover:bg-white/10 rounded-lg mt-4" @click="sidebarOpen = false">
+            <NuxtLink to="/" class="block p-3 text-white hover:bg-white/10 rounded-lg mt-4" @click="sidebarOpen = false">
               📰 Noticias
             </NuxtLink>
           </div>

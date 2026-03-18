@@ -32,7 +32,10 @@
         <p>{{ JSON.stringify($route.query) }}</p>
       </div> -->
       <div class="pt-[5em]"></div>
-      <LegislationTable class=""></LegislationTable>
+      <LegislationTable
+        :hash="hashParams" 
+        :query="$route.query"
+      ></LegislationTable>
     </div>
     
     <!-- Sección Reseña Histórica Original (TERCERA SECCIÓN) - VACÍA -->
