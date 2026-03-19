@@ -11,10 +11,10 @@
           Legislativa
         </span>
       </h2>
-      <p class="mx-auto text-gray-600 text-[12px] xs:text-[10px] sm:text-[14px] md:text-[15px] lg:text-[16px] xl:text-[18px] 2xl:text-[28px] 4xl:text-[36px] 5xl:text-[52px] px-4" 
+      <!-- <p class="mx-auto text-gray-600 text-[12px] xs:text-[10px] sm:text-[14px] md:text-[15px] lg:text-[16px] xl:text-[18px] 2xl:text-[28px] 4xl:text-[36px] 5xl:text-[52px] px-4" 
           style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
         {{ subtitle }}
-      </p>
+      </p> -->
     </div>
 
     <!-- Header de Tabs con bordes redondeados -->
