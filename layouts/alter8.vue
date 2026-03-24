@@ -36,9 +36,12 @@
           <div class="hidden sm:flex items-center gap-[0.5vw] text-[.8em]">
             <!-- MENÚ 1: La institución -->
             <div class="relative group/menu">
-              <button class="px-[1vw] py-2 text-white font-medium hover:bg-[#C12F2F] rounded-lg transition-colors">
+              <NuxtLink 
+                to="/la-institucion" 
+                class="inline-block px-[1vw] py-2 text-white font-medium hover:bg-[#C12F2F] rounded-lg transition-colors cursor-pointer"
+              >
                 La institución
-              </button>
+              </NuxtLink>
               <div class="absolute right-0 mt-1 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all duration-200 z-50">
                 <div class="py-2">
                   <NuxtLink 
@@ -74,15 +77,18 @@
             
             <!-- MENÚ 2: Gestión Legislativa -->
             <div class="relative group/menu">
-              <button class="px-[1vw] py-2 text-white font-medium hover:bg-[#C12F2F] rounded-lg transition-colors">
+              <NuxtLink 
+                to="/gestion-legislativa" 
+                class="inline-block px-[1vw] py-2 text-white font-medium hover:bg-[#C12F2F] rounded-lg transition-colors cursor-pointer"
+              >
                 Gestión Legislativa
-              </button>
+              </NuxtLink>
               <div class="absolute right-0 mt-1 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all duration-200 z-50">
                 <div class="py-2">
                   <NuxtLink to="/gestion-legislativa#sesiones-pleno" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
                     Sesiónes del pleno
                   </NuxtLink>
-                  <NuxtLink to="/gestion-legislativa#gestion-legislativa" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                  <NuxtLink to="/gestion-legislativa#area-de-legislacion" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
                     Gestión legislativa
                   </NuxtLink>
                   <NuxtLink to="/gestion-legislativa#gaceta-legislativa" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
@@ -229,9 +235,9 @@
                 </svg>
               </button>
               <div v-show="mobileMenuState.legislators" class="ml-4 mt-1 space-y-1 border-l-2 border-white/30 pl-3">
-                <NuxtLink to="/alternative/legisladores/senadores" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👨‍⚖️ Senadores</NuxtLink>
-                <NuxtLink to="/alternative/legisladores/diputados" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👩‍⚖️ Diputados</NuxtLink>
-                <NuxtLink to="/alternative/legisladores/comisiones" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📋 Comisiones</NuxtLink>
+                <NuxtLink to="/" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👨‍⚖️ Senadores</NuxtLink>
+                <NuxtLink to="/" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👩‍⚖️ Diputados</NuxtLink>
+                <NuxtLink to="/" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📋 Comisiones</NuxtLink>
               </div>
             </div>
             
@@ -253,9 +259,9 @@
                 </svg>
               </button>
               <div v-show="mobileMenuState.legislative" class="ml-4 mt-1 space-y-1 border-l-2 border-white/30 pl-3">
-                <NuxtLink to="/alternative/legisladores/senadores" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👨‍⚖️ Sesión del pleno</NuxtLink>
-                <NuxtLink to="/alternative/legisladores/diputados" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👩‍⚖️ Proyectos de leyes</NuxtLink>
-                <NuxtLink to="/alternative/legisladores/comisiones" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📋 Gaceta Legislativa</NuxtLink>
+                <NuxtLink to="/" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👨‍⚖️ Sesión del pleno</NuxtLink>
+                <NuxtLink to="/" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👩‍⚖️ Proyectos de leyes</NuxtLink>
+                <NuxtLink to="/" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📋 Gaceta Legislativa</NuxtLink>
               </div>
             </div>
             
@@ -277,9 +283,9 @@
                 </svg>
               </button>
               <div v-show="mobileMenuState.culture" class="ml-4 mt-1 space-y-1 border-l-2 border-white/30 pl-3">
-                <NuxtLink to="/alternative/legisladores/senadores" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👨‍⚖️ Patrimonio histórico</NuxtLink>
-                <NuxtLink to="/alternative/legisladores/diputados" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👩‍⚖️ Eventos culturales</NuxtLink>
-                <NuxtLink to="/alternative/legisladores/comisiones" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📋 Biblioteca</NuxtLink>
+                <NuxtLink to="/" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👨‍⚖️ Patrimonio histórico</NuxtLink>
+                <NuxtLink to="/" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👩‍⚖️ Eventos culturales</NuxtLink>
+                <NuxtLink to="/" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📋 Biblioteca</NuxtLink>
               </div>
             </div>
             
@@ -301,9 +307,9 @@
                 </svg>
               </button>
               <div v-show="mobileMenuState.participation" class="ml-4 mt-1 space-y-1 border-l-2 border-white/30 pl-3">
-                <NuxtLink to="/alternative/legisladores/senadores" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👨‍⚖️ Audiencias públicas</NuxtLink>
-                <NuxtLink to="/alternative/legisladores/diputados" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👩‍⚖️ Rendición de cuentas</NuxtLink>
-                <NuxtLink to="/alternative/legisladores/comisiones" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📋 Transparencia</NuxtLink>
+                <NuxtLink to="/" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👨‍⚖️ Audiencias públicas</NuxtLink>
+                <NuxtLink to="/" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👩‍⚖️ Rendición de cuentas</NuxtLink>
+                <NuxtLink to="/" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📋 Transparencia</NuxtLink>
               </div>
             </div>
             

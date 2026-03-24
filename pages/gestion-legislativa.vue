@@ -25,13 +25,14 @@
       ref="section2Ref" 
       class="scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out z-10"
       :class="{ 'animate-in': isSection2Visible }"
-      style="min-height: 100vh; position: relative; background: transparent;"
+      style="min-height: 100vh; position: relative; background: transparent;align-items: center; display: flex;
+justify-content: center;
+flex-direction: column;"
     >
       <!-- <div class="w-full h-full flex items-center justify-center">
         <p><strong>Parámetros:</strong> {{hashParams}}</p>
         <p>{{ JSON.stringify($route.query) }}</p>
       </div> -->
-      <div class="pt-[5em]"></div>
       <LegislationTable
         :hash="hashParams" 
         :query="$route.query"
@@ -44,11 +45,14 @@
       ref="section3Ref" 
       class="scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out delay-200 z-10"
       :class="{ 'animate-in': isSection3Visible }"
-      style="min-height: 100vh; position: relative; background: transparent;"
+      style="min-height: 100vh; position: relative; background: transparent;align-items: center;display: flex;
+justify-content: center;
+flex-direction: column;"
     >
-      <div class="w-full h-full flex items-center justify-center">
-        <p class="text-2xl text-gray-500">Sección Reseña Histórica (Original)</p>
-      </div>
+      <FiscalizationTable
+        :hash="hashParams" 
+        :query="$route.query"
+      ></FiscalizationTable>
     </div>
 
     <!-- Sección Reseña Histórica Duplicada (CUARTA SECCIÓN) - VACÍA -->
@@ -57,11 +61,14 @@
       ref="section4Ref" 
       class="scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out delay-200 z-10"
       :class="{ 'animate-in': isSection4Visible }"
-      style="min-height: 100vh; position: relative; background: transparent;"
+      style="min-height: 100vh; position: relative; background: transparent; align-items: center;display: flex;
+justify-content: center;
+flex-direction: column;"
     >
-      <div class="w-full h-full flex items-center justify-center">
-        <p class="text-2xl text-gray-500">Sección Reseña Histórica (Duplicada)</p>
-      </div>
+      <ManagementTable
+        :hash="hashParams" 
+        :query="$route.query"
+      ></ManagementTable>
     </div>
     
     <!-- Sección Museo / Gaceta Legislativa (QUINTA SECCIÓN) -->
@@ -85,6 +92,8 @@ import ScrollProgress from '@/components/UI/ScrollProgress.vue'
 import PlenarySessions from '~/components/PlenarySessions.vue'
 import LegislativeGazette from '~/components/LegislativeGazette.vue'
 import LegislationTable from '~/components/LegislationTable.vue'
+import FiscalizationTable from '~/components/FiscalizationTable.vue'
+import ManagementTable from '~/components/ManagementTable.vue'
 
 const hashParams = computed(() => {
   const hash = route.hash

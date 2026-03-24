@@ -1,14 +1,14 @@
 <template>
-  <div class="legislation-container">
+  <div class="fiscalization-container">
     <!-- Mostrar tabla SOLO si hash cumple condición Y el filtro es válido -->
-    <template v-if="hashValido && filtroValido">
+    <template v-if="hashValido && filtroValido" class="mt-[3.5vw]">
       <!-- Header con título, contador y botón volver -->
-      <div class="legislation-header">
+      <div class="fiscalization-header">
         <div class="header-left">
           <button 
             class="back-button"
             @click="volverAOpciones"
-            title="Volver a las opciones de legislación"
+            title="Volver a las opciones de fiscalización"
           >
             <span class="back-icon">←</span>
             <span class="back-text">Volver</span>
@@ -16,7 +16,7 @@
           <!-- Icono SVG del link seleccionado -->
           <div v-if="iconoActivo" class="title-icon-svg" v-html="iconoActivo"></div>
           <div v-else class="title-icon-placeholder"></div>
-          <h2 class="legislation-title">
+          <h2 class="fiscalization-title">
             {{ tituloSeccion }}
             <span v-if="!loading && !error" class="badge">{{ totalItems }} registros</span>
           </h2>
@@ -44,7 +44,7 @@
               type="text" 
               v-model="terminoBusquedaLocal"
               @keyup.enter="aplicarBusquedaLocal"
-              placeholder="Buscar por título, número o asunto..."
+              placeholder="Buscar por título, resumen o destinatario..."
               class="search-input"
             >
             <button @click="aplicarBusquedaLocal" class="search-button" :disabled="loading">
@@ -65,7 +65,7 @@
       <!-- Estado de carga -->
       <div v-if="loading" class="loading-state">
         <div class="spinner"></div>
-        <p>Cargando proyectos de ley...</p>
+        <p>Cargando peticiones de informe...</p>
       </div>
 
       <!-- Estado de error -->
@@ -77,32 +77,39 @@
 
       <!-- Tabla de resultados -->
       <div v-else class="table-responsive">
-        <table class="legislation-table">
+        <table class="fiscalization-table">
           <thead>
             <tr>
               <th @click="ordenarPor('titulo')" class="sortable">
                 Título / Número
                 <span class="sort-icon">{{ getSortIcon('titulo') }}</span>
               </th>
-              <th @click="ordenarPor('asunto')" class="sortable">
-                Asunto
-                <span class="sort-icon">{{ getSortIcon('asunto') }}</span>
+              <th @click="ordenarPor('resumen')" class="sortable">
+                Resumen / Asunto
+                <span class="sort-icon">{{ getSortIcon('resumen') }}</span>
               </th>
               <th class="actions-column">Documento</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="item in itemsPaginados" :key="item.id" class="legislation-row">
+            <tr v-for="item in itemsPaginados" :key="item.id" class="fiscalization-row">
               <td class="title-cell">
                 <div class="titulo-principal">{{ item.titulo }}</div>
-                <div class="numero-ley">N° {{ item.numero }}</div>
-              </td>
+                <div class="numero-ley">ID: {{ item.id }}</div>
+               </td>
               <td class="asunto-cell">
-                <div class="asunto-texto">{{ truncarTexto(item.asunto, 80) }}</div>
+                <div class="asunto-texto">{{ truncarTexto(item.resumen, 80) }}</div>
+                <div v-if="item.tipo_destinatario" class="destinatario-info">
+                  <span class="destinatario-label">Destinatario:</span> {{ item.tipo_destinatario }}
+                </div>
+                <div v-if="item.fecha_recepcion" class="fecha-info">
+                  <span class="fecha-label">Recibido:</span> {{ formatearFecha(item.fecha_recepcion) }}
+                </div>
               </td>
               <td class="actions-cell">
                 <a 
-                  :href="`https://apisi.senado.gob.bo/${item.documento}`" 
+                  v-if="item.doc_archivo"
+                  :href="`https://apisi.senado.gob.bo/${item.doc_archivo}`" 
                   target="_blank"
                   class="btn-documento"
                   title="Ver documento PDF"
@@ -110,13 +117,14 @@
                   <span class="btn-icon">📄</span>
                   <span class="btn-text">PDF</span>
                 </a>
+                <span v-else class="sin-documento">Sin documento</span>
               </td>
             </tr>
             
             <!-- Fila cuando no hay resultados -->
             <tr v-if="itemsFiltrados.length === 0">
               <td colspan="3" class="empty-state">
-                <p>No se encontraron proyectos de ley</p>
+                <p>No se encontraron peticiones de informe</p>
               </td>
             </tr>
           </tbody>
@@ -133,7 +141,7 @@
         <div class="pagination-info">
           Mostrando {{ (paginaActual - 1) * itemsPorPagina + 1 }} - 
           {{ Math.min(paginaActual * itemsPorPagina, itemsFiltrados.length) }} de 
-          {{ itemsFiltrados.length }} proyectos
+          {{ itemsFiltrados.length }} peticiones
         </div>
         
         <div class="pagination-controls">
@@ -170,169 +178,86 @@
 
     <!-- Contenido cuando el filtro NO es válido o no está establecido -->
     <template v-else>
-      <!-- BUSCADOR GLOBAL -->
-      <div class="global-search-container">
-        <div class="global-search-box">
-          <input 
-            type="text" 
-            v-model="busquedaGlobal"
-            @keyup.enter="realizarBusquedaGlobal"
-            placeholder="Buscar en todos los proyectos de ley (título, número, asunto)..."
-            class="global-search-input"
+      <div v-if="cargandoTabs" class="loading-state">
+        <div class="spinner"></div>
+        <p>Cargando opciones...</p>
+      </div>
+      
+      <div v-else-if="errorTabs" class="error-state">
+        <span class="error-icon">⚠️</span>
+        <p>{{ errorTabs }}</p>
+        <button @click="cargarTabsFiscalizacion" class="retry-button">Reintentar</button>
+      </div>
+
+      <div v-else class="tabs-content px-1 sm:px-2 md:px-3 lg:px-4 xl:px-5 py-2 sm:py-3 md:py-4 lg:py-5 xl:py-6">
+        <!-- Header de Sección (Fiscalización) -->
+        <div class="section-header text-center pb-0.5 sm:pb-1 mb-1 sm:mb-2 border-b border-[#E03636] border-opacity-30">
+          <h2 class="section-title font-bold text-[#E03636] text-[1.8vw] mb-0">
+            {{ areaFiscalizacion?.titulo || 'Fiscalización' }}
+          </h2>
+          <p class="section-description text-gray-600 text-[6px] sm:text-[7px] md:text-[8px] lg:text-[9px] xl:text-[11px] 2xl:text-[16px] 3xl:text-[19px] 4xl:text-[30px] 5xl:text-[45px] mx-auto">
+            {{ areaFiscalizacion?.descripcion || 'Sistema de control y seguimiento de actividades institucionales' }}
+          </p>
+        </div>
+        
+        <!-- Grid de Tarjetas -->
+        <div class="links-grid grid gap-1 sm:gap-1.5 md:gap-2 xl:gap-4 3xl:gap-6 5xl:gap-9"
+          :class="gridColsClass"
+        >
+          <NuxtLink
+            v-for="link in linksFiscalizacion"
+            :key="link.id"
+            :to="link.path" 
+            class="link-card flex items-center bg-white bg-opacity-85 backdrop-blur-[10px] 
+              rounded-sm sm:rounded-md md:rounded-lg lg:rounded-xl shadow-sm hover:shadow-md 
+              p-1 sm:p-1.5 md:p-2
+              hover:-translate-y-0.5 transition-all duration-300
+              text-gray-900 no-underline
+              group"
+            @mouseenter="hoveredCard = link.id"
+            @mouseleave="hoveredCard = null"
           >
-          <button @click="realizarBusquedaGlobal" class="global-search-button" :disabled="buscandoGlobal">
-            <span class="search-icon">🔍</span>
-            <span v-if="buscandoGlobal" class="loading-spinner-small"></span>
-          </button>
-          <button 
-            v-if="busquedaGlobal" 
-            @click="limpiarBusquedaGlobal" 
-            class="global-clear-button"
-            title="Limpiar búsqueda"
-          >
-            ✕
-          </button>
-        </div>
-        
-        <!-- Resultados de búsqueda global -->
-        <div v-if="resultadosGlobal.length > 0 && !buscandoGlobal" class="resultados-global">
-          <div class="resultados-header">
-            <h3>Resultados de búsqueda: "{{ busquedaGlobal }}"</h3>
-            <span class="resultados-count">{{ resultadosGlobal.length }} resultados encontrados</span>
-          </div>
-          
-          <div class="resultados-tabs">
-            <button 
-              v-for="(resultados, categoria) in resultadosPorCategoria" 
-              :key="categoria"
-              class="resultado-tab"
-              :class="{ active: categoriaActiva === categoria }"
-              @click="categoriaActiva = categoria"
+            <!-- Contenedor del icono -->
+            <div 
+              class="icon-container flex-shrink-0 
+                m-2.5 sm:m-3 md:m-3 lg:m-4 xl:m-5 2xl:m-6 3xl:m-8 4xl:m-10 5xl:m-12
+                w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 xl:w-16 xl:h-16 
+                2xl:w-20 2xl:h-20 3xl:w-24 3xl:h-24 4xl:w-28 4xl:h-28 5xl:w-32 5xl:h-32
+                rounded-full transition-all duration-300"
+              :class="{
+                'bg-[#E03636]': hoveredCard === link.id,
+                'scale-110': hoveredCard === link.id
+              }"
             >
-              {{ obtenerNombreCategoria(categoria) }}
-              <span class="tab-count">{{ resultados.length }}</span>
-            </button>
-          </div>
-          
-          <div class="resultados-tabla-container">
-            <table class="resultados-tabla">
-              <thead>
-                <tr>
-                  <th>Título / Número</th>
-                  <th>Asunto</th>
-                  <th>Categoría</th>
-                  <th>Documento</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="item in resultadosPorCategoria[categoriaActiva]" :key="item.id">
-                  <td class="resultado-titulo">
-                    <div class="resultado-titulo-principal">{{ item.titulo }}</div>
-                    <div class="resultado-numero" v-if="item.numero">N° {{ item.numero }}</div>
-                    <div class="resultado-id" v-else>ID: {{ item.id }}</div>
-                  </td>
-                  <td class="resultado-asunto">
-                    {{ truncarTexto(item.asunto, 100) }}
-                  </td>
-                  <td class="resultado-categoria">
-                    <span class="categoria-badge">{{ obtenerNombreCategoria(item._categoria) }}</span>
-                  </td>
-                  <td class="resultado-documento">
-                    <a 
-                      v-if="item.documento"
-                      :href="`https://apisi.senado.gob.bo/${item.documento}`" 
-                      target="_blank"
-                      class="btn-documento-small"
-                      title="Ver documento PDF"
-                    >
-                      📄 PDF
-                    </a>
-                    <span v-else class="sin-documento-small">Sin documento</span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        
-        <div v-else-if="buscandoGlobal" class="loading-state">
-          <div class="spinner-small"></div>
-          <p>Buscando en todas las categorías...</p>
-        </div>
-        
-        <div v-else-if="busquedaGlobal && resultadosGlobal.length === 0 && !buscandoGlobal" class="no-resultados">
-          <p>No se encontraron resultados para "{{ busquedaGlobal }}"</p>
-        </div>
-        
-        <!-- Grid de Tarjetas (se muestra cuando no hay búsqueda) -->
-        <div v-if="!busquedaGlobal" class="tabs-content px-1 sm:px-2 md:px-3 lg:px-4 xl:px-5 py-2 sm:py-3 md:py-4 lg:py-5 xl:py-6">
-          <!-- Header de Sección (Legislación) -->
-          <div class="section-header text-center pb-0.5 sm:pb-1 mb-1 sm:mb-2 border-b border-[#E03636] border-opacity-30">
-            <h2 class="section-title font-bold text-[#E03636] text-[1.8vw] mb-0">
-              {{ areaLegislacion?.titulo || 'Legislación' }}
-            </h2>
-            <p class="section-description text-gray-600 text-[6px] sm:text-[7px] md:text-[8px] lg:text-[9px] xl:text-[11px] 2xl:text-[16px] 3xl:text-[19px] 4xl:text-[30px] 5xl:text-[45px] mx-auto">
-              {{ areaLegislacion?.descripcion || 'Acceda a toda la información relacionada con los proyectos de ley y legislación' }}
-            </p>
-          </div>
-          
-          <!-- Grid de Tarjetas -->
-          <div class="links-grid grid gap-1 sm:gap-1.5 md:gap-2 xl:gap-4 3xl:gap-6 5xl:gap-9 grid-cols-3">
-            <NuxtLink 
-              v-for="link in linksLegislacion" 
-              :key="link.id"
-              :to="link.path" 
-              class="link-card flex items-center bg-white bg-opacity-85 backdrop-blur-[10px] 
-                rounded-sm sm:rounded-md md:rounded-lg lg:rounded-xl shadow-sm hover:shadow-md 
-                p-1 sm:p-1.5 md:p-2
-                hover:-translate-y-0.5 transition-all duration-300
-                text-gray-900 no-underline
-                group"
-              @mouseenter="hoveredCard = link.id"
-              @mouseleave="hoveredCard = null"
-            >
-              <!-- Contenedor del icono -->
               <div 
-                class="icon-container flex-shrink-0 
-                  m-2.5 sm:m-3 md:m-3 lg:m-4 xl:m-5 2xl:m-6 3xl:m-8 4xl:m-10 5xl:m-12
-                  w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 xl:w-16 xl:h-16 
-                  2xl:w-20 2xl:h-20 3xl:w-24 3xl:h-24 4xl:w-28 4xl:h-28 5xl:w-32 5xl:h-32
-                  rounded-full transition-all duration-300"
-                :class="{
-                  'bg-[#E03636]': hoveredCard === link.id,
-                  'scale-110': hoveredCard === link.id
-                }"
+                class="w-full h-full flex items-center justify-center transition-colors duration-300"
+                :class="hoveredCard === link.id ? 'text-white' : 'text-[#E03636]'"
               >
-                <div 
-                  class="w-full h-full flex items-center justify-center transition-colors duration-300"
-                  :class="hoveredCard === link.id ? 'text-white' : 'text-[#E03636]'"
-                >
-                  <div class="svg-wrapper w-[97%] h-[97%]" v-html="link.icono"></div>
-                </div>
+                <div class="svg-wrapper w-[97%] h-[97%]" v-html="link.icono"></div>
               </div>
-              
-              <div class="link-content flex-1 min-w-0">
-                <h3 class="link-title font-semibold text-gray-900
-                  text-[7px] sm:text-[8px] md:text-[9px] lg:text-[10px] xl:text-[13px] 
-                  2xl:text-[17px] 3xl:text-[22px] 4xl:text-[32px] 5xl:text-[50px] 
-                  mb-0 leading-tight truncate">
-                  {{ link.titulo }}
-                </h3>
-                <p class="link-description text-gray-600
-                  text-[5px] sm:text-[7px] md:text-[8px] lg:text-[9px] xl:text-[12px] 
-                  2xl:text-[16px] 3xl:text-[19px] 4xl:text-[30px] 5xl:text-[45px]
-                  leading-tight line-clamp-2">
-                  {{ link.descripcion }}
-                </p>
-              </div>
-              
-              <div class="link-arrow text-[#E03636] ml-0.5 flex-shrink-0
-                text-[10px] sm:text-[12px] md:text-[13px] lg:text-[15px] xl:text-[18px] 
-                2xl:text-[22px] 3xl:text-[27px] 4xl:text-[35px] 5xl:text-[70px]">
-                ›
-              </div>
-            </NuxtLink>
-          </div>
+            </div>
+            
+            <div class="link-content flex-1 min-w-0">
+              <h3 class="link-title font-semibold text-gray-900
+                text-[7px] sm:text-[8px] md:text-[9px] lg:text-[10px] xl:text-[13px] 
+                2xl:text-[17px] 3xl:text-[22px] 4xl:text-[32px] 5xl:text-[50px] 
+                mb-0 leading-tight truncate">
+                {{ link.titulo }}
+              </h3>
+              <p class="link-description text-gray-600
+                text-[5px] sm:text-[7px] md:text-[8px] lg:text-[9px] xl:text-[12px] 
+                2xl:text-[16px] 3xl:text-[19px] 4xl:text-[30px] 5xl:text-[45px]
+                leading-tight line-clamp-2">
+                {{ link.descripcion }}
+              </p>
+            </div>
+            
+            <div class="link-arrow text-[#E03636] ml-0.5 flex-shrink-0
+              text-[10px] sm:text-[12px] md:text-[13px] lg:text-[15px] xl:text-[18px] 
+              2xl:text-[22px] 3xl:text-[27px] 4xl:text-[35px] 5xl:text-[70px]">
+              ›
+            </div>
+          </NuxtLink>
         </div>
       </div>
     </template>
@@ -342,30 +267,30 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-
+const gridColsClass = computed(() => {
+  const count = linksFiscalizacion.value.length
+  if (count === 2) {
+    return 'grid-cols-2'
+  }
+  return 'grid-cols-3'
+})
 // Estado para controlar qué tarjeta está en hover
 const hoveredCard = ref(null)
 const route = useRoute()
 const router = useRouter()
 
-// Estado para búsqueda global
-const busquedaGlobal = ref('')
-const buscandoGlobal = ref(false)
-const resultadosGlobal = ref([])
-const categoriaActiva = ref('')
-
 // Mapa de íconos por filtro
 const iconosPorFiltro = ref({})
 
-// Configuración de endpoints disponibles para los datos de la tabla (TUS URLs ORIGINALES)
+// Configuración de endpoints para fiscalización
 const ENDPOINTS = {
-  'proyectos-de-ley-en-tratamiento': {
-    url: 'https://apisi.senado.gob.bo/page/ley-tratamiento/buscar',
-    titulo: 'Proyectos de Ley en Tratamiento',
+  'peticion-informe-escrito': {
+    url: 'https://apisi.senado.gob.bo/page/peticion-informe-escrito',
+    titulo: 'Peticiones de Informe Escrito',
     icono: '',
     procesarRespuesta: (data) => {
       if (data.data && data.data.data) {
-        return data.data.data.map(item => ({ ...item, _categoria: 'proyectos-de-ley-en-tratamiento' }))
+        return data.data.data
       }
       return []
     },
@@ -373,69 +298,13 @@ const ENDPOINTS = {
       return data.data?.last_page || 1
     }
   },
-  'proyectos-de-ley-aprobados': {
-    url: 'https://apisi.senado.gob.bo/page/ley-aprobados/buscar',
-    titulo: 'Proyectos de Ley Aprobados',
+  'peticion-informe-oral': {
+    url: 'https://apisi.senado.gob.bo/page/peticion-informe-oral',
+    titulo: 'Peticiones de Informe Oral',
     icono: '',
     procesarRespuesta: (data) => {
       if (data.data && data.data.data) {
-        return data.data.data.map(item => ({ ...item, _categoria: 'proyectos-de-ley-aprobados' }))
-      }
-      return []
-    },
-    obtenerTotalPaginas: (data) => {
-      return data.data?.last_page || 1
-    }
-  },
-  'proyectos-de-ley-sansionados': {
-    url: 'https://apisi.senado.gob.bo/page/ley-sancionada/buscar',
-    titulo: 'Leyes Sancionadas',
-    icono: '',
-    procesarRespuesta: (data) => {
-      if (data.data && data.data.data) {
-        return data.data.data.map(item => ({ ...item, _categoria: 'proyectos-de-ley-sansionados' }))
-      }
-      return []
-    },
-    obtenerTotalPaginas: (data) => {
-      return data.data?.last_page || 1
-    }
-  },
-  'proyectos-de-ley-con-modificaciones': {
-    url: 'https://apisi.senado.gob.bo/page/ley-devuelto/buscar',
-    titulo: 'Proyectos de Ley con Modificaciones',
-    icono: '',
-    procesarRespuesta: (data) => {
-      if (data.data && data.data.data) {
-        return data.data.data.map(item => ({ ...item, _categoria: 'proyectos-de-ley-con-modificaciones' }))
-      }
-      return []
-    },
-    obtenerTotalPaginas: (data) => {
-      return data.data?.last_page || 1
-    }
-  },
-  'leyes-promulgadas': {
-    url: 'https://apisi.senado.gob.bo/page/ley-promulgada/buscar',
-    titulo: 'Leyes Promulgadas',
-    icono: '',
-    procesarRespuesta: (data) => {
-      if (data.data && data.data.data) {
-        return data.data.data.map(item => ({ ...item, _categoria: 'leyes-promulgadas' }))
-      }
-      return []
-    },
-    obtenerTotalPaginas: (data) => {
-      return data.data?.last_page || 1
-    }
-  },
-  'proyectos-de-ley-rechazados': {
-    url: 'https://apisi.senado.gob.bo/page/ley-rechazada/buscar',
-    titulo: 'Proyectos de Ley Rechazados',
-    icono: '',
-    procesarRespuesta: (data) => {
-      if (data.data && data.data.data) {
-        return data.data.data.map(item => ({ ...item, _categoria: 'proyectos-de-ley-rechazados' }))
+        return data.data.data
       }
       return []
     },
@@ -448,7 +317,7 @@ const ENDPOINTS = {
 const props = defineProps({
   hash: {
     type: [String, Object],
-    default: "gestion-legislativa"
+    default: "fiscalizacion"
   },
   query: {
     type: Object,
@@ -497,41 +366,30 @@ const endpointConfig = computed(() => {
 })
 
 const tituloSeccion = computed(() => {
-  return endpointConfig.value?.titulo || 'Proyectos de Ley'
+  return endpointConfig.value?.titulo || 'Peticiones de Informe'
 })
 
 // Icono activo para el título de la tabla
 const iconoActivo = computed(() => {
   if (!filtroActual.value) return ''
+  // Primero buscar en el mapa de íconos
   if (iconosPorFiltro.value[filtroActual.value]) {
     return iconosPorFiltro.value[filtroActual.value]
   }
-  const link = linksLegislacion.value.find(l => {
+  // Si no está en el mapa, buscar en los links
+  const link = linksFiscalizacion.value.find(l => {
     return l.path && l.path.includes(`filtro=${filtroActual.value}`)
   })
   return link?.icono || ''
 })
 
-// Datos de legislación desde la API de tabs
-const areaLegislacion = computed(() => {
-  return tabsData.value?.areas?.legislacion || null
+// Datos de fiscalización desde la API de tabs
+const areaFiscalizacion = computed(() => {
+  return tabsData.value?.areas?.fiscalizacion || null
 })
 
-const linksLegislacion = computed(() => {
-  return tabsData.value?.links?.legislacion || []
-})
-
-// Resultados por categoría para búsqueda global
-const resultadosPorCategoria = computed(() => {
-  const porCategoria = {}
-  resultadosGlobal.value.forEach(item => {
-    const categoria = item._categoria || 'otros'
-    if (!porCategoria[categoria]) {
-      porCategoria[categoria] = []
-    }
-    porCategoria[categoria].push(item)
-  })
-  return porCategoria
+const linksFiscalizacion = computed(() => {
+  return tabsData.value?.links?.fiscalizacion || []
 })
 
 // Computed para la tabla
@@ -542,8 +400,8 @@ const itemsFiltrados = computed(() => {
     const termino = busquedaLocalActiva.value.toLowerCase().trim()
     datos = datos.filter(item => 
       (item.titulo && item.titulo.toLowerCase().includes(termino)) ||
-      (item.numero && item.numero.toLowerCase().includes(termino)) ||
-      (item.asunto && item.asunto.toLowerCase().includes(termino))
+      (item.resumen && item.resumen.toLowerCase().includes(termino)) ||
+      (item.tipo_destinatario && item.tipo_destinatario.toLowerCase().includes(termino))
     )
   }
   
@@ -555,35 +413,23 @@ const itemsOrdenados = computed(() => {
   
   return [...itemsFiltrados.value].sort((a, b) => {
     if (orden.value.columna === 'titulo') {
-      const partesA = desenmascararTitulo(a.titulo)
-      const partesB = desenmascararTitulo(b.titulo)
-      
+      const tituloA = a.titulo || ''
+      const tituloB = b.titulo || ''
       if (orden.value.direccion === 'asc') {
-        if (partesA.anioInicio < partesB.anioInicio) return -1
-        if (partesA.anioInicio > partesB.anioInicio) return 1
-        if (partesA.numeroIzquierda < partesB.numeroIzquierda) return -1
-        if (partesA.numeroIzquierda > partesB.numeroIzquierda) return 1
-        return 0
+        return tituloA.localeCompare(tituloB)
       } else {
-        if (partesA.anioInicio > partesB.anioInicio) return -1
-        if (partesA.anioInicio < partesB.anioInicio) return 1
-        if (partesA.numeroIzquierda > partesB.numeroIzquierda) return -1
-        if (partesA.numeroIzquierda < partesB.numeroIzquierda) return 1
-        return 0
+        return tituloB.localeCompare(tituloA)
       }
-    } else {
-      const valorA = a[orden.value.columna] || ''
-      const valorB = b[orden.value.columna] || ''
-      
+    } else if (orden.value.columna === 'resumen') {
+      const resumenA = a.resumen || ''
+      const resumenB = b.resumen || ''
       if (orden.value.direccion === 'asc') {
-        if (valorA < valorB) return -1
-        if (valorA > valorB) return 1
+        return resumenA.localeCompare(resumenB)
       } else {
-        if (valorA > valorB) return -1
-        if (valorA < valorB) return 1
+        return resumenB.localeCompare(resumenA)
       }
-      return 0
     }
+    return 0
   })
 })
 
@@ -619,24 +465,9 @@ const paginasMostradas = computed(() => {
 })
 
 // Funciones auxiliares
-const desenmascararTitulo = (titulo) => {
-  if (!titulo) return { numeroIzquierda: 0, anioInicio: 0 }
-  
-  const matchNumero = titulo.match(/N[°\s]*(\d+)/i)
-  const numeroIzquierda = matchNumero ? parseInt(matchNumero[1], 10) : 0
-  
-  const indexBarra = titulo.indexOf('/')
-  let anioInicio = 0
-  
-  if (indexBarra !== -1) {
-    const parteDerecha = titulo.substring(indexBarra + 1).trim()
-    const matchAnio = parteDerecha.match(/(\d{4})/)
-    if (matchAnio) {
-      anioInicio = parseInt(matchAnio[1], 10)
-    }
-  }
-  
-  return { numeroIzquierda, anioInicio }
+const formatearFecha = (fecha) => {
+  if (!fecha) return ''
+  return new Date(fecha).toLocaleDateString('es-BO')
 }
 
 const truncarTexto = (texto, longitud) => {
@@ -655,120 +486,18 @@ const resetearTodo = () => {
   errorTabs.value = null
 }
 
-const obtenerNombreCategoria = (categoriaKey) => {
-  const nombres = {
-    'proyectos-de-ley-en-tratamiento': 'En Tratamiento',
-    'proyectos-de-ley-aprobados': 'Aprobados',
-    'proyectos-de-ley-sansionados': 'Sancionados',
-    'proyectos-de-ley-con-modificaciones': 'Con Modificaciones',
-    'leyes-promulgadas': 'Promulgadas',
-    'proyectos-de-ley-rechazados': 'Rechazados'
-  }
-  return nombres[categoriaKey] || categoriaKey
-}
-
-// Función para cargar datos de un endpoint completo
-const cargarEndpointCompleto = async (key, endpoint) => {
-  try {
-    const primeraPagina = await obtenerPaginaEndpoint(key, endpoint, 1)
-    if (!primeraPagina) return []
-    
-    const datosPrimeraPagina = endpoint.procesarRespuesta(primeraPagina) || []
-    const todosLosItems = [...datosPrimeraPagina]
-    
-    const totalPaginas = endpoint.obtenerTotalPaginas(primeraPagina)
-    
-    if (totalPaginas > 1) {
-      const paginasRestantes = Array.from({ length: totalPaginas - 1 }, (_, i) => i + 2)
-      const promesas = paginasRestantes.map(page => obtenerPaginaEndpoint(key, endpoint, page))
-      const resultados = await Promise.all(promesas)
-      
-      resultados.forEach(res => {
-        if (res) {
-          const datosPagina = endpoint.procesarRespuesta(res) || []
-          todosLosItems.push(...datosPagina)
-        }
-      })
-    }
-    
-    return todosLosItems
-  } catch (err) {
-    console.error(`Error cargando endpoint ${key}:`, err)
-    return []
-  }
-}
-
-const obtenerPaginaEndpoint = async (key, endpoint, page) => {
-  const url = `${endpoint.url}?page=${page}`
-  try {
-    const response = await fetch(url)
-    return await response.json()
-  } catch (err) {
-    console.error(`Error cargando página ${page} de ${key}:`, err)
-    return null
-  }
-}
-
-// Búsqueda global
-const realizarBusquedaGlobal = async () => {
-  if (!busquedaGlobal.value.trim()) {
-    resultadosGlobal.value = []
-    return
-  }
-  
-  buscandoGlobal.value = true
-  resultadosGlobal.value = []
-  
-  const termino = busquedaGlobal.value.toLowerCase().trim()
-  const endpointsKeys = Object.keys(ENDPOINTS)
-  
-  try {
-    // Cargar todos los endpoints en paralelo
-    const promesas = endpointsKeys.map(key => cargarEndpointCompleto(key, ENDPOINTS[key]))
-    const resultadosPorEndpoint = await Promise.all(promesas)
-    
-    // Combinar y filtrar resultados
-    let todosLosResultados = []
-    resultadosPorEndpoint.forEach((items, index) => {
-      const key = endpointsKeys[index]
-      items.forEach(item => {
-        // Filtrar por término de búsqueda
-        if ((item.titulo && item.titulo.toLowerCase().includes(termino)) ||
-            (item.numero && item.numero.toLowerCase().includes(termino)) ||
-            (item.asunto && item.asunto.toLowerCase().includes(termino))) {
-          todosLosResultados.push(item)
-        }
-      })
-    })
-    
-    resultadosGlobal.value = todosLosResultados
-    
-    // Establecer la primera categoría como activa si hay resultados
-    const categorias = Object.keys(resultadosPorCategoria.value)
-    if (categorias.length > 0 && !categoriaActiva.value) {
-      categoriaActiva.value = categorias[0]
-    }
-  } catch (err) {
-    console.error('Error en búsqueda global:', err)
-  } finally {
-    buscandoGlobal.value = false
-  }
-}
-
-const limpiarBusquedaGlobal = () => {
-  busquedaGlobal.value = ''
-  resultadosGlobal.value = []
-  categoriaActiva.value = ''
-}
-
-// Función para volver a las opciones de legislación
+// Función para volver a las opciones de fiscalización
 const volverAOpciones = () => {
+  // Limpiar el filtro para volver al estado de opciones
   emit('update:query', { filtro: '' })
+  
+  // También limpiar la URL si es necesario
   if (route.query.filtro) {
     router.replace({ query: {} })
   }
+  
   resetearTodo()
-  cargarTabsLegislacion()
+  cargarTabsFiscalizacion()
 }
 
 const obtenerPagina = async (page) => {
@@ -801,7 +530,7 @@ const cargarDatosCompletos = async () => {
     }
     
     const datosPrimeraPagina = endpointConfig.value.procesarRespuesta(primeraPagina) || []
-    const todasLasLeyes = [...datosPrimeraPagina]
+    const todasLasPeticiones = [...datosPrimeraPagina]
     
     const totalPaginas = endpointConfig.value.obtenerTotalPaginas(primeraPagina)
     
@@ -817,12 +546,12 @@ const cargarDatosCompletos = async () => {
       resultados.forEach(res => {
         if (res) {
           const datosPagina = endpointConfig.value.procesarRespuesta(res) || []
-          todasLasLeyes.push(...datosPagina)
+          todasLasPeticiones.push(...datosPagina)
         }
       })
     }
     
-    todosLosDatos.value = todasLasLeyes
+    todosLosDatos.value = todasLasPeticiones
     paginaActual.value = 1
     
     console.log(`✅ Cargados ${todosLosDatos.value.length} registros para filtro: ${filtroActual.value}`)
@@ -834,7 +563,7 @@ const cargarDatosCompletos = async () => {
   }
 }
 
-const cargarTabsLegislacion = async () => {
+const cargarTabsFiscalizacion = async () => {
   cargandoTabs.value = true
   errorTabs.value = null
   
@@ -846,11 +575,13 @@ const cargarTabsLegislacion = async () => {
       tabsData.value = data.data
       
       // Sincronizar los íconos de los links con los ENDPOINTS y con el mapa
-      if (tabsData.value?.links?.legislacion) {
-        tabsData.value.links.legislacion.forEach(link => {
+      if (tabsData.value?.links?.fiscalizacion) {
+        tabsData.value.links.fiscalizacion.forEach(link => {
           const filtroKey = link.path?.match(/filtro=([^&#]+)/)?.[1]
           if (filtroKey) {
+            // Guardar en el mapa de íconos
             iconosPorFiltro.value[filtroKey] = link.icono
+            // También actualizar el ENDPOINT si existe
             if (ENDPOINTS[filtroKey]) {
               ENDPOINTS[filtroKey].icono = link.icono
             }
@@ -912,7 +643,7 @@ watch(() => props.hash, () => {
     if (filtroValido.value) {
       cargarDatosCompletos()
     } else {
-      cargarTabsLegislacion()
+      cargarTabsFiscalizacion()
     }
   }
 }, { immediate: true })
@@ -927,7 +658,7 @@ watch(() => props.query, (nuevoQuery, viejoQuery) => {
       if (nuevoFiltro && ENDPOINTS.hasOwnProperty(nuevoFiltro)) {
         cargarDatosCompletos()
       } else {
-        cargarTabsLegislacion()
+        cargarTabsFiscalizacion()
       }
     }
   }
@@ -944,28 +675,24 @@ watch(() => route.query, (nuevoQuery, viejoQuery) => {
       if (nuevoFiltro && ENDPOINTS.hasOwnProperty(nuevoFiltro)) {
         cargarDatosCompletos()
       } else {
-        cargarTabsLegislacion()
+        cargarTabsFiscalizacion()
       }
     }
   }
 }, { immediate: true, deep: true })
-
-watch(itemsPorPagina, (nuevoValor) => {
-  console.log('📊 itemsPorPagina cambió a:', nuevoValor, 'tipo:', typeof nuevoValor)
-})
 </script>
 
 <style scoped>
-/* Todos los estilos existentes se mantienen igual */
-.legislation-container {
+.fiscalization-container {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   max-width: 1200px;
   margin: 0 auto;
   padding: 16px;
   background: transparent;
+  
 }
 
-.legislation-header {
+.fiscalization-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1053,7 +780,7 @@ watch(itemsPorPagina, (nuevoValor) => {
   }
 }
 
-.legislation-title {
+.fiscalization-title {
   font-size: 1.4rem;
   font-weight: 600;
   color: #0f172a;
@@ -1181,13 +908,13 @@ watch(itemsPorPagina, (nuevoValor) => {
   margin-bottom: 16px;
 }
 
-.legislation-table {
+.fiscalization-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 0.85rem;
 }
 
-.legislation-table th {
+.fiscalization-table th {
   background: #f8fafc;
   padding: 8px 12px;
   text-align: left;
@@ -1215,14 +942,14 @@ watch(itemsPorPagina, (nuevoValor) => {
   opacity: 0.6;
 }
 
-.legislation-row td {
+.fiscalization-row td {
   padding: 8px 12px;
   border-bottom: 1px solid #eef2f6;
   color: #334155;
   line-height: 1.3;
 }
 
-.legislation-row:hover td {
+.fiscalization-row:hover td {
   background-color: #f8fafc;
 }
 
@@ -1254,6 +981,29 @@ watch(itemsPorPagina, (nuevoValor) => {
   line-height: 1.3;
   color: #475569;
   font-size: 0.8rem;
+  margin-bottom: 4px;
+}
+
+.destinatario-info {
+  font-size: 0.7rem;
+  color: #E03636;
+  margin-top: 2px;
+}
+
+.destinatario-label {
+  font-weight: 500;
+  color: #64748b;
+}
+
+.fecha-info {
+  font-size: 0.65rem;
+  color: #94a3b8;
+  margin-top: 2px;
+}
+
+.fecha-label {
+  font-weight: 500;
+  color: #64748b;
 }
 
 .actions-cell {
@@ -1284,8 +1034,9 @@ watch(itemsPorPagina, (nuevoValor) => {
   box-shadow: 0 2px 4px rgba(224, 54, 54, 0.3);
 }
 
-.btn-icon {
-  font-size: 0.8rem;
+.sin-documento {
+  font-size: 0.7rem;
+  color: #94a3b8;
 }
 
 .debug-info {
@@ -1427,283 +1178,7 @@ watch(itemsPorPagina, (nuevoValor) => {
   font-size: 0.95rem;
 }
 
-/* Estilos para el buscador global */
-.global-search-container {
-  margin-bottom: 24px;
-}
-
-.global-search-box {
-  display: flex;
-  gap: 8px;
-  background: white;
-  padding: 4px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  position: relative;
-  max-width: 600px;
-  margin: 0 auto 24px auto;
-}
-
-.global-search-input {
-  flex: 1;
-  border: 1px solid #e2e8f0;
-  padding: 12px 16px;
-  font-size: 1rem;
-  border-radius: 8px;
-  outline: none;
-  transition: all 0.2s;
-  padding-right: 70px;
-}
-
-.global-search-input:focus {
-  border-color: #E03636;
-  box-shadow: 0 0 0 2px rgba(224, 54, 54, 0.2);
-}
-
-.global-search-button {
-  background: #E03636;
-  color: white;
-  border: none;
-  padding: 8px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-size: 1rem;
-  position: absolute;
-  right: 4px;
-  top: 4px;
-  bottom: 4px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.global-search-button:hover:not(:disabled) {
-  background: #b82c2c;
-}
-
-.global-search-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.global-clear-button {
-  background: transparent;
-  border: none;
-  color: #94a3b8;
-  cursor: pointer;
-  font-size: 1rem;
-  padding: 0 12px;
-  position: absolute;
-  right: 80px;
-  top: 50%;
-  transform: translateY(-50%);
-  line-height: 1;
-}
-
-.global-clear-button:hover {
-  color: #E03636;
-}
-
-.loading-spinner-small {
-  width: 16px;
-  height: 16px;
-  border: 2px solid white;
-  border-top-color: transparent;
-  border-radius: 50%;
-  animation: spin 0.6s linear infinite;
-  display: inline-block;
-}
-
-.spinner-small {
-  width: 40px;
-  height: 40px;
-  border: 3px solid #e2e8f0;
-  border-top-color: #E03636;
-  border-radius: 50%;
-  margin: 0 auto 12px;
-  animation: spin 0.8s linear infinite;
-}
-
-/* Resultados de búsqueda */
-.resultados-global {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  overflow: hidden;
-  margin-bottom: 24px;
-}
-
-.resultados-header {
-  padding: 16px 20px;
-  background: #f8fafc;
-  border-bottom: 1px solid #e2e8f0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-
-.resultados-header h3 {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #0f172a;
-  margin: 0;
-}
-
-.resultados-count {
-  font-size: 0.85rem;
-  color: #64748b;
-  background: #f1f5f9;
-  padding: 4px 10px;
-  border-radius: 20px;
-}
-
-.resultados-tabs {
-  display: flex;
-  gap: 4px;
-  padding: 12px 16px 0 16px;
-  background: white;
-  border-bottom: 1px solid #e2e8f0;
-  flex-wrap: wrap;
-}
-
-.resultado-tab {
-  padding: 8px 16px;
-  background: transparent;
-  border: none;
-  border-radius: 8px 8px 0 0;
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: #64748b;
-  cursor: pointer;
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.resultado-tab:hover {
-  background: #f1f5f9;
-  color: #E03636;
-}
-
-.resultado-tab.active {
-  background: #E03636;
-  color: white;
-}
-
-.tab-count {
-  background: rgba(0, 0, 0, 0.1);
-  padding: 2px 6px;
-  border-radius: 12px;
-  font-size: 0.7rem;
-}
-
-.resultado-tab.active .tab-count {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-.resultados-tabla-container {
-  overflow-x: auto;
-  padding: 16px;
-}
-
-.resultados-tabla {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.85rem;
-}
-
-.resultados-tabla th {
-  text-align: left;
-  padding: 12px 12px;
-  background: #f8fafc;
-  font-weight: 600;
-  color: #475569;
-  border-bottom: 2px solid #e2e8f0;
-}
-
-.resultados-tabla td {
-  padding: 12px;
-  border-bottom: 1px solid #eef2f6;
-  color: #334155;
-}
-
-.resultado-titulo-principal {
-  font-weight: 500;
-  color: #0f172a;
-  margin-bottom: 4px;
-}
-
-.resultado-numero, .resultado-id {
-  font-size: 0.7rem;
-  color: #64748b;
-  background: #f1f5f9;
-  display: inline-block;
-  padding: 2px 8px;
-  border-radius: 12px;
-}
-
-.resultado-asunto {
-  max-width: 400px;
-  line-height: 1.4;
-  color: #475569;
-}
-
-.resultado-categoria {
-  text-align: center;
-}
-
-.categoria-badge {
-  display: inline-block;
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-size: 0.7rem;
-  font-weight: 500;
-  background: #f1f5f9;
-  color: #E03636;
-}
-
-.resultado-documento {
-  text-align: center;
-}
-
-.btn-documento-small {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  background: #E03636;
-  color: white;
-  text-decoration: none;
-  padding: 4px 10px;
-  border-radius: 5px;
-  font-size: 0.7rem;
-  font-weight: 500;
-  transition: all 0.2s;
-}
-
-.btn-documento-small:hover {
-  background: #b82c2c;
-  transform: translateY(-1px);
-}
-
-.sin-documento-small {
-  font-size: 0.7rem;
-  color: #94a3b8;
-}
-
-.no-resultados {
-  text-align: center;
-  padding: 40px;
-  background: white;
-  border-radius: 12px;
-  color: #64748b;
-  margin-bottom: 24px;
-}
-
-/* Estilos para las tarjetas (igual que antes) */
+/* Estilos para las tarjetas */
 .tabs-content {
   background: transparent;
 }
@@ -1729,7 +1204,7 @@ watch(itemsPorPagina, (nuevoValor) => {
 .links-grid {
   display: grid;
   gap: 0.25rem;
-  grid-template-columns: repeat(3, 1fr);
+  /* grid-template-columns: repeat(3, 1fr); */
 }
 
 .link-card {
@@ -1820,6 +1295,7 @@ watch(itemsPorPagina, (nuevoValor) => {
   font-size: 10px;
 }
 
+/* Media queries responsivas */
 @media (min-width: 640px) {
   .section-description { font-size: 7px; }
   .links-grid { gap: 0.375rem; }
@@ -1866,6 +1342,7 @@ watch(itemsPorPagina, (nuevoValor) => {
   .link-arrow { font-size: 22px; }
 }
 
+/* Utilidades */
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -1883,14 +1360,16 @@ watch(itemsPorPagina, (nuevoValor) => {
   min-width: 0;
 }
 
+/* Backdrop filter support */
 @supports (backdrop-filter: blur(10px)) {
   .backdrop-blur-\[10px\] {
     backdrop-filter: blur(10px);
   }
 }
 
+/* Responsive */
 @media (max-width: 768px) {
-  .legislation-container {
+  .fiscalization-container {
     padding: 12px;
   }
   
@@ -1934,19 +1413,6 @@ watch(itemsPorPagina, (nuevoValor) => {
   
   .back-button {
     padding: 6px 10px;
-  }
-  
-  .global-search-box {
-    max-width: 100%;
-  }
-  
-  .resultados-tabla th,
-  .resultados-tabla td {
-    padding: 8px;
-  }
-  
-  .resultado-asunto {
-    max-width: 200px;
   }
 }
 </style>
