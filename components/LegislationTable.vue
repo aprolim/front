@@ -1,7 +1,7 @@
 <template>
   <div class="legislation-container">
     <!-- Mostrar tabla SOLO si hash cumple condición Y el filtro es válido -->
-    <template v-if="hashValido && filtroValido">
+    <template v-if="hashValido && filtroValido" class="mt-[3.5vw]">
       <!-- Header con título, contador y botón volver -->
       <div class="legislation-header">
         <div class="header-left">
@@ -102,6 +102,7 @@
               </td>
               <td class="actions-cell">
                 <a 
+                  v-if="item.documento"
                   :href="`https://apisi.senado.gob.bo/${item.documento}`" 
                   target="_blank"
                   class="btn-documento"
@@ -110,6 +111,7 @@
                   <span class="btn-icon">📄</span>
                   <span class="btn-text">PDF</span>
                 </a>
+                <span v-else class="sin-documento">Sin documento</span>
               </td>
             </tr>
             
@@ -170,35 +172,69 @@
 
     <!-- Contenido cuando el filtro NO es válido o no está establecido -->
     <template v-else>
-      <!-- BUSCADOR GLOBAL -->
+      <!-- BUSCADOR GLOBAL CON BOTÓN VOLVER A LA IZQUIERDA -->
       <div class="global-search-container">
-        <div class="global-search-box">
-          <input 
-            type="text" 
-            v-model="busquedaGlobal"
-            @keyup.enter="realizarBusquedaGlobal"
-            placeholder="Buscar en todos los proyectos de ley (título, número, asunto)..."
-            class="global-search-input"
-          >
-          <button @click="realizarBusquedaGlobal" class="global-search-button" :disabled="buscandoGlobal">
-            <span class="search-icon">🔍</span>
-            <span v-if="buscandoGlobal" class="loading-spinner-small"></span>
-          </button>
+        <div class="global-search-wrapper">
+          <!-- Botón Volver a la izquierda del buscador -->
           <button 
-            v-if="busquedaGlobal" 
-            @click="limpiarBusquedaGlobal" 
-            class="global-clear-button"
-            title="Limpiar búsqueda"
+            v-if="busquedaGlobal && resultadosGlobal.length > 0" 
+            class="back-from-search-button"
+            @click="limpiarBusquedaGlobal"
+            title="Volver a las opciones"
           >
-            ✕
+            <span class="back-icon">←</span>
+            <span class="back-text">Volver</span>
           </button>
+          <div class="global-search-box">
+            <input 
+              type="text" 
+              v-model="busquedaGlobal"
+              @keyup.enter="realizarBusquedaGlobal"
+              placeholder="Buscar en todos los proyectos de ley (título, número, asunto)..."
+              class="global-search-input"
+            >
+            <button @click="realizarBusquedaGlobal" class="global-search-button" :disabled="buscandoGlobal">
+              <span class="search-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16.9982 16.7411" class="size-[2vw]">
+                  <path d="M16.5731,14.3456l-3.8-3.6938a1.3964,1.3964,0,0,0-.705-.3665,6.6049,6.6049,0,1,0-1.6263,1.6729,1.395,1.395,0,0,0,.3888.6942L14.63,16.3465a1.3947,1.3947,0,0,0,1.9434-2.0009Zm-6.44-4.3121a4.9289,4.9289,0,1,1-.1015-6.971A4.9351,4.9351,0,0,1,10.1331,10.0335Z" 
+                        fill="currentColor" />
+                </svg>
+              </span>
+              <span v-if="buscandoGlobal" class="loading-spinner-small"></span>
+            </button>
+            <button 
+              v-if="busquedaGlobal" 
+              @click="limpiarBusquedaGlobal" 
+              class="global-clear-button"
+              title="Limpiar búsqueda"
+            >
+              ✕
+            </button>
+          </div>
         </div>
         
-        <!-- Resultados de búsqueda global -->
+        <!-- Resultados de búsqueda global CON PAGINACIÓN -->
         <div v-if="resultadosGlobal.length > 0 && !buscandoGlobal" class="resultados-global">
           <div class="resultados-header">
             <h3>Resultados de búsqueda: "{{ busquedaGlobal }}"</h3>
             <span class="resultados-count">{{ resultadosGlobal.length }} resultados encontrados</span>
+          </div>
+          
+          <!-- Selector de filas por página para resultados globales -->
+          <div class="resultados-controls">
+            <div class="rows-per-page">
+              <span>Mostrar</span>
+              <select v-model.number="resultadosItemsPorPagina" @change="resetearPaginaResultados">
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+              </select>
+              <span>filas</span>
+            </div>
           </div>
           
           <div class="resultados-tabs">
@@ -207,7 +243,7 @@
               :key="categoria"
               class="resultado-tab"
               :class="{ active: categoriaActiva === categoria }"
-              @click="categoriaActiva = categoria"
+              @click="cambiarCategoriaResultados(categoria)"
             >
               {{ obtenerNombreCategoria(categoria) }}
               <span class="tab-count">{{ resultados.length }}</span>
@@ -225,7 +261,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="item in resultadosPorCategoria[categoriaActiva]" :key="item.id">
+                <tr v-for="item in itemsResultadosPaginados" :key="item.id">
                   <td class="resultado-titulo">
                     <div class="resultado-titulo-principal">{{ item.titulo }}</div>
                     <div class="resultado-numero" v-if="item.numero">N° {{ item.numero }}</div>
@@ -253,6 +289,45 @@
               </tbody>
             </table>
           </div>
+          
+          <!-- Paginación para resultados globales -->
+          <div v-if="itemsResultadosFiltrados.length > 0" class="resultados-pagination">
+            <div class="pagination-info">
+              Mostrando {{ (resultadosPaginaActual - 1) * resultadosItemsPorPagina + 1 }} - 
+              {{ Math.min(resultadosPaginaActual * resultadosItemsPorPagina, itemsResultadosFiltrados.length) }} de 
+              {{ itemsResultadosFiltrados.length }} resultados
+            </div>
+            
+            <div class="pagination-controls">
+              <button 
+                class="pagination-btn" 
+                :disabled="resultadosPaginaActual === 1"
+                @click="resultadosPaginaActual--"
+              >
+                ← Anterior
+              </button>
+              
+              <div class="pagination-numbers">
+                <button 
+                  v-for="page in resultadosPaginasMostradas" 
+                  :key="page"
+                  class="pagination-number"
+                  :class="{ active: page === resultadosPaginaActual }"
+                  @click="resultadosPaginaActual = page"
+                >
+                  {{ page }}
+                </button>
+              </div>
+              
+              <button 
+                class="pagination-btn" 
+                :disabled="resultadosPaginaActual === resultadosTotalPaginas"
+                @click="resultadosPaginaActual++"
+              >
+                Siguiente →
+              </button>
+            </div>
+          </div>
         </div>
         
         <div v-else-if="buscandoGlobal" class="loading-state">
@@ -262,6 +337,10 @@
         
         <div v-else-if="busquedaGlobal && resultadosGlobal.length === 0 && !buscandoGlobal" class="no-resultados">
           <p>No se encontraron resultados para "{{ busquedaGlobal }}"</p>
+          <button class="back-from-search-button" @click="limpiarBusquedaGlobal">
+            <span class="back-icon">←</span>
+            <span class="back-text">Volver a opciones</span>
+          </button>
         </div>
         
         <!-- Grid de Tarjetas (se muestra cuando no hay búsqueda) -->
@@ -353,6 +432,10 @@ const busquedaGlobal = ref('')
 const buscandoGlobal = ref(false)
 const resultadosGlobal = ref([])
 const categoriaActiva = ref('')
+
+// Variables para paginación de resultados de búsqueda global
+const resultadosPaginaActual = ref(1)
+const resultadosItemsPorPagina = ref(5)
 
 // Mapa de íconos por filtro
 const iconosPorFiltro = ref({})
@@ -534,6 +617,40 @@ const resultadosPorCategoria = computed(() => {
   return porCategoria
 })
 
+// Computed para los resultados filtrados por categoría activa
+const itemsResultadosFiltrados = computed(() => {
+  if (!categoriaActiva.value) return []
+  return resultadosPorCategoria.value[categoriaActiva.value] || []
+})
+
+// Computed para los resultados paginados
+const itemsResultadosPaginados = computed(() => {
+  const inicio = (resultadosPaginaActual.value - 1) * resultadosItemsPorPagina.value
+  const fin = inicio + resultadosItemsPorPagina.value
+  return itemsResultadosFiltrados.value.slice(inicio, fin)
+})
+
+// Computed para total de páginas de resultados
+const resultadosTotalPaginas = computed(() => {
+  return Math.ceil(itemsResultadosFiltrados.value.length / resultadosItemsPorPagina.value)
+})
+
+// Computed para páginas mostradas en paginación
+const resultadosPaginasMostradas = computed(() => {
+  const total = resultadosTotalPaginas.value
+  const actual = resultadosPaginaActual.value
+  const rango = 5
+  
+  let inicio = Math.max(1, actual - Math.floor(rango / 2))
+  let fin = Math.min(total, inicio + rango - 1)
+  
+  if (fin - inicio + 1 < rango) {
+    inicio = Math.max(1, fin - rango + 1)
+  }
+  
+  return Array.from({ length: fin - inicio + 1 }, (_, i) => inicio + i)
+})
+
 // Computed para la tabla
 const itemsFiltrados = computed(() => {
   let datos = [...todosLosDatos.value]
@@ -667,6 +784,17 @@ const obtenerNombreCategoria = (categoriaKey) => {
   return nombres[categoriaKey] || categoriaKey
 }
 
+// Función para cambiar de categoría y resetear paginación
+const cambiarCategoriaResultados = (categoria) => {
+  categoriaActiva.value = categoria
+  resultadosPaginaActual.value = 1
+}
+
+// Función para resetear paginación al cambiar número de filas
+const resetearPaginaResultados = () => {
+  resultadosPaginaActual.value = 1
+}
+
 // Función para cargar datos de un endpoint completo
 const cargarEndpointCompleto = async (key, endpoint) => {
   try {
@@ -718,6 +846,7 @@ const realizarBusquedaGlobal = async () => {
   
   buscandoGlobal.value = true
   resultadosGlobal.value = []
+  resultadosPaginaActual.value = 1
   
   const termino = busquedaGlobal.value.toLowerCase().trim()
   const endpointsKeys = Object.keys(ENDPOINTS)
@@ -759,6 +888,8 @@ const limpiarBusquedaGlobal = () => {
   busquedaGlobal.value = ''
   resultadosGlobal.value = []
   categoriaActiva.value = ''
+  resultadosPaginaActual.value = 1
+  resultadosItemsPorPagina.value = 5
 }
 
 // Función para volver a las opciones de legislación
@@ -956,7 +1087,6 @@ watch(itemsPorPagina, (nuevoValor) => {
 </script>
 
 <style scoped>
-/* Todos los estilos existentes se mantienen igual */
 .legislation-container {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   max-width: 1200px;
@@ -1432,6 +1562,41 @@ watch(itemsPorPagina, (nuevoValor) => {
   margin-bottom: 24px;
 }
 
+.global-search-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.back-from-search-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid #e2e8f0;
+  padding: 8px 16px;
+  border-radius: 8px;
+  color: #475569;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.back-from-search-button:hover {
+  background: #E03636;
+  border-color: #E03636;
+  color: white;
+}
+
+.back-from-search-button:hover .back-icon {
+  transform: translateX(-2px);
+}
+
 .global-search-box {
   display: flex;
   gap: 8px;
@@ -1440,14 +1605,14 @@ watch(itemsPorPagina, (nuevoValor) => {
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   position: relative;
-  max-width: 600px;
-  margin: 0 auto 24px auto;
+  flex: 1;
+  max-width: 300px;
 }
 
 .global-search-input {
   flex: 1;
   border: 1px solid #e2e8f0;
-  padding: 12px 16px;
+  padding: 4px 8px;
   font-size: 1rem;
   border-radius: 8px;
   outline: none;
@@ -1461,8 +1626,7 @@ watch(itemsPorPagina, (nuevoValor) => {
 }
 
 .global-search-button {
-  background: #E03636;
-  color: white;
+  color: black;
   border: none;
   padding: 8px 20px;
   border-radius: 8px;
@@ -1558,6 +1722,19 @@ watch(itemsPorPagina, (nuevoValor) => {
   background: #f1f5f9;
   padding: 4px 10px;
   border-radius: 20px;
+}
+
+.resultados-controls {
+  display: flex;
+  justify-content: flex-end;
+  padding: 12px 16px;
+  background: white;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.resultados-controls .rows-per-page {
+  background: #f8fafc;
+  margin: 0;
 }
 
 .resultados-tabs {
@@ -1694,6 +1871,83 @@ watch(itemsPorPagina, (nuevoValor) => {
   color: #94a3b8;
 }
 
+.resultados-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 16px;
+  background: white;
+  border-top: 1px solid #e2e8f0;
+}
+
+.resultados-pagination .pagination-info {
+  color: #64748b;
+  font-size: 0.85rem;
+}
+
+.resultados-pagination .pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.resultados-pagination .pagination-btn {
+  background: white;
+  border: 1px solid #e2e8f0;
+  padding: 6px 12px;
+  border-radius: 6px;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.resultados-pagination .pagination-btn:hover:not(:disabled) {
+  background: #E03636;
+  color: white;
+  border-color: #E03636;
+}
+
+.resultados-pagination .pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.resultados-pagination .pagination-numbers {
+  display: flex;
+  gap: 4px;
+}
+
+.resultados-pagination .pagination-number {
+  min-width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e2e8f0;
+  background: white;
+  border-radius: 6px;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.resultados-pagination .pagination-number:hover:not(.active):not(:disabled) {
+  background: #f1f5f9;
+  border-color: #E03636;
+}
+
+.resultados-pagination .pagination-number.active {
+  background: #E03636;
+  color: white;
+  border-color: #E03636;
+}
+
 .no-resultados {
   text-align: center;
   padding: 40px;
@@ -1703,7 +1957,7 @@ watch(itemsPorPagina, (nuevoValor) => {
   margin-bottom: 24px;
 }
 
-/* Estilos para las tarjetas (igual que antes) */
+/* Estilos para las tarjetas */
 .tabs-content {
   background: transparent;
 }
@@ -1936,8 +2190,18 @@ watch(itemsPorPagina, (nuevoValor) => {
     padding: 6px 10px;
   }
   
+  .global-search-wrapper {
+    flex-direction: column;
+  }
+  
   .global-search-box {
     max-width: 100%;
+    width: 100%;
+  }
+  
+  .back-from-search-button {
+    width: 100%;
+    justify-content: center;
   }
   
   .resultados-tabla th,
@@ -1947,6 +2211,15 @@ watch(itemsPorPagina, (nuevoValor) => {
   
   .resultado-asunto {
     max-width: 200px;
+  }
+  
+  .resultados-pagination {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .resultados-controls {
+    justify-content: center;
   }
 }
 </style>
