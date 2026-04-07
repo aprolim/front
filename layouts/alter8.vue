@@ -99,18 +99,21 @@
             </div>
             <!-- MENÚ 3: Legisladores y representación -->
             <div class="relative group/menu">
-              <button class="px-[1vw] py-2 text-white font-medium hover:bg-[#C12F2F] rounded-lg transition-colors">
-                Legisladores
-              </button>
+              <NuxtLink 
+                to="/legisladores-nacionales" 
+                class="inline-block px-[1vw] py-2 text-white font-medium hover:bg-[#C12F2F] rounded-lg transition-colors cursor-pointer"
+              >
+                Legisladores Nacionales
+              </NuxtLink>
               <div class="absolute right-0 mt-1 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all duration-200 z-50">
                 <div class="py-2">
-                  <NuxtLink to="/" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                  <NuxtLink to="/legisladores-nacionales#" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
                     👨‍⚖️ Senadores
                   </NuxtLink>
-                  <NuxtLink to="/" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                  <NuxtLink to="/legisladores-nacionales#" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
                     👩‍⚖️ Diputados
                   </NuxtLink>
-                  <NuxtLink to="/" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                  <NuxtLink to="/legisladores-nacionales#" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
                     📋 Comisiones
                   </NuxtLink>
                 </div>
