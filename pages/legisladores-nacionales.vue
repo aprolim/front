@@ -159,7 +159,7 @@
                 <img :src="titular.imagen" :alt="titular.nombre" class="w-full h-full object-cover">
               </div>
               <p class="text-white font-semibold text-sm">{{ titular.nombre.split(' ')[0] }} {{ titular.nombre.split(' ')[1] }}</p>
-              <p class="text-gray-300 text-xs">{{ titular.cargo }}</p>
+              <p class="text-gray-300 text-xs">{{ titular.partido }}</p>
             </div>
           </div>
 
@@ -177,7 +177,7 @@
                 <img :src="suplente.imagen" :alt="suplente.nombre" class="w-full h-full object-cover">
               </div>
               <p class="text-white font-semibold text-sm">{{ suplente.nombre.split(' ')[0] }} {{ suplente.nombre.split(' ')[1] }}</p>
-              <p class="text-gray-300 text-xs">{{ suplente.cargo }}</p>
+              <p class="text-gray-300 text-xs">{{ suplente.partido }}</p>
             </div>
           </div>
         </div>
@@ -220,7 +220,7 @@
               <div class="w-20 h-20 rounded-full border-4 flex items-center justify-center mx-auto"
                    :style="{ borderColor: '#E4D294', backgroundColor: partidoSeleccionado?.id === partido.id ? 'rgba(228,210,148,0.2)' : 'rgba(255,255,255,0.1)' }">
                 <div v-html="partidoSeleccionado?.id === partido.id ? partido.iconoDorado : partido.iconoBlanco" 
-                     class="w-12 h-12"></div>
+                     class="w-full h-full"></div>
               </div>
               <p class="text-center text-white text-xs mt-1">{{ partido.nombreCorto }}</p>
             </div>
@@ -247,7 +247,7 @@
                   <img :src="persona.imagen" :alt="persona.nombre" class="w-full h-full object-cover">
                 </div>
                 <p class="text-white font-semibold text-sm">{{ persona.nombre.split(' ')[0] }} {{ persona.nombre.split(' ')[1] }}</p>
-                <p class="text-gray-300 text-xs">{{ persona.cargo }}</p>
+                <p class="text-gray-300 text-xs">{{ persona.departamento }}</p>
               </div>
             </div>
             <div class="grid grid-cols-5 gap-6 mb-6">
@@ -257,7 +257,7 @@
                   <img :src="persona.imagen" :alt="persona.nombre" class="w-full h-full object-cover">
                 </div>
                 <p class="text-white font-semibold text-sm">{{ persona.nombre.split(' ')[0] }} {{ persona.nombre.split(' ')[1] }}</p>
-                <p class="text-gray-300 text-xs">{{ persona.cargo }}</p>
+                <p class="text-gray-300 text-xs">{{ persona.departamento }}</p>
               </div>
             </div>
             <div class="grid grid-cols-5 gap-6">
@@ -267,7 +267,7 @@
                   <img :src="persona.imagen" :alt="persona.nombre" class="w-full h-full object-cover">
                 </div>
                 <p class="text-white font-semibold text-sm">{{ persona.nombre.split(' ')[0] }} {{ persona.nombre.split(' ')[1] }}</p>
-                <p class="text-gray-300 text-xs">{{ persona.cargo }}</p>
+                <p class="text-gray-300 text-xs">{{ persona.departamento }}</p>
               </div>
             </div>
           </div>
@@ -281,7 +281,7 @@
                   <img :src="persona.imagen" :alt="persona.nombre" class="w-full h-full object-cover">
                 </div>
                 <p class="text-white font-semibold text-sm">{{ persona.nombre.split(' ')[0] }} {{ persona.nombre.split(' ')[1] }}</p>
-                <p class="text-gray-300 text-xs">{{ persona.cargo }}</p>
+                <p class="text-gray-300 text-xs">{{ persona.departamento }}</p>
               </div>
             </div>
             <div class="grid grid-cols-4 gap-6 mb-6">
@@ -291,7 +291,7 @@
                   <img :src="persona.imagen" :alt="persona.nombre" class="w-full h-full object-cover">
                 </div>
                 <p class="text-white font-semibold text-sm">{{ persona.nombre.split(' ')[0] }} {{ persona.nombre.split(' ')[1] }}</p>
-                <p class="text-gray-300 text-xs">{{ persona.cargo }}</p>
+                <p class="text-gray-300 text-xs">{{ persona.departamento }}</p>
               </div>
             </div>
             <div class="grid grid-cols-4 gap-6">
@@ -301,7 +301,7 @@
                   <img :src="persona.imagen" :alt="persona.nombre" class="w-full h-full object-cover">
                 </div>
                 <p class="text-white font-semibold text-sm">{{ persona.nombre.split(' ')[0] }} {{ persona.nombre.split(' ')[1] }}</p>
-                <p class="text-gray-300 text-xs">{{ persona.cargo }}</p>
+                <p class="text-gray-300 text-xs">{{ persona.departamento }}</p>
               </div>
             </div>
           </div>
@@ -314,7 +314,7 @@
         <img :src="persona.imagen" :alt="persona.nombre" class="w-full h-full object-cover">
       </div>
       <p class="text-white font-semibold text-sm">{{ persona.nombre.split(' ')[0] }} {{ persona.nombre.split(' ')[1] }}</p>
-      <p class="text-gray-300 text-xs">{{ persona.cargo }}</p>
+      <p class="text-gray-300 text-xs">{{ persona.departamento }}</p>
     </div>
   </div>
   <div class="grid grid-cols-3 gap-6 mb-6">
@@ -324,7 +324,7 @@
         <img :src="persona.imagen" :alt="persona.nombre" class="w-full h-full object-cover">
       </div>
       <p class="text-white font-semibold text-sm">{{ persona.nombre.split(' ')[0] }} {{ persona.nombre.split(' ')[1] }}</p>
-      <p class="text-gray-300 text-xs">{{ persona.cargo }}</p>
+      <p class="text-gray-300 text-xs">{{ persona.departamento }}</p>
     </div>
   </div>
   <!-- Tercera fila: solo 1 elemento en la primera columna -->
@@ -336,7 +336,7 @@
           <img :src="miembrosMostrar[6].imagen" :alt="miembrosMostrar[6].nombre" class="w-full h-full object-cover">
         </div>
         <p class="text-white font-semibold text-sm">{{ miembrosMostrar[6].nombre.split(' ')[0] }} {{ miembrosMostrar[6].nombre.split(' ')[1] }}</p>
-        <p class="text-gray-300 text-xs">{{ miembrosMostrar[6].cargo }}</p>
+        <p class="text-gray-300 text-xs">{{ miembrosMostrar[6].departamento }}</p>
       </div>
     </div>
     <div></div>
@@ -352,7 +352,7 @@
                   <img :src="miembrosMostrar[0].imagen" :alt="miembrosMostrar[0].nombre" class="w-full h-full object-cover">
                 </div>
                 <p class="text-white font-semibold text-sm">{{ miembrosMostrar[0].nombre.split(' ')[0] }} {{ miembrosMostrar[0].nombre.split(' ')[1] }}</p>
-                <p class="text-gray-300 text-xs">{{ miembrosMostrar[0].cargo }}</p>
+                <p class="text-gray-300 text-xs">{{ miembrosMostrar[0].departamento }}</p>
               </div>
             </div>
           </div>
@@ -368,8 +368,10 @@ import { useRoute } from 'vue-router'
 import { useScrollEffects } from '@/composables/useScrollEffects'
 import ScrollProgress from '@/components/UI/ScrollProgress.vue'
 import { departamentosData } from '@/data/departamentos.js'
+import { partidosData } from '~/data/partidos'
 
 const departamentos = ref(departamentosData)
+const partidos = ref(partidosData)
 
 const { scrolled, scrollProgress, initScrollListener, removeScrollListener } = useScrollEffects()
 const route = useRoute()
@@ -457,135 +459,29 @@ const selectedImage = ref({
 // ==================== DATOS SECCIÓN 3 ====================
 const departamentoSeleccionado = ref(null)
 
-const crearEscudoDorado = (nombre) => `
-  <svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-    <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" fill="#D4AF37" stroke="#B8960C" stroke-width="2"/>
-    <text x="50" y="55" text-anchor="middle" fill="#8B6914" font-size="10" font-weight="bold">${nombre.substring(0, 3)}</text>
-  </svg>
-`
-
-const crearEscudoReal = (nombre, color) => `
-  <svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-    <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" fill="${color}" stroke="#E4D294" stroke-width="2"/>
-    <text x="50" y="55" text-anchor="middle" fill="white" font-size="10" font-weight="bold">${nombre.substring(0, 3)}</text>
-  </svg>
-`
-
-
-
 // Datos de senadores por departamento (simplificados)
 const titularesPorDepartamento = {
-  'LA PAZ': [
-    { nombre: 'Bertha Nurmy Gutierrez', cargo: 'Senadora Titular', imagen: 'https://randomuser.me/api/portraits/women/1.jpg' },
-    { nombre: 'Daniel Antonio Ortiz', cargo: 'Senador Titular', imagen: 'https://randomuser.me/api/portraits/men/2.jpg' },
-    { nombre: 'Erick Nelson Soruco', cargo: 'Senador Titular', imagen: 'https://randomuser.me/api/portraits/men/3.jpg' },
-    { nombre: 'Freddy Castillo Chavez', cargo: 'Senador Titular', imagen: 'https://randomuser.me/api/portraits/men/4.jpg' }
-  ],
-  'SANTA CRUZ': [
-    { nombre: 'Carlos Sánchez', cargo: 'Senador Titular', imagen: 'https://randomuser.me/api/portraits/men/5.jpg' },
-    { nombre: 'Patricia Suárez', cargo: 'Senadora Titular', imagen: 'https://randomuser.me/api/portraits/women/6.jpg' },
-    { nombre: 'Roberto Fernández', cargo: 'Senador Titular', imagen: 'https://randomuser.me/api/portraits/men/7.jpg' },
-    { nombre: 'Ana María', cargo: 'Senadora Titular', imagen: 'https://randomuser.me/api/portraits/women/8.jpg' }
-  ],
-  'COCHABAMBA': [
-    { nombre: 'Mónica Reyes', cargo: 'Senadora Titular', imagen: 'https://randomuser.me/api/portraits/women/9.jpg' },
-    { nombre: 'Fernando Torrico', cargo: 'Senador Titular', imagen: 'https://randomuser.me/api/portraits/men/10.jpg' },
-    { nombre: 'Cecilia López', cargo: 'Senadora Titular', imagen: 'https://randomuser.me/api/portraits/women/11.jpg' },
-    { nombre: 'Javier Arce', cargo: 'Senador Titular', imagen: 'https://randomuser.me/api/portraits/men/12.jpg' }
-  ],
-  'POTOSÍ': [
-    { nombre: 'René Joaquino', cargo: 'Senador Titular', imagen: 'https://randomuser.me/api/portraits/men/13.jpg' },
-    { nombre: 'Lidia Mamani', cargo: 'Senadora Titular', imagen: 'https://randomuser.me/api/portraits/women/14.jpg' },
-    { nombre: 'Felipe Quispe', cargo: 'Senador Titular', imagen: 'https://randomuser.me/api/portraits/men/15.jpg' },
-    { nombre: 'Juana Condori', cargo: 'Senadora Titular', imagen: 'https://randomuser.me/api/portraits/women/16.jpg' }
-  ],
-  'CHUQUISACA': [
-    { nombre: 'Gladys Alarcón', cargo: 'Senadora Titular', imagen: 'https://randomuser.me/api/portraits/women/17.jpg' },
-    { nombre: 'Marcelo Chirinos', cargo: 'Senador Titular', imagen: 'https://randomuser.me/api/portraits/men/18.jpg' },
-    { nombre: 'Roxana Muñoz', cargo: 'Senadora Titular', imagen: 'https://randomuser.me/api/portraits/women/19.jpg' },
-    { nombre: 'Daniel Rojas', cargo: 'Senador Titular', imagen: 'https://randomuser.me/api/portraits/men/20.jpg' }
-  ],
-  'ORURO': [
-    { nombre: 'Rubén Méndez', cargo: 'Senador Titular', imagen: 'https://randomuser.me/api/portraits/men/21.jpg' },
-    { nombre: 'Nélida Sifuentes', cargo: 'Senadora Titular', imagen: 'https://randomuser.me/api/portraits/women/22.jpg' },
-    { nombre: 'Edgar Montaño', cargo: 'Senador Titular', imagen: 'https://randomuser.me/api/portraits/men/23.jpg' },
-    { nombre: 'Betty Yañiquez', cargo: 'Senadora Titular', imagen: 'https://randomuser.me/api/portraits/women/24.jpg' }
-  ],
-  'TARIJA': [
-    { nombre: 'Rodrigo Paz', cargo: 'Senador Titular', imagen: 'https://randomuser.me/api/portraits/men/25.jpg' },
-    { nombre: 'Sonia Gutiérrez', cargo: 'Senadora Titular', imagen: 'https://randomuser.me/api/portraits/women/26.jpg' },
-    { nombre: 'Edwin Castellanos', cargo: 'Senador Titular', imagen: 'https://randomuser.me/api/portraits/men/27.jpg' },
-    { nombre: 'María Lema', cargo: 'Senadora Titular', imagen: 'https://randomuser.me/api/portraits/women/28.jpg' }
-  ],
-  'BENI': [
-    { nombre: 'Jeanine Áñez', cargo: 'Senadora Titular', imagen: 'https://randomuser.me/api/portraits/women/29.jpg' },
-    { nombre: 'Yerko Núñez', cargo: 'Senador Titular', imagen: 'https://randomuser.me/api/portraits/men/30.jpg' },
-    { nombre: 'Adriana Salvatierra', cargo: 'Senadora Titular', imagen: 'https://randomuser.me/api/portraits/women/31.jpg' },
-    { nombre: 'Arturo Murillo', cargo: 'Senador Titular', imagen: 'https://randomuser.me/api/portraits/men/32.jpg' }
-  ],
-  'PANDO': [
-    { nombre: 'Reina Cabrera', cargo: 'Senadora Titular', imagen: 'https://randomuser.me/api/portraits/women/33.jpg' },
-    { nombre: 'Carmelo Lenz', cargo: 'Senador Titular', imagen: 'https://randomuser.me/api/portraits/men/34.jpg' },
-    { nombre: 'Gladys Torrico', cargo: 'Senadora Titular', imagen: 'https://randomuser.me/api/portraits/women/35.jpg' },
-    { nombre: 'Richard Vásquez', cargo: 'Senador Titular', imagen: 'https://randomuser.me/api/portraits/men/36.jpg' }
-  ]
+  'LA PAZ': [],
+  'SANTA CRUZ': [],
+  'COCHABAMBA': [],
+  'POTOSÍ': [],
+  'CHUQUISACA': [],
+  'ORURO': [],
+  'TARIJA': [],
+  'BENI': [],
+  'PANDO': []
 }
 
 const suplentesPorDepartamento = {
-  'LA PAZ': [
-    { nombre: 'Freddy Rioja Melgar', cargo: 'Senador Suplente', imagen: 'https://randomuser.me/api/portraits/men/37.jpg' },
-    { nombre: 'Reina Isabel Pallares', cargo: 'Senadora Suplente', imagen: 'https://randomuser.me/api/portraits/women/38.jpg' },
-    { nombre: 'Cesia Roca Escalante', cargo: 'Senadora Suplente', imagen: 'https://randomuser.me/api/portraits/women/39.jpg' },
-    { nombre: 'Villma Colque Camacho', cargo: 'Senadora Suplente', imagen: 'https://randomuser.me/api/portraits/women/40.jpg' }
-  ],
-  'SANTA CRUZ': [
-    { nombre: 'Marcela Guerrero Vilca', cargo: 'Senadora Suplente', imagen: 'https://randomuser.me/api/portraits/women/41.jpg' },
-    { nombre: 'Sichard Hans Soraide', cargo: 'Senador Suplente', imagen: 'https://randomuser.me/api/portraits/men/42.jpg' },
-    { nombre: 'Mabel Giordano', cargo: 'Senadora Suplente', imagen: 'https://randomuser.me/api/portraits/women/43.jpg' },
-    { nombre: 'Marco Antonio Segovia', cargo: 'Senador Suplente', imagen: 'https://randomuser.me/api/portraits/men/44.jpg' }
-  ],
-  'COCHABAMBA': [
-    { nombre: 'Rolando Vacaflor', cargo: 'Senador Suplente', imagen: 'https://randomuser.me/api/portraits/men/45.jpg' },
-    { nombre: 'Richard Espada Ugarte', cargo: 'Senador Suplente', imagen: 'https://randomuser.me/api/portraits/men/46.jpg' },
-    { nombre: 'Hugo Marcelo Cortez', cargo: 'Senador Suplente', imagen: 'https://randomuser.me/api/portraits/men/47.jpg' },
-    { nombre: 'Aldo Sergio Villegas', cargo: 'Senador Suplente', imagen: 'https://randomuser.me/api/portraits/men/48.jpg' }
-  ],
-  'POTOSÍ': [
-    { nombre: 'Victor S. Quispe', cargo: 'Senador Suplente', imagen: 'https://randomuser.me/api/portraits/men/49.jpg' },
-    { nombre: 'Jesus Humberto Suarez', cargo: 'Senador Suplente', imagen: 'https://randomuser.me/api/portraits/men/50.jpg' },
-    { nombre: 'Maria Elena Pachacute', cargo: 'Senadora Suplente', imagen: 'https://randomuser.me/api/portraits/women/51.jpg' },
-    { nombre: 'Royer Ivan Mamani', cargo: 'Senador Suplente', imagen: 'https://randomuser.me/api/portraits/men/52.jpg' }
-  ],
-  'CHUQUISACA': [
-    { nombre: 'Edwin Lopez Quiroga', cargo: 'Senador Suplente', imagen: 'https://randomuser.me/api/portraits/men/53.jpg' },
-    { nombre: 'Roxana Mamani', cargo: 'Senadora Suplente', imagen: 'https://randomuser.me/api/portraits/women/54.jpg' },
-    { nombre: 'Marcelo Matias Cardona', cargo: 'Senador Suplente', imagen: 'https://randomuser.me/api/portraits/men/55.jpg' },
-    { nombre: 'Manfred Leo Perez', cargo: 'Senador Suplente', imagen: 'https://randomuser.me/api/portraits/men/56.jpg' }
-  ],
-  'ORURO': [
-    { nombre: 'Roger Mamani Coronado', cargo: 'Senador Suplente', imagen: 'https://randomuser.me/api/portraits/men/57.jpg' },
-    { nombre: 'Nilton Condori Alanoca', cargo: 'Senador Suplente', imagen: 'https://randomuser.me/api/portraits/men/58.jpg' },
-    { nombre: 'Luzmaya Zelaya Vega', cargo: 'Senadora Suplente', imagen: 'https://randomuser.me/api/portraits/women/59.jpg' },
-    { nombre: 'Carolina Giese Urresti', cargo: 'Senadora Suplente', imagen: 'https://randomuser.me/api/portraits/women/60.jpg' }
-  ],
-  'TARIJA': [
-    { nombre: 'Leonardo Roca Eguez', cargo: 'Senador Suplente', imagen: 'https://randomuser.me/api/portraits/men/61.jpg' },
-    { nombre: 'Susana Gabriela Ruiz', cargo: 'Senadora Suplente', imagen: 'https://randomuser.me/api/portraits/women/62.jpg' },
-    { nombre: 'Lorgio Fernando Pareja', cargo: 'Senador Suplente', imagen: 'https://randomuser.me/api/portraits/men/63.jpg' },
-    { nombre: 'Lenny Mayra Ayala', cargo: 'Senadora Suplente', imagen: 'https://randomuser.me/api/portraits/women/64.jpg' }
-  ],
-  'BENI': [
-    { nombre: 'Ramiro Mamani Ramirez', cargo: 'Senador Suplente', imagen: 'https://randomuser.me/api/portraits/men/65.jpg' },
-    { nombre: 'Ilse Fatima Davila', cargo: 'Senadora Suplente', imagen: 'https://randomuser.me/api/portraits/women/66.jpg' },
-    { nombre: 'Kathia Natalia Miserendino', cargo: 'Senadora Suplente', imagen: 'https://randomuser.me/api/portraits/women/67.jpg' },
-    { nombre: 'Jorge Antonio Quispe', cargo: 'Senador Suplente', imagen: 'https://randomuser.me/api/portraits/men/68.jpg' }
-  ],
-  'PANDO': [
-    { nombre: 'Claudia Cardenas', cargo: 'Senadora Suplente', imagen: 'https://randomuser.me/api/portraits/women/69.jpg' },
-    { nombre: 'Cinthya Inga Gutierrez', cargo: 'Senadora Suplente', imagen: 'https://randomuser.me/api/portraits/women/70.jpg' },
-    { nombre: 'Apolinar Rivera Muñoz', cargo: 'Senador Suplente', imagen: 'https://randomuser.me/api/portraits/men/71.jpg' },
-    { nombre: 'Cesia Roca Escalante', cargo: 'Senadora Suplente', imagen: 'https://randomuser.me/api/portraits/women/72.jpg' }
-  ]
+  'LA PAZ': [],
+  'SANTA CRUZ': [],
+  'COCHABAMBA': [],
+  'POTOSÍ': [],
+  'CHUQUISACA': [],
+  'ORURO': [],
+  'TARIJA': [],
+  'BENI': [],
+  'PANDO': []
 }
 
 const titulares = ref([])
@@ -603,44 +499,52 @@ const mostrarSuplentes = ref(false)
 
 // Datos de los senadores por partido
 const senadoresData = [
-  { nombre: 'Abdon Porcel Arancibia', suplente: 'Ilse Fatima Davila Arancibia', partido: 'libre' },
-  { nombre: 'Bertha Nurmy Gutierrez Meneses De Mamani', suplente: 'Freddy Rioja Melgar', partido: 'pdc' },
-  { nombre: 'Branko Goran Marinkovic Jovicevic', suplente: 'Kathia Natalia Miserendino Romero', partido: 'libre' },
-  { nombre: 'Carol Carlo Duran', suplente: 'Jorge Antonio Quispe Flores', partido: 'libre' },
-  { nombre: 'Cesar Mentasti Padilla', suplente: 'Marcela Guerrero Vilca', partido: 'alianza' },
-  { nombre: 'Claudia Mallon Vargas', suplente: 'Apolinar Rivera Muñoz', partido: 'sumate' },
-  { nombre: 'Daniel Antonio Ortiz Velasquez', suplente: 'Reina Isabel Pallares Morales', partido: 'pdc' },
-  { nombre: 'Eliana Rina Acosta Quispe', suplente: 'Sichard Hans Soraide Castedo', partido: 'alianza' },
-  { nombre: 'Erick Nelson Soruco Alpire', suplente: 'Cesia Roca Escalante', partido: 'pdc' },
-  { nombre: 'Ernesto Suarez Sattori', suplente: 'Claudia Cardenas Velasquez', partido: 'libre' },
-  { nombre: 'Freddy Castillo Chavez', suplente: 'Villma Colque Camacho', partido: 'pdc' },
-  { nombre: 'Jose Roca Haensel', suplente: 'Mabel Giordano Sonnenschein', partido: 'alianza' },
-  { nombre: 'Jose Sanchez Aguilar', suplente: 'Cinthya Inga Gutierrez Guzman', partido: 'libre' },
-  { nombre: 'Leonor Rosalva Romero Gutierrez', suplente: 'Marco Antonio Segovia Vargas', partido: 'alianza' },
-  { nombre: 'Maria Isabel Moreno Cortez', suplente: 'Rolando Vacaflor Gabriel Arana', partido: 'libre' },
-  { nombre: 'Paola Limbania Lopez Zeballos', suplente: 'Richard Espada Ugarte', partido: 'pdc' },
-  { nombre: 'Teresa Alarcon Arana', suplente: '', partido: 'pdc' },
-  { nombre: 'Tomasa Yarhui Jacome', suplente: 'Hugo Marcelo Cortez Calvimontes', partido: 'libre' },
-  { nombre: 'Wanda Ximena Medrano Hervas', suplente: 'Aldo Sergio Villegas Mora', partido: 'libre' },
-  { nombre: 'Ana Maria Crispin Choque', suplente: 'Victor S. Quispe Santander', partido: 'pdc' },
-  { nombre: 'Cintia Monica Puerta Campos', suplente: 'Jesus Humberto Suarez Eguez', partido: 'pdc' },
-  { nombre: 'Jose Manuel Ormachea Mendienta', suplente: 'Maria Elena Pachacute Ticona', partido: 'libre' },
-  { nombre: 'Judith Rosario Garcia Coca', suplente: 'Royer Ivan Mamani Garcia', partido: 'pdc' },
-  { nombre: 'Maria Antonieta Alcon Sanchez', suplente: 'Edwin Lopez Quiroga', partido: 'pdc' },
-  { nombre: 'Nicanor Gonzalo Cochi Condori', suplente: 'Roxana Mamani Colquehuanca', partido: 'pdc' },
-  { nombre: 'Ana Karina Velasco Añez', suplente: 'Marcelo Matias Cardona Ibañez', partido: 'alianza' },
-  { nombre: 'Bertha Cartagena Sanchez', suplente: 'Manfred Leo Perez Hassenteufel', partido: 'pdc' },
-  { nombre: 'Betty Canaviri Villanueva', suplente: 'Roger Mamani Coronado', partido: 'libre' },
-  { nombre: 'Carmen Soledad Chapeton Tancara', suplente: 'Nilton Condori Alanoca', partido: 'alianza' },
-  { nombre: 'Diego Esteban Mateo Avila Navajas', suplente: 'Luzmaya Zelaya Vega', partido: 'pdc' },
-  { nombre: 'Julio Diego Romaña Galindo', suplente: 'Carolina Giese Urresti', partido: 'libre' },
-  { nombre: 'Kathia Lisbeth Quiroga Fernandez', suplente: 'Leonardo Roca Eguez', partido: 'libre' },
-  { nombre: 'Marcelino Flores Ordoñez', suplente: 'Susana Gabriela Ruiz Zuleta', partido: 'pdc' },
-  { nombre: 'Rosa Tatiana Añez Carrasco', suplente: 'Lorgio Fernando Pareja Saucedo', partido: 'alianza' },
-  { nombre: 'Wilder Veliz Armas', suplente: 'Lenny Mayra Ayala Justiniano', partido: 'pdc' },
-  { nombre: 'Yasmin Estivariz Villarroel', suplente: 'Ramiro Mamani Ramirez', partido: 'pdc' }
+  { nombre: 'Abdon Porcel Arancibia', suplente: 'Ilse Fatima Davila Arancibia', partido: 'libre', departamento:'Chuquisaca', imagen:'/senadores/g3/ABDON PORCEL ARANCIBIA.png', imagensu:'/suplentes/g1/ILSE FATIMA DAVILA ARANCIBIA.png'},
+  { nombre: 'Bertha Nurmy Gutierrez Meneses De Mamani', suplente: 'Freddy Rioja Melgar', partido: 'pdc', departamento:'Chuquisaca', imagen:'/senadores/g2/BERTHA NURMY GUTIERREZ MENESES.png', imagensu:'/suplentes/g3/FREDDY RIOJA MELGAR.png' },
+  { nombre: 'Branko Goran Marinkovic Jovicevic', suplente: 'Kathia Natalia Miserendino Romero', partido: 'libre', departamento:'Santa Cruz', imagen:'/senadores/g3/BRANKO GORAN MARINKOVIC JOVICEVIC.png', imagensu:'/suplentes/g4/KATHIA NATALIA MISERENDINO ROMERO.png' },
+  { nombre: 'Carol Carlo Duran', suplente: 'Jorge Antonio Quispe Flores', partido: 'libre', departamento:'Pando', imagen:'/senadores/g4/CAROL CARLO DURAN.png', imagensu:'/suplentes/g5/JORGE ANTONIO QUISPE FLORES.png' },
+  { nombre: 'Cesar Mentasti Padilla', suplente: 'Marcela Guerrero Vilca', partido: 'alianza', departamento:'Tarija', imagen:'/senadores/g2/CESAR MENTASTI PADILLA.png', imagensu:'/suplentes/g3/MARCELA GUERRERO VILCA.png' },
+  { nombre: 'Claudia Mallon Vargas', suplente: 'Apolinar Rivera Muñoz', partido: 'sumate', departamento:'Cochabamba', imagen:'/senadores/g3/CLAUDIA MALLON VARGAS.png', imagensu:'/suplentes/g2/APOLINAR RIVERA MUÑOZ.png' },
+  { nombre: 'Daniel Antonio Ortiz Velasquez', suplente: 'Reina Isabel Pallares Morales', partido: 'pdc', departamento:'Chuquisaca', imagen:'/senadores/g1/DANIEL ANTONIO ORTIZ VELÁSQUEZ.png', imagensu:'/suplentes/g1/REINA ISABEL PALLARES MORALES.png' },
+  { nombre: 'Eliana Rina Acosta Quispe', suplente: 'Sichard Hans Soraide Castedo', partido: 'alianza', departamento:'Pando', imagen:'/senadores/g3/ELIANA RINA ACOSTA QUISPE.png', imagensu:'/suplentes/g5/SICHARD HANS SORAIDE CASTEDO.png' },
+  { nombre: 'Erick Nelson Soruco Alpire', suplente: 'Cesia Roca Escalante', partido: 'pdc', departamento:'Beni', imagen:'/senadores/g2/ERICK NELSON SORUCO ALPIRE.png', imagensu:'/suplentes/g4/CESIA ROCA ESCALANTE.png' },
+  { nombre: 'Ernesto Suarez Sattori', suplente: 'Claudia Cardenas Velasquez', partido: 'libre', departamento:'Beni', imagen:'/senadores/g4/ERNESTO SUAREZ SATTORI.png', imagensu:'/suplentes/g4/CLAUDIA CARDENAS VELASQUEZ.png' },
+  { nombre: 'Freddy Castillo Chavez', suplente: 'Villma Colque Camacho', partido: 'pdc', departamento:'Oruro', imagen:'/senadores/g1/FREDDY CASTILLO CHAVEZ.png', imagensu:'/suplentes/g2/VILLMA COLQUE CAMACHO.png' },
+  { nombre: 'Jose Roca Haensel', suplente: 'Mabel Giordano Sonnenschein', partido: 'alianza', departamento:'Beni', imagen:'/senadores/g3/JOSE ROCA HAENSEL.png', imagensu:'/suplentes/g4/MABEL GIORDANO SONNENSCHEIN.png' },
+  { nombre: 'Jose Sanchez Aguilar', suplente: 'Cinthya Inga Gutierrez Guzman', partido: 'libre', departamento:'Oruro', imagen:'/senadores/g2/JOSÉ SÁNCHEZ AGUILAR.png', imagensu:'/suplentes/g2/CINTHYA INGA GUTIERREZ GUZMAN.png' },
+  { nombre: 'Leonor Rosalva Romero Gutierrez', suplente: 'Marco Antonio Segovia Vargas', partido: 'alianza', departamento:'Tarija', imagen:'/senadores/g2/LEONOR ROSALVA ROMERO GUTIERREZ.png', imagensu:'/suplentes/g3/MARCO ANTONIO SEGOVIA VARGAS.png' },
+  { nombre: 'Maria Isabel Moreno Cortez', suplente: 'Rolando Vacaflor Gabriel Arana', partido: 'libre', departamento:'Tarija', imagen:'/senadores/g4/MARÍA ISABEL MORENO CORTEZ.png', imagensu:'/suplentes/g3/ROLANDO VACAFLOR GABRIEL ARANA.png' },
+  { nombre: 'Paola Limbania Lopez Zeballos', suplente: 'Richard Espada Ugarte', partido: 'pdc', departamento:'Santa Cruz', imagen:'/senadores/g2/PAOLA LIMBANIA LÓPEZ ZEBALLO.png', imagensu:'/suplentes/g4/RICHARD ESPADA UGARTE.png' },
+  { nombre: 'Teresa Alarcon Arana', suplente: 'CANDIDATO INHABILITADO', partido: 'pdc', departamento:'Potosí', imagen:'/senadores/g4/TERESA ALARCON ARANA.png', imagensu:'/suplentes/g3/CANDIDATO INHABILITADO.png' },
+  { nombre: 'Tomasa Yarhui Jacome', suplente: 'Hugo Marcelo Cortez Calvimontes', partido: 'libre', departamento:'Chuquisaca', imagen:'/senadores/g3/TOMASA YARHUI JACOME.png', imagensu:'/suplentes/g1/HUGO MARCELO CORTEZ CALVIMONTES.png' },
+  { nombre: 'Wanda Ximena Medrano Hervas', suplente: 'Aldo Sergio Villegas Mora', partido: 'libre', departamento:'Cochabamba', imagen:'/senadores/g3/WANDA XIMENA MEDRANO HERVAS.png', imagensu:'/suplentes/g2/ALDO SERGIO VILLEGAS MORA.png' },
+  { nombre: 'Ana Maria Crispin Choque', suplente: 'Victor S. Quispe Santander', partido: 'pdc', departamento:'La Paz', imagen:'/senadores/g1/ANA MARÍA CRISPIN CHOQUE.png', imagensu:'/suplentes/g1/VICTOR SEVERO QUISPE SANTANDER.png' },
+  { nombre: 'Cintia Monica Puerta Campos', suplente: 'Jesus Humberto Suarez Eguez', partido: 'pdc', departamento:'Pando', imagen:'/senadores/g2/CINTIA MONICA PUERTA CAMPOS.png', imagensu:'/suplentes/g5/JESUS HUMBERTO SUAREZ EGUEZ.png' },
+  { nombre: 'Jose Manuel Ormachea Mendienta', suplente: 'Maria Elena Pachacute Ticona', partido: 'libre', departamento:'La Paz', imagen:'/senadores/g3/JOSÉ MANUEL ORMACHEA MENDIETA.png', imagensu:'/suplentes/g1/MARIA ELENA PACHACUTE TICONA.png' },
+  { nombre: 'Judith Rosario Garcia Coca', suplente: 'Royer Ivan Mamani Garcia', partido: 'pdc', departamento:'Cochabamba', imagen:'/senadores/g1/JUDITH ROSARIO GARCIA COCA.png', imagensu:'/suplentes/g2/ROYER IVAN MAMANI GARCIA.png' },
+  { nombre: 'Maria Antonieta Alcon Sanchez', suplente: 'Edwin Lopez Quiroga', partido: 'pdc', departamento:'Oruro', imagen:'/senadores/g1/MARÍA ANTONIETA ALCÓN SÁNCHEZ.png', imagensu:'/suplentes/g2/EDWIN LOPEZ QUIROGA.png' },
+  { nombre: 'Nicanor Gonzalo Cochi Condori', suplente: 'Roxana Mamani Colquehuanca', partido: 'pdc', departamento:'La Paz', imagen:'/senadores/g1/NICANOR GONZALO COCHI CONDORI.png', imagensu:'/suplentes/g1/ROXANA MAMANI COLQUEHUANCA.png' },
+  { nombre: 'Ana Karina Velasco Añez', suplente: 'Marcelo Matias Cardona Ibañez', partido: 'alianza', departamento:'Beni', imagen:'/senadores/g3/ANA KARINA VELASCO AÑEZ.png', imagensu:'/suplentes/g4/MARCELO MATIAS CARDONA IBAÑEZ.png' },
+  { nombre: 'Bertha Cartagena Sanchez', suplente: 'Manfred Leo Perez Hassenteufel', partido: 'pdc', departamento:'Potosí', imagen:'/senadores/g1/BERTHA CARTAGENA SÁNCHEZ.png', imagensu:'/suplentes/g1/MANFRED LEO PEREZ HASSENTEUFEL.png' },
+  { nombre: 'Betty Canaviri Villanueva', suplente: 'Roger Mamani Coronado', partido: 'libre', departamento:'Potosí', imagen:'/senadores/g4/BETTY CANAVIRI VILLANUEVA.png', imagensu:'/suplentes/g3/ROGER MAMANI CORONADO.png' },
+  { nombre: 'Carmen Soledad Chapeton Tancara', suplente: 'Nilton Condori Alanoca', partido: 'alianza', departamento:'La Paz', imagen:'/senadores/g2/CARMEN SOLEDAD CHAPETON TANCARA.png', imagensu:'/suplentes/g1/NILTON CONDORI ALANOCA.png' },
+  { nombre: 'Diego Esteban Mateo Avila Navajas', suplente: 'Luzmaya Zelaya Vega', partido: 'pdc', departamento:'Tarija', imagen:'/senadores/g1/DIEGO ESTEBAN MATEO ÁVILA NAVAJAS.png', imagensu:'/suplentes/g3/LUZMAYA ZELAYA VEGA.png' },
+  { nombre: 'Julio Diego Romaña Galindo', suplente: 'Carolina Giese Urresti', partido: 'libre', departamento:'Pando', imagen:'/senadores/g4/JULIO DIEGO ROMAÑA GALINDO.png', imagensu:'/suplentes/g5/CAROLINA GIESE URRESTI.png' },
+  { nombre: 'Kathia Lisbeth Quiroga Fernandez', suplente: 'Leonardo Roca Eguez', partido: 'libre', departamento:'Santa Cruz', imagen:'/senadores/g3/KHATIA LISBETH QUIROGA FERNÁNDEZ.png', imagensu:'/suplentes/g4/LEONARDO ROCA EGUEZ.png' },
+  { nombre: 'Marcelino Flores Ordoñez', suplente: 'Susana Gabriela Ruiz Zuleta', partido: 'pdc', departamento:'Potosí', imagen:'/senadores/g2/MARCELINO FLORES ORDOÑEZ.png', imagensu:'/suplentes/g3/SUSANA GABRIELA RUIZ ZULETA.png' },
+  { nombre: 'Rosa Tatiana Añez Carrasco', suplente: 'Lorgio Fernando Pareja Saucedo', partido: 'alianza', departamento:'Santa Cruz', imagen:'/senadores/g2/ROSA TATIANA AÑEZ CARRASCO.png', imagensu:'/suplentes/g4/LORGIO FERNANDO PAREJA SAUCEDO.png' },
+  { nombre: 'Wilder Veliz Armas', suplente: 'Lenny Mayra Ayala Justiniano', partido: 'pdc', departamento:'Cochabamba', imagen:'/senadores/g1/WILDER VELIZ ARMAS VELIZ ARMAS.png', imagensu:'/suplentes/g2/LENNY MAYRA AYALA JUSTINIANO.png' },
+  { nombre: 'Yasmin Estivariz Villarroel', suplente: 'Ramiro Mamani Ramirez', partido: 'pdc', departamento:'Oruro', imagen:'/senadores/g1/YASMIN ESTIVARIZ VILLARROEL.png', imagensu:'/suplentes/g2/RAMIRO MAMANI RAMIREZ.png'}
 ]
 
+senadoresData.forEach(({nombre, suplente, partido, departamento, imagen, imagensu})=>{
+  const rellenar=(departamento)=>{
+    titularesPorDepartamento[departamento].push({nombre, partido, imagen})
+    suplentesPorDepartamento[departamento].push({nombre:suplente,partido,imagen:imagensu})
+  }
+  console.log(departamento.toUpperCase())
+  rellenar(departamento.toUpperCase())
+})
 // Organizar por partido
 const miembrosPorPartido = {
   pdc: { titulares: [], suplentes: [] },
@@ -651,43 +555,31 @@ const miembrosPorPartido = {
 
 senadoresData.forEach(s => {
   let partidoKey = s.partido
+  let {imagen, imagensu}=s
   if (partidoKey === 'pdc') {
-    miembrosPorPartido.pdc.titulares.push({ nombre: s.nombre, cargo: 'Senador Titular', imagen: `https://randomuser.me/api/portraits/${Math.random() > 0.5 ? 'men' : 'women'}/${Math.floor(Math.random() * 70) + 1}.jpg` })
+    miembrosPorPartido.pdc.titulares.push({ nombre: s.nombre, partido:s.partido, departamento: s.departamento, imagen })
     if (s.suplente) {
-      miembrosPorPartido.pdc.suplentes.push({ nombre: s.suplente, cargo: 'Senador Suplente', imagen: `https://randomuser.me/api/portraits/${Math.random() > 0.5 ? 'men' : 'women'}/${Math.floor(Math.random() * 70) + 1}.jpg` })
+      miembrosPorPartido.pdc.suplentes.push({ nombre: s.suplente, partido:s.partido, departamento: s.departamento, imagen: imagensu })
     }
   } else if (partidoKey === 'libre') {
-    miembrosPorPartido.libre.titulares.push({ nombre: s.nombre, cargo: 'Senador Titular', imagen: `https://randomuser.me/api/portraits/${Math.random() > 0.5 ? 'men' : 'women'}/${Math.floor(Math.random() * 70) + 1}.jpg` })
+    miembrosPorPartido.libre.titulares.push({ nombre: s.nombre, partido:s.partido, departamento: s.departamento, imagen })
     if (s.suplente) {
-      miembrosPorPartido.libre.suplentes.push({ nombre: s.suplente, cargo: 'Senador Suplente', imagen: `https://randomuser.me/api/portraits/${Math.random() > 0.5 ? 'men' : 'women'}/${Math.floor(Math.random() * 70) + 1}.jpg` })
+      miembrosPorPartido.libre.suplentes.push({ nombre: s.suplente, partido:s.partido, departamento: s.departamento, imagen: imagensu })
     }
   } else if (partidoKey === 'alianza') {
-    miembrosPorPartido.alianza.titulares.push({ nombre: s.nombre, cargo: 'Senador Titular', imagen: `https://randomuser.me/api/portraits/${Math.random() > 0.5 ? 'men' : 'women'}/${Math.floor(Math.random() * 70) + 1}.jpg` })
+    miembrosPorPartido.alianza.titulares.push({ nombre: s.nombre, partido:s.partido, departamento: s.departamento, imagen })
     if (s.suplente) {
-      miembrosPorPartido.alianza.suplentes.push({ nombre: s.suplente, cargo: 'Senador Suplente', imagen: `https://randomuser.me/api/portraits/${Math.random() > 0.5 ? 'men' : 'women'}/${Math.floor(Math.random() * 70) + 1}.jpg` })
+      miembrosPorPartido.alianza.suplentes.push({ nombre: s.suplente, partido:s.partido, departamento: s.departamento, imagen: imagensu })
     }
   } else if (partidoKey === 'sumate') {
-    miembrosPorPartido.sumate.titulares.push({ nombre: s.nombre, cargo: 'Senador Titular', imagen: `https://randomuser.me/api/portraits/${Math.random() > 0.5 ? 'men' : 'women'}/${Math.floor(Math.random() * 70) + 1}.jpg` })
+    miembrosPorPartido.sumate.titulares.push({ nombre: s.nombre, partido:s.partido, departamento: s.departamento, imagen })
     if (s.suplente) {
-      miembrosPorPartido.sumate.suplentes.push({ nombre: s.suplente, cargo: 'Senador Suplente', imagen: `https://randomuser.me/api/portraits/${Math.random() > 0.5 ? 'men' : 'women'}/${Math.floor(Math.random() * 70) + 1}.jpg` })
+      miembrosPorPartido.sumate.suplentes.push({ nombre: s.suplente, partido:s.partido, departamento: s.departamento, imagen: imagensu })
     }
   }
 })
 
-// Iconos SVG para partidos
-const crearIconoPartido = (color, letra) => `
-  <svg width="80" height="80" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="50" cy="50" r="40" fill="${color}" stroke="#E4D294" stroke-width="2"/>
-    <text x="50" y="65" text-anchor="middle" fill="white" font-size="40" font-weight="bold">${letra}</text>
-  </svg>
-`
 
-const partidos = ref([
-  { id: 'pdc', nombre: 'Partido Demócrata Cristiano', nombreCorto: 'PDC', iconoBlanco: crearIconoPartido('#FFFFFF', 'P'), iconoDorado: crearIconoPartido('#D4AF37', 'P') },
-  { id: 'libre', nombre: 'Libre', nombreCorto: 'LIBRE', iconoBlanco: crearIconoPartido('#FFFFFF', 'L'), iconoDorado: crearIconoPartido('#D4AF37', 'L') },
-  { id: 'alianza', nombre: 'Alianza Unidad', nombreCorto: 'AU', iconoBlanco: crearIconoPartido('#FFFFFF', 'A'), iconoDorado: crearIconoPartido('#D4AF37', 'A') },
-  { id: 'sumate', nombre: 'Sumate', nombreCorto: 'SUMATE', iconoBlanco: crearIconoPartido('#FFFFFF', 'S'), iconoDorado: crearIconoPartido('#D4AF37', 'S') }
-])
 
 const miembrosMostrar = computed(() => {
   if (!partidoSeleccionado.value) return []
