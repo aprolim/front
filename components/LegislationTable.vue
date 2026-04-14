@@ -1,7 +1,11 @@
 <template>
   <div class="legislation-container">
     <!-- Mostrar tabla SOLO si hash cumple condición Y el filtro es válido -->
-    <template v-if="hashValido && filtroValido" class="mt-[3.5vw]">
+
+    
+    
+    <template v-if="hashValido && filtroValido">
+      <div class="mt-[4vw]"></div>
       <!-- Header con título, contador y botón volver -->
       <div class="legislation-header">
         <div class="header-left">

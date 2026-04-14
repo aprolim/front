@@ -499,42 +499,42 @@ const mostrarSuplentes = ref(false)
 
 // Datos de los senadores por partido
 const senadoresData = [
-  { nombre: 'Abdon Porcel Arancibia', suplente: 'Ilse Fatima Davila Arancibia', partido: 'libre', departamento:'Chuquisaca', imagen:'/senadores/g3/ABDON PORCEL ARANCIBIA.png', imagensu:'/suplentes/g1/ILSE FATIMA DAVILA ARANCIBIA.png'},
-  { nombre: 'Bertha Nurmy Gutierrez Meneses De Mamani', suplente: 'Freddy Rioja Melgar', partido: 'pdc', departamento:'Chuquisaca', imagen:'/senadores/g2/BERTHA NURMY GUTIERREZ MENESES.png', imagensu:'/suplentes/g3/FREDDY RIOJA MELGAR.png' },
-  { nombre: 'Branko Goran Marinkovic Jovicevic', suplente: 'Kathia Natalia Miserendino Romero', partido: 'libre', departamento:'Santa Cruz', imagen:'/senadores/g3/BRANKO GORAN MARINKOVIC JOVICEVIC.png', imagensu:'/suplentes/g4/KATHIA NATALIA MISERENDINO ROMERO.png' },
-  { nombre: 'Carol Carlo Duran', suplente: 'Jorge Antonio Quispe Flores', partido: 'libre', departamento:'Pando', imagen:'/senadores/g4/CAROL CARLO DURAN.png', imagensu:'/suplentes/g5/JORGE ANTONIO QUISPE FLORES.png' },
-  { nombre: 'Cesar Mentasti Padilla', suplente: 'Marcela Guerrero Vilca', partido: 'alianza', departamento:'Tarija', imagen:'/senadores/g2/CESAR MENTASTI PADILLA.png', imagensu:'/suplentes/g3/MARCELA GUERRERO VILCA.png' },
-  { nombre: 'Claudia Mallon Vargas', suplente: 'Apolinar Rivera Muñoz', partido: 'sumate', departamento:'Cochabamba', imagen:'/senadores/g3/CLAUDIA MALLON VARGAS.png', imagensu:'/suplentes/g2/APOLINAR RIVERA MUÑOZ.png' },
-  { nombre: 'Daniel Antonio Ortiz Velasquez', suplente: 'Reina Isabel Pallares Morales', partido: 'pdc', departamento:'Chuquisaca', imagen:'/senadores/g1/DANIEL ANTONIO ORTIZ VELÁSQUEZ.png', imagensu:'/suplentes/g1/REINA ISABEL PALLARES MORALES.png' },
-  { nombre: 'Eliana Rina Acosta Quispe', suplente: 'Sichard Hans Soraide Castedo', partido: 'alianza', departamento:'Pando', imagen:'/senadores/g3/ELIANA RINA ACOSTA QUISPE.png', imagensu:'/suplentes/g5/SICHARD HANS SORAIDE CASTEDO.png' },
-  { nombre: 'Erick Nelson Soruco Alpire', suplente: 'Cesia Roca Escalante', partido: 'pdc', departamento:'Beni', imagen:'/senadores/g2/ERICK NELSON SORUCO ALPIRE.png', imagensu:'/suplentes/g4/CESIA ROCA ESCALANTE.png' },
-  { nombre: 'Ernesto Suarez Sattori', suplente: 'Claudia Cardenas Velasquez', partido: 'libre', departamento:'Beni', imagen:'/senadores/g4/ERNESTO SUAREZ SATTORI.png', imagensu:'/suplentes/g4/CLAUDIA CARDENAS VELASQUEZ.png' },
-  { nombre: 'Freddy Castillo Chavez', suplente: 'Villma Colque Camacho', partido: 'pdc', departamento:'Oruro', imagen:'/senadores/g1/FREDDY CASTILLO CHAVEZ.png', imagensu:'/suplentes/g2/VILLMA COLQUE CAMACHO.png' },
-  { nombre: 'Jose Roca Haensel', suplente: 'Mabel Giordano Sonnenschein', partido: 'alianza', departamento:'Beni', imagen:'/senadores/g3/JOSE ROCA HAENSEL.png', imagensu:'/suplentes/g4/MABEL GIORDANO SONNENSCHEIN.png' },
-  { nombre: 'Jose Sanchez Aguilar', suplente: 'Cinthya Inga Gutierrez Guzman', partido: 'libre', departamento:'Oruro', imagen:'/senadores/g2/JOSÉ SÁNCHEZ AGUILAR.png', imagensu:'/suplentes/g2/CINTHYA INGA GUTIERREZ GUZMAN.png' },
-  { nombre: 'Leonor Rosalva Romero Gutierrez', suplente: 'Marco Antonio Segovia Vargas', partido: 'alianza', departamento:'Tarija', imagen:'/senadores/g2/LEONOR ROSALVA ROMERO GUTIERREZ.png', imagensu:'/suplentes/g3/MARCO ANTONIO SEGOVIA VARGAS.png' },
-  { nombre: 'Maria Isabel Moreno Cortez', suplente: 'Rolando Vacaflor Gabriel Arana', partido: 'libre', departamento:'Tarija', imagen:'/senadores/g4/MARÍA ISABEL MORENO CORTEZ.png', imagensu:'/suplentes/g3/ROLANDO VACAFLOR GABRIEL ARANA.png' },
-  { nombre: 'Paola Limbania Lopez Zeballos', suplente: 'Richard Espada Ugarte', partido: 'pdc', departamento:'Santa Cruz', imagen:'/senadores/g2/PAOLA LIMBANIA LÓPEZ ZEBALLO.png', imagensu:'/suplentes/g4/RICHARD ESPADA UGARTE.png' },
-  { nombre: 'Teresa Alarcon Arana', suplente: 'CANDIDATO INHABILITADO', partido: 'pdc', departamento:'Potosí', imagen:'/senadores/g4/TERESA ALARCON ARANA.png', imagensu:'/suplentes/g3/CANDIDATO INHABILITADO.png' },
-  { nombre: 'Tomasa Yarhui Jacome', suplente: 'Hugo Marcelo Cortez Calvimontes', partido: 'libre', departamento:'Chuquisaca', imagen:'/senadores/g3/TOMASA YARHUI JACOME.png', imagensu:'/suplentes/g1/HUGO MARCELO CORTEZ CALVIMONTES.png' },
-  { nombre: 'Wanda Ximena Medrano Hervas', suplente: 'Aldo Sergio Villegas Mora', partido: 'libre', departamento:'Cochabamba', imagen:'/senadores/g3/WANDA XIMENA MEDRANO HERVAS.png', imagensu:'/suplentes/g2/ALDO SERGIO VILLEGAS MORA.png' },
-  { nombre: 'Ana Maria Crispin Choque', suplente: 'Victor S. Quispe Santander', partido: 'pdc', departamento:'La Paz', imagen:'/senadores/g1/ANA MARÍA CRISPIN CHOQUE.png', imagensu:'/suplentes/g1/VICTOR SEVERO QUISPE SANTANDER.png' },
-  { nombre: 'Cintia Monica Puerta Campos', suplente: 'Jesus Humberto Suarez Eguez', partido: 'pdc', departamento:'Pando', imagen:'/senadores/g2/CINTIA MONICA PUERTA CAMPOS.png', imagensu:'/suplentes/g5/JESUS HUMBERTO SUAREZ EGUEZ.png' },
-  { nombre: 'Jose Manuel Ormachea Mendienta', suplente: 'Maria Elena Pachacute Ticona', partido: 'libre', departamento:'La Paz', imagen:'/senadores/g3/JOSÉ MANUEL ORMACHEA MENDIETA.png', imagensu:'/suplentes/g1/MARIA ELENA PACHACUTE TICONA.png' },
-  { nombre: 'Judith Rosario Garcia Coca', suplente: 'Royer Ivan Mamani Garcia', partido: 'pdc', departamento:'Cochabamba', imagen:'/senadores/g1/JUDITH ROSARIO GARCIA COCA.png', imagensu:'/suplentes/g2/ROYER IVAN MAMANI GARCIA.png' },
-  { nombre: 'Maria Antonieta Alcon Sanchez', suplente: 'Edwin Lopez Quiroga', partido: 'pdc', departamento:'Oruro', imagen:'/senadores/g1/MARÍA ANTONIETA ALCÓN SÁNCHEZ.png', imagensu:'/suplentes/g2/EDWIN LOPEZ QUIROGA.png' },
-  { nombre: 'Nicanor Gonzalo Cochi Condori', suplente: 'Roxana Mamani Colquehuanca', partido: 'pdc', departamento:'La Paz', imagen:'/senadores/g1/NICANOR GONZALO COCHI CONDORI.png', imagensu:'/suplentes/g1/ROXANA MAMANI COLQUEHUANCA.png' },
-  { nombre: 'Ana Karina Velasco Añez', suplente: 'Marcelo Matias Cardona Ibañez', partido: 'alianza', departamento:'Beni', imagen:'/senadores/g3/ANA KARINA VELASCO AÑEZ.png', imagensu:'/suplentes/g4/MARCELO MATIAS CARDONA IBAÑEZ.png' },
-  { nombre: 'Bertha Cartagena Sanchez', suplente: 'Manfred Leo Perez Hassenteufel', partido: 'pdc', departamento:'Potosí', imagen:'/senadores/g1/BERTHA CARTAGENA SÁNCHEZ.png', imagensu:'/suplentes/g1/MANFRED LEO PEREZ HASSENTEUFEL.png' },
-  { nombre: 'Betty Canaviri Villanueva', suplente: 'Roger Mamani Coronado', partido: 'libre', departamento:'Potosí', imagen:'/senadores/g4/BETTY CANAVIRI VILLANUEVA.png', imagensu:'/suplentes/g3/ROGER MAMANI CORONADO.png' },
-  { nombre: 'Carmen Soledad Chapeton Tancara', suplente: 'Nilton Condori Alanoca', partido: 'alianza', departamento:'La Paz', imagen:'/senadores/g2/CARMEN SOLEDAD CHAPETON TANCARA.png', imagensu:'/suplentes/g1/NILTON CONDORI ALANOCA.png' },
-  { nombre: 'Diego Esteban Mateo Avila Navajas', suplente: 'Luzmaya Zelaya Vega', partido: 'pdc', departamento:'Tarija', imagen:'/senadores/g1/DIEGO ESTEBAN MATEO ÁVILA NAVAJAS.png', imagensu:'/suplentes/g3/LUZMAYA ZELAYA VEGA.png' },
-  { nombre: 'Julio Diego Romaña Galindo', suplente: 'Carolina Giese Urresti', partido: 'libre', departamento:'Pando', imagen:'/senadores/g4/JULIO DIEGO ROMAÑA GALINDO.png', imagensu:'/suplentes/g5/CAROLINA GIESE URRESTI.png' },
-  { nombre: 'Kathia Lisbeth Quiroga Fernandez', suplente: 'Leonardo Roca Eguez', partido: 'libre', departamento:'Santa Cruz', imagen:'/senadores/g3/KHATIA LISBETH QUIROGA FERNÁNDEZ.png', imagensu:'/suplentes/g4/LEONARDO ROCA EGUEZ.png' },
-  { nombre: 'Marcelino Flores Ordoñez', suplente: 'Susana Gabriela Ruiz Zuleta', partido: 'pdc', departamento:'Potosí', imagen:'/senadores/g2/MARCELINO FLORES ORDOÑEZ.png', imagensu:'/suplentes/g3/SUSANA GABRIELA RUIZ ZULETA.png' },
-  { nombre: 'Rosa Tatiana Añez Carrasco', suplente: 'Lorgio Fernando Pareja Saucedo', partido: 'alianza', departamento:'Santa Cruz', imagen:'/senadores/g2/ROSA TATIANA AÑEZ CARRASCO.png', imagensu:'/suplentes/g4/LORGIO FERNANDO PAREJA SAUCEDO.png' },
-  { nombre: 'Wilder Veliz Armas', suplente: 'Lenny Mayra Ayala Justiniano', partido: 'pdc', departamento:'Cochabamba', imagen:'/senadores/g1/WILDER VELIZ ARMAS VELIZ ARMAS.png', imagensu:'/suplentes/g2/LENNY MAYRA AYALA JUSTINIANO.png' },
-  { nombre: 'Yasmin Estivariz Villarroel', suplente: 'Ramiro Mamani Ramirez', partido: 'pdc', departamento:'Oruro', imagen:'/senadores/g1/YASMIN ESTIVARIZ VILLARROEL.png', imagensu:'/suplentes/g2/RAMIRO MAMANI RAMIREZ.png'}
+  { nombre: 'Abdon Porcel Arancibia', suplente: 'Ilse Fatima Davila Arancibia', partido: 'libre', departamento:'Chuquisaca', imagen:'/new/titulares/g1/ABDON PORCEL ARANCIBIA.png', imagensu:'new/suplentes/g1/ILSE FATIMA DAVILA ARANCIBIA.png'},
+  { nombre: 'Bertha Nurmy Gutierrez Meneses De Mamani', suplente: 'Freddy Rioja Melgar', partido: 'pdc', departamento:'Chuquisaca', imagen:'new/titulares/g2/BERTHA NURMY GUTIERREZ MENESES.png', imagensu:'new/suplentes/g2/FREDDY RIOJA MELGAR.png' },
+  { nombre: 'Branko Goran Marinkovic Jovicevic', suplente: 'Kathia Natalia Miserendino Romero', partido: 'libre', departamento:'Santa Cruz', imagen:'new/titulares/g3/BRANKO GORAN MARINKOVIC JOVICEVIC.png', imagensu:'new/suplentes/g3/KATHIA NATALIA MISERENDINO ROMERO.png' },
+  { nombre: 'Carol Carlo Duran', suplente: 'Jorge Antonio Quispe Flores', partido: 'libre', departamento:'Pando', imagen:'new/titulares/g3/CAROL CARLO DURAN.png', imagensu:'new/suplentes/g3/JORGE ANTONIO QUISPE FLORES.png' },
+  { nombre: 'Cesar Mentasti Padilla', suplente: 'Marcela Guerrero Vilca', partido: 'alianza', departamento:'Tarija', imagen:'new/titulares/g2/CESAR MENTASTI PADILLA.png', imagensu:'new/suplentes/g2/MARCELA GUERRERO VILCA.png' },
+  { nombre: 'Claudia Mallon Vargas', suplente: 'Apolinar Rivera Muñoz', partido: 'sumate', departamento:'Cochabamba', imagen:'new/titulares/g1/CLAUDIA MALLON VARGAS.png', imagensu:'new/suplentes/g1/APOLINAR RIVERA MUÑOZ.png' },
+  { nombre: 'Daniel Antonio Ortiz Velasquez', suplente: 'Reina Isabel Pallares Morales', partido: 'pdc', departamento:'Chuquisaca', imagen:'new/titulares/g1/DANIEL ANTONIO ORTIZ VELASQUEZ.png', imagensu:'new/suplentes/g1/REINA ISABEL PALLARES MORALES.png' },
+  { nombre: 'Eliana Rina Acosta Quispe', suplente: 'Sichard Hans Soraide Castedo', partido: 'alianza', departamento:'Pando', imagen:'new/titulares/g3/ELIANA RINA ACOSTA QUISPE.png', imagensu:'new/suplentes/g3/SICHARD HANS SORAIDE CASTEDO.png' },
+  { nombre: 'Erick Nelson Soruco Alpire', suplente: 'Cesia Roca Escalante', partido: 'pdc', departamento:'Beni', imagen:'new/titulares/g3/ERICK NELSON SORUCO ALPIRE.png', imagensu:'new/suplentes/g3/CESIA ROCA ESCALANTE.png' },
+  { nombre: 'Ernesto Suarez Sattori', suplente: 'Claudia Cardenas Velasquez', partido: 'libre', departamento:'Beni', imagen:'new/titulares/g3/ERNESTO SUAREZ SATTORI.png', imagensu:'new/suplentes/g3/CLAUDIA CARDENAS VELASQUEZ.png' },
+  { nombre: 'Freddy Castillo Chavez', suplente: 'Villma Colque Camacho', partido: 'pdc', departamento:'Oruro', imagen:'new/titulares/g2/FREDDY CASTILLO CHAVEZ.png', imagensu:'new/suplentes/g2/VILLMA COLQUE CAMACHO.png' },
+  { nombre: 'Jose Roca Haensel', suplente: 'Mabel Giordano Sonnenschein', partido: 'alianza', departamento:'Beni', imagen:'new/titulares/g3/JOSE ROCA HAENSEL.png', imagensu:'new/suplentes/g3/MABEL GIORDANO SONNENSCHEIN.png' },
+  { nombre: 'Jose Sanchez Aguilar', suplente: 'Cinthya Inga Gutierrez Guzman', partido: 'libre', departamento:'Oruro', imagen:'new/titulares/g2/JOSE SANCHEZ AGUILAR.png', imagensu:'new/suplentes/g2/CINTHYA INGA GUTIERREZ GUZMAN.png' },
+  { nombre: 'Leonor Rosalva Romero Gutierrez', suplente: 'Marco Antonio Segovia Vargas', partido: 'alianza', departamento:'Tarija', imagen:'new/titulares/g2/LEONOR ROSALVA ROMERO GUTIERREZ.png', imagensu:'new/suplentes/g2/MARCO ANTONIO SEGOVIA VARGAS.png' },
+  { nombre: 'Maria Isabel Moreno Cortez', suplente: 'Rolando Vacaflor Gabriel Arana', partido: 'libre', departamento:'Tarija', imagen:'new/titulares/g2/MARIA ISABEL MORENO CORTEZ.png', imagensu:'new/suplentes/g2/ROLANDO VACAFLOR GABRIEL ARANA.png' },
+  { nombre: 'Paola Limbania Lopez Zeballos', suplente: 'Richard Espada Ugarte', partido: 'pdc', departamento:'Santa Cruz', imagen:'new/titulares/g3/PAOLA LIMBANIA LOPEZ ZEBALLOS.png', imagensu:'new/suplentes/g3/RICHARD ESPADA UGARTE.png' },
+  { nombre: 'Teresa Alarcon Arana', suplente: 'CANDIDATO INHABILITADO', partido: 'pdc', departamento:'Potosí', imagen:'new/titulares/g2/TERESA ALARCON ARANA.png', imagensu:'new/suplentes/g2/CANDIDATO INHABILITADO.png' },
+  { nombre: 'Tomasa Yarhui Jacome', suplente: 'Hugo Marcelo Cortez Calvimontes', partido: 'libre', departamento:'Chuquisaca', imagen:'new/titulares/g1/TOMASA YARHUI JACOME.png', imagensu:'new/suplentes/g1/HUGO MARCELO CORTEZ CALVIMONTES.png' },
+  { nombre: 'Wanda Ximena Medrano Hervas', suplente: 'Aldo Sergio Villegas Mora', partido: 'libre', departamento:'Cochabamba', imagen:'new/titulares/g1/WANDA XIMENA MEDRANO HERVAS.png', imagensu:'new/suplentes/g1/ALDO SERGIO VILLEGAS MORA.png' },
+  { nombre: 'Ana Maria Crispin Choque', suplente: 'Victor S. Quispe Santander', partido: 'pdc', departamento:'La Paz', imagen:'new/titulares/g1/ANA MARIA CRISPIN CHOQUE.png', imagensu:'new/suplentes/g1/VICTOR SEVERO QUISPE SANTANDER.png' },
+  { nombre: 'Cintia Monica Puerta Campos', suplente: 'Jesus Humberto Suarez Eguez', partido: 'pdc', departamento:'Pando', imagen:'new/titulares/g3/CINTIA MONICA PUERTA CAMPOS.png', imagensu:'new/suplentes/g3/JESUS HUMBERTO SUAREZ EGUEZ.png' },
+  { nombre: 'Jose Manuel Ormachea Mendienta', suplente: 'Maria Elena Pachacute Ticona', partido: 'libre', departamento:'La Paz', imagen:'new/titulares/g1/JOSE MANUEL ORMACHEA MENDIETA.png', imagensu:'new/suplentes/g1/MARIA ELENA PACHACUTE TICONA.png' },
+  { nombre: 'Judith Rosario Garcia Coca', suplente: 'Royer Ivan Mamani Garcia', partido: 'pdc', departamento:'Cochabamba', imagen:'new/titulares/g1/JUDITH ROSARIO GARCIA COCA.png', imagensu:'new/suplentes/g1/ROYER IVAN MAMANI GARCIA.png' },
+  { nombre: 'Maria Antonieta Alcon Sanchez', suplente: 'Edwin Lopez Quiroga', partido: 'pdc', departamento:'Oruro', imagen:'new/titulares/g2/MARIA ANTONIETA ALCON SANCHEZ.png', imagensu:'new/suplentes/g2/EDWIN LOPEZ QUIROGA.png' },
+  { nombre: 'Nicanor Gonzalo Cochi Condori', suplente: 'Roxana Mamani Colquehuanca', partido: 'pdc', departamento:'La Paz', imagen:'new/titulares/g1/NICANOR GONZALO COCHI CONDORI.png', imagensu:'new/suplentes/g1/ROXANA MAMANI COLQUEHUANCA.png' },
+  { nombre: 'Ana Karina Velasco Añez', suplente: 'Marcelo Matias Cardona Ibañez', partido: 'alianza', departamento:'Beni', imagen:'new/titulares/g3/ANA KARINA VELASCO ÁÑEZ.png', imagensu:'new/suplentes/g3/MARCELO MATIAS CARDONA IBAÑEZ.png' },
+  { nombre: 'Bertha Cartagena Sanchez', suplente: 'Manfred Leo Perez Hassenteufel', partido: 'pdc', departamento:'Potosí', imagen:'new/titulares/g1/BERTHA CARTAGENA SANCHEZ.png', imagensu:'new/suplentes/g1/MANFRED LEO PEREZ HASSENTEUFEL.png' },
+  { nombre: 'Betty Canaviri Villanueva', suplente: 'Roger Mamani Coronado', partido: 'libre', departamento:'Potosí', imagen:'new/titulares/g2/BETTY CANAVIRI VILLANUEVA.png', imagensu:'new/suplentes/g2/ROGER MAMANI CORONADO.png' },
+  { nombre: 'Carmen Soledad Chapeton Tancara', suplente: 'Nilton Condori Alanoca', partido: 'alianza', departamento:'La Paz', imagen:'new/titulares/g1/CARMEN SOLEDAD CHAPETÓN TANCARA.png', imagensu:'new/suplentes/g1/NILTON CONDORI ALANOCA.png' },
+  { nombre: 'Diego Esteban Mateo Avila Navajas', suplente: 'Luzmaya Zelaya Vega', partido: 'pdc', departamento:'Tarija', imagen:'new/titulares/g2/DIEGO ESTEBAN MATEO ÁVILA NAVAJAS.png', imagensu:'new/suplentes/g2/LUZMAYA ZELAYA VEGA.png' },
+  { nombre: 'Julio Diego Romaña Galindo', suplente: 'Carolina Giese Urresti', partido: 'libre', departamento:'Pando', imagen:'new/titulares/g3/JULIO DIEGO ROMAÑA GALINDO.png', imagensu:'new/suplentes/g3/CAROLINA GIESE URRESTI.png' },
+  { nombre: 'Kathia Lisbeth Quiroga Fernandez', suplente: 'Leonardo Roca Eguez', partido: 'libre', departamento:'Santa Cruz', imagen:'new/titulares/g3/KATHIA LISBETH QUIROGA FERNÁNDEZ.png', imagensu:'new/suplentes/g3/LEONARDO ROCA EGUEZ.png' },
+  { nombre: 'Marcelino Flores Ordoñez', suplente: 'Susana Gabriela Ruiz Zuleta', partido: 'pdc', departamento:'Potosí', imagen:'new/titulares/g2/MARCELINO FLORES ORDOÑEZ.png', imagensu:'new/suplentes/g2/SUSANA GABRIELA RUIZ ZULETA.png' },
+  { nombre: 'Rosa Tatiana Añez Carrasco', suplente: 'Lorgio Fernando Pareja Saucedo', partido: 'alianza', departamento:'Santa Cruz', imagen:'new/titulares/g3/ROSA TATIANA AÑEZ CARRASCO.png', imagensu:'new/suplentes/g3/LORGIO FERNANDO PAREJA SAUCEDO.png' },
+  { nombre: 'Wilder Veliz Armas', suplente: 'Lenny Mayra Ayala Justiniano', partido: 'pdc', departamento:'Cochabamba', imagen:'new/titulares/g1/WILDER VELIZ ARMAS.png', imagensu:'new/suplentes/g1/LENNY MAYRA AYALA JUSTINIANO.png' },
+  { nombre: 'Yasmin Estivariz Villarroel', suplente: 'Ramiro Mamani Ramirez', partido: 'pdc', departamento:'Oruro', imagen:'new/titulares/g2/YASMIN ESTIVARIZ VILLARROEL.png', imagensu:'new/suplentes/g2/RAMIRO MAMANI RAMIREZ.png'}
 ]
 
 senadoresData.forEach(({nombre, suplente, partido, departamento, imagen, imagensu})=>{
@@ -753,15 +753,15 @@ section, .scroll-section {
 }
 
 .seccion1-fondo {
-  background-image: url('https://pxcdn.reduno.com.bo/reduno/112025/1762461432445.webp?cw=800&ch=450&extw=jpg');
+  background-image: url('/legisladores nacionales/fondo directiva.jpg');
 }
 
 .seccion3-fondo {
-  background-image: url('https://pxcdn.reduno.com.bo/reduno/112025/1762461432445.webp?cw=800&ch=450&extw=jpg');
+  background-image: url('/legisladores nacionales/fondo departamentos.jpg');
 }
 
 .seccion4-fondo {
-  background-image: url('https://apisi.senado.gob.bo/images/a001535c-1750-49a8-b277-37b32b038c45_1759275539.jpeg');
+  background-image: url('/legisladores nacionales/fondo partidos.jpg');
 }
 
 .scroll-section {

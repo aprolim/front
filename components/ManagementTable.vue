@@ -2,6 +2,7 @@
   <div class="management-container">
     <!-- Mostrar tabla SOLO si hash cumple condición Y el filtro es válido -->
     <template v-if="hashValido && filtroValido" class="mt-[3.5vw]">
+      <div class="mt-[4vw]"></div>
       <!-- Header con título, contador y botón volver -->
       <div class="management-header">
         <div class="header-left">
