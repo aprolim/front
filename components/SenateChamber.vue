@@ -419,9 +419,9 @@ const props = defineProps({
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
         photoUrl: "/senadores/g1/BERTHA CARTAGENA SÁNCHEZ.png",
-        comision:"Comisión de Naciones y Pueblos Indígena Originario Campesinos, Culturas e Interculturalidad",
+        comision:"",
         comite:"Comité de Culturas, Interculturalidad y Patrimonio Cultural",
-        cargo:""
+        cargo:"Secretaria de Comite"
       },
       { 
         id: 3, seatNumber: 3, curve: 'upper', side: 'left', 
@@ -471,9 +471,9 @@ const props = defineProps({
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
         photoUrl: "/senadores/g1/WILDER VELIZ ARMAS VELIZ ARMAS.png",
-        comision:"Comisión de Justicia Plural, Ministerio Público y Defensa del Estado",
+        comision:"",
         comite:"Comité de Justicia Plural y Consejo de la Magistratura.",
-        cargo:""
+        cargo:"Secretario de Comite"
       },
       { 
         id: 7, seatNumber: 7, curve: 'upper', side: 'left', 
@@ -512,9 +512,9 @@ const props = defineProps({
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
         photoUrl: "/senadores/g1/FREDDY CASTILLO CHAVEZ.png",
-        comision:"Comisión de Constitución, Derechos Humanos, Legislación y Sistema Electoral",
+        comision:"",
         comite:"Comité de Constitución, Legislación e Interpretación Legislativa y Constitucional.",
-        cargo:""
+        cargo:"Secretario de Comite"
       },
       { 
         id: 10, seatNumber: 17, curve: 'lower', side: 'left', 
@@ -525,9 +525,9 @@ const props = defineProps({
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
         photoUrl: "/senadores/g1/MARÍA ANTONIETA ALCÓN SÁNCHEZ.png",
-        comision:"Comisión de Política Social",
+        comision:"",
         comite:"Comité de Educación, Salud, Ciencia, Tecnología y Deporte",
-        cargo:""
+        cargo:"Secretaria de Comite"
       },
       { 
         id: 11, seatNumber: 18, curve: 'lower', side: 'left', 
@@ -538,9 +538,9 @@ const props = defineProps({
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
         photoUrl: "/senadores/g2/BERTHA NURMY GUTIERREZ MENESES.png",
-        comision:"Comisión de Naciones y Pueblos Indígena Originario Campesinos, Culturas e Interculturalidad",
+        comision:"",
         comite:"Comité de Naciones y Pueblos Indígena Originario Campesinos",
-        cargo:""
+        cargo:"Secretaria de Comite"
       },
       { 
         id: 12, seatNumber: 19, curve: 'lower', side: 'left', 
@@ -551,9 +551,9 @@ const props = defineProps({
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
         photoUrl: "/senadores/g2/MARCELINO FLORES ORDOÑEZ.png",
-        comision:"Comisión de Economía Plural, Producción e Industria",
+        comision:"",
         comite:"Comité de Energía, Hidrocarburos, Minería y Metalurgia",
-        cargo:""
+        cargo:"Secretario de Comite"
       },
       { 
         id: 13, seatNumber: 20, curve: 'lower', side: 'left', 
@@ -564,9 +564,9 @@ const props = defineProps({
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
         photoUrl: "/senadores/g2/PAOLA LIMBANIA LÓPEZ ZEBALLO.png",
-        comision:"Comisión de Seguridad del Estado",
+        comision:"",
         comite:"Comité de Seguridad del Estado y Lucha Contra el Narcotráfico",
-        cargo:""
+        cargo:"Secretaria de Comite"
       },
       { 
         id: 14, seatNumber: 21, curve: 'lower', side: 'left', 
@@ -590,9 +590,9 @@ const props = defineProps({
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
         photoUrl: "/senadores/g2/CINTIA MONICA PUERTA CAMPOS.png",
-        comision:"Comisión de Tierra y Territorio / Región Amazónica",
+        comision:"",
         comite:"Comité de Medio Ambiente, Biodiversidad, Amazonía, Áreas Protegidas y Cambio Climático",
-        cargo:""
+        cargo:"Secretaria de Comite"
       },
       { 
         id: 16, seatNumber: 23, curve: 'lower', side: 'left', 
@@ -647,9 +647,9 @@ const props = defineProps({
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
         photoUrl: "/senadores/g2/LEONOR ROSALVA ROMERO GUTIERREZ.png",
-        comision:"Comisión de Planificación, Política Económica y Finanzas",
+        comision:"",
         comite:"Comité de Planificación, Presupuesto, Inversión Pública y Contraloría General del Estado",
-        cargo:""
+        cargo:"Secretaria de Comite"
       },
       
       // CURVA INFERIOR DERECHA - asientos 26-29 (4 senadores)
@@ -675,9 +675,9 @@ const props = defineProps({
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
         photoUrl: "/senadores/g3/JOSE ROCA HAENSEL.png",
-        comision:"Comisión de Organización Territorial del Estado y Autonomías",
+        comision:"",
         comite:"Comité de Autonomías Municipales, Indigena Originario Campesinas y Regionales",
-        cargo:""
+        cargo:"Secretario de Comite"
       },
       { 
         id: 22, seatNumber: 11, curve: 'lower', side: 'right', 
@@ -688,9 +688,9 @@ const props = defineProps({
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
         photoUrl: "/senadores/g3/ANA KARINA VELASCO AÑEZ.png",
-        comision:"Comisión de Seguridad del Estado",
+        comision:"",
         comite:"Comité de Fuerzas Armadas y Policía Boliviana",
-        cargo:""
+        cargo:"Secretaria de comite"
       },
       { 
         id: 23, seatNumber: 12, curve: 'lower', side: 'right', 
@@ -718,9 +718,9 @@ const props = defineProps({
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
         photoUrl: "/senadores/g3/CLAUDIA MALLON VARGAS.png",
-        comision:"Comisión de Política Social",
+        comision:"",
         comite:"Comité de Vivienda, Regimen Laboral, Seguridad Industrial y Seguridad Social",
-        cargo:""
+        cargo:"Secretaria de Comite"
       },
       
       // ============ LIBRE - OPOSICIÓN (12 senadores) ============
@@ -749,9 +749,9 @@ const props = defineProps({
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
         photoUrl: "/senadores/g3/WANDA XIMENA MEDRANO HERVAS.png",
-        comision:"Comisión de Política Internacional y Protección al Migrante",
+        comision:"",
         comite:"Comité de Relaciones Económicas Internacionales",
-        cargo:""
+        cargo:"Secretaria de Comite"
       },
       { 
         id: 27, seatNumber: 26, curve: 'upper', side: 'right', 
@@ -790,9 +790,9 @@ const props = defineProps({
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
         photoUrl: "/senadores/g3/TOMASA YARHUI JACOME.png",
-        comision:"Comisión de Constitución, Derechos Humanos, Legislación y Sistema Electoral",
+        comision:"",
         comite:"Comité de Sistema Electoral, Derechos Humanos y Equidad Social",
-        cargo:""
+        cargo:"Secretaria de Comite"
       },
       { 
         id: 30, seatNumber: 32, curve: 'lower', side: 'right', 
@@ -803,9 +803,9 @@ const props = defineProps({
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
         photoUrl: "/senadores/g3/ABDON PORCEL ARANCIBIA.png",
-        comision:"Comisión de Planificación, Política Económica y Finanzas",
+        comision:"",
         comite:"Comité de Políticas Financiera, Monetaria, Tributaria y Seguros",
-        cargo:""
+        cargo:"Secretario de Comite"
       },
       { 
         id: 31, seatNumber: 33, curve: 'lower', side: 'right', 
@@ -816,9 +816,9 @@ const props = defineProps({
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
         photoUrl: "/senadores/g4/TERESA ALARCON ARANA.png",
-        comision:"Comisión de Política Internacional y Protección al Migrante",
+        comision:"",
         comite:"Comité de Asuntos Exteriores Interpelatorios y Organismos Internacionales",
-        cargo:""
+        cargo:"Secretaria de Comite"
       },
       { 
         id: 32, seatNumber: 34, curve: 'lower', side: 'right', 
@@ -829,9 +829,9 @@ const props = defineProps({
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
         photoUrl: "/senadores/g4/BETTY CANAVIRI VILLANUEVA.png",
-        comision:"Comisión de Economía Plural, Producción e Industria",
+        comision:"",
         comite:"Comité de Economía Plural, Desarrollo Productivo, Obras Públicas e Infraestructura",
-        cargo:""
+        cargo:"Secretaria de Comite"
       },
       { 
         id: 33, seatNumber: 35, curve: 'lower', side: 'right', 
@@ -842,9 +842,9 @@ const props = defineProps({
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
         photoUrl: "/senadores/g4/MARÍA ISABEL MORENO CORTEZ.png",
-        comision:"Comisión de Justicia Plural, Ministerio Público y Defensa del Estado",
+        comision:"",
         comite:"Comité de Ministerio Público y Defensa Legal del Estado",
-        cargo:""
+        cargo:"Secretaria de Comite"
       },
       { 
         id: 34, seatNumber: 24, curve: 'lower', side: 'right', 
@@ -855,9 +855,9 @@ const props = defineProps({
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
         photoUrl: "/senadores/g4/ERNESTO SUAREZ SATTORI.png",
-        comision:"Comisión de Organización Territorial del Estado y Autonomías",
+        comision:"",
         comite:"Comité de Autonomías Departamentales",
-        cargo:""
+        cargo:"Secretario de Comite"
       },
       
       // ============ LIBRE - 2 SENADORES ADICIONALES ============
@@ -871,9 +871,9 @@ const props = defineProps({
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
         photoUrl: "/senadores/g4/CAROL CARLO DURAN.png",
-        comision:"Comisión de Tierra y Territorio / Región Amazónica",
+        comision:"",
         comite:"Comité de Tierra y Territorio, Recursos Naturales y Hoja de la Coca",
-        cargo:""
+        cargo:"Secretaria de Comite"
       },
       { 
         id: 36, seatNumber: 25, curve: 'lower', side: 'left', 

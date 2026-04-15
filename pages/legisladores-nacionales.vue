@@ -9,7 +9,7 @@
     <!-- ==================== SECCIÓN 1 ==================== -->
     <!-- ==================== SECCIÓN 1 MODIFICADA ==================== -->
     <section 
-      id="seccion1"
+      id="directiva-camaral"
       class="relative h-screen flex items-center justify-center overflow-hidden transition-all duration-500"
       :class="{ 'min-h-[40vh] md:min-h-[45vh]': scrolled }"
       ref="seccion1Ref"
@@ -72,7 +72,7 @@
 
     <!-- ==================== SECCIÓN 2 - FONDO BLANCO ==================== -->
     <div 
-      id="seccion2"
+      id="comisiones-y-comites"
       ref="seccion2Ref" 
       class="scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out z-10"
       :class="{ 'animate-in': isSeccion2Visible }"
@@ -104,7 +104,7 @@
     
     <!-- ==================== SECCIÓN 3 - ESCUDOS Y SENADORES ==================== -->
     <div 
-      id="seccion3"
+      id="brigadas-parlamentarias"
       ref="seccion3Ref" 
       class="scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out delay-200 z-10 flex flex-items-center"
       :class="{ 'animate-in': isSeccion3Visible }"
@@ -154,12 +154,11 @@
               </div>
             </div>
             <div v-for="(titular, index) in titulares" :key="'titular-'+index" class="text-center">
-              <div class="w-28 h-28 mx-auto rounded-full overflow-hidden border-4 circle-shadow mb-2" 
-                   style="border-color: #E4D294;">
+              <div class="w-28 h-28 mx-auto rounded-full overflow-hidden mb-2">
                 <img :src="titular.imagen" :alt="titular.nombre" class="w-full h-full object-cover">
               </div>
               <p class="text-white font-semibold text-sm">{{ titular.nombre.split(' ')[0] }} {{ titular.nombre.split(' ')[1] }}</p>
-              <p class="text-gray-300 text-xs">{{ titular.partido }}</p>
+              <p v-if="titular.nombre" class="text-gray-300 text-xs">{{ titular.partido }}</p>
             </div>
           </div>
 
@@ -172,12 +171,11 @@
               </div>
             </div>
             <div v-for="(suplente, index) in suplentes" :key="'suplente-'+index" class="text-center">
-              <div class="w-28 h-28 mx-auto rounded-full overflow-hidden border-4 circle-shadow mb-2" 
-                   style="border-color: #E4D294;">
+              <div class="w-28 h-28 mx-auto rounded-full overflow-hidden mb-2">
                 <img :src="suplente.imagen" :alt="suplente.nombre" class="w-full h-full object-cover">
               </div>
               <p class="text-white font-semibold text-sm">{{ suplente.nombre.split(' ')[0] }} {{ suplente.nombre.split(' ')[1] }}</p>
-              <p class="text-gray-300 text-xs">{{ suplente.partido }}</p>
+              <p v-if="suplente.nombre" class="text-gray-300 text-xs">{{ suplente.partido }}</p>
             </div>
           </div>
         </div>
@@ -186,7 +184,7 @@
     
     <!-- ==================== SECCIÓN 4 - BANCADAS POLÍTICAS ==================== -->
     <div 
-      id="seccion4"
+      id="bancadas-politicas"
       ref="seccion4Ref" 
       class="scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out delay-400 z-10 mt-[5vw]"
       :class="{ 'animate-in': isSeccion4Visible }"
@@ -271,7 +269,6 @@
               </div>
             </div>
           </div>
-
           <div v-else-if="partidoSeleccionado?.id === 'libre'">
             <!-- Libre: 3 filas de 4 -->
             <div class="grid grid-cols-4 gap-6 mb-6">
@@ -305,44 +302,44 @@
               </div>
             </div>
           </div>
-<div v-else-if="partidoSeleccionado?.id === 'alianza'">
-  <!-- Alianza Unidad: 2 filas de 3 -->
-  <div class="grid grid-cols-3 gap-6 mb-6">
-    <div v-for="(persona, index) in miembrosMostrar.slice(0,3)" :key="index" class="text-center">
-      <div class="w-28 h-28 mx-auto rounded-full overflow-hidden border-4 circle-shadow mb-2" 
-           style="border-color: #E4D294;">
-        <img :src="persona.imagen" :alt="persona.nombre" class="w-full h-full object-cover">
-      </div>
-      <p class="text-white font-semibold text-sm">{{ persona.nombre.split(' ')[0] }} {{ persona.nombre.split(' ')[1] }}</p>
-      <p class="text-gray-300 text-xs">{{ persona.departamento }}</p>
-    </div>
-  </div>
-  <div class="grid grid-cols-3 gap-6 mb-6">
-    <div v-for="(persona, index) in miembrosMostrar.slice(3,6)" :key="index" class="text-center">
-      <div class="w-28 h-28 mx-auto rounded-full overflow-hidden border-4 circle-shadow mb-2" 
-           style="border-color: #E4D294;">
-        <img :src="persona.imagen" :alt="persona.nombre" class="w-full h-full object-cover">
-      </div>
-      <p class="text-white font-semibold text-sm">{{ persona.nombre.split(' ')[0] }} {{ persona.nombre.split(' ')[1] }}</p>
-      <p class="text-gray-300 text-xs">{{ persona.departamento }}</p>
-    </div>
-  </div>
-  <!-- Tercera fila: solo 1 elemento en la primera columna -->
-  <div class="grid grid-cols-3 gap-6">
-    <div class="text-center">
-      <div v-if="miembrosMostrar[6]" class="inline-block">
-        <div class="w-28 h-28 rounded-full overflow-hidden border-4 circle-shadow mb-2" 
-             style="border-color: #E4D294;">
-          <img :src="miembrosMostrar[6].imagen" :alt="miembrosMostrar[6].nombre" class="w-full h-full object-cover">
-        </div>
-        <p class="text-white font-semibold text-sm">{{ miembrosMostrar[6].nombre.split(' ')[0] }} {{ miembrosMostrar[6].nombre.split(' ')[1] }}</p>
-        <p class="text-gray-300 text-xs">{{ miembrosMostrar[6].departamento }}</p>
-      </div>
-    </div>
-    <div></div>
-    <div></div>
-  </div>
-</div>
+          <div v-else-if="partidoSeleccionado?.id === 'alianza'">
+            <!-- Alianza Unidad: 2 filas de 3 -->
+            <div class="grid grid-cols-3 gap-6 mb-6">
+              <div v-for="(persona, index) in miembrosMostrar.slice(0,3)" :key="index" class="text-center">
+                <div class="w-28 h-28 mx-auto rounded-full overflow-hidden border-4 circle-shadow mb-2" 
+                    style="border-color: #E4D294;">
+                  <img :src="persona.imagen" :alt="persona.nombre" class="w-full h-full object-cover">
+                </div>
+                <p class="text-white font-semibold text-sm">{{ persona.nombre.split(' ')[0] }} {{ persona.nombre.split(' ')[1] }}</p>
+                <p class="text-gray-300 text-xs">{{ persona.departamento }}</p>
+              </div>
+            </div>
+            <div class="grid grid-cols-3 gap-6 mb-6">
+              <div v-for="(persona, index) in miembrosMostrar.slice(3,6)" :key="index" class="text-center">
+                <div class="w-28 h-28 mx-auto rounded-full overflow-hidden border-4 circle-shadow mb-2" 
+                    style="border-color: #E4D294;">
+                  <img :src="persona.imagen" :alt="persona.nombre" class="w-full h-full object-cover">
+                </div>
+                <p class="text-white font-semibold text-sm">{{ persona.nombre.split(' ')[0] }} {{ persona.nombre.split(' ')[1] }}</p>
+                <p class="text-gray-300 text-xs">{{ persona.departamento }}</p>
+              </div>
+            </div>
+            <!-- Tercera fila: solo 1 elemento en la primera columna -->
+            <div class="grid grid-cols-3 gap-6">
+              <div class="text-center">
+                <div v-if="miembrosMostrar[6]" class="inline-block">
+                  <div class="w-28 h-28 rounded-full overflow-hidden border-4 circle-shadow mb-2" 
+                      style="border-color: #E4D294;">
+                    <img :src="miembrosMostrar[6].imagen" :alt="miembrosMostrar[6].nombre" class="w-full h-full object-cover">
+                  </div>
+                  <p class="text-white font-semibold text-sm">{{ miembrosMostrar[6].nombre.split(' ')[0] }} {{ miembrosMostrar[6].nombre.split(' ')[1] }}</p>
+                  <p class="text-gray-300 text-xs">{{ miembrosMostrar[6].departamento }}</p>
+                </div>
+              </div>
+              <div></div>
+              <div></div>
+            </div>
+          </div>
           <div v-else-if="partidoSeleccionado?.id === 'sumate'">
             <!-- Sumate: 1 fila de 1 (centrado) -->
             <div class="flex justify-center">
@@ -515,7 +512,7 @@ const senadoresData = [
   { nombre: 'Leonor Rosalva Romero Gutierrez', suplente: 'Marco Antonio Segovia Vargas', partido: 'alianza', departamento:'Tarija', imagen:'new/titulares/g2/LEONOR ROSALVA ROMERO GUTIERREZ.png', imagensu:'new/suplentes/g2/MARCO ANTONIO SEGOVIA VARGAS.png' },
   { nombre: 'Maria Isabel Moreno Cortez', suplente: 'Rolando Vacaflor Gabriel Arana', partido: 'libre', departamento:'Tarija', imagen:'new/titulares/g2/MARIA ISABEL MORENO CORTEZ.png', imagensu:'new/suplentes/g2/ROLANDO VACAFLOR GABRIEL ARANA.png' },
   { nombre: 'Paola Limbania Lopez Zeballos', suplente: 'Richard Espada Ugarte', partido: 'pdc', departamento:'Santa Cruz', imagen:'new/titulares/g3/PAOLA LIMBANIA LOPEZ ZEBALLOS.png', imagensu:'new/suplentes/g3/RICHARD ESPADA UGARTE.png' },
-  { nombre: 'Teresa Alarcon Arana', suplente: 'CANDIDATO INHABILITADO', partido: 'pdc', departamento:'Potosí', imagen:'new/titulares/g2/TERESA ALARCON ARANA.png', imagensu:'new/suplentes/g2/CANDIDATO INHABILITADO.png' },
+  { nombre: 'Teresa Alarcon Arana', suplente: '', partido: 'pdc', departamento:'Potosí', imagen:'new/titulares/g2/TERESA ALARCON ARANA.png', imagensu:'' },
   { nombre: 'Tomasa Yarhui Jacome', suplente: 'Hugo Marcelo Cortez Calvimontes', partido: 'libre', departamento:'Chuquisaca', imagen:'new/titulares/g1/TOMASA YARHUI JACOME.png', imagensu:'new/suplentes/g1/HUGO MARCELO CORTEZ CALVIMONTES.png' },
   { nombre: 'Wanda Ximena Medrano Hervas', suplente: 'Aldo Sergio Villegas Mora', partido: 'libre', departamento:'Cochabamba', imagen:'new/titulares/g1/WANDA XIMENA MEDRANO HERVAS.png', imagensu:'new/suplentes/g1/ALDO SERGIO VILLEGAS MORA.png' },
   { nombre: 'Ana Maria Crispin Choque', suplente: 'Victor S. Quispe Santander', partido: 'pdc', departamento:'La Paz', imagen:'new/titulares/g1/ANA MARIA CRISPIN CHOQUE.png', imagensu:'new/suplentes/g1/VICTOR SEVERO QUISPE SANTANDER.png' },
@@ -601,10 +598,10 @@ const toggleTipoMiembros = () => {
 
 // ==================== SCROLL OBSERVER ====================
 const sections = {
-  'seccion1': seccion1Ref,
-  'seccion2': seccion2Ref,
-  'seccion3': seccion3Ref,
-  'seccion4': seccion4Ref
+  'directiva-camaral': seccion1Ref,
+  'comisiones-y-comites': seccion2Ref,
+  'brigadas-parlamentarias': seccion3Ref,
+  'bancadas-politicas': seccion4Ref
 }
 
 const scrollToSection = (id) => {

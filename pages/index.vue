@@ -15,6 +15,7 @@
       @mouseleave="resumeCarousel"
     >
       <HeroCarousel
+        ref="heroCarouselRef"
         :scrolled="scrolled"
         :current-media-index="currentMediaIndex"
         :filtered-hero-media="filteredHeroMedia"
@@ -128,6 +129,7 @@ import ScrollProgress from '@/components/UI/ScrollProgress.vue'
 import ImportantNewsSection from '@/components/ImportantNewsSection.vue'
 import MoreNewsGrid from '@/components/MoreNewsGrid.vue'
 
+// Media del hero
 const heroMedia = ref([
   {
     type: 'video',
@@ -151,6 +153,7 @@ const heroMedia = ref([
   }
 ])
 
+// Carousel
 const {
   currentMediaIndex,
   filteredHeroMedia,
@@ -160,10 +163,13 @@ const {
   resumeCarousel
 } = useCarousel(heroMedia.value)
 
+// Scroll effects
 const { scrolled, scrollProgress, initScrollListener, removeScrollListener } = useScrollEffects()
 
+// Refs
 const darkMode = ref(false)
 const heroSection = ref(null)
+const heroCarouselRef = ref(null)
 const showSection = ref(true)
 
 const importantNewsRef = ref(null)
@@ -171,11 +177,13 @@ const moreNewsRef = ref(null)
 const senateRef = ref(null)
 const museumRef = ref(null)
 
+// Visibility states
 const isImportantNewsVisible = ref(false)
 const isMoreNewsVisible = ref(false)
 const isSenateVisible = ref(false)
 const isMuseumVisible = ref(false)
 
+// Event handlers
 const handleCollectionSelect = (collection) => {
   console.log('Colección seleccionada:', collection)
 }
@@ -196,6 +204,21 @@ const handleDonationClick = () => {
   console.log('Donación solicitada')
 }
 
+// Forzar reproducción del video
+const forceVideoPlayback = () => {
+  if (heroCarouselRef.value && heroCarouselRef.value.forceVideoPlay) {
+    heroCarouselRef.value.forceVideoPlay()
+  } else if (heroCarouselRef.value && heroCarouselRef.value.playActiveVideo) {
+    heroCarouselRef.value.playActiveVideo()
+  }
+}
+
+// Manejar interacción del usuario para activar video
+const handleUserInteraction = () => {
+  forceVideoPlayback()
+}
+
+// Scroll observer
 let scrollObserver = null
 
 const initScrollObserver = () => {
@@ -238,19 +261,23 @@ const initScrollObserver = () => {
   });
 };
 
+// Lifecycle
 onMounted(async () => {
+  // Iniciar carrusel
   startCarousel();
+  
+  // Inicializar scroll
   initScrollListener();
+  
   await nextTick();
   showSection.value = true;
   initScrollObserver();
   
-  // 👇 ESTO ES LO NUEVO - Forzar scroll al inicio
-  // Múltiples intentos para asegurar que funcione
+  // Forzar scroll al inicio
   setTimeout(() => {
     window.scrollTo({
       top: 0,
-      behavior: 'auto' // 'auto' es más rápido y seguro
+      behavior: 'auto'
     })
   }, 10)
   
@@ -267,15 +294,51 @@ onMounted(async () => {
       behavior: 'auto'
     })
   }, 300)
+  
+  // Forzar reproducción del video múltiples veces
+  setTimeout(() => {
+    forceVideoPlayback()
+  }, 200)
+  
+  setTimeout(() => {
+    forceVideoPlayback()
+  }, 500)
+  
+  setTimeout(() => {
+    forceVideoPlayback()
+  }, 1000)
+  
+  setTimeout(() => {
+    forceVideoPlayback()
+  }, 2000)
+  
+  // Event listeners para interacción del usuario
+  document.addEventListener('click', handleUserInteraction)
+  document.addEventListener('touchstart', handleUserInteraction)
+  document.addEventListener('scroll', forceVideoPlayback)
+  
+  // Escuchar cuando la página se carga completamente
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      forceVideoPlayback()
+    }, 100)
+  })
 });
 
 onUnmounted(() => {
   removeScrollListener();
+  
   if (scrollObserver) {
     scrollObserver.disconnect();
   }
+  
+  // Remover event listeners
+  document.removeEventListener('click', handleUserInteraction)
+  document.removeEventListener('touchstart', handleUserInteraction)
+  document.removeEventListener('scroll', forceVideoPlayback)
 });
 
+// Page meta
 definePageMeta({
   layout: 'alter8'
 });

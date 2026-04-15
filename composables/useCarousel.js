@@ -6,7 +6,8 @@ export function useCarousel(heroMedia = []) {
   const route = useRoute()
   
   // Estados reactivos para configuración
-  const useVideo = ref(false)
+  //const useVideo = ref(false)
+  const useVideo = ref(true)
   const mediaCount = ref(3)
   const transitionTime = ref(5000)
   const currentMediaIndex = ref(0)
@@ -20,11 +21,13 @@ export function useCarousel(heroMedia = []) {
     // Verificar si hay parámetro video en la URL
     const hasVideoParam = 'video' in query
     
-    if (hasVideoParam) {
-      useVideo.value = query.video === 'true' || query.video === '1'
-    } else {
-      useVideo.value = false
-    }
+    
+
+    // if (hasVideoParam) {
+    //   useVideo.value = query.video === 'true' || query.video === '1'
+    // } else {
+    //   useVideo.value = false
+    // }
     
     if (query.images) {
       mediaCount.value = parseInt(query.images) || 3

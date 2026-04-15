@@ -107,14 +107,17 @@
               </NuxtLink>
               <div class="absolute right-0 mt-1 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all duration-200 z-50">
                 <div class="py-2">
-                  <NuxtLink to="/legisladores-nacionales#" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    👨‍⚖️ Senadores
+                  <NuxtLink to="/legisladores-nacionales#directiva-camaral" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                    Directiva Camaral
                   </NuxtLink>
-                  <NuxtLink to="/legisladores-nacionales#" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    👩‍⚖️ Diputados
+                  <NuxtLink to="/legisladores-nacionales#comisiones-y-comites" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                    Comisiones y comites
                   </NuxtLink>
-                  <NuxtLink to="/legisladores-nacionales#" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    📋 Comisiones
+                  <NuxtLink to="/legisladores-nacionales#brigadas-parlamentarias" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                    Brigadas parlamentarias
+                  </NuxtLink>
+                  <NuxtLink to="/legisladores-nacionales#bancadas-politicas" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
+                    Bancadas politicas
                   </NuxtLink>
                 </div>
               </div>
