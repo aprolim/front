@@ -19,7 +19,7 @@
           
           <!-- Columna Izquierda (60%) -->
           <div class="w-[60%] p-8 rounded-2xl shadow-left-column" 
-               :style="{ backgroundColor: 'rgba(224, 54, 54, 0.65)' }">
+               :style="{ backgroundColor: 'rgba(190, 0, 0, 0.60)' }">
             <div class="grid grid-cols-3 gap-6">
               <!-- Generar dinámicamente las 3 columnas con 2 personas cada una -->
               <div v-for="(columna, colIndex) in columnasPersonas" :key="colIndex" class="space-y-6">
@@ -103,6 +103,7 @@
     </div>
     
     <!-- ==================== SECCIÓN 3 - ESCUDOS Y SENADORES ==================== -->
+<!-- ==================== SECCIÓN 3 - ESCUDOS Y SENADORES ==================== -->
     <div 
       id="brigadas-parlamentarias"
       ref="seccion3Ref" 
@@ -110,125 +111,127 @@
       :class="{ 'animate-in': isSeccion3Visible }"
       style="min-height: 100vh; position: relative; background: transparent;"
     >
-      <div class="mx-auto px-4 py-10 z-10 relative w-full">
+      <div class="mx-auto px-4 pt-[6vw] z-10 relative w-full">
         
         <!-- Estado Inicial: Escudos en 2 filas (5 + 4) -->
         <div v-if="!departamentoSeleccionado" class="flex flex-col items-center justify-center min-h-[80vh]">
           <div class="grid grid-cols-5 gap-8 mb-8">
             <div v-for="dep in departamentos.slice(0,5)" :key="dep.id" 
-                 @click="seleccionarDepartamento(dep)"
-                 class="cursor-pointer transition-all duration-300 hover:scale-105 text-center">
-              <div v-html="dep.escudoDorado" class="w-24 h-24 mx-auto"></div>
+                @click="seleccionarDepartamento(dep)"
+                class="cursor-pointer transition-all duration-300 hover:scale-105 text-center">
+              <div v-html="dep.escudoDorado" class="w-[15vw] h-[15vw] mx-auto"></div>
               <p class="text-center text-white mt-2 text-sm font-semibold">{{ dep.nombre }}</p>
             </div>
           </div>
           <div class="grid grid-cols-4 gap-8">
             <div v-for="dep in departamentos.slice(5,9)" :key="dep.id" 
-                 @click="seleccionarDepartamento(dep)"
-                 class="cursor-pointer transition-all duration-300 hover:scale-105 text-center">
-              <div v-html="dep.escudoDorado" class="w-24 h-24 mx-auto"></div>
+                @click="seleccionarDepartamento(dep)"
+                class="cursor-pointer transition-all duration-300 hover:scale-105 text-center">
+              <div v-html="dep.escudoDorado" class="w-[15vw] h-[15vw] mx-auto"></div>
               <p class="text-center text-white mt-2 text-sm font-semibold">{{ dep.nombre }}</p>
             </div>
           </div>
         </div>
 
         <!-- Estado con Departamento Seleccionado -->
-        <div v-else class="w-full  flex flex-col justify-center items-center min-h-[80vh]">
-          <!-- Fila Principal: 9 escudos en una sola fila -->
-          <div class="grid grid-cols-9 gap-4 mb-12">
-            <div v-for="dep in departamentos" :key="dep.id" 
-                 @click="seleccionarDepartamento(dep)"
-                 class="cursor-pointer transition-all duration-300 hover:scale-105 text-center">
-              <div v-html="departamentoSeleccionado?.id === dep.id ? dep.escudoReal : dep.escudoDorado" 
-                   class="w-16 h-16 mx-auto"></div>
-              <p class="text-center text-white text-xs mt-1">{{ dep.nombre }}</p>
+        <transition name="fade-fast" mode="out-in">
+          <div v-if="departamentoSeleccionado" :key="departamentoSeleccionado?.id" class="w-full flex flex-col justify-center items-center min-h-[80vh]">
+            <!-- Fila Principal: 9 escudos en una sola fila -->
+            <div class="grid grid-cols-9 gap-4 mb-12">
+              <div v-for="dep in departamentos" :key="dep.id" 
+                  @click="seleccionarDepartamento(dep)"
+                  class="cursor-pointer transition-all duration-500 hover:scale-[1.2] text-center">
+                <div v-html="departamentoSeleccionado?.id === dep.id ? dep.escudoReal : dep.escudoDorado" 
+                    class="w-[7.5vw] h-[7.5vw] mx-auto"></div>
+                <p class="text-center text-white text-xs mt-1">{{ dep.nombre }}</p>
+              </div>
             </div>
-          </div>
 
-          <!-- Fila de Titulares (5 columnas) -->
-          <div class="grid grid-cols-5 gap-6 mb-8">
-            <div class="text-center">
-              <div class="inline-block px-6 py-2 rounded-full text-white font-semibold" 
-                   :style="{ backgroundColor: 'rgba(224, 54, 54, 0.8)' }">
-                {{ departamentoSeleccionado?.nombre }}
+            <!-- Fila de Titulares (5 columnas) -->
+            <div class="grid grid-cols-5 gap-6 mb-8">
+              <div class="text-center">
+                <br>
+                <br>
+                <div class="inline-block px-1 py-2 rounded-full text-white font-semibold w-[12vw]" 
+                    :style="{ backgroundColor: 'rgba(224, 54, 54, 0.8)' }">
+                  {{ departamentoSeleccionado?.nombre }}
+                </div>
+              </div>
+              <div v-for="(titular, index) in titulares" :key="'titular-'+index" class="text-center">
+                <div class="w-[12vw] h-[12vw] mx-auto rounded-full overflow-hidden mb-2 transition-all duration-300 hover:scale-[1.2]">
+                  <img :src="titular.imagen" :alt="titular.nombre" class="w-full h-full object-cover">
+                </div>
+                <p class="text-white font-semibold text-sm">{{ titular.nombre.split(' ')[0] }} {{ titular.nombre.split(' ')[1] }}</p>
+                <p v-if="titular.nombre" class="text-gray-300 text-xs">{{ titular.partido }}</p>
               </div>
             </div>
-            <div v-for="(titular, index) in titulares" :key="'titular-'+index" class="text-center">
-              <div class="w-28 h-28 mx-auto rounded-full overflow-hidden mb-2">
-                <img :src="titular.imagen" :alt="titular.nombre" class="w-full h-full object-cover">
-              </div>
-              <p class="text-white font-semibold text-sm">{{ titular.nombre.split(' ')[0] }} {{ titular.nombre.split(' ')[1] }}</p>
-              <p v-if="titular.nombre" class="text-gray-300 text-xs">{{ titular.partido }}</p>
-            </div>
-          </div>
 
-          <!-- Fila de Suplentes (5 columnas) -->
-          <div class="grid grid-cols-5 gap-6">
-            <div class="text-center">
-              <div class="inline-block px-6 py-2 rounded-full text-white font-semibold" 
-                   :style="{ backgroundColor: 'rgba(224, 54, 54, 0.8)' }">
-                {{ departamentoSeleccionado?.nombre }}
+            <!-- Fila de Suplentes (5 columnas) -->
+            <div class="grid grid-cols-5 gap-6">
+              <div class="text-center">
+                <br>
+                <br>
+                <div class="inline-block px-6 py-2 rounded-full text-white font-semibold w-[12vw]" 
+                    :style="{ backgroundColor: 'rgba(224, 54, 54, 0.8)' }">
+                  {{ departamentoSeleccionado?.nombre }}
+                </div>
               </div>
-            </div>
-            <div v-for="(suplente, index) in suplentes" :key="'suplente-'+index" class="text-center">
-              <div class="w-28 h-28 mx-auto rounded-full overflow-hidden mb-2">
-                <img :src="suplente.imagen" :alt="suplente.nombre" class="w-full h-full object-cover">
+              <div v-for="(suplente, index) in suplentes" :key="'suplente-'+index" class="text-center">
+                <div class="w-[12vw] h-[12vw] mx-auto rounded-full overflow-hidden mb-2 transition-all duration-300 hover:scale-[1.2]">
+                  <img :src="suplente.imagen" :alt="suplente.nombre" class="w-full h-full object-cover">
+                </div>
+                <p class="text-white font-semibold text-sm">{{ suplente.nombre.split(' ')[0] }} {{ suplente.nombre.split(' ')[1] }}</p>
+                <p v-if="suplente.nombre" class="text-gray-300 text-xs">{{ suplente.partido }}</p>
               </div>
-              <p class="text-white font-semibold text-sm">{{ suplente.nombre.split(' ')[0] }} {{ suplente.nombre.split(' ')[1] }}</p>
-              <p v-if="suplente.nombre" class="text-gray-300 text-xs">{{ suplente.partido }}</p>
             </div>
           </div>
-        </div>
+        </transition>
       </div>
     </div>
-    
     <!-- ==================== SECCIÓN 4 - BANCADAS POLÍTICAS ==================== -->
     <div 
       id="bancadas-politicas"
       ref="seccion4Ref" 
-      class="scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out delay-400 z-10 mt-[5vw]"
+      class="scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out delay-400 z-10"
       :class="{ 'animate-in': isSeccion4Visible }"
       style="min-height: 100vh; position: relative; background: transparent;"
     >
-      <div class="container mx-auto px-4 py-10 z-10 relative">
+      <div class="container mx-auto px-4 z-10 relative" style="min-height: 100vh;">
         
         <!-- 4 Partidos Políticos - Estado Inicial -->
-        <div v-if="!partidoSeleccionado" class="flex flex-col items-center justify-center min-h-[80vh]">
-          <div class="flex justify-center gap-12 mb-12">
+        <div v-if="!partidoSeleccionado" class="flex flex-col items-center justify-center" style="min-height: 100vh;">
+          <div class="flex justify-center gap-12">
             <div v-for="partido in partidos" :key="partido.id" 
-                 @click="seleccionarPartido(partido)"
-                 class="cursor-pointer transition-all duration-300 hover:scale-105 text-center">
-              <div class="w-32 h-32 rounded-full border-4 flex items-center justify-center mx-auto"
-                   :style="{ borderColor: '#E4D294', backgroundColor: 'rgba(255,255,255,0.1)' }">
-                <div v-html="partido.iconoBlanco" class="w-20 h-20"></div>
-              </div>
+                @click="seleccionarPartido(partido)"
+                class="cursor-pointer transition-all duration-300 hover:scale-105 text-center items-center">
+              <div v-html="partido.iconoBlanco" class="w-[18vw] h-[18vw] mx-auto"></div>
               <p class="text-center text-white mt-3 text-lg font-semibold">{{ partido.nombre }}</p>
             </div>
           </div>
         </div>
 
         <!-- Estado con Partido Seleccionado -->
-        <div v-else class="w-full">
+        <div v-else class="w-full pt-[5.5vw]">
           <!-- 4 Partidos reorganizados arriba -->
-          <div class="flex justify-center gap-8 mb-8">
+          <div class="flex justify-center gap-8 mb-2">
             <div v-for="partido in partidos" :key="partido.id" 
-                 @click="seleccionarPartido(partido)"
-                 class="cursor-pointer transition-all duration-300 text-center"
-                 :class="{ 'transform scale-90': partidoSeleccionado?.id === partido.id }">
-              <div class="w-20 h-20 rounded-full border-4 flex items-center justify-center mx-auto"
-                   :style="{ borderColor: '#E4D294', backgroundColor: partidoSeleccionado?.id === partido.id ? 'rgba(228,210,148,0.2)' : 'rgba(255,255,255,0.1)' }">
+                @click="seleccionarPartido(partido)"
+                class="cursor-pointer transition-all duration-300 text-center"
+                :class="{ 'transform scale-90': partidoSeleccionado?.id === partido.id }">
+              <div class="w-16 h-16 rounded-full border-4 flex items-center justify-center mx-auto transition-all duration-1000 hover:scale-[1.5]"
+                  :style="{ borderColor: '#E4D294', backgroundColor: partidoSeleccionado?.id === partido.id ? 'rgba(228,210,148,0.2)' : 'rgba(255,255,255,0.1)' }">
                 <div v-html="partidoSeleccionado?.id === partido.id ? partido.iconoDorado : partido.iconoBlanco" 
-                     class="w-full h-full"></div>
+                    class="w-full h-full"></div>
               </div>
               <p class="text-center text-white text-xs mt-1">{{ partido.nombreCorto }}</p>
             </div>
           </div>
 
           <!-- Barra Roja con Botón Suplentes/Titulares -->
-          <div class="bg-red-700 rounded-lg px-6 py-3 mb-8 flex items-center justify-between">
+          <div class="bg-red-700 rounded-lg px-6 py-1 flex items-center justify-between">
             <button 
               @click="toggleTipoMiembros"
-              class="bg-red-800 hover:bg-red-900 text-white font-semibold px-6 py-2 rounded-lg transition-colors">
+              class="bg-[#E03636] hover:bg-red-900 text-white font-semibold px-6 py-2 rounded-lg transition-colors">
               {{ mostrarSuplentes ? 'VER TITULARES' : 'VER SUPLENTES' }}
             </button>
             <h3 class="text-white font-bold text-xl">{{ partidoSeleccionado?.nombre }}</h3>
@@ -236,45 +239,48 @@
           </div>
 
           <!-- Grid dinámico según partido seleccionado -->
-          <div v-if="partidoSeleccionado?.id === 'pdc'">
+          <div v-if="partidoSeleccionado?.id === 'pdc'" class="group bg-[rgba(190,0,0,0.6)] pt-2">
             <!-- PDC: 3 filas (6, 5, 5) -->
             <div class="grid grid-cols-6 gap-6 mb-6">
-              <div v-for="(persona, index) in miembrosMostrar.slice(0,6)" :key="index" class="text-center">
-                <div class="w-28 h-28 mx-auto rounded-full overflow-hidden border-4 circle-shadow mb-2" 
-                     style="border-color: #E4D294;">
+              <div v-for="(persona, index) in miembrosMostrar.slice(0,6)" :key="index" 
+                  class="text-center transition-all duration-1000 hover:scale-[2.5] group-hover:[&:not(:hover)]:scale-75 group-hover:[&:not(:hover)]:opacity-50">
+                <div class="w-24 h-24 mx-auto rounded-full overflow-hidden border-4 circle-shadow mb-1" 
+                    style="border-color: #E4D294;">
                   <img :src="persona.imagen" :alt="persona.nombre" class="w-full h-full object-cover">
                 </div>
-                <p class="text-white font-semibold text-sm">{{ persona.nombre.split(' ')[0] }} {{ persona.nombre.split(' ')[1] }}</p>
-                <p class="text-gray-300 text-xs">{{ persona.departamento }}</p>
+                <p class="text-white font-semibold text-sm drop-shadow-lg">{{ persona.nombre.split(' ')[0] }} {{ persona.nombre.split(' ')[1] }}</p>
+                <p class="text-gray-300 text-xs drop-shadow-lg">{{ persona.departamento }}</p>
               </div>
             </div>
             <div class="grid grid-cols-5 gap-6 mb-6">
-              <div v-for="(persona, index) in miembrosMostrar.slice(6,11)" :key="index" class="text-center">
-                <div class="w-28 h-28 mx-auto rounded-full overflow-hidden border-4 circle-shadow mb-2" 
-                     style="border-color: #E4D294;">
+              <div v-for="(persona, index) in miembrosMostrar.slice(6,11)" :key="index" 
+                  class="text-center transition-all duration-1000 hover:scale-[2.5] group-hover:[&:not(:hover)]:scale-75 group-hover:[&:not(:hover)]:opacity-50">
+                <div class="w-24 h-24 mx-auto rounded-full overflow-hidden border-4 circle-shadow mb-1" 
+                    style="border-color: #E4D294;">
                   <img :src="persona.imagen" :alt="persona.nombre" class="w-full h-full object-cover">
                 </div>
-                <p class="text-white font-semibold text-sm">{{ persona.nombre.split(' ')[0] }} {{ persona.nombre.split(' ')[1] }}</p>
-                <p class="text-gray-300 text-xs">{{ persona.departamento }}</p>
+                <p class="text-white font-semibold text-sm drop-shadow-lg">{{ persona.nombre.split(' ')[0] }} {{ persona.nombre.split(' ')[1] }}</p>
+                <p class="text-gray-300 text-xs drop-shadow-lg">{{ persona.departamento }}</p>
               </div>
             </div>
             <div class="grid grid-cols-5 gap-6">
-              <div v-for="(persona, index) in miembrosMostrar.slice(11,16)" :key="index" class="text-center">
-                <div class="w-28 h-28 mx-auto rounded-full overflow-hidden border-4 circle-shadow mb-2" 
-                     style="border-color: #E4D294;">
+              <div v-for="(persona, index) in miembrosMostrar.slice(11,16)" :key="index" 
+                  class="text-center transition-all duration-1000 hover:scale-[2.5] group-hover:[&:not(:hover)]:scale-75 group-hover:[&:not(:hover)]:opacity-50">
+                <div class="w-24 h-24 mx-auto rounded-full overflow-hidden border-4 circle-shadow mb-1" 
+                    style="border-color: #E4D294;">
                   <img :src="persona.imagen" :alt="persona.nombre" class="w-full h-full object-cover">
                 </div>
-                <p class="text-white font-semibold text-sm">{{ persona.nombre.split(' ')[0] }} {{ persona.nombre.split(' ')[1] }}</p>
-                <p class="text-gray-300 text-xs">{{ persona.departamento }}</p>
+                <p class="text-white font-semibold text-sm drop-shadow-lg">{{ persona.nombre.split(' ')[0] }} {{ persona.nombre.split(' ')[1] }}</p>
+                <p class="text-gray-300 text-xs drop-shadow-lg">{{ persona.departamento }}</p>
               </div>
             </div>
           </div>
-          <div v-else-if="partidoSeleccionado?.id === 'libre'">
+          <div v-else-if="partidoSeleccionado?.id === 'libre'" class="group bg-[rgba(190,0,0,0.6)] pt-2">
             <!-- Libre: 3 filas de 4 -->
             <div class="grid grid-cols-4 gap-6 mb-6">
               <div v-for="(persona, index) in miembrosMostrar.slice(0,4)" :key="index" class="text-center">
-                <div class="w-28 h-28 mx-auto rounded-full overflow-hidden border-4 circle-shadow mb-2" 
-                     style="border-color: #E4D294;">
+                <div class="w-24 h-24 mx-auto rounded-full overflow-hidden border-4 circle-shadow mb-1" 
+                    style="border-color: #E4D294;">
                   <img :src="persona.imagen" :alt="persona.nombre" class="w-full h-full object-cover">
                 </div>
                 <p class="text-white font-semibold text-sm">{{ persona.nombre.split(' ')[0] }} {{ persona.nombre.split(' ')[1] }}</p>
@@ -283,8 +289,8 @@
             </div>
             <div class="grid grid-cols-4 gap-6 mb-6">
               <div v-for="(persona, index) in miembrosMostrar.slice(4,8)" :key="index" class="text-center">
-                <div class="w-28 h-28 mx-auto rounded-full overflow-hidden border-4 circle-shadow mb-2" 
-                     style="border-color: #E4D294;">
+                <div class="w-24 h-24 mx-auto rounded-full overflow-hidden border-4 circle-shadow mb-1" 
+                    style="border-color: #E4D294;">
                   <img :src="persona.imagen" :alt="persona.nombre" class="w-full h-full object-cover">
                 </div>
                 <p class="text-white font-semibold text-sm">{{ persona.nombre.split(' ')[0] }} {{ persona.nombre.split(' ')[1] }}</p>
@@ -293,8 +299,8 @@
             </div>
             <div class="grid grid-cols-4 gap-6">
               <div v-for="(persona, index) in miembrosMostrar.slice(8,12)" :key="index" class="text-center">
-                <div class="w-28 h-28 mx-auto rounded-full overflow-hidden border-4 circle-shadow mb-2" 
-                     style="border-color: #E4D294;">
+                <div class="w-24 h-24 mx-auto rounded-full overflow-hidden border-4 circle-shadow mb-1" 
+                    style="border-color: #E4D294;">
                   <img :src="persona.imagen" :alt="persona.nombre" class="w-full h-full object-cover">
                 </div>
                 <p class="text-white font-semibold text-sm">{{ persona.nombre.split(' ')[0] }} {{ persona.nombre.split(' ')[1] }}</p>
@@ -302,11 +308,11 @@
               </div>
             </div>
           </div>
-          <div v-else-if="partidoSeleccionado?.id === 'alianza'">
+          <div v-else-if="partidoSeleccionado?.id === 'alianza'" class="group bg-[rgba(190,0,0,0.6)] pt-2">
             <!-- Alianza Unidad: 2 filas de 3 -->
             <div class="grid grid-cols-3 gap-6 mb-6">
               <div v-for="(persona, index) in miembrosMostrar.slice(0,3)" :key="index" class="text-center">
-                <div class="w-28 h-28 mx-auto rounded-full overflow-hidden border-4 circle-shadow mb-2" 
+                <div class="w-24 h-24 mx-auto rounded-full overflow-hidden border-4 circle-shadow mb-2" 
                     style="border-color: #E4D294;">
                   <img :src="persona.imagen" :alt="persona.nombre" class="w-full h-full object-cover">
                 </div>
@@ -316,7 +322,7 @@
             </div>
             <div class="grid grid-cols-3 gap-6 mb-6">
               <div v-for="(persona, index) in miembrosMostrar.slice(3,6)" :key="index" class="text-center">
-                <div class="w-28 h-28 mx-auto rounded-full overflow-hidden border-4 circle-shadow mb-2" 
+                <div class="w-24 h-24 mx-auto rounded-full overflow-hidden border-4 circle-shadow mb-2" 
                     style="border-color: #E4D294;">
                   <img :src="persona.imagen" :alt="persona.nombre" class="w-full h-full object-cover">
                 </div>
@@ -328,7 +334,7 @@
             <div class="grid grid-cols-3 gap-6">
               <div class="text-center">
                 <div v-if="miembrosMostrar[6]" class="inline-block">
-                  <div class="w-28 h-28 rounded-full overflow-hidden border-4 circle-shadow mb-2" 
+                  <div class="w-24 h-24 rounded-full overflow-hidden border-4 circle-shadow mb-2" 
                       style="border-color: #E4D294;">
                     <img :src="miembrosMostrar[6].imagen" :alt="miembrosMostrar[6].nombre" class="w-full h-full object-cover">
                   </div>
@@ -340,12 +346,12 @@
               <div></div>
             </div>
           </div>
-          <div v-else-if="partidoSeleccionado?.id === 'sumate'">
+          <div v-else-if="partidoSeleccionado?.id === 'sumate'" class="group bg-[rgba(190,0,0,0.6)] pt-2">
             <!-- Sumate: 1 fila de 1 (centrado) -->
             <div class="flex justify-center">
               <div v-if="miembrosMostrar[0]" class="text-center">
                 <div class="w-28 h-28 rounded-full overflow-hidden border-4 circle-shadow mb-2" 
-                     style="border-color: #E4D294;">
+                    style="border-color: #E4D294;">
                   <img :src="miembrosMostrar[0].imagen" :alt="miembrosMostrar[0].nombre" class="w-full h-full object-cover">
                 </div>
                 <p class="text-white font-semibold text-sm">{{ miembrosMostrar[0].nombre.split(' ')[0] }} {{ miembrosMostrar[0].nombre.split(' ')[1] }}</p>
@@ -539,7 +545,6 @@ senadoresData.forEach(({nombre, suplente, partido, departamento, imagen, imagens
     titularesPorDepartamento[departamento].push({nombre, partido, imagen})
     suplentesPorDepartamento[departamento].push({nombre:suplente,partido,imagen:imagensu})
   }
-  console.log(departamento.toUpperCase())
   rellenar(departamento.toUpperCase())
 })
 // Organizar por partido
@@ -862,5 +867,16 @@ footer {
     opacity: 1 !important;
     transform: none !important;
   }
+}
+
+/* Transición simple y elegante */
+.fade-fast-enter-active,
+.fade-fast-leave-active {
+  transition: opacity 0.6s ease-in;
+}
+
+.fade-fast-enter-from,
+.fade-fast-leave-to {
+  opacity: 0;
 }
 </style>

@@ -1,6 +1,6 @@
 // nuxt.config.ts - SIN PRIMEVUE TEMPORALMENTE
 export default defineNuxtConfig({
-  devtools: { enabled: true },
+  devtools: { enabled: false },
   
   // Módulos
   modules: [
