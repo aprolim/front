@@ -1,5 +1,14 @@
 // nuxt.config.ts - SIN PRIMEVUE TEMPORALMENTE
 export default defineNuxtConfig({
+  vite: {
+    server: {
+      allowedHosts: [
+        'demoap.senado.gob.bo',
+        'localhost',
+        '127.0.0.1'
+      ]
+    }
+  },
   devtools: { enabled: false },
   
   // Módulos
