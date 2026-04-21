@@ -6,25 +6,25 @@ export const modeNewsGridData = {
       id: 1, 
       titulo: 'Reforma Educativa para áreas rurales aprobada', 
       imagen: '/sesiones-portada/image1.png', 
-      enlace: '/noticias/reforma-educativa' 
+      enlace: '/' 
     },
     { 
       id: 2, 
       titulo: 'Plan Nacional de hidrocarburos 2024-2026', 
       imagen: '/sesiones-portada/image2.png', 
-      enlace: '/noticias/plan-hospitalario' 
+      enlace: '/' 
     },
     { 
       id: 3, 
       titulo: 'Sesiones en pleno ampliada para mitigar el cambio climático', 
       imagen: '/sesiones-portada/image3.png', 
-      enlace: '/noticias/proteccion-bosques' 
+      enlace: '/' 
     },
     { 
       id: 4, 
       titulo: 'Se reafirma la nueva constitucion', 
       imagen: '/sesiones-portada/image4.png', 
-      enlace: '/noticias/plataforma-digital' 
+      enlace: '/' 
     }
   ],
 

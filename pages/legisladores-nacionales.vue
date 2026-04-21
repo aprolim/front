@@ -51,11 +51,11 @@
             <h3 class="text-2xl font-bold text-white drop-shadow-lg mb-2 text-center">
               {{ selectedImage.nombre }}
             </h3>
-            <p class="text-lg text-gray-200 drop-shadow mb-4 text-center">
+            <p class="text-lg text-gray-100 drop-shadow-lg mb-4 text-center">
               {{ selectedImage.cargo }}
             </p>
             <div class="text-center max-w-md">
-              <p class="text-white drop-shadow leading-relaxed">
+              <p class="text-white drop-shadow-lg leading-relaxed">
                 {{ selectedImage.text }}
               </p>
             </div>
@@ -68,33 +68,101 @@
       />
     </section>
 
-    <!-- ==================== SECCIÓN 2 - FONDO BLANCO ==================== -->
+    <!-- ==================== SECCIÓN 2 - COMISIONES Y COMITES ==================== -->
     <div 
       id="comisiones-y-comites"
       ref="seccion2Ref" 
       class="scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out z-10"
       :class="{ 'animate-in': isSeccion2Visible }"
-      style="min-height: 100vh; position: relative; background: white;"
+      style="height: 100vh; position: relative; background: white;"
     >
-      <div class="container mx-auto px-4 py-20">
-        <h2 class="text-4xl md:text-5xl font-bold mb-8 text-center text-gray-800">
-          Sección 2 - Fondo Blanco
-        </h2>
-        <p class="text-xl text-center text-gray-600 max-w-3xl mx-auto">
-          Esta sección tiene fondo blanco puro, sin imagen de fondo fija.
-        </p>
-        <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          <div class="bg-gray-100 p-6 rounded-lg shadow-md">
-            <h3 class="text-xl font-semibold mb-3">Contenido 1</h3>
-            <p class="text-gray-600">Ejemplo de contenido en sección blanca</p>
+      <div class="container mx-auto px-4 py-12">
+        <!-- Header Rojo con texto blanco en mayúsculas -->
+        <div class="bg-[#E03636] rounded-lg mb-8">
+          <h2 class="text-3xl md:text-4xl font-bold text-center text-white py-4 tracking-wide">
+            COMISIONES Y COMITÉS
+          </h2>
+        </div>
+
+        <!-- Layout de dos columnas: 40% - 60% -->
+        <div class="flex flex-col md:flex-row gap-6">
+          
+          <!-- Columna Izquierda: 40% - Botones -->
+          <div class="w-full md:w-[40%] space-y-3">
+            <button
+              v-for="comision in comisionesList"
+              :key="comision.id"
+              @click="seleccionarComision(comision)"
+              :class="[
+                'w-full py-3 px-4 rounded-lg font-semibold transition-all duration-300 text-left',
+                comisionSeleccionada?.id === comision.id 
+                  ? 'bg-[#E03636] text-white' 
+                  : 'bg-white text-[#E03636] border border-[#E03636] hover:bg-[#E03636] hover:text-white'
+              ]"
+            >
+              {{ comision.nombre }}
+            </button>
           </div>
-          <div class="bg-gray-100 p-6 rounded-lg shadow-md">
-            <h3 class="text-xl font-semibold mb-3">Contenido 2</h3>
-            <p class="text-gray-600">Ejemplo de contenido en sección blanca</p>
-          </div>
-          <div class="bg-gray-100 p-6 rounded-lg shadow-md">
-            <h3 class="text-xl font-semibold mb-3">Contenido 3</h3>
-            <p class="text-gray-600">Ejemplo de contenido en sección blanca</p>
+
+          <!-- Columna Derecha: 60% - Contenido dinámico -->
+          <div class="w-full md:w-[60%] bg-gray-400/90 rounded-lg pt-6 min-h-[500px] text-[1vw]">
+            <div v-if="comisionSeleccionada">
+              <!-- Título dinámico (igual al botón seleccionado) -->
+              <h3 class="text-2xl font-bold text-white drop-shadow-md mb-6 pb-2 text-center">
+                {{ comisionSeleccionada.nombre }}
+              </h3>
+
+              <!-- Grupo 1: Primera fila de 2 fichas -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div v-for="(miembro, idx) in comisionSeleccionada.miembrosGrupo1" :key="'g1-'+idx" class="flex items-center gap-4 p-4 rounded-lg px-[2vw]">
+                  <img :src="miembro.foto" :alt="miembro.nombre" class="w-20 h-20 rounded-full object-cover">
+                  <div class="text-white text-center">
+                    <p class="font-bold drop-shadow-md">{{ miembro.cargo }}</p>
+                    <p class="drop-shadow-md">{{ miembro.nombre }}</p>
+                    <p class="text-sm drop-shadow-md">{{ miembro.partido }}</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Línea roja con título -->
+              <div class="my-6 py-[.4vw] bg-[#E03636]">
+                <h4 class="font-semibold text-white text-[1em] text-center">{{ comisionSeleccionada.tituloLinea1 }}</h4>
+              </div>
+
+              <!-- Grupo 2: Segunda fila de 2 fichas -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div v-for="(miembro, idx) in comisionSeleccionada.miembrosGrupo2" :key="'g2-'+idx" class="flex items-center gap-4 p-4 rounded-lg px-[2vw]">
+                  <img :src="miembro.foto" :alt="miembro.nombre" class="w-20 h-20 rounded-full object-cover">
+                  <div class="text-white">
+                    <p class="font-bold drop-shadow-md">{{ miembro.cargo }}</p>
+                    <p class="drop-shadow-md">{{ miembro.nombre }}</p>
+                    <p class="text-sm drop-shadow-md">{{ miembro.partido }}</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Línea roja con título (segunda) -->
+              <div class="my-6 py-[.4vw] bg-[#E03636]">
+                <h4 class="text-[1em] font-semibold text-white text-center">{{ comisionSeleccionada.tituloLinea2 }}</h4>
+              </div>
+
+              <!-- Grupo 3: Tercera fila de 2 fichas -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div v-for="(miembro, idx) in comisionSeleccionada.miembrosGrupo3" :key="'g3-'+idx" class="flex items-center gap-4 p-4 rounded-lg px-[2vw]">
+                  <img :src="miembro.foto" :alt="miembro.nombre" class="w-20 h-20 rounded-full object-cover">
+                  <div>
+                    <p class="font-bold text-white">{{ miembro.cargo }}</p>
+                    <p class="text-white">{{ miembro.nombre }}</p>
+                    <p class="text-sm text-white">{{ miembro.partido }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Estado vacío (cuando no hay comisión seleccionada) -->
+            <div v-else class="flex items-center justify-center h-96">
+              <p class="text-gray-500 text-lg">Seleccione una comisión o comité para ver sus miembros</p>
+            </div>
           </div>
         </div>
       </div>
@@ -134,52 +202,50 @@
         <transition name="fade-fast" mode="out-in">
           <div v-if="departamentoSeleccionado" :key="departamentoSeleccionado?.id" class="w-full flex flex-col justify-center items-center min-h-[80vh]">
             <!-- Fila Principal: 9 escudos en una sola fila -->
-            <div class="grid grid-cols-9 gap-4 mb-12">
+            <div class="grid grid-cols-9 gap-4">
               <div v-for="dep in departamentos" :key="dep.id" 
                   @click="seleccionarDepartamento(dep)"
-                  class="cursor-pointer transition-all duration-500 hover:scale-[1.2] text-center">
+                  class="cursor-pointer transition-all duration-500 hover:scale-[1.45] text-center">
                 <div v-html="departamentoSeleccionado?.id === dep.id ? dep.escudoReal : dep.escudoDorado" 
                     class="w-[7.5vw] h-[7.5vw] mx-auto"></div>
-                <p class="text-center text-white text-xs mt-1">{{ dep.nombre }}</p>
+                <p class="text-center text-white text-xs mt-1 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">{{ dep.nombre }}</p>
               </div>
             </div>
+            <div class="bg-[rgba(190,0,0,0.6)] pt-[2vw] px-[4vw] pb-[1vw]">
 
-            <!-- Fila de Titulares (5 columnas) -->
-            <div class="grid grid-cols-5 gap-6 mb-8">
-              <div class="text-center">
-                <br>
-                <br>
-                <div class="inline-block px-1 py-2 rounded-full text-white font-semibold w-[12vw]" 
-                    :style="{ backgroundColor: 'rgba(224, 54, 54, 0.8)' }">
-                  {{ departamentoSeleccionado?.nombre }}
+                <!-- Fila de Titulares (5 columnas) -->
+                <div class="grid grid-cols-5 gap-6 mb-8">
+                  <div class="text-center">
+                    <div class="mt-[5vw] inline-block px-1 py-2 rounded-full text-white font-semibold w-[12vw]" 
+                        :style="{ backgroundColor: 'rgba(224, 54, 54, 0.8)' }">
+                      {{ departamentoSeleccionado?.nombre }}
+                    </div>
+                  </div>
+                  <div v-for="(titular, index) in titulares" :key="'titular-'+index" class="text-center">
+                    <div class="w-[12vw] h-[12vw] mx-auto rounded-full overflow-hidden mb-2 transition-all duration-300 hover:scale-[1.3]">
+                      <img :src="titular.imagen" :alt="titular.nombre" loading="lazy" class="w-full h-full object-cover">
+                    </div>
+                    <p class="text-white font-semibold text-sm">{{ titular.nombre.split(' ')[0] }} {{ titular.nombre.split(' ')[1] }}</p>
+                    <p v-if="titular.nombre" class="text-gray-300 text-xs">{{ titular.partido }}</p>
+                  </div>
                 </div>
-              </div>
-              <div v-for="(titular, index) in titulares" :key="'titular-'+index" class="text-center">
-                <div class="w-[12vw] h-[12vw] mx-auto rounded-full overflow-hidden mb-2 transition-all duration-300 hover:scale-[1.2]">
-                  <img :src="titular.imagen" :alt="titular.nombre" loading="lazy" class="w-full h-full object-cover">
+    
+                <!-- Fila de Suplentes (5 columnas) -->
+                <div class="grid grid-cols-5 gap-6">
+                  <div class="text-center">
+                    <div class="mt-[5vw] inline-block px-6 py-2 rounded-full text-white font-semibold w-[12vw]" 
+                        :style="{ backgroundColor: 'rgba(224, 54, 54, 0.8)' }">
+                      {{ departamentoSeleccionado?.nombre }}
+                    </div>
+                  </div>
+                  <div v-for="(suplente, index) in suplentes" :key="'suplente-'+index" class="text-center">
+                    <div class="w-[12vw] h-[12vw] mx-auto rounded-full overflow-hidden mb-2 transition-all duration-300 hover:scale-[1.3]">
+                      <img :src="suplente.imagen" :alt="suplente.nombre" loading="lazy" class="w-full h-full object-cover">
+                    </div>
+                    <p class="text-white font-semibold text-sm">{{ suplente.nombre.split(' ')[0] }} {{ suplente.nombre.split(' ')[1] }}</p>
+                    <p v-if="suplente.nombre" class="text-gray-300 text-xs">{{ suplente.partido }}</p>
+                  </div>
                 </div>
-                <p class="text-white font-semibold text-sm">{{ titular.nombre.split(' ')[0] }} {{ titular.nombre.split(' ')[1] }}</p>
-                <p v-if="titular.nombre" class="text-gray-300 text-xs">{{ titular.partido }}</p>
-              </div>
-            </div>
-
-            <!-- Fila de Suplentes (5 columnas) -->
-            <div class="grid grid-cols-5 gap-6">
-              <div class="text-center">
-                <br>
-                <br>
-                <div class="inline-block px-6 py-2 rounded-full text-white font-semibold w-[12vw]" 
-                    :style="{ backgroundColor: 'rgba(224, 54, 54, 0.8)' }">
-                  {{ departamentoSeleccionado?.nombre }}
-                </div>
-              </div>
-              <div v-for="(suplente, index) in suplentes" :key="'suplente-'+index" class="text-center">
-                <div class="w-[12vw] h-[12vw] mx-auto rounded-full overflow-hidden mb-2 transition-all duration-300 hover:scale-[1.2]">
-                  <img :src="suplente.imagen" :alt="suplente.nombre" loading="lazy" class="w-full h-full object-cover">
-                </div>
-                <p class="text-white font-semibold text-sm">{{ suplente.nombre.split(' ')[0] }} {{ suplente.nombre.split(' ')[1] }}</p>
-                <p v-if="suplente.nombre" class="text-gray-300 text-xs">{{ suplente.partido }}</p>
-              </div>
             </div>
           </div>
         </transition>
@@ -450,6 +516,193 @@ const selectedImage = ref({
   nombre: personasData.value[0].nombre,
   cargo: personasData.value[0].cargo
 })
+
+// ==================== DATOS SECCIÓN 2 - COMISIONES Y COMITES ====================
+const comisionesList = ref([
+  { id: 1, nombre: 'COMISIÓN DE CONSTITUCIÓN' },
+  { id: 2, nombre: 'COMISIÓN DE GOBIERNO' },
+  { id: 3, nombre: 'COMISIÓN DE ECONOMÍA' },
+  { id: 4, nombre: 'COMISIÓN DE EDUCACIÓN' },
+  { id: 5, nombre: 'COMISIÓN DE SALUD' },
+  { id: 6, nombre: 'COMISIÓN DE DERECHOS HUMANOS' },
+  { id: 7, nombre: 'COMITÉ DE ÉTICA' },
+  { id: 8, nombre: 'COMITÉ DE TRANSPARENCIA' },
+  { id: 9, nombre: 'COMISIÓN DE TECNOLOGÍA' },
+  { id: 10, nombre: 'COMISIÓN DE MEDIO AMBIENTE' }
+])
+
+const comisionSeleccionada = ref(null)
+
+// Datos completos de cada comisión
+const comisionesData = {
+  1: {
+    miembrosGrupo1: [
+      { foto: '/api/placeholder/80/80', cargo: 'PRESIDENTE', nombre: 'Juan Pérez', partido: 'PDC' },
+      { foto: '/api/placeholder/80/80', cargo: 'VICEPRESIDENTE', nombre: 'María López', partido: 'LIBRE' }
+    ],
+    tituloLinea1: 'COMISIÓN PERMANENTE',
+    miembrosGrupo2: [
+      { foto: '/api/placeholder/80/80', cargo: 'SECRETARIO', nombre: 'Carlos Gómez', partido: 'PDC' },
+      { foto: '/api/placeholder/80/80', cargo: 'VOCAL', nombre: 'Ana Fernández', partido: 'ALIANZA' }
+    ],
+    tituloLinea2: 'COMISIÓN ESPECIAL',
+    miembrosGrupo3: [
+      { foto: '/api/placeholder/80/80', cargo: 'ASESOR', nombre: 'Roberto Quispe', partido: 'SUMATE' },
+      { foto: '/api/placeholder/80/80', cargo: 'COORDINADOR', nombre: 'Laura Vargas', partido: 'PDC' }
+    ]
+  },
+  2: {
+    miembrosGrupo1: [
+      { foto: '/api/placeholder/80/80', cargo: 'PRESIDENTE', nombre: 'Pedro Castillo', partido: 'LIBRE' },
+      { foto: '/api/placeholder/80/80', cargo: 'VICEPRESIDENTE', nombre: 'Rosa Mamani', partido: 'PDC' }
+    ],
+    tituloLinea1: 'MESA DIRECTIVA',
+    miembrosGrupo2: [
+      { foto: '/api/placeholder/80/80', cargo: 'SECRETARIO', nombre: 'Luis Torrez', partido: 'ALIANZA' },
+      { foto: '/api/placeholder/80/80', cargo: 'VOCAL', nombre: 'Elena Ríos', partido: 'LIBRE' }
+    ],
+    tituloLinea2: 'COMISIÓN TÉCNICA',
+    miembrosGrupo3: [
+      { foto: '/api/placeholder/80/80', cargo: 'ASESOR', nombre: 'Miguel Ángel', partido: 'SUMATE' },
+      { foto: '/api/placeholder/80/80', cargo: 'COORDINADOR', nombre: 'Claudia Paz', partido: 'PDC' }
+    ]
+  },
+  3: {
+    miembrosGrupo1: [
+      { foto: '/api/placeholder/80/80', cargo: 'PRESIDENTE', nombre: 'Fernando Ríos', partido: 'ALIANZA' },
+      { foto: '/api/placeholder/80/80', cargo: 'VICEPRESIDENTE', nombre: 'Silvia Méndez', partido: 'PDC' }
+    ],
+    tituloLinea1: 'COMISIÓN DE PLANIFICACIÓN',
+    miembrosGrupo2: [
+      { foto: '/api/placeholder/80/80', cargo: 'SECRETARIO', nombre: 'Jorge Tapia', partido: 'LIBRE' },
+      { foto: '/api/placeholder/80/80', cargo: 'VOCAL', nombre: 'Marcela Soliz', partido: 'PDC' }
+    ],
+    tituloLinea2: 'SUBCOMISIÓN DE PRESUPUESTO',
+    miembrosGrupo3: [
+      { foto: '/api/placeholder/80/80', cargo: 'ASESOR', nombre: 'Raúl Vargas', partido: 'SUMATE' },
+      { foto: '/api/placeholder/80/80', cargo: 'COORDINADOR', nombre: 'Patricia Lema', partido: 'ALIANZA' }
+    ]
+  },
+  4: {
+    miembrosGrupo1: [
+      { foto: '/api/placeholder/80/80', cargo: 'PRESIDENTE', nombre: 'Mario Quispe', partido: 'PDC' },
+      { foto: '/api/placeholder/80/80', cargo: 'VICEPRESIDENTE', nombre: 'Elena Morales', partido: 'LIBRE' }
+    ],
+    tituloLinea1: 'COMISIÓN DE EDUCACIÓN SUPERIOR',
+    miembrosGrupo2: [
+      { foto: '/api/placeholder/80/80', cargo: 'SECRETARIO', nombre: 'Hugo Fernández', partido: 'ALIANZA' },
+      { foto: '/api/placeholder/80/80', cargo: 'VOCAL', nombre: 'Ruth Camacho', partido: 'PDC' }
+    ],
+    tituloLinea2: 'COMISIÓN DE CIENCIA Y TECNOLOGÍA',
+    miembrosGrupo3: [
+      { foto: '/api/placeholder/80/80', cargo: 'ASESOR', nombre: 'David Torrico', partido: 'SUMATE' },
+      { foto: '/api/placeholder/80/80', cargo: 'COORDINADOR', nombre: 'Andrea Paz', partido: 'LIBRE' }
+    ]
+  },
+  5: {
+    miembrosGrupo1: [
+      { foto: '/api/placeholder/80/80', cargo: 'PRESIDENTE', nombre: 'Ricardo García', partido: 'LIBRE' },
+      { foto: '/api/placeholder/80/80', cargo: 'VICEPRESIDENTE', nombre: 'Sandra López', partido: 'PDC' }
+    ],
+    tituloLinea1: 'COMISIÓN DE SALUD PÚBLICA',
+    miembrosGrupo2: [
+      { foto: '/api/placeholder/80/80', cargo: 'SECRETARIO', nombre: 'Carlos Luna', partido: 'ALIANZA' },
+      { foto: '/api/placeholder/80/80', cargo: 'VOCAL', nombre: 'Gabriela Rojas', partido: 'LIBRE' }
+    ],
+    tituloLinea2: 'COMISIÓN DE SEGUROS DE SALUD',
+    miembrosGrupo3: [
+      { foto: '/api/placeholder/80/80', cargo: 'ASESOR', nombre: 'Fernando Aguirre', partido: 'PDC' },
+      { foto: '/api/placeholder/80/80', cargo: 'COORDINADOR', nombre: 'Lourdes Castellón', partido: 'SUMATE' }
+    ]
+  },
+  6: {
+    miembrosGrupo1: [
+      { foto: '/api/placeholder/80/80', cargo: 'PRESIDENTE', nombre: 'Julio Mamani', partido: 'PDC' },
+      { foto: '/api/placeholder/80/80', cargo: 'VICEPRESIDENTE', nombre: 'Carolina Daza', partido: 'LIBRE' }
+    ],
+    tituloLinea1: 'COMISIÓN DE DD.HH',
+    miembrosGrupo2: [
+      { foto: '/api/placeholder/80/80', cargo: 'SECRETARIO', nombre: 'Ramiro Flores', partido: 'ALIANZA' },
+      { foto: '/api/placeholder/80/80', cargo: 'VOCAL', nombre: 'Luz Quintanilla', partido: 'PDC' }
+    ],
+    tituloLinea2: 'COMISIÓN DE PUEBLOS INDÍGENAS',
+    miembrosGrupo3: [
+      { foto: '/api/placeholder/80/80', cargo: 'ASESOR', nombre: 'Félix Yucra', partido: 'SUMATE' },
+      { foto: '/api/placeholder/80/80', cargo: 'COORDINADOR', nombre: 'Marisol Choque', partido: 'LIBRE' }
+    ]
+  },
+  7: {
+    miembrosGrupo1: [
+      { foto: '/api/placeholder/80/80', cargo: 'PRESIDENTE', nombre: 'Ana María Cordero', partido: 'ALIANZA' },
+      { foto: '/api/placeholder/80/80', cargo: 'VICEPRESIDENTE', nombre: 'Roberto Linares', partido: 'PDC' }
+    ],
+    tituloLinea1: 'COMITÉ DE ÉTICA',
+    miembrosGrupo2: [
+      { foto: '/api/placeholder/80/80', cargo: 'SECRETARIO', nombre: 'Patricia Flores', partido: 'LIBRE' },
+      { foto: '/api/placeholder/80/80', cargo: 'VOCAL', nombre: 'Mauricio Rojas', partido: 'PDC' }
+    ],
+    tituloLinea2: 'TRIBUNAL DE HONOR',
+    miembrosGrupo3: [
+      { foto: '/api/placeholder/80/80', cargo: 'ASESOR', nombre: 'Elizabeth Quiroga', partido: 'SUMATE' },
+      { foto: '/api/placeholder/80/80', cargo: 'COORDINADOR', nombre: 'Luis Espinoza', partido: 'ALIANZA' }
+    ]
+  },
+  8: {
+    miembrosGrupo1: [
+      { foto: '/api/placeholder/80/80', cargo: 'PRESIDENTE', nombre: 'Katherine Salazar', partido: 'PDC' },
+      { foto: '/api/placeholder/80/80', cargo: 'VICEPRESIDENTE', nombre: 'Humberto Roca', partido: 'LIBRE' }
+    ],
+    tituloLinea1: 'COMITÉ DE TRANSPARENCIA',
+    miembrosGrupo2: [
+      { foto: '/api/placeholder/80/80', cargo: 'SECRETARIO', nombre: 'María del Pilar Sanz', partido: 'ALIANZA' },
+      { foto: '/api/placeholder/80/80', cargo: 'VOCAL', nombre: 'José Manuel Ortiz', partido: 'PDC' }
+    ],
+    tituloLinea2: 'COMISIÓN ANTICORRUPCIÓN',
+    miembrosGrupo3: [
+      { foto: '/api/placeholder/80/80', cargo: 'ASESOR', nombre: 'Norma Campos', partido: 'SUMATE' },
+      { foto: '/api/placeholder/80/80', cargo: 'COORDINADOR', nombre: 'Cristian Maldonado', partido: 'LIBRE' }
+    ]
+  },
+  9: {
+    miembrosGrupo1: [
+      { foto: '/api/placeholder/80/80', cargo: 'PRESIDENTE', nombre: 'Paola Ticona', partido: 'LIBRE' },
+      { foto: '/api/placeholder/80/80', cargo: 'VICEPRESIDENTE', nombre: 'Marcelo Peñaranda', partido: 'PDC' }
+    ],
+    tituloLinea1: 'COMISIÓN DE TECNOLOGÍA',
+    miembrosGrupo2: [
+      { foto: '/api/placeholder/80/80', cargo: 'SECRETARIO', nombre: 'Daniela Ríos', partido: 'ALIANZA' },
+      { foto: '/api/placeholder/80/80', cargo: 'VOCAL', nombre: 'Gustavo Lora', partido: 'LIBRE' }
+    ],
+    tituloLinea2: 'COMISIÓN DE INNOVACIÓN',
+    miembrosGrupo3: [
+      { foto: '/api/placeholder/80/80', cargo: 'ASESOR', nombre: 'Javier Yugar', partido: 'PDC' },
+      { foto: '/api/placeholder/80/80', cargo: 'COORDINADOR', nombre: 'Verónica Aguilera', partido: 'SUMATE' }
+    ]
+  },
+  10: {
+    miembrosGrupo1: [
+      { foto: '/api/placeholder/80/80', cargo: 'PRESIDENTE', nombre: 'Álvaro Dorado', partido: 'PDC' },
+      { foto: '/api/placeholder/80/80', cargo: 'VICEPRESIDENTE', nombre: 'Karen Vaca', partido: 'LIBRE' }
+    ],
+    tituloLinea1: 'COMISIÓN DE MEDIO AMBIENTE',
+    miembrosGrupo2: [
+      { foto: '/api/placeholder/80/80', cargo: 'SECRETARIO', nombre: 'Sergio Balderrama', partido: 'ALIANZA' },
+      { foto: '/api/placeholder/80/80', cargo: 'VOCAL', nombre: 'Mónica Arce', partido: 'PDC' }
+    ],
+    tituloLinea2: 'COMISIÓN DE RECURSOS HÍDRICOS',
+    miembrosGrupo3: [
+      { foto: '/api/placeholder/80/80', cargo: 'ASESOR', nombre: 'Edwin Limachi', partido: 'SUMATE' },
+      { foto: '/api/placeholder/80/80', cargo: 'COORDINADOR', nombre: 'Sonia Quispe', partido: 'LIBRE' }
+    ]
+  }
+}
+
+const seleccionarComision = (comision) => {
+  comisionSeleccionada.value = {
+    ...comision,
+    ...comisionesData[comision.id]
+  }
+}
 
 // ==================== DATOS SECCIÓN 3 ====================
 const departamentoSeleccionado = ref(null)

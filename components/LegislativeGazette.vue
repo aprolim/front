@@ -28,7 +28,7 @@
           
           <div class="flex justify-center">
             <NuxtLink 
-              to="/gaceta-oficial" 
+              to="/" 
               class="bg-[#E03636] hover:bg-[#C12F2F] text-white font-bold py-[.4em] px-[0.8em] rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg text-lg"
             >
               Ver más
