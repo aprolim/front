@@ -519,16 +519,16 @@ const selectedImage = ref({
 
 // ==================== DATOS SECCIÓN 2 - COMISIONES Y COMITES ====================
 const comisionesList = ref([
-  { id: 1, nombre: 'COMISIÓN DE CONSTITUCIÓN' },
-  { id: 2, nombre: 'COMISIÓN DE GOBIERNO' },
-  { id: 3, nombre: 'COMISIÓN DE ECONOMÍA' },
-  { id: 4, nombre: 'COMISIÓN DE EDUCACIÓN' },
-  { id: 5, nombre: 'COMISIÓN DE SALUD' },
-  { id: 6, nombre: 'COMISIÓN DE DERECHOS HUMANOS' },
-  { id: 7, nombre: 'COMITÉ DE ÉTICA' },
-  { id: 8, nombre: 'COMITÉ DE TRANSPARENCIA' },
-  { id: 9, nombre: 'COMISIÓN DE TECNOLOGÍA' },
-  { id: 10, nombre: 'COMISIÓN DE MEDIO AMBIENTE' }
+  { id: 1, nombre: 'Comisión de Constitución, Derechos Humanos, Legislación y Sistema Electoral' },
+  { id: 2, nombre: 'Comisión de Justicia Plural, Ministerio Público y Defensa LEGAL del Estado' },
+  { id: 3, nombre: 'Comisión de Seguridad del Estado, Fuerzas Armadas y Policía Boliviana' },
+  { id: 4, nombre: 'Comisión de Organización Territorial del Estado y Autonomías' },
+  { id: 5, nombre: 'Comisión de Planificación, Política Económica y Finanzas' },
+  { id: 6, nombre: 'Comisión de Economía Plural, Producción,Industria e Industrialización' },
+  { id: 7, nombre: 'Comisión de Naciones y Pueblos Indígena Originario Campesinos e Interculturalidad' },
+  { id: 8, nombre: 'Comisión de Política Social, Educación y Salud' },
+  { id: 9, nombre: 'Comisión de Política Internacional' },
+  { id: 10, nombre: 'Comisión de Tierra y Territorio, Recursos Naturales y Medio Ambiente' }
 ])
 
 const comisionSeleccionada = ref(null)
@@ -537,162 +537,161 @@ const comisionSeleccionada = ref(null)
 const comisionesData = {
   1: {
     miembrosGrupo1: [
-      { foto: '/api/placeholder/80/80', cargo: 'PRESIDENTE', nombre: 'Juan Pérez', partido: 'PDC' },
-      { foto: '/api/placeholder/80/80', cargo: 'VICEPRESIDENTE', nombre: 'María López', partido: 'LIBRE' }
+      { foto: '/api/placeholder/80/80', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Daniel Antonio Ortiz Velasquez', partido: 'PDC' },
+      { foto: '/api/placeholder/80/80', cargo: 'SENADORA SUPLENTE', nombre: 'Reina Isabel Pallares Morales', partido: 'PDC' }
     ],
     tituloLinea1: 'COMISIÓN PERMANENTE',
     miembrosGrupo2: [
-      { foto: '/api/placeholder/80/80', cargo: 'SECRETARIO', nombre: 'Carlos Gómez', partido: 'PDC' },
-      { foto: '/api/placeholder/80/80', cargo: 'VOCAL', nombre: 'Ana Fernández', partido: 'ALIANZA' }
+      { foto: '/api/placeholder/80/80', cargo: 'SECRETARIO DE COMITÉ', nombre: 'Freddy Castillo Chavez', partido: 'PDC' },
+      { foto: '/api/placeholder/80/80', cargo: 'SENADORA SUPLENTE', nombre: 'Villma Colque Camacho', partido: 'PDC' }
     ],
     tituloLinea2: 'COMISIÓN ESPECIAL',
     miembrosGrupo3: [
-      { foto: '/api/placeholder/80/80', cargo: 'ASESOR', nombre: 'Roberto Quispe', partido: 'SUMATE' },
-      { foto: '/api/placeholder/80/80', cargo: 'COORDINADOR', nombre: 'Laura Vargas', partido: 'PDC' }
+      { foto: '/api/placeholder/80/80', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Tomasa Yarhui Jacome', partido: 'PDC' },
+      { foto: '/api/placeholder/80/80', cargo: 'SENADOR SUPLENTE', nombre: 'Hugo Marcelo Cortez Calvimontes', partido: 'PDC' }
     ]
   },
   2: {
     miembrosGrupo1: [
-      { foto: '/api/placeholder/80/80', cargo: 'PRESIDENTE', nombre: 'Pedro Castillo', partido: 'LIBRE' },
-      { foto: '/api/placeholder/80/80', cargo: 'VICEPRESIDENTE', nombre: 'Rosa Mamani', partido: 'PDC' }
+      { foto: '/api/placeholder/80/80', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Erick Nelson Soruco Alpire', partido: 'PDC' },
+      { foto: '/api/placeholder/80/80', cargo: 'SENADORA SUPLENTE', nombre: 'Cesia Roca Escalante', partido: 'PDC' }
     ],
     tituloLinea1: 'MESA DIRECTIVA',
     miembrosGrupo2: [
-      { foto: '/api/placeholder/80/80', cargo: 'SECRETARIO', nombre: 'Luis Torrez', partido: 'ALIANZA' },
-      { foto: '/api/placeholder/80/80', cargo: 'VOCAL', nombre: 'Elena Ríos', partido: 'LIBRE' }
+      { foto: '/api/placeholder/80/80', cargo: 'SECRETARIO DE COMITÉ', nombre: 'Wilder Veliz Armas', partido: 'PDC' },
+      { foto: '/api/placeholder/80/80', cargo: 'SENADORA SUPLENTE', nombre: 'Lenny Mayra Ayala Justiniano', partido: 'PDC' }
     ],
     tituloLinea2: 'COMISIÓN TÉCNICA',
     miembrosGrupo3: [
-      { foto: '/api/placeholder/80/80', cargo: 'ASESOR', nombre: 'Miguel Ángel', partido: 'SUMATE' },
-      { foto: '/api/placeholder/80/80', cargo: 'COORDINADOR', nombre: 'Claudia Paz', partido: 'PDC' }
+      { foto: '/api/placeholder/80/80', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Maria Isabel Moreno Cortez', partido: 'LIBRE' },
+      { foto: '/api/placeholder/80/80', cargo: 'SENADOR SUPLENTE', nombre: 'Rolando Vacaflor Gabriel Arana', partido: 'LIBRE' }
     ]
   },
   3: {
     miembrosGrupo1: [
-      { foto: '/api/placeholder/80/80', cargo: 'PRESIDENTE', nombre: 'Fernando Ríos', partido: 'ALIANZA' },
-      { foto: '/api/placeholder/80/80', cargo: 'VICEPRESIDENTE', nombre: 'Silvia Méndez', partido: 'PDC' }
+      { foto: '/api/placeholder/80/80', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Judith Rosario Garcia Coca', partido: 'PDC' },
+      { foto: '/api/placeholder/80/80', cargo: 'SENADOR SUPLENTE', nombre: 'Royer Ivan Mamani Garcia', partido: 'PDC' }
     ],
     tituloLinea1: 'COMISIÓN DE PLANIFICACIÓN',
     miembrosGrupo2: [
-      { foto: '/api/placeholder/80/80', cargo: 'SECRETARIO', nombre: 'Jorge Tapia', partido: 'LIBRE' },
-      { foto: '/api/placeholder/80/80', cargo: 'VOCAL', nombre: 'Marcela Soliz', partido: 'PDC' }
+      { foto: '/api/placeholder/80/80', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Ana Karina Velasco Áñez', partido: 'UNIDAD' },
+      { foto: '/api/placeholder/80/80', cargo: 'SENADOR SUPLENTE', nombre: 'Marcelo Matias Cardona Ibañez', partido: 'UNIDAD' }
     ],
     tituloLinea2: 'SUBCOMISIÓN DE PRESUPUESTO',
     miembrosGrupo3: [
-      { foto: '/api/placeholder/80/80', cargo: 'ASESOR', nombre: 'Raúl Vargas', partido: 'SUMATE' },
-      { foto: '/api/placeholder/80/80', cargo: 'COORDINADOR', nombre: 'Patricia Lema', partido: 'ALIANZA' }
+      { foto: '/api/placeholder/80/80', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Paola Limbania Lopez Zeballos', partido: 'PDC' },
+      { foto: '/api/placeholder/80/80', cargo: 'SENADOR SUPLENTE', nombre: 'Richard Espada Ugarte', partido: 'PDC' }
     ]
   },
   4: {
     miembrosGrupo1: [
-      { foto: '/api/placeholder/80/80', cargo: 'PRESIDENTE', nombre: 'Mario Quispe', partido: 'PDC' },
-      { foto: '/api/placeholder/80/80', cargo: 'VICEPRESIDENTE', nombre: 'Elena Morales', partido: 'LIBRE' }
+      { foto: '/api/placeholder/80/80', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'CESAR MENTASTI PADILLA', partido: 'UNIDAD' },
+      { foto: '/api/placeholder/80/80', cargo: 'SENADORA SUPLENTE', nombre: 'MARCELA GUERRERO VILCA', partido: 'UNIDAD' }
     ],
     tituloLinea1: 'COMISIÓN DE EDUCACIÓN SUPERIOR',
     miembrosGrupo2: [
-      { foto: '/api/placeholder/80/80', cargo: 'SECRETARIO', nombre: 'Hugo Fernández', partido: 'ALIANZA' },
-      { foto: '/api/placeholder/80/80', cargo: 'VOCAL', nombre: 'Ruth Camacho', partido: 'PDC' }
+      { foto: '/api/placeholder/80/80', cargo: 'SECRETARIO DE COMITÉ', nombre: 'Jose Roca Haensel', partido: 'UNIDAD' },
+      { foto: '/api/placeholder/80/80', cargo: 'SENADORA SUPLENTE', nombre: 'Mabel Giordano Sonnenschein', partido: 'UNIDAD' }
     ],
     tituloLinea2: 'COMISIÓN DE CIENCIA Y TECNOLOGÍA',
     miembrosGrupo3: [
-      { foto: '/api/placeholder/80/80', cargo: 'ASESOR', nombre: 'David Torrico', partido: 'SUMATE' },
-      { foto: '/api/placeholder/80/80', cargo: 'COORDINADOR', nombre: 'Andrea Paz', partido: 'LIBRE' }
+      { foto: '/api/placeholder/80/80', cargo: 'SECRETARIO DE COMITÉ', nombre: 'Ernesto Suarez Sattori', partido: 'LIBRE' },
+      { foto: '/api/placeholder/80/80', cargo: 'SENADORA SUPLENTE', nombre: 'Claudia Cardenas Velasquez', partido: 'LIBRE' }
     ]
   },
   5: {
     miembrosGrupo1: [
-      { foto: '/api/placeholder/80/80', cargo: 'PRESIDENTE', nombre: 'Ricardo García', partido: 'LIBRE' },
-      { foto: '/api/placeholder/80/80', cargo: 'VICEPRESIDENTE', nombre: 'Sandra López', partido: 'PDC' }
+      { foto: '/api/placeholder/80/80', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Eliana Rina Acosta Quispe', partido: 'UNIDAD' },
+      { foto: '/api/placeholder/80/80', cargo: 'SENADOR SUPLENTE', nombre: 'Sichard Hans Soraide Castedo', partido: 'UNIDAD' }
     ],
     tituloLinea1: 'COMISIÓN DE SALUD PÚBLICA',
     miembrosGrupo2: [
-      { foto: '/api/placeholder/80/80', cargo: 'SECRETARIO', nombre: 'Carlos Luna', partido: 'ALIANZA' },
-      { foto: '/api/placeholder/80/80', cargo: 'VOCAL', nombre: 'Gabriela Rojas', partido: 'LIBRE' }
+      { foto: '/api/placeholder/80/80', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Leonor Rosalva Romero Gutierrez', partido: 'UNIDAD' },
+      { foto: '/api/placeholder/80/80', cargo: 'SENADOR SUPLENTE', nombre: 'Marco Antonio Segovia Vargas', partido: 'UNIDAD' }
     ],
     tituloLinea2: 'COMISIÓN DE SEGUROS DE SALUD',
     miembrosGrupo3: [
-      { foto: '/api/placeholder/80/80', cargo: 'ASESOR', nombre: 'Fernando Aguirre', partido: 'PDC' },
-      { foto: '/api/placeholder/80/80', cargo: 'COORDINADOR', nombre: 'Lourdes Castellón', partido: 'SUMATE' }
+      { foto: '/api/placeholder/80/80', cargo: 'SECRETARIO DE COMITÉ', nombre: 'Abdon Porcel Arancibia', partido: 'LIBRE' },
+      { foto: '/api/placeholder/80/80', cargo: 'SENADORA SUPLENTE', nombre: 'Ilse Fatima Davila Arancibia', partido: 'LIBRE' }
     ]
   },
   6: {
     miembrosGrupo1: [
-      { foto: '/api/placeholder/80/80', cargo: 'PRESIDENTE', nombre: 'Julio Mamani', partido: 'PDC' },
-      { foto: '/api/placeholder/80/80', cargo: 'VICEPRESIDENTE', nombre: 'Carolina Daza', partido: 'LIBRE' }
+      { foto: '/api/placeholder/80/80', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Ana Maria Crispin Choque', partido: 'PDC' },
+      { foto: '/api/placeholder/80/80', cargo: 'SENADORSUPLENTE', nombre: 'Victor Severo Quispe Santander', partido: 'PDC' }
     ],
     tituloLinea1: 'COMISIÓN DE DD.HH',
     miembrosGrupo2: [
-      { foto: '/api/placeholder/80/80', cargo: 'SECRETARIO', nombre: 'Ramiro Flores', partido: 'ALIANZA' },
-      { foto: '/api/placeholder/80/80', cargo: 'VOCAL', nombre: 'Luz Quintanilla', partido: 'PDC' }
+      { foto: '/api/placeholder/80/80', cargo: 'SECRETARIODE COMITÉ', nombre: 'Marcelino Flores Ordoñez', partido: 'PDC' },
+      { foto: '/api/placeholder/80/80', cargo: 'SENADORA SUPLENTE', nombre: 'Susana Gabriela Ruiz Zuleta', partido: 'PDC' }
     ],
     tituloLinea2: 'COMISIÓN DE PUEBLOS INDÍGENAS',
     miembrosGrupo3: [
-      { foto: '/api/placeholder/80/80', cargo: 'ASESOR', nombre: 'Félix Yucra', partido: 'SUMATE' },
-      { foto: '/api/placeholder/80/80', cargo: 'COORDINADOR', nombre: 'Marisol Choque', partido: 'LIBRE' }
+      { foto: '/api/placeholder/80/80', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Betty Canaviri Villanueva', partido: 'LIBRE' },
+      { foto: '/api/placeholder/80/80', cargo: 'SENADOR SUPLENTE', nombre: 'Roger Mamani Coronado', partido: 'LIBRE' }
     ]
   },
   7: {
     miembrosGrupo1: [
-      { foto: '/api/placeholder/80/80', cargo: 'PRESIDENTE', nombre: 'Ana María Cordero', partido: 'ALIANZA' },
-      { foto: '/api/placeholder/80/80', cargo: 'VICEPRESIDENTE', nombre: 'Roberto Linares', partido: 'PDC' }
+      { foto: '/api/placeholder/80/80', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Jose Manuel Ormachea Mendieta', partido: 'LIBRE' },
+      { foto: '/api/placeholder/80/80', cargo: 'SENADORA SUPLENTE', nombre: 'Maria Elena Pachacute Ticona', partido: 'LIBRE' }
     ],
     tituloLinea1: 'COMITÉ DE ÉTICA',
     miembrosGrupo2: [
-      { foto: '/api/placeholder/80/80', cargo: 'SECRETARIO', nombre: 'Patricia Flores', partido: 'LIBRE' },
-      { foto: '/api/placeholder/80/80', cargo: 'VOCAL', nombre: 'Mauricio Rojas', partido: 'PDC' }
+      { foto: '/api/placeholder/80/80', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Bertha Nurmy Gutierrez Meneses', partido: 'PDC' },
+      { foto: '/api/placeholder/80/80', cargo: 'SENADOR SUPLENTE', nombre: 'Freddy Rioja Melgar', partido: 'PDC' }
     ],
     tituloLinea2: 'TRIBUNAL DE HONOR',
     miembrosGrupo3: [
-      { foto: '/api/placeholder/80/80', cargo: 'ASESOR', nombre: 'Elizabeth Quiroga', partido: 'SUMATE' },
-      { foto: '/api/placeholder/80/80', cargo: 'COORDINADOR', nombre: 'Luis Espinoza', partido: 'ALIANZA' }
+      { foto: '/api/placeholder/80/80', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Bertha Cartagena Sanchez', partido: 'PDC' },
+      { foto: '/api/placeholder/80/80', cargo: 'SENADOR SUPLENTE', nombre: 'Manfred Leo Perez Hassenteufel', partido: 'PDC' }
     ]
   },
   8: {
     miembrosGrupo1: [
-      { foto: '/api/placeholder/80/80', cargo: 'PRESIDENTE', nombre: 'Katherine Salazar', partido: 'PDC' },
-      { foto: '/api/placeholder/80/80', cargo: 'VICEPRESIDENTE', nombre: 'Humberto Roca', partido: 'LIBRE' }
+      { foto: '/api/placeholder/80/80', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Jose Sanchez Aguilar', partido: 'LIBRE' },
+      { foto: '/api/placeholder/80/80', cargo: 'SENADORA SUPLENTE', nombre: 'Cinthya Inga Gutierrez Guzman', partido: 'LIBRE' }
     ],
     tituloLinea1: 'COMITÉ DE TRANSPARENCIA',
     miembrosGrupo2: [
-      { foto: '/api/placeholder/80/80', cargo: 'SECRETARIO', nombre: 'María del Pilar Sanz', partido: 'ALIANZA' },
-      { foto: '/api/placeholder/80/80', cargo: 'VOCAL', nombre: 'José Manuel Ortiz', partido: 'PDC' }
+      { foto: '/api/placeholder/80/80', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Maria Antonieta Alcon Sanchez', partido: 'PDC' },
+      { foto: '/api/placeholder/80/80', cargo: 'SENADOR SUPLENTE', nombre: 'Edwin Lopez Quiroga', partido: 'PDC' }
     ],
     tituloLinea2: 'COMISIÓN ANTICORRUPCIÓN',
     miembrosGrupo3: [
-      { foto: '/api/placeholder/80/80', cargo: 'ASESOR', nombre: 'Norma Campos', partido: 'SUMATE' },
-      { foto: '/api/placeholder/80/80', cargo: 'COORDINADOR', nombre: 'Cristian Maldonado', partido: 'LIBRE' }
+      { foto: '/api/placeholder/80/80', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Claudia Mallon Vargas', partido: 'APB SUMATE' },
+      { foto: '/api/placeholder/80/80', cargo: 'SENADOR SUPLENTE', nombre: 'Apolinar Rivera Muñoz', partido: 'APB SUMATE' }
     ]
   },
   9: {
     miembrosGrupo1: [
-      { foto: '/api/placeholder/80/80', cargo: 'PRESIDENTE', nombre: 'Paola Ticona', partido: 'LIBRE' },
-      { foto: '/api/placeholder/80/80', cargo: 'VICEPRESIDENTE', nombre: 'Marcelo Peñaranda', partido: 'PDC' }
+      { foto: '/api/placeholder/80/80', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Nicanor Gonzalo Cochi Condori', partido: 'PDC' },
+      { foto: '/api/placeholder/80/80', cargo: 'SENADORA SUPLENTE', nombre: 'Roxana Mamani Colquehuanca', partido: 'PDC' }
     ],
     tituloLinea1: 'COMISIÓN DE TECNOLOGÍA',
     miembrosGrupo2: [
-      { foto: '/api/placeholder/80/80', cargo: 'SECRETARIO', nombre: 'Daniela Ríos', partido: 'ALIANZA' },
-      { foto: '/api/placeholder/80/80', cargo: 'VOCAL', nombre: 'Gustavo Lora', partido: 'LIBRE' }
+      { foto: '/api/placeholder/80/80', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Teresa Alarcon Arana', partido: 'PDC' },
     ],
     tituloLinea2: 'COMISIÓN DE INNOVACIÓN',
     miembrosGrupo3: [
-      { foto: '/api/placeholder/80/80', cargo: 'ASESOR', nombre: 'Javier Yugar', partido: 'PDC' },
-      { foto: '/api/placeholder/80/80', cargo: 'COORDINADOR', nombre: 'Verónica Aguilera', partido: 'SUMATE' }
+      { foto: '/api/placeholder/80/80', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Wanda Ximena Medrano Hervas', partido: 'LIBRE' },
+      { foto: '/api/placeholder/80/80', cargo: 'SENADOR SUPLENTE', nombre: 'Aldo Sergio Villegas Mora', partido: 'LIBRE' }
     ]
   },
   10: {
     miembrosGrupo1: [
-      { foto: '/api/placeholder/80/80', cargo: 'PRESIDENTE', nombre: 'Álvaro Dorado', partido: 'PDC' },
-      { foto: '/api/placeholder/80/80', cargo: 'VICEPRESIDENTE', nombre: 'Karen Vaca', partido: 'LIBRE' }
+      { foto: '/api/placeholder/80/80', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Branko Goran Marinkovic Jovicevic', partido: 'LIBRE' },
+      { foto: '/api/placeholder/80/80', cargo: 'SENADORA SUPLENTE', nombre: 'Kathia Natalia Miserendino Romero', partido: 'LIBRE' }
     ],
     tituloLinea1: 'COMISIÓN DE MEDIO AMBIENTE',
     miembrosGrupo2: [
-      { foto: '/api/placeholder/80/80', cargo: 'SECRETARIO', nombre: 'Sergio Balderrama', partido: 'ALIANZA' },
-      { foto: '/api/placeholder/80/80', cargo: 'VOCAL', nombre: 'Mónica Arce', partido: 'PDC' }
+      { foto: '/api/placeholder/80/80', cargo: 'SECRETARIA DE COMITÉ', nombre: ' ', partido: 'LIBRE' },
+      { foto: '/api/placeholder/80/80', cargo: 'VOCAL', nombre: ' ', partido: 'LIBRE' }
     ],
     tituloLinea2: 'COMISIÓN DE RECURSOS HÍDRICOS',
     miembrosGrupo3: [
-      { foto: '/api/placeholder/80/80', cargo: 'ASESOR', nombre: 'Edwin Limachi', partido: 'SUMATE' },
-      { foto: '/api/placeholder/80/80', cargo: 'COORDINADOR', nombre: 'Sonia Quispe', partido: 'LIBRE' }
+      { foto: '/api/placeholder/80/80', cargo: 'ASESOR', nombre: ' ', partido: 'PDC' },
+      { foto: '/api/placeholder/80/80', cargo: 'COORDINADOR', nombre: ' ', partido: 'PDC' }
     ]
   }
 }
