@@ -21,7 +21,7 @@
             <!-- Logo como botón para ir al inicio -->
             <button 
               @click="goToHome"
-              class="ml-[1em] w-[2.5em] h-[2.5em] rounded-lg overflow-hidden flex items-center justify-center group-hover:scale-105 transition-transform cursor-pointer"
+              class="ml-[1em] w-[2.5em] h-[2.5em] rounded-lg overflow-hidden flex items-center justify-center group-hover:scale-105 transition-transform cursor-pointer duration-[1.2s] hover:scale-[2.9] hover:translate-y-[4vw] hover:translate-x-[3vw] bg-[#E03636]"
               aria-label="Ir al inicio"
             >
               <img 
@@ -42,7 +42,10 @@
               >
                 La institución
               </NuxtLink>
-              <div class="absolute right-0 mt-1 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all duration-200 z-50">
+              <div class="absolute right-0 mt-3 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 
+                          opacity-0 invisible translate-y-[-1rem] 
+                          group-hover/menu:opacity-100 group-hover/menu:visible group-hover/menu:translate-y-0 
+                          transition-all duration-700 ease-in-out z-50">
                 <div class="py-2">
                   <NuxtLink 
                     to="/la-institucion#mandato" 
@@ -50,21 +53,18 @@
                   >
                     Mandato constitucional
                   </NuxtLink>
-
                   <NuxtLink 
                     to="/la-institucion#directiva-camaral" 
                     class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors"
                   >
                     Directiva camaral
                   </NuxtLink>
-
                   <NuxtLink 
                     to="/la-institucion#resena-historica" 
                     class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors"
                   >
                     Reseña histórica
                   </NuxtLink>
-
                   <NuxtLink 
                     to="/la-institucion#museo" 
                     class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors"
@@ -83,7 +83,10 @@
               >
                 Gestión Legislativa
               </NuxtLink>
-              <div class="absolute right-0 mt-1 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all duration-200 z-50">
+              <div class="absolute right-0 mt-3 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 
+                          opacity-0 invisible translate-y-[-1rem] 
+                          group-hover/menu:opacity-100 group-hover/menu:visible group-hover/menu:translate-y-0 
+                          transition-all duration-700 ease-in-out z-50">
                 <div class="py-2">
                   <NuxtLink to="/gestion-legislativa#sesiones-pleno" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
                     Sesiónes del pleno
@@ -97,6 +100,7 @@
                 </div>
               </div>
             </div>
+            
             <!-- MENÚ 3: Legisladores y representación -->
             <div class="relative group/menu">
               <NuxtLink 
@@ -105,7 +109,10 @@
               >
                 Legisladores Nacionales
               </NuxtLink>
-              <div class="absolute right-0 mt-1 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all duration-200 z-50">
+              <div class="absolute right-0 mt-3 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 
+                          opacity-0 invisible translate-y-[-1rem] 
+                          group-hover/menu:opacity-100 group-hover/menu:visible group-hover/menu:translate-y-0 
+                          transition-all duration-700 ease-in-out z-50">
                 <div class="py-2">
                   <NuxtLink to="/legisladores-nacionales#directiva-camaral" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
                     Directiva Camaral
@@ -128,7 +135,10 @@
               <button class="px-[1vw] py-2 text-white font-medium hover:bg-[#C12F2F] rounded-lg transition-colors">
                 Cultura
               </button>
-              <div class="absolute right-0 mt-1 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all duration-200 z-50">
+              <div class="absolute right-0 mt-3 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 
+                          opacity-0 invisible translate-y-[-1rem] 
+                          group-hover/menu:opacity-100 group-hover/menu:visible group-hover/menu:translate-y-0 
+                          transition-all duration-700 ease-in-out z-50">
                 <div class="py-2">
                   <NuxtLink to="/" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
                     👨‍⚖️ Patrimonio histórico
@@ -148,7 +158,10 @@
               <button class="px-[1vw] py-2 text-white font-medium hover:bg-[#C12F2F] rounded-lg transition-colors">
                 Participación
               </button>
-              <div class="absolute right-0 mt-1 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all duration-200 z-50">
+              <div class="absolute right-0 mt-3 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 
+                          opacity-0 invisible translate-y-[-1rem] 
+                          group-hover/menu:opacity-100 group-hover/menu:visible group-hover/menu:translate-y-0 
+                          transition-all duration-700 ease-in-out z-50">
                 <div class="py-2">
                   <NuxtLink to="/" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
                     Audiencias públicas
