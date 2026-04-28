@@ -213,7 +213,7 @@
                     {{ selectedSenator.partyShort }}
                   </div>
                   <div class="pill-red font-extrabold">
-                    Asiento {{ selectedSenator.seatNumber }}
+                    Curul {{ selectedSenator.seatNumber }}
                   </div>
                 </div>
 
@@ -405,7 +405,7 @@ const props = defineProps({
         email: "davila@senado.gob.bo", phone: "+591 71562341", office: "Edificio Presidente, Piso 10",
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/senadores/g1/DIEGO ESTEBAN MATEO ÁVILA NAVAJAS.png",
+        photoUrl: "/new/titulares/g2/DIEGO ESTEBAN MATEO ÁVILA NAVAJAS.png",
         comision:"Directiva Legislatura 2025-2026",
         comite:"",
         cargo:"Presidente"
@@ -418,7 +418,7 @@ const props = defineProps({
         email: "bcartagena@senado.gob.bo", phone: "+591 71456982", office: "Edificio Presidente, Piso 9",
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/senadores/g1/BERTHA CARTAGENA SÁNCHEZ.png",
+        photoUrl: "/new/titulares/g1/BERTHA CARTAGENA SANCHEZ.png",
         comision:"",
         comite:"Comité de Culturas, Interculturalidad y Patrimonio Cultural",
         cargo:"Secretaria de Comite"
@@ -431,7 +431,7 @@ const props = defineProps({
         email: "dortiz@senado.gob.bo", phone: "+591 71234567", office: "Edificio Presidente, Piso 9",
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/senadores/g1/DANIEL ANTONIO ORTIZ VELÁSQUEZ.png",
+        photoUrl: "/new/titulares/g1/DANIEL ANTONIO ORTIZ VELASQUEZ.png",
         comision:"Comisión de Constitución, Derechos Humanos, Legislación y Sistema Electoral",
         comite:"",
         cargo:"Presidente de Comisión"
@@ -444,7 +444,7 @@ const props = defineProps({
         email: "ncochi@senado.gob.bo", phone: "+591 72567890", office: "Edificio Presidente, Piso 8",
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/senadores/g1/NICANOR GONZALO COCHI CONDORI.png",
+        photoUrl: "/new/titulares/g1/NICANOR GONZALO COCHI CONDORI.png",
         comision:"Comisión de Política Internacional y Protección al Migrante",
         comite:"",
         cargo:"Presidente de Comisión"
@@ -457,7 +457,7 @@ const props = defineProps({
         email: "acrispin@senado.gob.bo", phone: "+591 73456789", office: "Edificio Presidente, Piso 8",
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/senadores/g1/ANA MARÍA CRISPIN CHOQUE.png",
+        photoUrl: "/new/titulares/g1/ANA MARIA CRISPIN CHOQUE.png",
         comision:"Comisión de Economía Plural, Producción e Industria",
         comite:"",
         cargo:"Presidente de Comisión"
@@ -470,7 +470,7 @@ const props = defineProps({
         email: "wveliz@senado.gob.bo", phone: "+591 74567891", office: "Edificio Presidente, Piso 7",
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/senadores/g1/WILDER VELIZ ARMAS VELIZ ARMAS.png",
+        photoUrl: "/new/titulares/g1/WILDER VELIZ ARMAS.png",
         comision:"",
         comite:"Comité de Justicia Plural y Consejo de la Magistratura.",
         cargo:"Secretario de Comite"
@@ -483,7 +483,7 @@ const props = defineProps({
         email: "jgarcia@senado.gob.bo", phone: "+591 75678912", office: "Edificio Presidente, Piso 7",
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/senadores/g1/JUDITH ROSARIO GARCIA COCA.png",
+        photoUrl: "/new/titulares/g1/JUDITH ROSARIO GARCIA COCA.png",
         comision:"Comisión de Seguridad del Estado",
         comite:"",
         cargo:"Presidente de Comisión"
@@ -498,7 +498,7 @@ const props = defineProps({
         email: "yestivariz@senado.gob.bo", phone: "+591 76789123", office: "Edificio Presidente, Piso 6",
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/senadores/g1/YASMIN ESTIVARIZ VILLARROEL.png",
+        photoUrl: "/new/titulares/g2/YASMIN ESTIVARIZ VILLARROEL.png",
         comision:"Directiva Legislatura 2025-2026",
         comite:"",
         cargo:"Primera Secretaria"
@@ -511,7 +511,7 @@ const props = defineProps({
         email: "fcastillo@senado.gob.bo", phone: "+591 77891234", office: "Edificio Presidente, Piso 6",
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/senadores/g1/FREDDY CASTILLO CHAVEZ.png",
+        photoUrl: "/new/titulares/g2/FREDDY CASTILLO CHAVEZ.png",
         comision:"",
         comite:"Comité de Constitución, Legislación e Interpretación Legislativa y Constitucional.",
         cargo:"Secretario de Comite"
@@ -524,7 +524,7 @@ const props = defineProps({
         email: "malcon@senado.gob.bo", phone: "+591 78912345", office: "Edificio Presidente, Piso 5",
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/senadores/g1/MARÍA ANTONIETA ALCÓN SÁNCHEZ.png",
+        photoUrl: "/new/titulares/g2/MARIA ANTONIETA ALCON SANCHEZ.png",
         comision:"",
         comite:"Comité de Educación, Salud, Ciencia, Tecnología y Deporte",
         cargo:"Secretaria de Comite"
@@ -537,7 +537,7 @@ const props = defineProps({
         email: "bgutierrez@senado.gob.bo", phone: "+591 79123456", office: "Edificio Presidente, Piso 5",
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/senadores/g2/BERTHA NURMY GUTIERREZ MENESES.png",
+        photoUrl: "/new/titulares/g2/BERTHA NURMY GUTIERREZ MENESES.png",
         comision:"",
         comite:"Comité de Naciones y Pueblos Indígena Originario Campesinos",
         cargo:"Secretaria de Comite"
@@ -550,7 +550,7 @@ const props = defineProps({
         email: "mflores@senado.gob.bo", phone: "+591 70234567", office: "Edificio Presidente, Piso 4",
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/senadores/g2/MARCELINO FLORES ORDOÑEZ.png",
+        photoUrl: "/new/titulares/g2/MARCELINO FLORES ORDOÑEZ.png",
         comision:"",
         comite:"Comité de Energía, Hidrocarburos, Minería y Metalurgia",
         cargo:"Secretario de Comite"
@@ -563,7 +563,7 @@ const props = defineProps({
         email: "plopez@senado.gob.bo", phone: "+591 71345678", office: "Edificio Presidente, Piso 4",
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/senadores/g2/PAOLA LIMBANIA LÓPEZ ZEBALLO.png",
+        photoUrl: "/new/titulares/g3/PAOLA LIMBANIA LOPEZ ZEBALLOS.png",
         comision:"",
         comite:"Comité de Seguridad del Estado y Lucha Contra el Narcotráfico",
         cargo:"Secretaria de Comite"
@@ -576,7 +576,7 @@ const props = defineProps({
         email: "esoruco@senado.gob.bo", phone: "+591 72456789", office: "Edificio Presidente, Piso 3",
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/senadores/g2/ERICK NELSON SORUCO ALPIRE.png",
+        photoUrl: "/new/titulares/g3/ERICK NELSON SORUCO ALPIRE.png",
         comision:"Comisión de Justicia Plural, Ministerio Público y Defensa del Estado",
         comite:"",
         cargo:"Presidente de Comisión"
@@ -589,7 +589,7 @@ const props = defineProps({
         email: "cpuerta@senado.gob.bo", phone: "+591 73567890", office: "Edificio Presidente, Piso 3",
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/senadores/g2/CINTIA MONICA PUERTA CAMPOS.png",
+        photoUrl: "/new/titulares/g3/CINTIA MONICA PUERTA CAMPOS.png",
         comision:"",
         comite:"Comité de Medio Ambiente, Biodiversidad, Amazonía, Áreas Protegidas y Cambio Climático",
         cargo:"Secretaria de Comite"
@@ -602,7 +602,7 @@ const props = defineProps({
         email: "jsanchez@senado.gob.bo", phone: "+591 74678901", office: "Edificio Presidente, Piso 2",
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/senadores/g2/JOSÉ SÁNCHEZ AGUILAR.png",
+        photoUrl: "/new/titulares/g2/JOSE SANCHEZ AGUILAR.png",
         comision:"Comisión de Política Social",
         comite:"",
         cargo:"Presidente de Comisión"
@@ -620,7 +620,7 @@ const props = defineProps({
         email: "schapeton@senado.gob.bo", phone: "+591 75789012", office: "Edificio Aliados, Piso 10",
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/senadores/g2/CARMEN SOLEDAD CHAPETON TANCARA.png",
+        photoUrl: "/new/titulares/g1/CARMEN SOLEDAD CHAPETÓN TANCARA.png",
         comision:"Directiva Legislatura 2025-2026",
         comite:"",
         cargo:"Primera Vicepresidencia"
@@ -633,7 +633,7 @@ const props = defineProps({
         email: "cmentasti@senado.gob.bo", phone: "+591 76890123", office: "Edificio Aliados, Piso 10",
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/senadores/g2/CESAR MENTASTI PADILLA.png",
+        photoUrl: "/new/titulares/g2/CESAR MENTASTI PADILLA.png",
         comision:"Comisión de Organización Territorial del Estado y Autonomías",
         comite:"",
         cargo:"Presidente de Comisión"
@@ -646,7 +646,7 @@ const props = defineProps({
         email: "lromero@senado.gob.bo", phone: "+591 77901234", office: "Edificio Aliados, Piso 9",
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/senadores/g2/LEONOR ROSALVA ROMERO GUTIERREZ.png",
+        photoUrl: "/new/titulares/g2/LEONOR ROSALVA ROMERO GUTIERREZ.png",
         comision:"",
         comite:"Comité de Planificación, Presupuesto, Inversión Pública y Contraloría General del Estado",
         cargo:"Secretaria de Comite"
@@ -661,7 +661,7 @@ const props = defineProps({
         email: "tanez@senado.gob.bo", phone: "+591 78123456", office: "Edificio Aliados, Piso 9",
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/senadores/g2/ROSA TATIANA AÑEZ CARRASCO.png",
+        photoUrl: "/new/titulares/g3/ROSA TATIANA AÑEZ CARRASCO.png",
         comision:"Directiva Legislatura 2025-2026",
         comite:"",
         cargo:"Tercera Secretaria"
@@ -674,7 +674,7 @@ const props = defineProps({
         email: "jroca@senado.gob.bo", phone: "+591 79234567", office: "Edificio Aliados, Piso 8",
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/senadores/g3/JOSE ROCA HAENSEL.png",
+        photoUrl: "/new/titulares/g3/JOSE ROCA HAENSEL.png",
         comision:"",
         comite:"Comité de Autonomías Municipales, Indigena Originario Campesinas y Regionales",
         cargo:"Secretario de Comite"
@@ -687,7 +687,7 @@ const props = defineProps({
         email: "avelasco@senado.gob.bo", phone: "+591 70345678", office: "Edificio Aliados, Piso 8",
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/senadores/g3/ANA KARINA VELASCO AÑEZ.png",
+        photoUrl: "/new/titulares/g3/ANA KARINA VELASCO ÁÑEZ.png",
         comision:"",
         comite:"Comité de Fuerzas Armadas y Policía Boliviana",
         cargo:"Secretaria de comite"
@@ -700,7 +700,7 @@ const props = defineProps({
         email: "eacosta@senado.gob.bo", phone: "+591 71456789", office: "Edificio Aliados, Piso 7",
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/senadores/g3/ELIANA RINA ACOSTA QUISPE.png",
+        photoUrl: "/new/titulares/g3/ELIANA RINA ACOSTA QUISPE.png",
         comision:"Comisión de Planificación, Política Económica y Finanzas",
         comite:"",
         cargo:"Presidente de Comisión"
@@ -717,7 +717,7 @@ const props = defineProps({
         email: "cmallon@senado.gob.bo", phone: "+591 72567890", office: "Edificio Aliados, Piso 7",
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/senadores/g3/CLAUDIA MALLON VARGAS.png",
+        photoUrl: "/new/titulares/g1/CLAUDIA MALLON VARGAS.png",
         comision:"",
         comite:"Comité de Vivienda, Regimen Laboral, Seguridad Industrial y Seguridad Social",
         cargo:"Secretaria de Comite"
@@ -735,7 +735,7 @@ const props = defineProps({
         email: "jormachea@senado.gob.bo", phone: "+591 73678901", office: "Edificio Oposición, Piso 10",
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/senadores/g3/JOSÉ MANUEL ORMACHEA MENDIETA.png",
+        photoUrl: "/new/titulares/g1/JOSE MANUEL ORMACHEA MENDIETA.png",
         comision:"Comisión de Naciones y Pueblos Indígena Originario Campesinos, Culturas e Interculturalidad",
         comite:"",
         cargo:"Presidente de Comisión"
@@ -748,7 +748,7 @@ const props = defineProps({
         email: "wmedrano@senado.gob.bo", phone: "+591 74789012", office: "Edificio Oposición, Piso 10",
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/senadores/g3/WANDA XIMENA MEDRANO HERVAS.png",
+        photoUrl: "/new/titulares/g1/WANDA XIMENA MEDRANO HERVAS.png",
         comision:"",
         comite:"Comité de Relaciones Económicas Internacionales",
         cargo:"Secretaria de Comite"
@@ -761,7 +761,7 @@ const props = defineProps({
         email: "bmarinkovic@senado.gob.bo", phone: "+591 75890123", office: "Edificio Oposición, Piso 9",
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/senadores/g3/BRANKO GORAN MARINKOVIC JOVICEVIC.png",
+        photoUrl: "/new/titulares/g3/BRANKO GORAN MARINKOVIC JOVICEVIC.png",
         comision:"Comisión de Tierra y Territorio / Región Amazónica",
         comite:"",
         cargo:"Presidente de Comisión"
@@ -776,7 +776,7 @@ const props = defineProps({
         email: "kquiroga@senado.gob.bo", phone: "+591 76901234", office: "Edificio Oposición, Piso 9",
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/senadores/g3/KHATIA LISBETH QUIROGA FERNÁNDEZ.png",
+        photoUrl: "/new/titulares/g3/KATHIA LISBETH QUIROGA FERNÁNDEZ.png",
         comision:"Directiva Legislatura 2025-2026",
         comite:"",
         cargo:"Segunda Vicepresidencia"
@@ -789,7 +789,7 @@ const props = defineProps({
         email: "tyarhui@senado.gob.bo", phone: "+591 77123456", office: "Edificio Oposición, Piso 8",
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/senadores/g3/TOMASA YARHUI JACOME.png",
+        photoUrl: "/new/titulares/g1/TOMASA YARHUI JACOME.png",
         comision:"",
         comite:"Comité de Sistema Electoral, Derechos Humanos y Equidad Social",
         cargo:"Secretaria de Comite"
@@ -802,7 +802,7 @@ const props = defineProps({
         email: "aporcel@senado.gob.bo", phone: "+591 78234567", office: "Edificio Oposición, Piso 8",
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/senadores/g3/ABDON PORCEL ARANCIBIA.png",
+        photoUrl: "/new/titulares/g1/ABDON PORCEL ARANCIBIA.png",
         comision:"",
         comite:"Comité de Políticas Financiera, Monetaria, Tributaria y Seguros",
         cargo:"Secretario de Comite"
@@ -815,7 +815,7 @@ const props = defineProps({
         email: "talarcon@senado.gob.bo", phone: "+591 79345678", office: "Edificio Oposición, Piso 7",
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/senadores/g4/TERESA ALARCON ARANA.png",
+        photoUrl: "/new/titulares/g2/TERESA ALARCON ARANA.png",
         comision:"",
         comite:"Comité de Asuntos Exteriores Interpelatorios y Organismos Internacionales",
         cargo:"Secretaria de Comite"
@@ -828,7 +828,7 @@ const props = defineProps({
         email: "bcanaviri@senado.gob.bo", phone: "+591 70456789", office: "Edificio Oposición, Piso 7",
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/senadores/g4/BETTY CANAVIRI VILLANUEVA.png",
+        photoUrl: "/new/titulares/g2/BETTY CANAVIRI VILLANUEVA.png",
         comision:"",
         comite:"Comité de Economía Plural, Desarrollo Productivo, Obras Públicas e Infraestructura",
         cargo:"Secretaria de Comite"
@@ -841,7 +841,7 @@ const props = defineProps({
         email: "mimoreno@senado.gob.bo", phone: "+591 71567890", office: "Edificio Oposición, Piso 6",
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/senadores/g4/MARÍA ISABEL MORENO CORTEZ.png",
+        photoUrl: "/new/titulares/g2/MARIA ISABEL MORENO CORTEZ.png",
         comision:"",
         comite:"Comité de Ministerio Público y Defensa Legal del Estado",
         cargo:"Secretaria de Comite"
@@ -854,7 +854,7 @@ const props = defineProps({
         email: "esuarez@senado.gob.bo", phone: "+591 72678901", office: "Edificio Oposición, Piso 6",
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/senadores/g4/ERNESTO SUAREZ SATTORI.png",
+        photoUrl: "/new/titulares/g3/ERNESTO SUAREZ SATTORI.png",
         comision:"",
         comite:"Comité de Autonomías Departamentales",
         cargo:"Secretario de Comite"
@@ -870,7 +870,7 @@ const props = defineProps({
         email: "ccarlo@senado.gob.bo", phone: "+591 73789012", office: "Edificio Oposición, Piso 5",
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/senadores/g4/CAROL CARLO DURAN.png",
+        photoUrl: "/new/titulares/g3/CAROL CARLO DURAN.png",
         comision:"",
         comite:"Comité de Tierra y Territorio, Recursos Naturales y Hoja de la Coca",
         cargo:"Secretaria de Comite"
@@ -883,7 +883,7 @@ const props = defineProps({
         email: "jromana@senado.gob.bo", phone: "+591 74890123", office: "Edificio Oposición, Piso 5",
         twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
         youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/senadores/g4/JULIO DIEGO ROMAÑA GALINDO.png",
+        photoUrl: "/new/titulares/g3/JULIO DIEGO ROMAÑA GALINDO.png",
         comision:"Directiva Legislatura 2025-2026",
         comite:"",
         cargo:"Segunda Secretaria"

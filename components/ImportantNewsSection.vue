@@ -65,7 +65,7 @@
         class="tab-pane fade-in"
       >
         <!-- Header de Sección -->
-        <div class="section-header text-center pb-0.5 sm:pb-1 mb-1 sm:mb-2 border-b border-[#E03636] border-opacity-30">
+        <div class="section-header text-center pb-0.5 sm:pb-1 mb-1 sm:mb-2">
           <h2 class="section-title font-bold text-[#E03636] text-[9px] sm:text-[10px] md:text-[10px] lg:text-[12px] xl:text-[14px] 2xl:text-[19px] 3xl:text-[24px] 4xl:text-[35px] 5xl:text-[52px] mb-0">
             {{ areas[tab.id]?.titulo || tab.label }}
           </h2>
