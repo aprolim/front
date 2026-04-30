@@ -235,24 +235,30 @@
       
       <div class="mx-auto px-4 z-10 relative w-full" style="flex: 1; display: flex; flex-direction: column; justify-content: center;">
         <!-- Estado Inicial: Escudos en 2 filas (5 + 4) -->
-        <div v-if="!departamentoSeleccionado" class="flex flex-col items-center justify-center">
-          <div class="grid grid-cols-5 gap-8 mb-8">
-            <div v-for="dep in departamentos.slice(0,5)" :key="dep.id" 
-                @click="seleccionarDepartamento(dep)"
-                class="cursor-pointer transition-all duration-300 hover:scale-105 text-center">
-              <div v-html="dep.escudoDorado" class="w-[15vw] h-[15vw] mx-auto"></div>
-              <p class="text-center text-white mt-2 text-sm font-semibold">{{ dep.nombre }}</p>
-            </div>
-          </div>
-          <div class="grid grid-cols-4 gap-8">
-            <div v-for="dep in departamentos.slice(5,9)" :key="dep.id" 
-                @click="seleccionarDepartamento(dep)"
-                class="cursor-pointer transition-all duration-300 hover:scale-105 text-center">
-              <div v-html="dep.escudoDorado" class="w-[15vw] h-[15vw] mx-auto"></div>
-              <p class="text-center text-white mt-2 text-sm font-semibold">{{ dep.nombre }}</p>
-            </div>
-          </div>
-        </div>
+<div v-if="!departamentoSeleccionado" class="flex flex-col items-center justify-center">
+  <div class="grid grid-cols-5 gap-8 mb-8">
+    <div v-for="dep in departamentos.slice(0,5)" :key="dep.id" 
+        @click="seleccionarDepartamento(dep)"
+        class="cursor-pointer transition-all duration-300 hover:scale-[1.5] text-center group relative hover:z-50">
+      <div v-html="dep.escudoDorado" 
+          class="w-[15vw] h-[15vw] mx-auto transition-all duration-300 group-hover:opacity-0"></div>
+      <div v-html="dep.escudoReal" 
+          class="w-[15vw] h-[15vw] mx-auto absolute top-0 left-0 right-0 transition-all duration-300 opacity-0 group-hover:opacity-100 group-hover:z-10"></div>
+      <p class="text-center text-white mt-2 text-sm font-semibold relative z-0">{{ dep.nombre }}</p>
+    </div>
+  </div>
+  <div class="grid grid-cols-4 gap-8">
+    <div v-for="dep in departamentos.slice(5,9)" :key="dep.id" 
+        @click="seleccionarDepartamento(dep)"
+        class="cursor-pointer transition-all duration-300 hover:scale-[1.5] text-center group relative hover:z-50">
+      <div v-html="dep.escudoDorado" 
+          class="w-[15vw] h-[15vw] mx-auto transition-all duration-300 group-hover:opacity-0"></div>
+      <div v-html="dep.escudoReal" 
+          class="w-[15vw] h-[15vw] mx-auto absolute top-0 left-0 right-0 transition-all duration-300 opacity-0 group-hover:opacity-100 group-hover:z-10"></div>
+      <p class="text-center text-white mt-2 text-sm font-semibold relative z-0">{{ dep.nombre }}</p>
+    </div>
+  </div>
+</div>
         
         <!-- Estado con Departamento Seleccionado -->
         <transition name="fade-fast" mode="out-in">
