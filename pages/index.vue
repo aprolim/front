@@ -98,7 +98,7 @@
     </div>
     
     <!-- Museo - CON SU PROPIO FONDO -->
-    <div 
+    <!-- <div 
       ref="museumRef" 
       class="h-screen w-full scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out delay-400 z-10 snap-section"
       :class="{ 'animate-in': isMuseumVisible }"
@@ -113,7 +113,7 @@
         @virtual-tour-started="handleVirtualTour"
         @donation-clicked="handleDonationClick"
       />
-    </div>
+    </div> -->
   </div>
 </template>
 

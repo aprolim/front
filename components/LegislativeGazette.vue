@@ -13,10 +13,10 @@
 
     <!-- Contenedor de 2 columnas -->
     <div class="flex-1 mx-auto px-4 pt-[4vw]">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 lg:gap-16 mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-1 gap-8 md:gap-12 lg:gap-16 mx-auto">
       
         <!-- COLUMNA 1: Informe de gestion -->
-        <div class="flex flex-col h-full group px-[6vw]">
+        <!-- <div class="flex flex-col h-full group px-[6vw]">
           <div class="relative w-full h-[26vw] overflow-hidden shadow-xl mb-6 bg-white p-[0.6em]">
             <img 
               src="/images/gaceta-oficial.jpg" 
@@ -34,7 +34,7 @@
               Ver más
             </NuxtLink>
           </div>
-        </div>
+        </div> -->
 
         <!-- COLUMNA 2: redactor -->
         <div class="flex flex-col h-full group px-[6vw]">

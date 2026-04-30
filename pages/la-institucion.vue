@@ -23,7 +23,7 @@
     </section>
 
     <!-- Sección Directiva Camaral - CON ID -->
-    <div 
+    <div
       id="directiva-camaral"
       ref="senateDirectorsRef" 
       class="scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out z-10"

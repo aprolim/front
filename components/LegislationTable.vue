@@ -351,16 +351,16 @@
         <div v-if="!busquedaGlobal" class="tabs-content px-1 sm:px-2 md:px-3 lg:px-4 xl:px-5 py-2 sm:py-3 md:py-4 lg:py-5 xl:py-6">
           <!-- Header de Sección (Legislación) -->
           <div class="section-header text-center pb-0.5 sm:pb-1 mb-1 sm:mb-2 border-b border-[#E03636] border-opacity-30">
-            <h2 class="section-title font-bold text-[#E03636] text-[1.8vw] mb-0">
-              {{ areaLegislacion?.titulo || 'Legislación' }}
+            <h2 class="section-title font-bold text-[#E03636] text-[3.0vw] mb-0 translate-y-[-7vw]">
+              {{ areaLegislacion?.titulo || 'Area Legislación' }}
             </h2>
-            <p class="section-description text-gray-600 text-[6px] sm:text-[7px] md:text-[8px] lg:text-[9px] xl:text-[11px] 2xl:text-[16px] 3xl:text-[19px] 4xl:text-[30px] 5xl:text-[45px] mx-auto">
+            <p class="section-description text-gray-600 text-[6px] sm:text-[7px] md:text-[8px] lg:text-[9px] xl:text-[11px] 2xl:text-[16px] 3xl:text-[19px] 4xl:text-[30px] 5xl:text-[45px] mx-auto translate-y-[-7vw]">
               {{ areaLegislacion?.descripcion || 'Acceda a toda la información relacionada con los proyectos de ley y legislación' }}
             </p>
           </div>
           
           <!-- Grid de Tarjetas -->
-          <div class="links-grid grid gap-1 sm:gap-1.5 md:gap-2 xl:gap-4 3xl:gap-6 5xl:gap-9 grid-cols-3">
+          <div class="links-grid grid gap-1 sm:gap-1.5 md:gap-2 xl:gap-4 3xl:gap-6 5xl:gap-9 grid-cols-3 translate-y-[-4vw]">
             <NuxtLink 
               v-for="link in linksLegislacion" 
               :key="link.id"

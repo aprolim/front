@@ -208,13 +208,13 @@
                   </div>
                 </div>
 
-                <div class="info-row-second">
-                  <div class="pill-red font-extrabold">
+                <div class="info-row-second flex justify-center items-center">
+                  <div class="pill-red font-extrabold px-[1.5vw]">
                     {{ selectedSenator.partyShort }}
                   </div>
-                  <div class="pill-red font-extrabold">
+                  <!-- <div class="pill-red font-extrabold">
                     Curul {{ selectedSenator.seatNumber }}
-                  </div>
+                  </div> -->
                 </div>
 
                 <div class="bancada-row">
@@ -1435,17 +1435,16 @@ watch(() => props.senators, () => {
 }
 
 .info-row-second {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1em;
-  width: 100%;
+  /* display: grid;
+  grid-template-columns: 1fr 1fr; */
+  /* gap: 1em;
+  width: 100%; */
   margin-bottom: 1em;
 }
 
 .pill-red {
   background-color: rgba(224, 54, 54, 0.85);
   color: white;
-  padding: 0.2em 0.15em;
   border-radius: 1em;
   font-size: 0.8em;
   font-weight: 600;

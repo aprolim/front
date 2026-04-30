@@ -21,7 +21,7 @@
             <!-- Logo como botón para ir al inicio -->
             <button 
               @click="goToHome"
-              class="ml-[1em] w-[2.5em] h-[2.5em] rounded-lg overflow-hidden flex items-center justify-center group-hover:scale-105 transition-transform cursor-pointer duration-[1.2s] hover:scale-[2.9] hover:translate-y-[4vw] hover:translate-x-[3vw] bg-[#E03636]"
+              class="ml-[1em] w-[2.5em] h-[2.5em] rounded-lg overflow-hidden flex items-center justify-center bg-[#E03636]"
               aria-label="Ir al inicio"
             >
               <img 
@@ -131,7 +131,7 @@
             </div>
 
             <!-- MENÚ 4: Cultura y patrimonio -->
-            <div class="relative group/menu">
+            <!-- <div class="relative group/menu">
               <button class="px-[1vw] py-2 text-white font-medium hover:bg-[#C12F2F] rounded-lg transition-colors">
                 Cultura
               </button>
@@ -151,9 +151,8 @@
                   </NuxtLink>
                 </div>
               </div>
-            </div>
-
-            <!-- MENÚ 5: Participación y transparencia -->
+            </div> -->
+<!-- 
             <div class="relative group/menu">
               <button class="px-[1vw] py-2 text-white font-medium hover:bg-[#C12F2F] rounded-lg transition-colors">
                 Participación
@@ -174,7 +173,7 @@
                   </NuxtLink>
                 </div>
               </div>
-            </div>
+            </div> -->
           </div>
 
           <!-- Versión móvil: texto simple -->

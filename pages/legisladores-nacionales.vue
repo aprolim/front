@@ -28,6 +28,7 @@
                   img: persona.imagen, 
                   text: persona.textoCompleto, 
                   nombre: persona.nombre, 
+                  apellido: persona.apellido, 
                   cargo: persona.cargo 
                 }"
               >
@@ -36,7 +37,9 @@
                   <img :src="persona.imagen" :alt="persona.nombre" loading="lazy" class="w-full h-full object-cover">
                 </div>
                 <p class="mt-2 text-white font-semibold drop-shadow">{{ persona.nombre }}</p>
-                <p class="text-sm text-gray-200 drop-shadow">{{ persona.cargoPartido.toUpperCase() }}</p>
+                <p class="text-white font-semibold drop-shadow">{{ persona.apellido }}</p>
+                <p class="text-[.8vw] text-gray-200 drop-shadow">{{ persona.cargoPartido.toUpperCase() }}</p>
+                <p class="text-[.8vw] text-gray-200 drop-shadow">{{ persona.partido.toUpperCase() }}</p>
               </div>
             </div>
 
@@ -48,6 +51,7 @@
                   img: persona.imagen, 
                   text: persona.textoCompleto, 
                   nombre: persona.nombre, 
+                  apellido: persona.apellido, 
                   cargo: persona.cargo 
                 }"
               >
@@ -56,7 +60,9 @@
                   <img :src="persona.imagen" :alt="persona.nombre" loading="lazy" class="w-full h-full object-cover">
                 </div>
                 <p class="mt-2 text-white font-semibold drop-shadow">{{ persona.nombre }}</p>
+                <p class="text-white font-semibold drop-shadow">{{ persona.apellido }}</p>
                 <p class="text-sm text-gray-200 drop-shadow">{{ persona.cargoPartido.toUpperCase() }}</p>
+                <p class="text-sm text-gray-200 drop-shadow">{{ persona.partido.toUpperCase() }}</p>
               </div>
             </div>
           </div>
@@ -126,7 +132,7 @@
           </div>
 
           <!-- Columna Derecha: 60% - Contenido dinámico -->
-          <div class="w-full md:w-[60%] bg-gray-400/90 rounded-lg pt-6 min-h-[500px] text-[1vw]">
+          <div class="w-full md:w-[60%] bg-gray-400/90 rounded-lg pt-[1vw] min-h-[500px] text-[1vw] mt-[-1.5vw]">
             <div v-if="comisionSeleccionada">
               <!-- Título dinámico (igual al botón seleccionado) -->
               <h3 class="text-2xl font-bold text-white drop-shadow-md mb-[1vw] text-center">
@@ -134,12 +140,13 @@
               </h3>
 
               <!-- Grupo 1: Primera fila de 2 fichas -->
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div v-for="(miembro, idx) in comisionSeleccionada.miembrosGrupo1" :key="'g1-'+idx" class="flex items-center gap-4 p-[1vw] rounded-lg px-[2vw]">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-0">
+                <div v-for="(miembro, idx) in comisionSeleccionada.miembrosGrupo1" :key="'g1-'+idx" class="flex items-center gap-0 p-[1vw] rounded-lg pl-[2vw]">
                   <img :src="miembro.foto" :alt="miembro.nombre" class="w-[8vw] h-[8vw] rounded-full object-cover transition-all duration-700 hover:scale-[1.6]">
                   <div class="text-white text-center">
                     <p class="font-bold drop-shadow-md">{{ miembro.cargo }}</p>
                     <p class="drop-shadow-md">{{ miembro.nombre }}</p>
+                    <p class="drop-shadow-md">{{ miembro.apellido }}</p>
                     <p class="text-sm drop-shadow-md">{{ miembro.partido }}</p>
                   </div>
                 </div>
@@ -151,12 +158,13 @@
               </div>
 
               <!-- Grupo 2: Segunda fila de 2 fichas -->
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div v-for="(miembro, idx) in comisionSeleccionada.miembrosGrupo2" :key="'g2-'+idx" class="flex items-center gap-4 p-[1vw] rounded-lg px-[2vw]">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-0">
+                <div v-for="(miembro, idx) in comisionSeleccionada.miembrosGrupo2" :key="'g2-'+idx" class="flex items-center gap-0 p-[1vw] rounded-lg pl-[2vw]">
                   <img :src="miembro.foto" :alt="miembro.nombre" class="w-[8vw] h-[8vw] rounded-full object-cover transition-all duration-700 hover:scale-[1.6]">
                   <div class="text-white text-center">
                     <p class="font-bold drop-shadow-md">{{ miembro.cargo }}</p>
                     <p class="drop-shadow-md">{{ miembro.nombre }}</p>
+                    <p class="drop-shadow-md">{{ miembro.apellido }}</p>
                     <p class="text-sm drop-shadow-md">{{ miembro.partido }}</p>
                   </div>
                 </div>
@@ -168,12 +176,13 @@
               </div>
 
               <!-- Grupo 3: Tercera fila de 2 fichas -->
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div v-for="(miembro, idx) in comisionSeleccionada.miembrosGrupo3" :key="'g3-'+idx" class="flex items-center gap-4 p-[1vw] rounded-lg px-[2vw]">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-0">
+                <div v-for="(miembro, idx) in comisionSeleccionada.miembrosGrupo3" :key="'g3-'+idx" class="flex items-center gap-0 p-[1vw] rounded-lg pl-[2vw]">
                   <img :src="miembro.foto" :alt="miembro.nombre" class="w-[8vw] h-[8vw] rounded-full object-cover transition-all duration-700 hover:scale-[1.6]">
                   <div class="text-white text-center">
                     <p class="font-bold drop-shadow-md">{{ miembro.cargo }}</p>
                     <p class="drop-shadow-md">{{ miembro.nombre }}</p>
+                    <p class="drop-shadow-md">{{ miembro.apellido }}</p>
                     <p class="text-sm drop-shadow-md">{{ miembro.partido }}</p>
                   </div>
                 </div>
@@ -230,11 +239,11 @@
                 <p class="text-center text-white text-xs mt-1 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">{{ dep.nombre }}</p>
               </div>
             </div>
-            <div class="bg-[rgba(190,0,0,0.6)] pt-[2vw] px-[4vw] pb-[1vw]">
+            <div class="bg-[rgba(190,0,0,0.6)] pt-[2vw] px-[2vw] pb-[1vw]">
                 <!-- Fila de Titulares (5 columnas) -->
-                <div class="grid grid-cols-5 gap-6 mb-8">
+                <div class="grid grid-cols-5 gap-2 mb-[1vw]">
                   <div class="text-center">
-                    <div class="mt-[5vw] inline-block px-1 py-2 rounded-full text-white font-semibold w-[12vw]" 
+                    <div class="mt-[4vw] inline-block px-1 py-2 rounded-full text-white font-semibold w-[12vw]" 
                         :style="{ backgroundColor: 'rgba(224, 54, 54, 0.8)' }">
                       {{ departamentoSeleccionado?.nombre }}
                     </div>
@@ -243,12 +252,13 @@
                     <div class="w-[12vw] h-[12vw] mx-auto rounded-full overflow-hidden mb-2 transition-all duration-300 hover:scale-[1.3]">
                       <img :src="titular.imagen" :alt="titular.nombre" loading="lazy" class="w-full h-full object-cover">
                     </div>
-                    <p class="text-white font-semibold text-sm">{{ titular.nombre.split(' ')[0] }} {{ titular.nombre.split(' ')[1] }}</p>
-                    <p v-if="titular.nombre" class="text-gray-300 text-xs">{{ titular.partido }}</p>
+                    <p class="text-white font-semibold text-sm">{{ titular.nombre }}</p>
+                    <p class="text-white font-semibold text-sm">{{ titular.apellido }}</p>
+                    <p v-if="titular.nombre" class="text-gray-300 text-xs">{{ titular.partido.toUpperCase() }}</p>
                   </div>
                 </div>
                 <!-- Fila de Suplentes (5 columnas) -->
-                <div class="grid grid-cols-5 gap-6">
+                <div class="grid grid-cols-5 gap-2">
                   <div class="text-center">
                     <div class="mt-[5vw] inline-block px-6 py-2 rounded-full text-white font-semibold w-[12vw]" 
                         :style="{ backgroundColor: 'rgba(224, 54, 54, 0.8)' }">
@@ -259,8 +269,9 @@
                     <div class="w-[12vw] h-[12vw] mx-auto rounded-full overflow-hidden mb-2 transition-all duration-300 hover:scale-[1.3]">
                       <img :src="suplente.imagen" :alt="suplente.nombre" loading="lazy" class="w-full h-full object-cover">
                     </div>
-                    <p class="text-white font-semibold text-sm">{{ suplente.nombre.split(' ')[0] }} {{ suplente.nombre.split(' ')[1] }}</p>
-                    <p v-if="suplente.nombre" class="text-gray-300 text-xs">{{ suplente.partido }}</p>
+                    <p class="text-white font-semibold text-sm">{{ suplente.nombre }}</p>
+                    <p class="text-white font-semibold text-sm">{{ suplente.apellido }}</p>
+                    <p v-if="suplente.nombre" class="text-gray-300 text-xs">{{ suplente.partido.toUpperCase() }}</p>
                   </div>
                 </div>
             </div>
@@ -277,7 +288,7 @@
       :class="{ 'animate-in': isSeccion4Visible }"
       style="min-height: 100vh; position: relative; background: transparent;"
     >
-      <div class="container mx-auto px-4 z-10 relative" style="min-height: 100vh;">
+      <div class="mx-[5vw] px-4 z-10 relative" style="min-height: 100vh;">
         
         <!-- Transición para el estado inicial -->
         <transition name="fade-scale" mode="out-in">
@@ -302,8 +313,8 @@
                   @click="seleccionarPartido(partido)"
                   class="cursor-pointer transition-all duration-300 text-center"
                   :class="{ 'transform scale-90': partidoSeleccionado?.id === partido.id }">
-                <div class="w-16 h-16 rounded-full border-4 flex items-center justify-center mx-auto transition-all duration-300 hover:scale-[1.5]"
-                    :style="{ borderColor: '#E4D294', backgroundColor: partidoSeleccionado?.id === partido.id ? 'rgba(228,210,148,0.2)' : 'rgba(255,255,255,0.1)' }">
+                <div class="w-16 h-16 rounded-full flex items-center justify-center mx-auto transition-all duration-300 hover:scale-[2.3] hover:translate-y-[2vw]"
+                    :style="{ backgroundColor: partidoSeleccionado?.id === partido.id ? 'rgba(228,210,148,0.2)' : 'rgba(255,255,255,0.1)' }">
                   <div v-html="partidoSeleccionado?.id === partido.id ? partido.iconoDorado : partido.iconoBlanco" 
                       class="w-full h-full"></div>
                 </div>
@@ -315,128 +326,134 @@
             <div class="bg-red-700 rounded-lg px-6 py-1 flex items-center justify-between">
               <button 
                 @click="toggleTipoMiembros"
-                class="bg-[#E03636] hover:bg-red-900 text-white font-semibold px-6 py-2 rounded-lg transition-colors">
+                class="bg-[#E03636] hover:bg-red-900 text-white font-semibold px-[1.5vw] py-[.1vw] rounded-lg transition-colors">
                 {{ mostrarSuplentes ? 'VER TITULARES' : 'VER SUPLENTES' }}
               </button>
-              <h3 class="text-white font-bold text-xl">{{ partidoSeleccionado?.nombre }}</h3>
-              <div class="w-32"></div>
+              <h3 class="text-white font-bold text-[2vw]">{{ partidoSeleccionado?.nombre }}</h3>
+              <div class="w-[15vw]"></div>
             </div>
 
             <!-- Grid dinámico según partido seleccionado con transición interna -->
             <transition name="fade-scale" mode="out-in">
               <div :key="mostrarSuplentes ? 'suplentes' : 'titulares'">
                 <div v-if="partidoSeleccionado?.id === 'pdc'" class="group bg-[rgba(190,0,0,0.6)] pt-2">
-                  <div class="grid grid-cols-6 gap-6 mb-6">
+                  <div class="grid grid-cols-6 mb-[.5vw]">
                     <div v-for="(persona, index) in miembrosMostrar.slice(0,6)" :key="persona.nombre" 
-                        class="text-center transition-all duration-300 hover:scale-[1.1]">
-                      <div class="w-24 h-24 mx-auto rounded-full overflow-hidden border-4 circle-shadow mb-1" 
-                          style="border-color: #E4D294;">
+                        class="text-center">
+                      <div class="w-[7vw] h-[7vw] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[3] hover:relative hover:z-40">
                         <img :src="persona.imagen" :alt="persona.nombre" loading="lazy" class="w-full h-full object-cover">
                       </div>
-                      <p class="text-white font-semibold text-sm drop-shadow-lg">{{ persona.nombre}}</p>
-                      <p class="text-gray-200 text-xs drop-shadow-lg">{{ persona.departamento }}</p>
+                      <p class="text-white font-semibold text-[.9vw] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre}}</p>
+                      <p class="text-white font-semibold text-[.9vw] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido}}</p>
+                      <p class="text-gray-200 text-[.8vw] drop-shadow-lg">{{ persona.departamento }}</p>
                     </div>
                   </div>
-                  <div class="grid grid-cols-5 gap-6 mb-6">
+                  <div class="grid grid-cols-5 mb-[.5vw]">
                     <div v-for="(persona, index) in miembrosMostrar.slice(6,11)" :key="persona.nombre" 
-                        class="text-center transition-all duration-300 hover:scale-[1.1]">
-                      <div class="w-24 h-24 mx-auto rounded-full overflow-hidden border-4 circle-shadow mb-1" 
-                          style="border-color: #E4D294;">
+                        class="text-center">
+                      <div class="w-[7vw] h-[7vw] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[3] hover:relative hover:z-40">
                         <img :src="persona.imagen" :alt="persona.nombre" loading="lazy" class="w-full h-full object-cover">
                       </div>
-                      <p class="text-white font-semibold text-sm drop-shadow-lg">{{ persona.nombre}}</p>
-                      <p class="text-gray-200 text-xs drop-shadow-lg">{{ persona.departamento }}</p>
+                      <p class="text-white font-semibold text-[.9vw] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre}}</p>
+                      <p class="text-white font-semibold text-[.9vw] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido}}</p>
+                      <p class="text-gray-200 text-[.8vw] drop-shadow-lg">{{ persona.departamento }}</p>
                     </div>
                   </div>
-                  <div class="grid grid-cols-5 gap-6">
+                  <div class="grid grid-cols-5">
                     <div v-for="(persona, index) in miembrosMostrar.slice(11,16)" :key="persona.nombre" 
-                        class="text-center transition-all duration-300 hover:scale-[1.1]">
-                      <div class="w-24 h-24 mx-auto rounded-full overflow-hidden border-4 circle-shadow mb-1" 
-                          style="border-color: #E4D294;">
+                        class="text-center">
+                      <div class="w-[7vw] h-[7vw] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[3] hover:relative hover:z-40">
                         <img :src="persona.imagen" :alt="persona.nombre" loading="lazy" class="w-full h-full object-cover">
                       </div>
-                      <p class="text-white font-semibold text-sm drop-shadow-lg">{{ persona.nombre}}</p>
-                      <p class="text-gray-200 text-xs drop-shadow-lg">{{ persona.departamento }}</p>
+                      <p class="text-white font-semibold text-[.9vw] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre}}</p>
+                      <p class="text-white font-semibold text-[.9vw] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido}}</p>
+                      <p class="text-gray-200 text-[.8vw] drop-shadow-lg">{{ persona.departamento }}</p>
                     </div>
                   </div>
                 </div>
+
                 <div v-else-if="partidoSeleccionado?.id === 'libre'" class="group bg-[rgba(190,0,0,0.6)] pt-2">
-                  <div class="grid grid-cols-4 gap-6 mb-6">
-                    <div v-for="(persona, index) in miembrosMostrar.slice(0,4)" :key="persona.nombre" class="text-center transition-all duration-300 hover:scale-[1.1]">
-                      <div class="w-24 h-24 mx-auto rounded-full overflow-hidden border-4 circle-shadow mb-1" 
-                          style="border-color: #E4D294;">
+                  <div class="grid grid-cols-4 mb-[.5vw]">
+                    <div v-for="(persona, index) in miembrosMostrar.slice(0,4)" :key="persona.nombre" 
+                        class="text-center">
+                      <div class="w-[7vw] h-[7vw] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[3] hover:relative hover:z-40">
                         <img :src="persona.imagen" :alt="persona.nombre" loading="lazy" class="w-full h-full object-cover">
                       </div>
-                      <p class="text-white font-semibold text-sm">{{ persona.nombre }}</p>
-                      <p class="text-gray-200 text-xs">{{ persona.departamento }}</p>
+                      <p class="text-white font-semibold text-[.9vw] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre}}</p>
+                      <p class="text-white font-semibold text-[.9vw] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido}}</p>
+                      <p class="text-gray-200 text-[.8vw] drop-shadow-lg">{{ persona.departamento }}</p>
                     </div>
                   </div>
-                  <div class="grid grid-cols-4 gap-6 mb-6">
-                    <div v-for="(persona, index) in miembrosMostrar.slice(4,8)" :key="persona.nombre" class="text-center transition-all duration-300 hover:scale-[1.1]">
-                      <div class="w-24 h-24 mx-auto rounded-full overflow-hidden border-4 circle-shadow mb-1" 
-                          style="border-color: #E4D294;">
+                  <div class="grid grid-cols-4 mb-[.5vw]">
+                    <div v-for="(persona, index) in miembrosMostrar.slice(4,8)" :key="persona.nombre" 
+                        class="text-center">
+                      <div class="w-[7vw] h-[7vw] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[3] hover:relative hover:z-40">
                         <img :src="persona.imagen" :alt="persona.nombre" loading="lazy" class="w-full h-full object-cover">
                       </div>
-                      <p class="text-white font-semibold text-sm">{{ persona.nombre}}</p>
-                      <p class="text-gray-200 text-xs">{{ persona.departamento }}</p>
+                      <p class="text-white font-semibold text-[.9vw] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre}}</p>
+                      <p class="text-white font-semibold text-[.9vw] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido}}</p>
+                      <p class="text-gray-200 text-[.8vw] drop-shadow-lg">{{ persona.departamento }}</p>
                     </div>
                   </div>
-                  <div class="grid grid-cols-4 gap-6">
-                    <div v-for="(persona, index) in miembrosMostrar.slice(8,12)" :key="persona.nombre" class="text-center transition-all duration-300 hover:scale-[1.1]">
-                      <div class="w-24 h-24 mx-auto rounded-full overflow-hidden border-4 circle-shadow mb-1" 
-                          style="border-color: #E4D294;">
+                  <div class="grid grid-cols-4">
+                    <div v-for="(persona, index) in miembrosMostrar.slice(8,12)" :key="persona.nombre" 
+                        class="text-center">
+                      <div class="w-[7vw] h-[7vw] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[3] hover:relative hover:z-40">
                         <img :src="persona.imagen" :alt="persona.nombre" loading="lazy" class="w-full h-full object-cover">
                       </div>
-                      <p class="text-white font-semibold text-sm">{{ persona.nombre}}</p>
-                      <p class="text-gray-200 text-xs">{{ persona.departamento }}</p>
+                      <p class="text-white font-semibold text-[.9vw] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre}}</p>
+                      <p class="text-white font-semibold text-[.9vw] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido}}</p>
+                      <p class="text-gray-200 text-[.8vw] drop-shadow-lg">{{ persona.departamento }}</p>
                     </div>
                   </div>
                 </div>
+
                 <div v-else-if="partidoSeleccionado?.id === 'alianza'" class="group bg-[rgba(190,0,0,0.6)] pt-2">
-                  <div class="grid grid-cols-3 gap-6 mb-6">
-                    <div v-for="(persona, index) in miembrosMostrar.slice(0,3)" :key="persona.nombre" class="text-center transition-all duration-300 hover:scale-[1.1]">
-                      <div class="w-24 h-24 mx-auto rounded-full overflow-hidden border-4 circle-shadow mb-2" 
-                          style="border-color: #E4D294;">
+                  <div class="grid grid-cols-3 mb-[.5vw]">
+                    <div v-for="(persona, index) in miembrosMostrar.slice(0,3)" :key="persona.nombre" 
+                        class="text-center">
+                      <div class="w-[7vw] h-[7vw] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[3] hover:relative hover:z-40">
                         <img :src="persona.imagen" :alt="persona.nombre" loading="lazy" class="w-full h-full object-cover">
                       </div>
-                      <p class="text-white font-semibold text-sm">{{ persona.nombre}}</p>
-                      <p class="text-gray-200 text-xs">{{ persona.departamento }}</p>
+                      <p class="text-white font-semibold text-[.9vw] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre}}</p>
+                      <p class="text-white font-semibold text-[.9vw] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido}}</p>
+                      <p class="text-gray-200 text-[.8vw] drop-shadow-lg">{{ persona.departamento }}</p>
                     </div>
                   </div>
-                  <div class="grid grid-cols-3 gap-6 mb-6">
-                    <div v-for="(persona, index) in miembrosMostrar.slice(3,6)" :key="persona.nombre" class="text-center transition-all duration-300 hover:scale-[1.1]">
-                      <div class="w-24 h-24 mx-auto rounded-full overflow-hidden border-4 circle-shadow mb-2" 
-                          style="border-color: #E4D294;">
+                  <div class="grid grid-cols-3 mb-[.5vw]">
+                    <div v-for="(persona, index) in miembrosMostrar.slice(3,6)" :key="persona.nombre" 
+                        class="text-center">
+                      <div class="w-[7vw] h-[7vw] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[3] hover:relative hover:z-40">
                         <img :src="persona.imagen" :alt="persona.nombre" loading="lazy" class="w-full h-full object-cover">
                       </div>
-                      <p class="text-white font-semibold text-sm">{{ persona.nombre}}</p>
-                      <p class="text-gray-200 text-xs">{{ persona.departamento }}</p>
+                      <p class="text-white font-semibold text-[.9vw] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre}}</p>
+                      <p class="text-white font-semibold text-[.9vw] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido}}</p>
+                      <p class="text-gray-200 text-[.8vw] drop-shadow-lg">{{ persona.departamento }}</p>
                     </div>
                   </div>
-                  <div class="grid grid-cols-3 gap-6">
-                    <div class="text-center transition-all duration-300 hover:scale-[1.1]">
-                      <div v-if="miembrosMostrar[6]" class="inline-block">
-                        <div class="w-24 h-24 mx-auto rounded-full overflow-hidden border-4 circle-shadow mb-2" 
-                            style="border-color: #E4D294;">
-                          <img :src="miembrosMostrar[6].imagen" :alt="miembrosMostrar[6].nombre" loading="lazy" class="w-full h-full object-cover">
-                        </div>
-                        <p class="text-white font-semibold text-sm">{{ miembrosMostrar[6].nombre}}</p>
-                        <p class="text-gray-200 text-xs">{{ miembrosMostrar[6].departamento }}</p>
+                  <div class="grid grid-cols-3">
+                    <div v-if="miembrosMostrar[6]" class="text-center">
+                      <div class="w-[7vw] h-[7vw] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[3] hover:relative hover:z-40">
+                        <img :src="miembrosMostrar[6].imagen" :alt="miembrosMostrar[6].nombre" loading="lazy" class="w-full h-full object-cover">
                       </div>
+                      <p class="text-white font-semibold text-[.9vw] drop-shadow-lg mt-[-.2vw]">{{ miembrosMostrar[6].nombre }}</p>
+                      <p class="text-white font-semibold text-[.9vw] drop-shadow-lg mt-[-.3vw]">{{ miembrosMostrar[6].apellido }}</p>
+                      <p class="text-gray-200 text-[.8vw] drop-shadow-lg">{{ miembrosMostrar[6].departamento }}</p>
                     </div>
                     <div></div>
                     <div></div>
                   </div>
                 </div>
+
                 <div v-else-if="partidoSeleccionado?.id === 'sumate'" class="group bg-[rgba(190,0,0,0.6)] pt-2">
                   <div class="flex justify-center">
-                    <div v-if="miembrosMostrar[0]" class="text-center transition-all duration-300 hover:scale-[1.1]">
-                      <div class="w-28 h-28 mx-auto rounded-full overflow-hidden border-4 circle-shadow mb-2" 
-                          style="border-color: #E4D294;">
+                    <div v-if="miembrosMostrar[0]" class="text-center">
+                      <div class="w-[7vw] h-[7vw] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[3] hover:relative hover:z-40">
                         <img :src="miembrosMostrar[0].imagen" :alt="miembrosMostrar[0].nombre" loading="lazy" class="w-full h-full object-cover">
                       </div>
-                      <p class="text-white font-semibold text-sm">{{ miembrosMostrar[0].nombre}}</p>
-                      <p class="text-gray-200 text-xs">{{ miembrosMostrar[0].departamento }}</p>
+                      <p class="text-white font-semibold text-[.9vw] drop-shadow-lg mt-[-.2vw]">{{ miembrosMostrar[0].nombre }}</p>
+                      <p class="text-white font-semibold text-[.9vw] drop-shadow-lg mt-[-.3vw]">{{ miembrosMostrar[0].apellido }}</p>
+                      <p class="text-gray-200 text-[.8vw] drop-shadow-lg">{{ miembrosMostrar[0].departamento }}</p>
                     </div>
                   </div>
                 </div>
@@ -475,78 +492,34 @@ const isSeccion2Visible = ref(false)
 const isSeccion3Visible = ref(false)
 const isSeccion4Visible = ref(false)
 
-const personasData = ref([
-  {
-    id: 1,
-    nombre: 'Diego Esteban Mateo Ávila Navajas',
-    cargoPartido: 'Presidencia PDC',
-    cargo: 'Presidenta del Senado',
-    imagen: '/senadores/g1/DIEGO ESTEBAN MATEO ÁVILA NAVAJAS.png',
-    textoCompleto: 'La Dra. María González es Presidenta del Senado con más de 15 años de experiencia en derecho constitucional. Ha liderado importantes reformas legislativas y promovido la participación ciudadana.'
-  },
-  {
-    id: 2,
-    nombre: 'Carmen Soledad Chapetón Tancara',
-    cargoPartido: 'Primera Vicepresidencia Unidad',
-    cargo: 'Vicepresidente',
-    imagen: '/senadores/g2/CARMEN SOLEDAD CHAPETON TANCARA.png',
-    textoCompleto: 'El Lic. Carlos Mendoza se desempeña como Vicepresidente del Senado. Economista de profesión, ha trabajado en políticas de desarrollo económico y transparencia gubernamental.'
-  },
-  {
-    id: 3,
-    nombre: 'Khatia Lisbeth Quiroga Fernández',
-    cargoPartido: 'Segunda Vicepresidencia Libre',
-    cargo: 'Secretario General',
-    imagen: '/senadores/g3/KHATIA LISBETH QUIROGA FERNÁNDEZ.png',
-    textoCompleto: 'El Dr. Roberto Fernández es Secretario General con amplia trayectoria en gestión parlamentaria. Es reconocido por su labor en la modernización administrativa.'
-  },
-  {
-    id: 4,
-    nombre: 'Yasmin Estivariz Villarroel',
-    cargoPartido: 'Primera Secretaria PDC',
-    cargo: 'Directora de Comunicación',
-    imagen: '/senadores/g1/YASMIN ESTIVARIZ VILLARROEL.png',
-    textoCompleto: 'La Sra. Ana Paula Ríos es Directora de Comunicación. Periodista y comunicadora social, ha implementado estrategias innovadoras para acercar el trabajo legislativo.'
-  },
-  {
-    id: 5,
-    nombre: 'Julio Diego Romaña',
-    cargoPartido: 'Segunda Secretaria Libre',
-    cargo: 'Jefe de Protocolo',
-    imagen: '/senadores/g4/JULIO DIEGO ROMAÑA GALINDO.png',
-    textoCompleto: 'El Arq. Luis Torrez es Jefe de Protocolo. Con más de 20 años organizando eventos diplomáticos, garantiza estándares internacionales.'
-  },
-  {
-    id: 6,
-    nombre: 'Rosa Tatiana Áñez Carrasco',
-    cargoPartido: 'Tercera Secretaria Unidad',
-    cargo: 'Coordinadora Legislativa',
-    imagen: '/senadores/g2/ROSA TATIANA AÑEZ CARRASCO.png',
-    textoCompleto: 'La Lic. Patricia Vargas es Coordinadora Legislativa. Especialista en políticas públicas, coordina el trabajo entre las diferentes comisiones.'
-  }
-])
 // Organizar personas en 2 filas de 3 columnas cada una
 const fila1 = ref([
   {
     id: 1,
-    nombre: 'Diego Esteban Mateo Ávila Navajas',
-    cargoPartido: 'Presidencia PDC',
+    nombre: 'Diego Esteban Mateo',
+    apellido: 'Ávila Navajas',
+    cargoPartido: 'Presidencia',
+    partido: 'PDC',
     cargo: 'Presidenta del Senado',
     imagen: '/senadores/g1/DIEGO ESTEBAN MATEO ÁVILA NAVAJAS.png',
     textoCompleto: 'La Dra. María González es Presidenta del Senado con más de 15 años de experiencia en derecho constitucional. Ha liderado importantes reformas legislativas y promovido la participación ciudadana.'
   },
   {
     id: 2,
-    nombre: 'Carmen Soledad Chapetón Tancara',
-    cargoPartido: 'Primera Vicepresidencia Unidad',
+    nombre: 'Carmen Soledad',
+    apellido:'Chapetón Tancara',
+    cargoPartido: 'Primera Vicepresidencia',
+    partido: 'Unidad',
     cargo: 'Vicepresidente',
     imagen: '/senadores/g2/CARMEN SOLEDAD CHAPETON TANCARA.png',
     textoCompleto: 'El Lic. Carlos Mendoza se desempeña como Vicepresidente del Senado. Economista de profesión, ha trabajado en políticas de desarrollo económico y transparencia gubernamental.'
   },
   {
     id: 3,
-    nombre: 'Khatia Lisbeth Quiroga Fernández',
-    cargoPartido: 'Segunda Vicepresidencia Libre',
+    nombre: 'Khatia Lisbeth',
+    apellido: 'Quiroga Fernández',
+    cargoPartido: 'Segunda Vicepresidencia',
+    partido: 'Libre',
     cargo: 'Secretario General',
     imagen: '/senadores/g3/KHATIA LISBETH QUIROGA FERNÁNDEZ.png',
     textoCompleto: 'El Dr. Roberto Fernández es Secretario General con amplia trayectoria en gestión parlamentaria. Es reconocido por su labor en la modernización administrativa.'
@@ -556,50 +529,48 @@ const fila1 = ref([
 const fila2 = ref([
   {
     id: 4,
-    nombre: 'Yasmin Estivariz Villarroel',
-    cargoPartido: 'Primera Secretaria PDC',
+    nombre: 'Yasmin',
+    apellido:'Quiroga Fernández',
+    cargoPartido: 'Primera Secretaria',
+    partido: 'PDC',
     cargo: 'Directora de Comunicación',
     imagen: '/senadores/g1/YASMIN ESTIVARIZ VILLARROEL.png',
     textoCompleto: 'La Sra. Ana Paula Ríos es Directora de Comunicación. Periodista y comunicadora social, ha implementado estrategias innovadoras para acercar el trabajo legislativo.'
   },
   {
     id: 5,
-    nombre: 'Julio Diego Romaña',
-    cargoPartido: 'Segunda Secretaria Libre',
+    nombre: 'Julio',
+    apellido:'Diego Romaña',
+    cargoPartido: 'Segunda Secretaria',
+    partido: 'Libre',
     cargo: 'Jefe de Protocolo',
     imagen: '/senadores/g4/JULIO DIEGO ROMAÑA GALINDO.png',
     textoCompleto: 'El Arq. Luis Torrez es Jefe de Protocolo. Con más de 20 años organizando eventos diplomáticos, garantiza estándares internacionales.'
   },
   {
     id: 6,
-    nombre: 'Rosa Tatiana Áñez Carrasco',
-    cargoPartido: 'Tercera Secretaria Unidad',
+    nombre: 'Rosa Tatiana',
+    apellido:'Áñez Carrasco',
+    cargoPartido: 'Tercera Secretaria',
+    partido: 'Unidad',
     cargo: 'Coordinadora Legislativa',
     imagen: '/senadores/g2/ROSA TATIANA AÑEZ CARRASCO.png',
     textoCompleto: 'La Lic. Patricia Vargas es Coordinadora Legislativa. Especialista en políticas públicas, coordina el trabajo entre las diferentes comisiones.'
   }
 ])
 
-// Organizar las personas en 3 columnas de 2 personas cada una
-const columnasPersonas = computed(() => {
-  const columnas = [[], [], []]
-  personasData.value.forEach((persona, index) => {
-    columnas[index % 3].push(persona)
-  })
-  return columnas
-})
-
 const selectedImage = ref({
-  img: personasData.value[0].imagen,
-  text: personasData.value[0].textoCompleto,
-  nombre: personasData.value[0].nombre,
-  cargo: personasData.value[0].cargo
+  img: fila1.value[0].imagen,
+  text: fila1.value[0].textoCompleto,
+  nombre: fila1.value[0].nombre,
+  apellido: fila1.value[0].apellido,
+  cargo: fila1.value[0].cargo
 })
 
 // ==================== DATOS SECCIÓN 2 - COMISIONES Y COMITES ====================
 const comisionesList = ref([
   { id: 1, nombre: 'Comisión de Constitución, Derechos Humanos, Legislación y Sistema Electoral' },
-  { id: 2, nombre: 'Comisión de Justicia Plural, Ministerio Público y Defensa LEGAL del Estado' },
+  { id: 2, nombre: 'Comisión de Justicia Plural, Ministerio Público y Defensa Legal del Estado' },
   { id: 3, nombre: 'Comisión de Seguridad del Estado, Fuerzas Armadas y Policía Boliviana' },
   { id: 4, nombre: 'Comisión de Organización Territorial del Estado y Autonomías' },
   { id: 5, nombre: 'Comisión de Planificación, Política Económica y Finanzas' },
@@ -616,161 +587,161 @@ const comisionSeleccionada = ref(null)
 const comisionesData = {
   1: {
     miembrosGrupo1: [
-      { foto: '/new/titulares/g1/DANIEL ANTONIO ORTIZ VELASQUEZ.png', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Daniel Antonio Ortiz Velasquez', partido: 'PDC' },
-      { foto: '/new/suplentes/g1/REINA ISABEL PALLARES MORALES.png', cargo: 'SENADORA SUPLENTE', nombre: 'Reina Isabel Pallares Morales', partido: 'PDC' }
+      { foto: '/new/titulares/g1/DANIEL ANTONIO ORTIZ VELASQUEZ.png', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Daniel Antonio', apellido:'Ortiz Velasquez', partido: 'PDC' },
+      { foto: '/new/suplentes/g1/REINA ISABEL PALLARES MORALES.png', cargo: 'SENADORA SUPLENTE', nombre: 'Reina Isabel', apellido:'Pallares Morales', partido: 'PDC' }
     ],
     tituloLinea1: 'COMITE DE CONSTITUCIÓN, LEGISLACIÓN E INTERPRETACIÓN LEGISLATIVA Y CONSTITUCIONAL',
     miembrosGrupo2: [
-      { foto: '/new/titulares/g2/FREDDY CASTILLO CHAVEZ.png', cargo: 'SECRETARIO DE COMITÉ', nombre: 'Freddy Castillo Chavez', partido: 'PDC' },
-      { foto: '/new/suplentes/g2/VILLMA COLQUE CAMACHO.png', cargo: 'SENADORA SUPLENTE', nombre: 'Villma Colque Camacho', partido: 'PDC' }
+      { foto: '/new/titulares/g2/FREDDY CASTILLO CHAVEZ.png', cargo: 'SECRETARIO DE COMITÉ', nombre: 'Freddy', apellido:'Castillo Chavez', partido: 'PDC' },
+      { foto: '/new/suplentes/g2/VILLMA COLQUE CAMACHO.png', cargo: 'SENADORA SUPLENTE', nombre: 'Villma ', apellido:'Colque Camacho', partido: 'PDC' }
     ],
     tituloLinea2: 'COMITE DE CONSTITUCIÓN, LEGISLACIÓN E INTERPRETACIÓN LEGISLATIVA Y CONSTITUCIONAL',
     miembrosGrupo3: [
-      { foto: '/new/titulares/g1/TOMASA YARHUI JACOME.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Tomasa Yarhui Jacome', partido: 'PDC' },
-      { foto: '/new/suplentes/g1/HUGO MARCELO CORTEZ CALVIMONTES.png', cargo: 'SENADOR SUPLENTE', nombre: 'Hugo Marcelo Cortez Calvimontes', partido: 'PDC' }
+      { foto: '/new/titulares/g1/TOMASA YARHUI JACOME.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Tomasa', apellido:'Yarhui Jacome', partido: 'PDC' },
+      { foto: '/new/suplentes/g1/HUGO MARCELO CORTEZ CALVIMONTES.png', cargo: 'SENADOR SUPLENTE', nombre: 'Hugo Marcelo', apellido:'Cortez Calvimontes', partido: 'PDC' }
     ]
   },
   2: {
     miembrosGrupo1: [
-      { foto: '/new/titulares/g3/ERICK NELSON SORUCO ALPIRE.png', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Erick Nelson Soruco Alpire', partido: 'PDC' },
-      { foto: '/new/suplentes/g3/CESIA ROCA ESCALANTE.png', cargo: 'SENADORA SUPLENTE', nombre: 'Cesia Roca Escalante', partido: 'PDC' }
+      { foto: '/new/titulares/g3/ERICK NELSON SORUCO ALPIRE.png', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Erick Nelson', apellido:'Soruco Alpire', partido: 'PDC' },
+      { foto: '/new/suplentes/g3/CESIA ROCA ESCALANTE.png', cargo: 'SENADORA SUPLENTE', nombre: 'Cesia', apellido:'Roca Escalante', partido: 'PDC' }
     ],
     tituloLinea1: 'COMITÉ DE JUSTICIA PLURAL Y CONSEJO DE LA MAGISTRATURA',
     miembrosGrupo2: [
-      { foto: '/new/titulares/g1/WILDER VELIZ ARMAS.png', cargo: 'SECRETARIO DE COMITÉ', nombre: 'Wilder Veliz Armas', partido: 'PDC' },
-      { foto: '/new/suplentes/g1/LENNY MAYRA AYALA JUSTINIANO.png', cargo: 'SENADORA SUPLENTE', nombre: 'Lenny Mayra Ayala Justiniano', partido: 'PDC' }
+      { foto: '/new/titulares/g1/WILDER VELIZ ARMAS.png', cargo: 'SECRETARIO DE COMITÉ', nombre: 'Wilder', apellido:'Veliz Armas', partido: 'PDC' },
+      { foto: '/new/suplentes/g1/LENNY MAYRA AYALA JUSTINIANO.png', cargo: 'SENADORA SUPLENTE', nombre: 'Lenny Mayra', apellido:'Ayala Justiniano', partido: 'PDC' }
     ],
     tituloLinea2: 'COMITÉ DE MINISTERIO PÚBLICO Y DEFENSA LEGAL DEL ESTADO',
     miembrosGrupo3: [
-      { foto: '/new/titulares/g2/MARIA ISABEL MORENO CORTEZ.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Maria Isabel Moreno Cortez', partido: 'LIBRE' },
-      { foto: '/new/suplentes/g2/ROLANDO VACAFLOR GABRIEL ARANA.png', cargo: 'SENADOR SUPLENTE', nombre: 'Rolando Vacaflor Gabriel Arana', partido: 'LIBRE' }
+      { foto: '/new/titulares/g2/MARIA ISABEL MORENO CORTEZ.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Maria Isabel', apellido:'Moreno Cortez', partido: 'LIBRE' },
+      { foto: '/new/suplentes/g2/ROLANDO VACAFLOR GABRIEL ARANA.png', cargo: 'SENADOR SUPLENTE', nombre: 'Rolando Vacaflor', apellido:'Gabriel Arana', partido: 'LIBRE' }
     ]
   },
   3: {
     miembrosGrupo1: [
-      { foto: '/new/titulares/g1/JUDITH ROSARIO GARCIA COCA.png', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Judith Rosario Garcia Coca', partido: 'PDC' },
-      { foto: '/new/suplentes/g1/ROYER IVAN MAMANI GARCIA.png', cargo: 'SENADOR SUPLENTE', nombre: 'Royer Ivan Mamani Garcia', partido: 'PDC' }
+      { foto: '/new/titulares/g1/JUDITH ROSARIO GARCIA COCA.png', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Judith Rosario', apellido:'Garcia Coca', partido: 'PDC' },
+      { foto: '/new/suplentes/g1/ROYER IVAN MAMANI GARCIA.png', cargo: 'SENADOR SUPLENTE', nombre: 'Royer Ivan', apellido:'Mamani Garcia', partido: 'PDC' }
     ],
     tituloLinea1: 'COMITÉ DE FUERZAS ARMADAS Y POLICÍA BOLIVIANA',
     miembrosGrupo2: [
-      { foto: '/new/titulares/g3/ANA KARINA VELASCO ÁÑEZ.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Ana Karina Velasco Áñez', partido: 'UNIDAD' },
-      { foto: '/new/suplentes/g3/MARCELO MATIAS CARDONA IBAÑEZ.png', cargo: 'SENADOR SUPLENTE', nombre: 'Marcelo Matias Cardona Ibañez', partido: 'UNIDAD' }
+      { foto: '/new/titulares/g3/ANA KARINA VELASCO ÁÑEZ.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Ana Karina', apellido:'Velasco Áñez', partido: 'UNIDAD' },
+      { foto: '/new/suplentes/g3/MARCELO MATIAS CARDONA IBAÑEZ.png', cargo: 'SENADOR SUPLENTE', nombre: 'Marcelo Matias', apellido:'Cardona Ibañez', partido: 'UNIDAD' }
     ],
     tituloLinea2: 'COMITÉ DE SEGURIDAD DEL ESTADO Y LUCHA CONTRA EL NARCOTRÁFICO',
     miembrosGrupo3: [
-      { foto: '/new/titulares/g3/PAOLA LIMBANIA LOPEZ ZEBALLOS.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Paola Limbania Lopez Zeballos', partido: 'PDC' },
-      { foto: '/new/suplentes/g3/RICHARD ESPADA UGARTE.png', cargo: 'SENADOR SUPLENTE', nombre: 'Richard Espada Ugarte', partido: 'PDC' }
+      { foto: '/new/titulares/g3/PAOLA LIMBANIA LOPEZ ZEBALLOS.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Paola Limbania', apellido:'Lopez Zeballos', partido: 'PDC' },
+      { foto: '/new/suplentes/g3/RICHARD ESPADA UGARTE.png', cargo: 'SENADOR SUPLENTE', nombre: 'Richard', apellido:'Espada Ugarte', partido: 'PDC' }
     ]
   },
   4: {
     miembrosGrupo1: [
-      { foto: '/new/titulares/g2/CESAR MENTASTI PADILLA.png', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Cesar Mentasti Padilla', partido: 'UNIDAD' },
-      { foto: '/new/suplentes/g2/MARCELA GUERRERO VILCA.png', cargo: 'SENADORA SUPLENTE', nombre: 'Marcela Guerrero Vilca', partido: 'UNIDAD' }
+      { foto: '/new/titulares/g2/CESAR MENTASTI PADILLA.png', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Cesar', apellido:'Mentasti Padilla', partido: 'UNIDAD' },
+      { foto: '/new/suplentes/g2/MARCELA GUERRERO VILCA.png', cargo: 'SENADORA SUPLENTE', nombre: 'Marcela', apellido:'Guerrero Vilca', partido: 'UNIDAD' }
     ],
     tituloLinea1: 'COMITÉ DE AUTONOMÍAS MUNICIPALES, INDÍGENA ORIGINARIO CAMPESINAS Y REGIONALES',
     miembrosGrupo2: [
-      { foto: '/new/titulares/g3/JOSE ROCA HAENSEL.png', cargo: 'SECRETARIO DE COMITÉ', nombre: 'Jose Roca Haensel', partido: 'UNIDAD' },
-      { foto: '/new/suplentes/g3/MABEL GIORDANO SONNENSCHEIN.png', cargo: 'SENADORA SUPLENTE', nombre: 'Mabel Giordano Sonnenschein', partido: 'UNIDAD' }
+      { foto: '/new/titulares/g3/JOSE ROCA HAENSEL.png', cargo: 'SECRETARIO DE COMITÉ', nombre: 'Jose', apellido:'Roca Haensel', partido: 'UNIDAD' },
+      { foto: '/new/suplentes/g3/MABEL GIORDANO SONNENSCHEIN.png', cargo: 'SENADORA SUPLENTE', nombre: 'Mabel', apellido:'Giordano Sonnenschein', partido: 'UNIDAD' }
     ],
     tituloLinea2: 'COMITÉ DE AUTONOMÍAS DEPARTAMENTALES',
     miembrosGrupo3: [
-      { foto: '/new/titulares/g3/ERNESTO SUAREZ SATTORI.png', cargo: 'SECRETARIO DE COMITÉ', nombre: 'Ernesto Suarez Sattori', partido: 'LIBRE' },
-      { foto: '/new/suplentes/g3/CLAUDIA CARDENAS VELASQUEZ.png', cargo: 'SENADORA SUPLENTE', nombre: 'Claudia Cardenas Velasquez', partido: 'LIBRE' }
+      { foto: '/new/titulares/g3/ERNESTO SUAREZ SATTORI.png', cargo: 'SECRETARIO DE COMITÉ', nombre: 'Ernesto', apellido:'Suarez Sattori', partido: 'LIBRE' },
+      { foto: '/new/suplentes/g3/CLAUDIA CARDENAS VELASQUEZ.png', cargo: 'SENADORA SUPLENTE', nombre: 'Claudia', apellido:'Cardenas Velasquez', partido: 'LIBRE' }
     ]
   },
   5: {
     miembrosGrupo1: [
-      { foto: '/new/titulares/g3/ELIANA RINA ACOSTA QUISPE.png', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Eliana Rina Acosta Quispe', partido: 'UNIDAD' },
-      { foto: '/new/suplentes/g3/SICHARD HANS SORAIDE CASTEDO.png', cargo: 'SENADOR SUPLENTE', nombre: 'Sichard Hans Soraide Castedo', partido: 'UNIDAD' }
+      { foto: '/new/titulares/g3/ELIANA RINA ACOSTA QUISPE.png', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Eliana Rina', apellido:'Acosta Quispe', partido: 'UNIDAD' },
+      { foto: '/new/suplentes/g3/SICHARD HANS SORAIDE CASTEDO.png', cargo: 'SENADOR SUPLENTE', nombre: 'Sichard Hans', apellido:'Soraide Castedo', partido: 'UNIDAD' }
     ],
     tituloLinea1: 'COMITÉ DE PLANIFICACIÓN, PRESUPUESTO, INVERSIÓN PÚBLICA Y CONTRALORÍA GENERAL DEL ESTADO',
     miembrosGrupo2: [
-      { foto: '/new/titulares/g2/LEONOR ROSALVA ROMERO GUTIERREZ.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Leonor Rosalva Romero Gutierrez', partido: 'UNIDAD' },
-      { foto: '/new/suplentes/g2/MARCO ANTONIO SEGOVIA VARGAS.png', cargo: 'SENADOR SUPLENTE', nombre: 'Marco Antonio Segovia Vargas', partido: 'UNIDAD' }
+      { foto: '/new/titulares/g2/LEONOR ROSALVA ROMERO GUTIERREZ.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Leonor Rosalva', apellido:'Romero Gutierrez', partido: 'UNIDAD' },
+      { foto: '/new/suplentes/g2/MARCO ANTONIO SEGOVIA VARGAS.png', cargo: 'SENADOR SUPLENTE', nombre: 'Marco Antonio', apellido:'Segovia Vargas', partido: 'UNIDAD' }
     ],
     tituloLinea2: 'COMITÉ DE POLÍTICAS FINANCIERA, MONETARIA, TRIBUTARIA Y SEGUROS',
     miembrosGrupo3: [
-      { foto: '/new/titulares/g1/ABDON PORCEL ARANCIBIA.png', cargo: 'SECRETARIO DE COMITÉ', nombre: 'Abdon Porcel Arancibia', partido: 'LIBRE' },
-      { foto: '/new/suplentes/g1/ILSE FATIMA DAVILA ARANCIBIA.png', cargo: 'SENADORA SUPLENTE', nombre: 'Ilse Fatima Davila Arancibia', partido: 'LIBRE' }
+      { foto: '/new/titulares/g1/ABDON PORCEL ARANCIBIA.png', cargo: 'SECRETARIO DE COMITÉ', nombre: 'Abdon', apellido:'Porcel Arancibia', partido: 'LIBRE' },
+      { foto: '/new/suplentes/g1/ILSE FATIMA DAVILA ARANCIBIA.png', cargo: 'SENADORA SUPLENTE', nombre: 'Ilse Fatima', apellido:'Davila Arancibia', partido: 'LIBRE' }
     ]
   },
   6: {
     miembrosGrupo1: [
-      { foto: '/new/titulares/g1/ANA MARIA CRISPIN CHOQUE.png', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Ana Maria Crispin Choque', partido: 'PDC' },
-      { foto: '/new/suplentes/g1/VICTOR SEVERO QUISPE SANTANDER.png', cargo: 'SENADORSUPLENTE', nombre: 'Victor Severo Quispe Santander', partido: 'PDC' }
+      { foto: '/new/titulares/g1/ANA MARIA CRISPIN CHOQUE.png', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Ana Maria', apellido:'Crispin Choque', partido: 'PDC' },
+      { foto: '/new/suplentes/g1/VICTOR SEVERO QUISPE SANTANDER.png', cargo: 'SENADORSUPLENTE', nombre: 'Victor Severo', apellido:'Quispe Santander', partido: 'PDC' }
     ],
     tituloLinea1: 'COMITÉ DE ENERGÍA, HIDROCARBUROS, MINERÍA Y METALURGIA',
     miembrosGrupo2: [
-      { foto: '/new/titulares/g2/MARCELINO FLORES ORDOÑEZ.png', cargo: 'SECRETARIODE COMITÉ', nombre: 'Marcelino Flores Ordoñez', partido: 'PDC' },
-      { foto: '/new/suplentes/g2/SUSANA GABRIELA RUIZ ZULETA.png', cargo: 'SENADORA SUPLENTE', nombre: 'Susana Gabriela Ruiz Zuleta', partido: 'PDC' }
+      { foto: '/new/titulares/g2/MARCELINO FLORES ORDOÑEZ.png', cargo: 'SECRETARIODE COMITÉ', nombre: 'Marcelino', apellido:'Flores Ordoñez', partido: 'PDC' },
+      { foto: '/new/suplentes/g2/SUSANA GABRIELA RUIZ ZULETA.png', cargo: 'SENADORA SUPLENTE', nombre: 'Susana Gabriela', apellido:'Ruiz Zuleta', partido: 'PDC' }
     ],
     tituloLinea2: 'COMITÉ DE ECONOMÍA PLURAL, DESARROLLO PRODUCTIVO, OBRAS PÚBLICAS E INFRAESTRUCTURA',
     miembrosGrupo3: [
-      { foto: '/new/titulares/g2/BETTY CANAVIRI VILLANUEVA.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Betty Canaviri Villanueva', partido: 'LIBRE' },
-      { foto: '/new/suplentes/g2/ROGER MAMANI CORONADO.png', cargo: 'SENADOR SUPLENTE', nombre: 'Roger Mamani Coronado', partido: 'LIBRE' }
+      { foto: '/new/titulares/g2/BETTY CANAVIRI VILLANUEVA.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Betty', apellido:'Canaviri Villanueva', partido: 'LIBRE' },
+      { foto: '/new/suplentes/g2/ROGER MAMANI CORONADO.png', cargo: 'SENADOR SUPLENTE', nombre: 'Roger', apellido:'Mamani Coronado', partido: 'LIBRE' }
     ]
   },
   7: {
     miembrosGrupo1: [
-      { foto: '/new/titulares/g1/JOSE MANUEL ORMACHEA MENDIETA.png', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Jose Manuel Ormachea Mendieta', partido: 'LIBRE' },
-      { foto: '/new/suplentes/g1/MARIA ELENA PACHACUTE TICONA.png', cargo: 'SENADORA SUPLENTE', nombre: 'Maria Elena Pachacute Ticona', partido: 'LIBRE' }
+      { foto: '/new/titulares/g1/JOSE MANUEL ORMACHEA MENDIETA.png', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Jose Manuel', apellido:'Ormachea Mendieta', partido: 'LIBRE' },
+      { foto: '/new/suplentes/g1/MARIA ELENA PACHACUTE TICONA.png', cargo: 'SENADORA SUPLENTE', nombre: 'Maria Elena', apellido:'Pachacute Ticona', partido: 'LIBRE' }
     ],
     tituloLinea1: 'COMITÉ DE NACIONES Y PUEBLOS INDÍGENA ORIGINARIO CAMPESINOS',
     miembrosGrupo2: [
-      { foto: '/new/titulares/g2/BERTHA NURMY GUTIERREZ MENESES.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Bertha Nurmy Gutierrez Meneses', partido: 'PDC' },
-      { foto: '/new/suplentes/g2/FREDDY RIOJA MELGAR.png', cargo: 'SENADOR SUPLENTE', nombre: 'Freddy Rioja Melgar', partido: 'PDC' }
+      { foto: '/new/titulares/g2/BERTHA NURMY GUTIERREZ MENESES.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Bertha Nurmy', apellido:'Gutierrez Meneses', partido: 'PDC' },
+      { foto: '/new/suplentes/g2/FREDDY RIOJA MELGAR.png', cargo: 'SENADOR SUPLENTE', nombre: 'Freddy', apellido:'Rioja Melgar', partido: 'PDC' }
     ],
     tituloLinea2: 'COMITÉ DE CULTURAS, INTERCULTURALIDAD Y PATRIMONIO CULTURAL',
     miembrosGrupo3: [
-      { foto: '/new/titulares/g1/BERTHA CARTAGENA SANCHEZ.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Bertha Cartagena Sanchez', partido: 'PDC' },
-      { foto: '/new/suplentes/g1/MANFRED LEO PEREZ HASSENTEUFEL.png', cargo: 'SENADOR SUPLENTE', nombre: 'Manfred Leo Perez Hassenteufel', partido: 'PDC' }
+      { foto: '/new/titulares/g1/BERTHA CARTAGENA SANCHEZ.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Bertha', apellido:'Cartagena Sanchez', partido: 'PDC' },
+      { foto: '/new/suplentes/g1/MANFRED LEO PEREZ HASSENTEUFEL.png', cargo: 'SENADOR SUPLENTE', nombre: 'Manfred Leo', apellido:'Perez Hassenteufel', partido: 'PDC' }
     ]
   },
   8: {
     miembrosGrupo1: [
-      { foto: '/new/titulares/g2/JOSE SANCHEZ AGUILAR.png', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Jose Sanchez Aguilar', partido: 'LIBRE' },
-      { foto: '/new/suplentes/g2/CINTHYA INGA GUTIERREZ GUZMAN.png', cargo: 'SENADORA SUPLENTE', nombre: 'Cinthya Inga Gutierrez Guzman', partido: 'LIBRE' }
+      { foto: '/new/titulares/g2/JOSE SANCHEZ AGUILAR.png', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Jose', apellido:'Sanchez Aguilar', partido: 'LIBRE' },
+      { foto: '/new/suplentes/g2/CINTHYA INGA GUTIERREZ GUZMAN.png', cargo: 'SENADORA SUPLENTE', nombre: 'Cinthya Inga', apellido:'Gutierrez Guzman', partido: 'LIBRE' }
     ],
     tituloLinea1: 'COMITÉ DE EDUCACIÓN, SALUD, CIENCIA, TECNOLOGÍA Y DEPORTES',
     miembrosGrupo2: [
-      { foto: '/new/titulares/g2/MARIA ANTONIETA ALCON SANCHEZ.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Maria Antonieta Alcon Sanchez', partido: 'PDC' },
-      { foto: '/new/suplentes/g2/EDWIN LOPEZ QUIROGA.png', cargo: 'SENADOR SUPLENTE', nombre: 'Edwin Lopez Quiroga', partido: 'PDC' }
+      { foto: '/new/titulares/g2/MARIA ANTONIETA ALCON SANCHEZ.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Maria Antonieta', apellido:'Alcon Sanchez', partido: 'PDC' },
+      { foto: '/new/suplentes/g2/EDWIN LOPEZ QUIROGA.png', cargo: 'SENADOR SUPLENTE', nombre: 'Edwin', apellido:'Lopez Quiroga', partido: 'PDC' }
     ],
     tituloLinea2: 'COMITÉ DE VIVIENDA, RÉGIMEN LABORAL, SEGURIDAD INDUSTRIAL Y SEGURIDAD SOCIAL',
     miembrosGrupo3: [
-      { foto: '/new/titulares/g1/CLAUDIA MALLON VARGAS.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Claudia Mallon Vargas', partido: 'APB SUMATE' },
-      { foto: '/new/suplentes/g1/APOLINAR RIVERA MUÑOZ.png', cargo: 'SENADOR SUPLENTE', nombre: 'Apolinar Rivera Muñoz', partido: 'APB SUMATE' }
+      { foto: '/new/titulares/g1/CLAUDIA MALLON VARGAS.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Claudia', apellido:'Mallon Vargas', partido: 'APB SUMATE' },
+      { foto: '/new/suplentes/g1/APOLINAR RIVERA MUÑOZ.png', cargo: 'SENADOR SUPLENTE', nombre: 'Apolinar', apellido:'Rivera Muñoz', partido: 'APB SUMATE' }
     ]
   },
   9: {
     miembrosGrupo1: [
-      { foto: '/new/titulares/g1/NICANOR GONZALO COCHI CONDORI.png', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Nicanor Gonzalo Cochi Condori', partido: 'PDC' },
-      { foto: '/new/suplentes/g1/ROXANA MAMANI COLQUEHUANCA.png', cargo: 'SENADORA SUPLENTE', nombre: 'Roxana Mamani Colquehuanca', partido: 'PDC' }
+      { foto: '/new/titulares/g1/NICANOR GONZALO COCHI CONDORI.png', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Nicanor Gonzalo', apellido:'Cochi Condori', partido: 'PDC' },
+      { foto: '/new/suplentes/g1/ROXANA MAMANI COLQUEHUANCA.png', cargo: 'SENADORA SUPLENTE', nombre: 'Roxana', apellido:'Mamani Colquehuanca', partido: 'PDC' }
     ],
     tituloLinea1: 'COMITÉ DE ASUNTOS EXTERIORES, INTERPARLAMENTARIOS Y ORGANISMOS INTERNACIONALES',
     miembrosGrupo2: [
-      { foto: '/new/titulares/g2/TERESA ALARCON ARANA.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Teresa Alarcon Arana', partido: 'PDC' },
+      { foto: '/new/titulares/g2/TERESA ALARCON ARANA.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Teresa', apellido:'Alarcon Arana', partido: 'PDC' },
     ],
     tituloLinea2: 'COMITÉ DE RELACIONES ECONÓMICAS INTERNACIONALES',
     miembrosGrupo3: [
-      { foto: '/new/titulares/g1/WANDA XIMENA MEDRANO HERVAS.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Wanda Ximena Medrano Hervas', partido: 'LIBRE' },
-      { foto: '/new/suplentes/g1/ALDO SERGIO VILLEGAS MORA.png', cargo: 'SENADOR SUPLENTE', nombre: 'Aldo Sergio Villegas Mora', partido: 'LIBRE' }
+      { foto: '/new/titulares/g1/WANDA XIMENA MEDRANO HERVAS.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Wanda Ximena', apellido:'Medrano Hervas', partido: 'LIBRE' },
+      { foto: '/new/suplentes/g1/ALDO SERGIO VILLEGAS MORA.png', cargo: 'SENADOR SUPLENTE', nombre: 'Aldo Sergio', apellido:'Villegas Mora', partido: 'LIBRE' }
     ]
   },
   10: {
     miembrosGrupo1: [
-      { foto: '/new/titulares/g3/BRANKO GORAN MARINKOVIC JOVICEVIC.png', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Branko Goran Marinkovic Jovicevic', partido: 'LIBRE' },
-      { foto: '/new/suplentes/g3/KATHIA NATALIA MISERENDINO ROMERO.png', cargo: 'SENADORA SUPLENTE', nombre: 'Kathia Natalia Miserendino Romero', partido: 'LIBRE' }
+      { foto: '/new/titulares/g3/BRANKO GORAN MARINKOVIC JOVICEVIC.png', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Branko Goran', apellido:'Marinkovic Jovicevic', partido: 'LIBRE' },
+      { foto: '/new/suplentes/g3/KATHIA NATALIA MISERENDINO ROMERO.png', cargo: 'SENADORA SUPLENTE', nombre: 'Kathia Natalia', apellido:'Miserendino Romero', partido: 'LIBRE' }
     ],
     tituloLinea1: 'COMITÉ DE TIERRA Y TERRITORIO, RECURSOS NATURALES Y HOJA DE LA COCA',
     miembrosGrupo2: [
-      { foto: '/new/titulares/g3/CAROL CARLO DURAN.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Carol Carlo Duran', partido: 'LIBRE' },
-      { foto: '/new/suplentes/g3/JORGE ANTONIO QUISPE FLORES.png', cargo: 'SENADOR SUPLENTE', nombre: 'Jorge Antonio Quispe Flores', partido: 'LIBRE' }
+      { foto: '/new/titulares/g3/CAROL CARLO DURAN.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Carol', apellido:'Carlo Duran', partido: 'LIBRE' },
+      { foto: '/new/suplentes/g3/JORGE ANTONIO QUISPE FLORES.png', cargo: 'SENADOR SUPLENTE', nombre: 'Jorge Antonio', apellido:'Quispe Flores', partido: 'LIBRE' }
     ],
     tituloLinea2: 'COMITÉ DE MEDIO AMBIENTE, BIODIVERSIDAD, AMAZONÍA, ÁREAS PROTEGIDAS Y CAMBIO CLIMÁTICO',
     miembrosGrupo3: [
-      { foto: '/new/titulares/g3/CINTIA MONICA PUERTA CAMPOS.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Cintia Monica Puerta Campos', partido: 'PDC' },
-      { foto: '/new/suplentes/g3/JESUS HUMBERTO SUAREZ EGUEZ.png', cargo: 'SENADOR SUPLENTE', nombre: 'Jesus Humberto Suarez Eguez', partido: 'PDC' }
+      { foto: '/new/titulares/g3/CINTIA MONICA PUERTA CAMPOS.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Cintia Monica', apellido:'Puerta Campos', partido: 'PDC' },
+      { foto: '/new/suplentes/g3/JESUS HUMBERTO SUAREZ EGUEZ.png', cargo: 'SENADOR SUPLENTE', nombre: 'Jesus Humberto', apellido:'Suarez Eguez', partido: 'PDC' }
     ]
   }
 }
@@ -823,52 +794,61 @@ const partidoSeleccionado = ref(null)
 const mostrarSuplentes = ref(false)
 
 const senadoresData = [
-  { nombre: 'Cintia Monica Puerta Campos', suplente: 'Jesus Humberto Suarez Eguez', partido: 'pdc', departamento:'Pando', imagen:'new/titulares/g3/CINTIA MONICA PUERTA CAMPOS.png', imagensu:'new/suplentes/g3/JESUS HUMBERTO SUAREZ EGUEZ.png', pos:116 },
-  { nombre: 'Paola Limbania Lopez Zeballos', suplente: 'Richard Espada Ugarte', partido: 'pdc', departamento:'Santa Cruz', imagen:'new/titulares/g3/PAOLA LIMBANIA LOPEZ ZEBALLOS.png', imagensu:'new/suplentes/g3/RICHARD ESPADA UGARTE.png', pos:114 },
-  { nombre: 'Diego Esteban Mateo Avila Navajas', suplente: 'Luzmaya Zelaya Vega', partido: 'pdc', departamento:'Tarija', imagen:'new/titulares/g2/DIEGO ESTEBAN MATEO ÁVILA NAVAJAS.png', imagensu:'new/suplentes/g2/LUZMAYA ZELAYA VEGA.png', pos:113 },
-  { nombre: 'Maria Isabel Moreno Cortez', suplente: 'Rolando Vacaflor Gabriel Arana', partido: 'libre', departamento:'Tarija', imagen:'new/titulares/g2/MARIA ISABEL MORENO CORTEZ.png', imagensu:'new/suplentes/g2/ROLANDO VACAFLOR GABRIEL ARANA.png', pos:207 },
-  { nombre: 'Yasmin Estivariz Villarroel', suplente: 'Ramiro Mamani Ramirez', partido: 'pdc', departamento:'Oruro', imagen:'new/titulares/g2/YASMIN ESTIVARIZ VILLARROEL.png', imagensu:'new/suplentes/g2/RAMIRO MAMANI RAMIREZ.png', pos:107},
-  { nombre: 'Wilder Veliz Armas', suplente: 'Lenny Mayra Ayala Justiniano', partido: 'pdc', departamento:'Cochabamba', imagen:'new/titulares/g1/WILDER VELIZ ARMAS.png', imagensu:'new/suplentes/g1/LENNY MAYRA AYALA JUSTINIANO.png', pos:105 },
-  { nombre: 'Judith Rosario Garcia Coca', suplente: 'Royer Ivan Mamani Garcia', partido: 'pdc', departamento:'Cochabamba', imagen:'new/titulares/g1/JUDITH ROSARIO GARCIA COCA.png', imagensu:'new/suplentes/g1/ROYER IVAN MAMANI GARCIA.png', pos:106 },
-  { nombre: 'Nicanor Gonzalo Cochi Condori', suplente: 'Roxana Mamani Colquehuanca', partido: 'pdc', departamento:'La Paz', imagen:'new/titulares/g1/NICANOR GONZALO COCHI CONDORI.png', imagensu:'new/suplentes/g1/ROXANA MAMANI COLQUEHUANCA.png', pos:103 },
-  { nombre: 'Bertha Cartagena Sanchez', suplente: 'Manfred Leo Perez Hassenteufel', partido: 'pdc', departamento:'Chuquisaca', imagen:'new/titulares/g1/BERTHA CARTAGENA SANCHEZ.png', imagensu:'new/suplentes/g1/MANFRED LEO PEREZ HASSENTEUFEL.png', pos:101 },
-  { nombre: 'Bertha Nurmy Gutierrez Meneses De Mamani', suplente: 'Freddy Rioja Melgar', partido: 'pdc', departamento:'Potosí', imagen:'new/titulares/g2/BERTHA NURMY GUTIERREZ MENESES.png', imagensu:'new/suplentes/g2/FREDDY RIOJA MELGAR.png', pos:110 },
-  { nombre: 'Marcelino Flores Ordoñez', suplente: 'Susana Gabriela Ruiz Zuleta', partido: 'pdc', departamento:'Potosí', imagen:'new/titulares/g2/MARCELINO FLORES ORDOÑEZ.png', imagensu:'new/suplentes/g2/SUSANA GABRIELA RUIZ ZULETA.png', pos:111 },
-  { nombre: 'Branko Goran Marinkovic Jovicevic', suplente: 'Kathia Natalia Miserendino Romero', partido: 'libre', departamento:'Santa Cruz', imagen:'new/titulares/g3/BRANKO GORAN MARINKOVIC JOVICEVIC.png', imagensu:'new/suplentes/g3/KATHIA NATALIA MISERENDINO ROMERO.png', pos:208 },
-  { nombre: 'Carol Carlo Duran', suplente: 'Jorge Antonio Quispe Flores', partido: 'libre', departamento:'Pando', imagen:'new/titulares/g3/CAROL CARLO DURAN.png', imagensu:'new/suplentes/g3/JORGE ANTONIO QUISPE FLORES.png', pos:211 },
-  { nombre: 'Cesar Mentasti Padilla', suplente: 'Marcela Guerrero Vilca', partido: 'alianza', departamento:'Tarija', imagen:'new/titulares/g2/CESAR MENTASTI PADILLA.png', imagensu:'new/suplentes/g2/MARCELA GUERRERO VILCA.png', pos:302 },
-  { nombre: 'Claudia Mallon Vargas', suplente: 'Apolinar Rivera Muñoz', partido: 'sumate', departamento:'Cochabamba', imagen:'new/titulares/g1/CLAUDIA MALLON VARGAS.png', imagensu:'new/suplentes/g1/APOLINAR RIVERA MUÑOZ.png', pos:401 },
-  { nombre: 'Daniel Antonio Ortiz Velasquez', suplente: 'Reina Isabel Pallares Morales', partido: 'pdc', departamento:'Chuquisaca', imagen:'new/titulares/g1/DANIEL ANTONIO ORTIZ VELASQUEZ.png', imagensu:'new/suplentes/g1/REINA ISABEL PALLARES MORALES.png', pos:102 },
-  { nombre: 'Erick Nelson Soruco Alpire', suplente: 'Cesia Roca Escalante', partido: 'pdc', departamento:'Beni', imagen:'new/titulares/g3/ERICK NELSON SORUCO ALPIRE.png', imagensu:'new/suplentes/g3/CESIA ROCA ESCALANTE.png', pos:115 },
-  { nombre: 'Ernesto Suarez Sattori', suplente: 'Claudia Cardenas Velasquez', partido: 'libre', departamento:'Beni', imagen:'new/titulares/g3/ERNESTO SUAREZ SATTORI.png', imagensu:'new/suplentes/g3/CLAUDIA CARDENAS VELASQUEZ.png', pos:210 },
-  { nombre: 'Freddy Castillo Chavez', suplente: 'Villma Colque Camacho', partido: 'pdc', departamento:'Oruro', imagen:'new/titulares/g2/FREDDY CASTILLO CHAVEZ.png', imagensu:'new/suplentes/g2/VILLMA COLQUE CAMACHO.png', pos:108 },
-  { nombre: 'Jose Roca Haensel', suplente: 'Mabel Giordano Sonnenschein', partido: 'alianza', departamento:'Beni', imagen:'new/titulares/g3/JOSE ROCA HAENSEL.png', imagensu:'new/suplentes/g3/MABEL GIORDANO SONNENSCHEIN.png', pos:305 },
-  { nombre: 'Leonor Rosalva Romero Gutierrez', suplente: 'Marco Antonio Segovia Vargas', partido: 'alianza', departamento:'Tarija', imagen:'new/titulares/g2/LEONOR ROSALVA ROMERO GUTIERREZ.png', imagensu:'new/suplentes/g2/MARCO ANTONIO SEGOVIA VARGAS.png', pos:303 },
-  { nombre: 'Teresa Alarcon Arana', suplente: '', partido: 'pdc', departamento:'Potosí', imagen:'new/titulares/g2/TERESA ALARCON ARANA.png', imagensu:'', pos:112 },
-  { nombre: 'Tomasa Yarhui Jacome', suplente: 'Hugo Marcelo Cortez Calvimontes', partido: 'libre', departamento:'Chuquisaca', imagen:'new/titulares/g1/TOMASA YARHUI JACOME.png', imagensu:'new/suplentes/g1/HUGO MARCELO CORTEZ CALVIMONTES.png', pos:201 },
-  { nombre: 'Wanda Ximena Medrano Hervas', suplente: 'Aldo Sergio Villegas Mora', partido: 'libre', departamento:'Cochabamba', imagen:'new/titulares/g1/WANDA XIMENA MEDRANO HERVAS.png', imagensu:'new/suplentes/g1/ALDO SERGIO VILLEGAS MORA.png', pos:204 },
-  { nombre: 'Ana Maria Crispin Choque', suplente: 'Victor S. Quispe Santander', partido: 'pdc', departamento:'La Paz', imagen:'new/titulares/g1/ANA MARIA CRISPIN CHOQUE.png', imagensu:'new/suplentes/g1/VICTOR SEVERO QUISPE SANTANDER.png', pos:104 },
-  { nombre: 'Jose Manuel Ormachea Mendienta', suplente: 'Maria Elena Pachacute Ticona', partido: 'libre', departamento:'La Paz', imagen:'new/titulares/g1/JOSE MANUEL ORMACHEA MENDIETA.png', imagensu:'new/suplentes/g1/MARIA ELENA PACHACUTE TICONA.png', pos:203},
-  { nombre: 'Maria Antonieta Alcon Sanchez', suplente: 'Edwin Lopez Quiroga', partido: 'pdc', departamento:'Oruro', imagen:'new/titulares/g2/MARIA ANTONIETA ALCON SANCHEZ.png', imagensu:'new/suplentes/g2/EDWIN LOPEZ QUIROGA.png', pos:109 },
-  { nombre: 'Ana Karina Velasco Añez', suplente: 'Marcelo Matias Cardona Ibañez', partido: 'alianza', departamento:'Beni', imagen:'new/titulares/g3/ANA KARINA VELASCO ÁÑEZ.png', imagensu:'new/suplentes/g3/MARCELO MATIAS CARDONA IBAÑEZ.png', pos:306 },
-  { nombre: 'Betty Canaviri Villanueva', suplente: 'Roger Mamani Coronado', partido: 'libre', departamento:'Potosí', imagen:'new/titulares/g2/BETTY CANAVIRI VILLANUEVA.png', imagensu:'new/suplentes/g2/ROGER MAMANI CORONADO.png', pos:206 },
-  { nombre: 'Carmen Soledad Chapeton Tancara', suplente: 'Nilton Condori Alanoca', partido: 'alianza', departamento:'La Paz', imagen:'new/titulares/g1/CARMEN SOLEDAD CHAPETÓN TANCARA.png', imagensu:'new/suplentes/g1/NILTON CONDORI ALANOCA.png', pos:301 },
-  { nombre: 'Julio Diego Romaña Galindo', suplente: 'Carolina Giese Urresti', partido: 'libre', departamento:'Pando', imagen:'new/titulares/g3/JULIO DIEGO ROMAÑA GALINDO.png', imagensu:'new/suplentes/g3/CAROLINA GIESE URRESTI.png', pos:212 },
-  { nombre: 'Kathia Lisbeth Quiroga Fernandez', suplente: 'Leonardo Roca Eguez', partido: 'libre', departamento:'Santa Cruz', imagen:'new/titulares/g3/KATHIA LISBETH QUIROGA FERNÁNDEZ.png', imagensu:'new/suplentes/g3/LEONARDO ROCA EGUEZ.png', pos:209 },
-  { nombre: 'Rosa Tatiana Añez Carrasco', suplente: 'Lorgio Fernando Pareja Saucedo', partido: 'alianza', departamento:'Santa Cruz', imagen:'new/titulares/g3/ROSA TATIANA AÑEZ CARRASCO.png', imagensu:'new/suplentes/g3/LORGIO FERNANDO PAREJA SAUCEDO.png', pos:304 },
-  { nombre: 'Abdon Porcel Arancibia', suplente: 'Ilse Fatima Davila Arancibia', partido: 'libre', departamento:'Chuquisaca', imagen:'/new/titulares/g1/ABDON PORCEL ARANCIBIA.png', imagensu:'new/suplentes/g1/ILSE FATIMA DAVILA ARANCIBIA.png', pos:202},
-  { nombre: 'Jose Sanchez Aguilar', suplente: 'Cinthya Inga Gutierrez Guzman', partido: 'libre', departamento:'Oruro', imagen:'new/titulares/g2/JOSE SANCHEZ AGUILAR.png', imagensu:'new/suplentes/g2/CINTHYA INGA GUTIERREZ GUZMAN.png', pos:205 },
-  { nombre: 'Eliana Rina Acosta Quispe', suplente: 'Sichard Hans Soraide Castedo', partido: 'alianza', departamento:'Pando', imagen:'new/titulares/g3/ELIANA RINA ACOSTA QUISPE.png', imagensu:'new/suplentes/g3/SICHARD HANS SORAIDE CASTEDO.png', pos:307 },
+  { tnombre: 'Cintia Monica', tapellido:'Puerta Campos', snombre: 'Jesus Humberto', sapellido:'Suarez Eguez', partido: 'pdc', departamento:'Pando', imagen:'new/titulares/g3/CINTIA MONICA PUERTA CAMPOS.png', imagensu:'new/suplentes/g3/JESUS HUMBERTO SUAREZ EGUEZ.png', pos:116 },
+  { tnombre: 'Paola Limbania', tapellido:'Lopez Zeballos', snombre: 'Richard', sapellido:'Espada Ugarte', partido: 'pdc', departamento:'Santa Cruz', imagen:'new/titulares/g3/PAOLA LIMBANIA LOPEZ ZEBALLOS.png', imagensu:'new/suplentes/g3/RICHARD ESPADA UGARTE.png', pos:114 },
+  { tnombre: 'Diego Esteban Mateo', tapellido:'Avila Navajas', snombre: 'Luzmaya', sapellido:'Zelaya Vega', partido: 'pdc', departamento:'Tarija', imagen:'new/titulares/g2/DIEGO ESTEBAN MATEO ÁVILA NAVAJAS.png', imagensu:'new/suplentes/g2/LUZMAYA ZELAYA VEGA.png', pos:113 },
+  { tnombre: 'Maria Isabel', tapellido:'Moreno Cortez', snombre: 'Rolando Vacaflor', sapellido:'Gabriel Arana', partido: 'libre', departamento:'Tarija', imagen:'new/titulares/g2/MARIA ISABEL MORENO CORTEZ.png', imagensu:'new/suplentes/g2/ROLANDO VACAFLOR GABRIEL ARANA.png', pos:207 },
+  { tnombre: 'Yasmin', tapellido:'Estivariz Villarroel', snombre: 'Ramiro', sapellido:'Mamani Ramirez', partido: 'pdc', departamento:'Oruro', imagen:'new/titulares/g2/YASMIN ESTIVARIZ VILLARROEL.png', imagensu:'new/suplentes/g2/RAMIRO MAMANI RAMIREZ.png', pos:107},
+  { tnombre: 'Wilder', tapellido:'Veliz Armas', snombre: 'Lenny Mayra', sapellido:'Ayala Justiniano', partido: 'pdc', departamento:'Cochabamba', imagen:'new/titulares/g1/WILDER VELIZ ARMAS.png', imagensu:'new/suplentes/g1/LENNY MAYRA AYALA JUSTINIANO.png', pos:105 },
+  { tnombre: 'Judith Rosario', tapellido:'Garcia Coca', snombre: 'Royer Ivan', sapellido:'Mamani Garcia', partido: 'pdc', departamento:'Cochabamba', imagen:'new/titulares/g1/JUDITH ROSARIO GARCIA COCA.png', imagensu:'new/suplentes/g1/ROYER IVAN MAMANI GARCIA.png', pos:106 },
+  { tnombre: 'Nicanor Gonzalo', tapellido:'Cochi Condori', snombre: 'Roxana', sapellido:'Mamani Colquehuanca', partido: 'pdc', departamento:'La Paz', imagen:'new/titulares/g1/NICANOR GONZALO COCHI CONDORI.png', imagensu:'new/suplentes/g1/ROXANA MAMANI COLQUEHUANCA.png', pos:103 },
+  { tnombre: 'Bertha', tapellido:'Cartagena Sanchez', snombre: 'Manfred Leo', sapellido:'Perez Hassenteufel', partido: 'pdc', departamento:'Chuquisaca', imagen:'new/titulares/g1/BERTHA CARTAGENA SANCHEZ.png', imagensu:'new/suplentes/g1/MANFRED LEO PEREZ HASSENTEUFEL.png', pos:101 },
+  { tnombre: 'Bertha Nurmy', tapellido:'Gutierrez Meneses De Mamani', snombre: 'Freddy', sapellido:'Rioja Melgar', partido: 'pdc', departamento:'Potosí', imagen:'new/titulares/g2/BERTHA NURMY GUTIERREZ MENESES.png', imagensu:'new/suplentes/g2/FREDDY RIOJA MELGAR.png', pos:110 },
+  { tnombre: 'Marcelino', tapellido:'Flores Ordoñez', snombre: 'Susana Gabriela', sapellido:'Ruiz Zuleta', partido: 'pdc', departamento:'Potosí', imagen:'new/titulares/g2/MARCELINO FLORES ORDOÑEZ.png', imagensu:'new/suplentes/g2/SUSANA GABRIELA RUIZ ZULETA.png', pos:111 },
+  { tnombre: 'Branko Goran', tapellido:'Marinkovic Jovicevic', snombre: 'Kathia Natalia', sapellido:'Miserendino Romero', partido: 'libre', departamento:'Santa Cruz', imagen:'new/titulares/g3/BRANKO GORAN MARINKOVIC JOVICEVIC.png', imagensu:'new/suplentes/g3/KATHIA NATALIA MISERENDINO ROMERO.png', pos:208 },
+  { tnombre: 'Carol', tapellido:'Carlo Duran', snombre: 'Jorge Antonio', sapellido:'Quispe Flores', partido: 'libre', departamento:'Pando', imagen:'new/titulares/g3/CAROL CARLO DURAN.png', imagensu:'new/suplentes/g3/JORGE ANTONIO QUISPE FLORES.png', pos:211 },
+  { tnombre: 'Cesar', tapellido:'Mentasti Padilla', snombre: 'Marcela', sapellido:'Guerrero Vilca', partido: 'alianza', departamento:'Tarija', imagen:'new/titulares/g2/CESAR MENTASTI PADILLA.png', imagensu:'new/suplentes/g2/MARCELA GUERRERO VILCA.png', pos:302 },
+  { tnombre: 'Claudia', tapellido:'Mallon Vargas', snombre: 'Apolinar', sapellido:'Rivera Muñoz', partido: 'sumate', departamento:'Cochabamba', imagen:'new/titulares/g1/CLAUDIA MALLON VARGAS.png', imagensu:'new/suplentes/g1/APOLINAR RIVERA MUÑOZ.png', pos:401 },
+  { tnombre: 'Daniel Antonio', tapellido:'Ortiz Velasquez', snombre: 'Reina Isabel', sapellido:'Pallares Morales', partido: 'pdc', departamento:'Chuquisaca', imagen:'new/titulares/g1/DANIEL ANTONIO ORTIZ VELASQUEZ.png', imagensu:'new/suplentes/g1/REINA ISABEL PALLARES MORALES.png', pos:102 },
+  { tnombre: 'Erick Nelson', tapellido:'Soruco Alpire', snombre: 'Cesia', sapellido:'Roca Escalante', partido: 'pdc', departamento:'Beni', imagen:'new/titulares/g3/ERICK NELSON SORUCO ALPIRE.png', imagensu:'new/suplentes/g3/CESIA ROCA ESCALANTE.png', pos:115 },
+  { tnombre: 'Ernesto', tapellido:'Suarez Sattori', snombre: 'Claudia', sapellido:'Cardenas Velasquez', partido: 'libre', departamento:'Beni', imagen:'new/titulares/g3/ERNESTO SUAREZ SATTORI.png', imagensu:'new/suplentes/g3/CLAUDIA CARDENAS VELASQUEZ.png', pos:210 },
+  { tnombre: 'Freddy', tapellido:'Castillo Chavez', snombre: 'Villma', sapellido:'Colque Camacho', partido: 'pdc', departamento:'Oruro', imagen:'new/titulares/g2/FREDDY CASTILLO CHAVEZ.png', imagensu:'new/suplentes/g2/VILLMA COLQUE CAMACHO.png', pos:108 },
+  { tnombre: 'Jose', tapellido:'Roca Haensel', snombre: 'Mabel', sapellido:'Giordano Sonnenschein', partido: 'alianza', departamento:'Beni', imagen:'new/titulares/g3/JOSE ROCA HAENSEL.png', imagensu:'new/suplentes/g3/MABEL GIORDANO SONNENSCHEIN.png', pos:305 },
+  { tnombre: 'Leonor Rosalva', tapellido:'Romero Gutierrez', snombre: 'Marco Antonio', sapellido:'Segovia Vargas', partido: 'alianza', departamento:'Tarija', imagen:'new/titulares/g2/LEONOR ROSALVA ROMERO GUTIERREZ.png', imagensu:'new/suplentes/g2/MARCO ANTONIO SEGOVIA VARGAS.png', pos:303 },
+  { tnombre: 'Teresa', tapellido:'Alarcon Arana', snombre: '', sapellido:'', partido: 'pdc', departamento:'Potosí', imagen:'new/titulares/g2/TERESA ALARCON ARANA.png', imagensu:'', pos:112 },
+  { tnombre: 'Tomasa', tapellido:'Yarhui Jacome', snombre: 'Hugo Marcelo', sapellido:'Cortez Calvimontes', partido: 'libre', departamento:'Chuquisaca', imagen:'new/titulares/g1/TOMASA YARHUI JACOME.png', imagensu:'new/suplentes/g1/HUGO MARCELO CORTEZ CALVIMONTES.png', pos:201 },
+  { tnombre: 'Wanda Ximena', tapellido:'Medrano Hervas', snombre: 'Aldo Sergio', sapellido:'Villegas Mora', partido: 'libre', departamento:'Cochabamba', imagen:'new/titulares/g1/WANDA XIMENA MEDRANO HERVAS.png', imagensu:'new/suplentes/g1/ALDO SERGIO VILLEGAS MORA.png', pos:204 },
+  { tnombre: 'Ana Maria', tapellido:'Crispin Choque', snombre: 'Victor S.', sapellido:'Quispe Santander', partido: 'pdc', departamento:'La Paz', imagen:'new/titulares/g1/ANA MARIA CRISPIN CHOQUE.png', imagensu:'new/suplentes/g1/VICTOR SEVERO QUISPE SANTANDER.png', pos:104 },
+  { tnombre: 'Jose Manuel', tapellido:'Ormachea Mendienta', snombre: 'Maria Elena', sapellido:'Pachacute Ticona', partido: 'libre', departamento:'La Paz', imagen:'new/titulares/g1/JOSE MANUEL ORMACHEA MENDIETA.png', imagensu:'new/suplentes/g1/MARIA ELENA PACHACUTE TICONA.png', pos:203},
+  { tnombre: 'Maria Antonieta', tapellido:'Alcon Sanchez', snombre: 'Edwin', sapellido:'Lopez Quiroga', partido: 'pdc', departamento:'Oruro', imagen:'new/titulares/g2/MARIA ANTONIETA ALCON SANCHEZ.png', imagensu:'new/suplentes/g2/EDWIN LOPEZ QUIROGA.png', pos:109 },
+  { tnombre: 'Ana Karina', tapellido:'Velasco Añez', snombre: 'Marcelo Matias', sapellido:'Cardona Ibañez', partido: 'alianza', departamento:'Beni', imagen:'new/titulares/g3/ANA KARINA VELASCO ÁÑEZ.png', imagensu:'new/suplentes/g3/MARCELO MATIAS CARDONA IBAÑEZ.png', pos:306 },
+  { tnombre: 'Betty', tapellido:'Canaviri Villanueva', snombre: 'Roger', sapellido:'Mamani Coronado', partido: 'libre', departamento:'Potosí', imagen:'new/titulares/g2/BETTY CANAVIRI VILLANUEVA.png', imagensu:'new/suplentes/g2/ROGER MAMANI CORONADO.png', pos:206 },
+  { tnombre: 'Carmen Soledad', tapellido:'Chapeton Tancara', snombre: 'Nilton', sapellido:'Condori Alanoca', partido: 'alianza', departamento:'La Paz', imagen:'new/titulares/g1/CARMEN SOLEDAD CHAPETÓN TANCARA.png', imagensu:'new/suplentes/g1/NILTON CONDORI ALANOCA.png', pos:301 },
+  { tnombre: 'Julio Diego', tapellido:'Romaña Galindo', snombre: 'Carolina', sapellido:'Giese Urresti', partido: 'libre', departamento:'Pando', imagen:'new/titulares/g3/JULIO DIEGO ROMAÑA GALINDO.png', imagensu:'new/suplentes/g3/CAROLINA GIESE URRESTI.png', pos:212 },
+  { tnombre: 'Kathia Lisbeth', tapellido:'Quiroga Fernandez', snombre: 'Leonardo', sapellido:'Roca Eguez', partido: 'libre', departamento:'Santa Cruz', imagen:'new/titulares/g3/KATHIA LISBETH QUIROGA FERNÁNDEZ.png', imagensu:'new/suplentes/g3/LEONARDO ROCA EGUEZ.png', pos:209 },
+  { tnombre: 'Rosa Tatiana', tapellido:'Añez Carrasco', snombre: 'Lorgio Fernando', sapellido:'Pareja Saucedo', partido: 'alianza', departamento:'Santa Cruz', imagen:'new/titulares/g3/ROSA TATIANA AÑEZ CARRASCO.png', imagensu:'new/suplentes/g3/LORGIO FERNANDO PAREJA SAUCEDO.png', pos:304 },
+  { tnombre: 'Abdon', tapellido:'Porcel Arancibia', snombre: 'Ilse Fatima', sapellido:'Davila Arancibia', partido: 'libre', departamento:'Chuquisaca', imagen:'/new/titulares/g1/ABDON PORCEL ARANCIBIA.png', imagensu:'new/suplentes/g1/ILSE FATIMA DAVILA ARANCIBIA.png', pos:202},
+  { tnombre: 'Jose', tapellido:'Sanchez Aguilar', snombre: 'Cinthya Inga', sapellido:'Gutierrez Guzman', partido: 'libre', departamento:'Oruro', imagen:'new/titulares/g2/JOSE SANCHEZ AGUILAR.png', imagensu:'new/suplentes/g2/CINTHYA INGA GUTIERREZ GUZMAN.png', pos:205 },
+  { tnombre: 'Eliana Rina', tapellido:'Acosta Quispe', snombre: 'Sichard Hans', sapellido:'Soraide Castedo', partido: 'alianza', departamento:'Pando', imagen:'new/titulares/g3/ELIANA RINA ACOSTA QUISPE.png', imagensu:'new/suplentes/g3/SICHARD HANS SORAIDE CASTEDO.png', pos:307 },
 ]
 
-senadoresData.sort((a, b) => a.pos - b.pos).forEach(({nombre, suplente, partido, departamento, imagen, imagensu})=>{
-  const rellenar=(departamento)=>{
-    titularesPorDepartamento[departamento].push({nombre, partido, imagen})
-    suplentesPorDepartamento[departamento].push({nombre:suplente,partido,imagen:imagensu})
-  }
-  rellenar(departamento.toUpperCase())
-})
-
+const sorted = senadoresData.sort((a, b) => a.pos - b.pos);
+for (let i = 0; i < sorted.length; i++) {
+  const item = sorted[i];
+  const depto = item.departamento.toUpperCase();
+  titularesPorDepartamento[depto].push({ 
+    nombre: item.tnombre, 
+    partido: item.partido, 
+    imagen: item.imagen,
+    apellido: item.tapellido 
+  });
+  suplentesPorDepartamento[depto].push({ 
+    nombre: item.snombre, 
+    partido: item.partido, 
+    imagen: item.imagensu,
+    apellido: item.sapellido 
+  });
+}
 // Organizar por partido
 const miembrosPorPartido = {
   pdc: { titulares: [], suplentes: [] },
@@ -877,35 +857,40 @@ const miembrosPorPartido = {
   sumate: { titulares: [], suplentes: [] }
 }
 
-senadoresData.forEach(s => {
-  let partidoKey = s.partido
-  let {imagen, imagensu}=s
-  if (partidoKey === 'pdc') {
-    miembrosPorPartido.pdc.titulares.push({ nombre: s.nombre, partido:s.partido, departamento: s.departamento, imagen })
-    if (s.suplente) {
-      miembrosPorPartido.pdc.suplentes.push({ nombre: s.suplente, partido:s.partido, departamento: s.departamento, imagen: imagensu })
-    }
-  } else if (partidoKey === 'libre') {
-    miembrosPorPartido.libre.titulares.push({ nombre: s.nombre, partido:s.partido, departamento: s.departamento, imagen })
-    if (s.suplente) {
-      miembrosPorPartido.libre.suplentes.push({ nombre: s.suplente, partido:s.partido, departamento: s.departamento, imagen: imagensu })
-    }
-  } else if (partidoKey === 'alianza') {
-    miembrosPorPartido.alianza.titulares.push({ nombre: s.nombre, partido:s.partido, departamento: s.departamento, imagen })
-    if (s.suplente) {
-      miembrosPorPartido.alianza.suplentes.push({ nombre: s.suplente, partido:s.partido, departamento: s.departamento, imagen: imagensu })
-    }
-  } else if (partidoKey === 'sumate') {
-    miembrosPorPartido.sumate.titulares.push({ nombre: s.nombre, partido:s.partido, departamento: s.departamento, imagen })
-    if (s.suplente) {
-      miembrosPorPartido.sumate.suplentes.push({ nombre: s.suplente, partido:s.partido, departamento: s.departamento, imagen: imagensu })
+const partidoMap = {
+  pdc: miembrosPorPartido.pdc,
+  libre: miembrosPorPartido.libre,
+  alianza: miembrosPorPartido.alianza,
+  sumate: miembrosPorPartido.sumate
+};
+
+for (let i = 0; i < senadoresData.length; i++) {
+  const s = senadoresData[i];
+  const target = partidoMap[s.partido];
+  if (target) {
+    target.titulares.push({
+      nombre: s.tnombre,
+      apellido: s.tapellido,
+      partido: s.partido,
+      departamento: s.departamento,
+      imagen: s.imagen
+    });
+    if (s.snombre) {
+      target.suplentes.push({
+        nombre: s.snombre,
+        apellido: s.sapellido,
+        partido: s.partido,
+        departamento: s.departamento,
+        imagen: s.imagensu
+      });
     }
   }
-})
+}
 
 const miembrosMostrar = computed(() => {
   if (!partidoSeleccionado.value) return []
   const data = miembrosPorPartido[partidoSeleccionado.value.id]
+  console.log(44, data)
   return mostrarSuplentes.value ? data.suplentes : data.titulares
 })
 
