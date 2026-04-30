@@ -195,7 +195,7 @@
             <span class="back-icon">←</span>
             <span class="back-text">Volver</span>
           </button>
-          <div class="global-search-box">
+          <div class="global-search-box z-30">
             <input 
               type="text" 
               v-model="busquedaGlobal"
@@ -373,10 +373,10 @@
         <div v-if="!busquedaGlobal" class="tabs-content px-1 sm:px-2 md:px-3 lg:px-4 xl:px-5 py-2 sm:py-3 md:py-4 lg:py-5 xl:py-6">
           <!-- Header de Sección (Gestión) -->
           <div class="section-header text-center pb-0.5 sm:pb-1 mb-1 sm:mb-2 border-b border-[#E03636] border-opacity-30">
-            <h2 class="section-title font-bold text-[#E03636] text-[1.8vw] mb-0">
+            <h2 class="section-title font-bold text-[#E03636] text-[3.0vw] mb-0 translate-y-[-7vw]">
               {{ areaGestion?.titulo || 'Gestión' }}
             </h2>
-            <p class="section-description text-gray-600 text-[6px] sm:text-[7px] md:text-[8px] lg:text-[9px] xl:text-[11px] 2xl:text-[16px] 3xl:text-[19px] 4xl:text-[30px] 5xl:text-[45px] mx-auto">
+            <p class="section-description text-gray-600 text-[.9vw] mx-auto translate-y-[-7vw]">
               {{ areaGestion?.descripcion || 'Documentación y resoluciones de gestión institucional' }}
             </p>
           </div>
@@ -1697,7 +1697,7 @@ watch(() => route.query, (nuevoQuery, viejoQuery) => {
 }
 
 .global-search-button:hover:not(:disabled) {
-  background: #b82c2c;
+  scale: 1.1;
 }
 
 .global-search-button:disabled {
@@ -2028,7 +2028,6 @@ watch(() => route.query, (nuevoQuery, viejoQuery) => {
 .section-description {
   color: #4b5563;
   margin: 0 auto;
-  font-size: 6px;
 }
 
 .links-grid {
@@ -2127,7 +2126,6 @@ watch(() => route.query, (nuevoQuery, viejoQuery) => {
 
 /* Media queries responsivas */
 @media (min-width: 640px) {
-  .section-description { font-size: 7px; }
   .links-grid { gap: 0.375rem; }
   .link-card { border-radius: 0.375rem; padding: 0.375rem; }
   .icon-container { margin: 0.75rem; width: 2.5rem; height: 2.5rem; }
@@ -2137,7 +2135,6 @@ watch(() => route.query, (nuevoQuery, viejoQuery) => {
 }
 
 @media (min-width: 768px) {
-  .section-description { font-size: 8px; }
   .links-grid { gap: 0.5rem; }
   .link-card { border-radius: 0.5rem; padding: 0.5rem; }
   .icon-container { margin: 0.75rem; width: 3rem; height: 3rem; }
@@ -2147,7 +2144,6 @@ watch(() => route.query, (nuevoQuery, viejoQuery) => {
 }
 
 @media (min-width: 1024px) {
-  .section-description { font-size: 9px; }
   .link-card { border-radius: 0.75rem; }
   .icon-container { margin: 1rem; width: 3.5rem; height: 3.5rem; }
   .link-title { font-size: 10px; }
@@ -2156,7 +2152,6 @@ watch(() => route.query, (nuevoQuery, viejoQuery) => {
 }
 
 @media (min-width: 1280px) {
-  .section-description { font-size: 11px; }
   .links-grid { gap: 1rem; }
   .icon-container { margin: 1.25rem; width: 4rem; height: 4rem; }
   .link-title { font-size: 13px; }
@@ -2165,7 +2160,6 @@ watch(() => route.query, (nuevoQuery, viejoQuery) => {
 }
 
 @media (min-width: 1536px) {
-  .section-description { font-size: 16px; }
   .icon-container { margin: 1.5rem; width: 5rem; height: 5rem; }
   .link-title { font-size: 17px; }
   .link-description { font-size: 16px; }

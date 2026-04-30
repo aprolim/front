@@ -341,7 +341,7 @@
     </div>
 
     <!-- Contenido principal -->
-    <main class="relative z-10 pt-[72px] snap-main">
+    <main class="relative z-10 snap-main">
       <slot />
     </main>
 

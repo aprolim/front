@@ -14,7 +14,7 @@
     </h2>
 
     <!-- Tres columnas -->
-    <div class="mx-auto px-[2.5vw] mt-[2vw] flex-1">
+    <div class="mx-auto px-[2.5vw] mt-[2vw] flex-1 text-[1.60vw]">
       <div class="flex justify-center items-stretch gap-[1.25em] h-full">
         
         <!-- COLUMNA IZQUIERDA (transparente, 5% más pequeña) -->
@@ -62,7 +62,7 @@
         <div class="w-[30%] bg-transparent rounded-2xl shadow-xl border border-white/20 p-4 origin-left text-[#000] text-[1.4vw]">
           <div v-if="selectedSenador" class="h-full flex flex-col items-center justify-center">
             <!-- Foto del senador seleccionado -->
-            <div class="w-[9em] h-[9em] rounded-full overflow-hidden border-[.25em] border-[#E4D294] shadow-2xl mb-[.50em]">
+            <div class="w-[12em] h-[12em] rounded-full overflow-hidden border-[.25em] border-[#E4D294] shadow-2xl mb-[.50em]">
               <img 
                 :src="selectedSenador.foto" 
                 :alt="selectedSenador.nombre"
@@ -128,6 +128,7 @@ const senadores = ref([
 ])
 
 const selectedSenador = ref(null)
+selectedSenador.value=senadores.value[0]
 </script>
 
 <style scoped>
