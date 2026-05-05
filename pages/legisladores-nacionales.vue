@@ -1,4 +1,4 @@
-<!-- pages/nueva-pagina.vue -->
+<!-- pages/legisladores-nacionales.vue -->
 <template>
   <div class="min-h-screen text-style">
     <!-- Fondos fijos para cada sección -->
@@ -46,11 +46,16 @@
                   cargo: persona.cargo 
                 }"
               >
-                <!-- Contenedor de la imagen sin overflow-hidden en hover -->
                 <div class="relative w-[16vh] h-[16vh] mx-auto">
                   <div class="w-full h-full rounded-full overflow-hidden border-4 circle-shadow transition-all duration-300 group-hover:scale-[1.3] group-hover:relative group-hover:z-50" 
                       style="border-color: #E4D294;">
-                    <img :src="persona.imagen" :alt="persona.nombre" loading="lazy" class="w-full h-full object-cover">
+                    <img 
+                      :src="persona.imagen" 
+                      :alt="persona.nombre" 
+                      loading="lazy" 
+                      decoding="async"
+                      class="w-full h-full object-cover"
+                    >
                   </div>
                 </div>
                 <p class="mt-2 text-white font-semibold drop-shadow text-[2.3vh]">{{ persona.nombre }}</p>
@@ -75,7 +80,13 @@
                 <div class="relative w-[16vh] h-[16vh] mx-auto">
                   <div class="w-full h-full rounded-full overflow-hidden border-4 circle-shadow transition-all duration-300 group-hover:scale-[1.3] group-hover:relative group-hover:z-50" 
                       style="border-color: #E4D294;">
-                    <img :src="persona.imagen" :alt="persona.nombre" loading="lazy" class="w-full h-full object-cover">
+                    <img 
+                      :src="persona.imagen" 
+                      :alt="persona.nombre" 
+                      loading="lazy" 
+                      decoding="async"
+                      class="w-full h-full object-cover"
+                    >
                   </div>
                 </div>
                 <p class="mt-2 text-white font-semibold drop-shadow text-[2.3vh]">{{ persona.nombre }}</p>
@@ -91,7 +102,13 @@
               :style="{ backgroundColor: 'rgba(0, 0, 0, 0.0)' }">
             <div class="w-[29vh] h-[29vh] rounded-full overflow-hidden mb-[.9vh] transition-all duration-300 circle-shadow-large border-[.4vh]" 
                 style="border-color: #E4D294;">
-              <img :src="selectedImage.img" :alt="selectedImage.nombre" loading="lazy" class="w-full h-full object-cover">
+              <img 
+                :src="selectedImage.img" 
+                :alt="selectedImage.nombre" 
+                loading="lazy" 
+                decoding="async"
+                class="w-full h-full object-cover"
+              >
             </div>
             <h3 class="text-[2.9vh] font-bold text-white drop-shadow-lg text-center">
               {{ selectedImage.nombre }}
@@ -103,7 +120,7 @@
               {{ selectedImage.cargo }}
             </p>
             <div class="text-center">
-              <p class="text-white drop-shadow-lg leading-relaxed text-[1.9vh]">
+              <p class="text-white drop-shadow-lg leading-relaxed text-[1.9vh] text-justify">
                 {{ selectedImage.text }}
               </p>
             </div>
@@ -164,7 +181,13 @@
               <!-- Grupo 1: Primera fila de 2 fichas -->
               <div class="grid grid-cols-1 md:grid-cols-2 gap-0">
                 <div v-for="(miembro, idx) in comisionSeleccionada.miembrosGrupo1" :key="'g1-'+idx" class="flex items-center gap-0 p-[1vw] rounded-lg pl-[2vw]">
-                  <img :src="miembro.foto" :alt="miembro.nombre" class="w-[14vh] h-[14vh] rounded-full object-cover transition-all duration-700 hover:scale-[3.2] hover:z-50">
+                  <img 
+                    :src="miembro.foto" 
+                    :alt="miembro.nombre" 
+                    loading="lazy" 
+                    decoding="async"
+                    class="w-[14vh] h-[14vh] rounded-full object-cover transition-all duration-700 hover:scale-[3.2] hover:z-50"
+                  >
                   <div class="text-white text-center text-[2vh]">
                     <p class="font-bold drop-shadow-md">{{ miembro.cargo }}</p>
                     <p class="drop-shadow-md">{{ miembro.nombre }}</p>
@@ -182,7 +205,13 @@
               <!-- Grupo 2: Segunda fila de 2 fichas -->
               <div class="grid grid-cols-1 md:grid-cols-2 gap-0">
                 <div v-for="(miembro, idx) in comisionSeleccionada.miembrosGrupo2" :key="'g2-'+idx" class="flex items-center gap-0 p-[1vw] rounded-lg pl-[2vw]">
-                  <img :src="miembro.foto" :alt="miembro.nombre" class="w-[14vh] h-[14vh] rounded-full object-cover transition-all duration-700 hover:scale-[3.2] hover:z-50">
+                  <img 
+                    :src="miembro.foto" 
+                    :alt="miembro.nombre" 
+                    loading="lazy" 
+                    decoding="async"
+                    class="w-[14vh] h-[14vh] rounded-full object-cover transition-all duration-700 hover:scale-[3.2] hover:z-50"
+                  >
                   <div class="text-white text-center text-[2vh]">
                     <p class="font-bold drop-shadow-md">{{ miembro.cargo }}</p>
                     <p class="drop-shadow-md">{{ miembro.nombre }}</p>
@@ -200,7 +229,13 @@
               <!-- Grupo 3: Tercera fila de 2 fichas -->
               <div class="grid grid-cols-1 md:grid-cols-2 gap-0">
                 <div v-for="(miembro, idx) in comisionSeleccionada.miembrosGrupo3" :key="'g3-'+idx" class="flex items-center gap-0 p-[1vw] rounded-lg pl-[2vw]">
-                  <img :src="miembro.foto" :alt="miembro.nombre" class="w-[14vh] h-[14vh] rounded-full object-cover transition-all duration-700 hover:scale-[3.2] hover:z-50">
+                  <img 
+                    :src="miembro.foto" 
+                    :alt="miembro.nombre" 
+                    loading="lazy" 
+                    decoding="async"
+                    class="w-[14vh] h-[14vh] rounded-full object-cover transition-all duration-700 hover:scale-[3.2] hover:z-50"
+                  >
                   <div class="text-white text-center text-[2vh]">
                     <p class="font-bold drop-shadow-md">{{ miembro.cargo }}</p>
                     <p class="drop-shadow-md">{{ miembro.nombre }}</p>
@@ -296,7 +331,13 @@
                 </div>
                 <div v-for="(titular, index) in titulares" :key="'titular-'+index" class="text-center">
                   <div class="w-[12vh] h-[12vh] mx-auto rounded-full overflow-hidden mb-2 transition-all duration-300 hover:scale-[3.3]">
-                    <img :src="titular.imagen" :alt="titular.nombre" loading="lazy" class="w-full h-full object-cover">
+                    <img 
+                      :src="titular.imagen" 
+                      :alt="titular.nombre" 
+                      loading="lazy" 
+                      decoding="async"
+                      class="w-full h-full object-cover"
+                    >
                   </div>
                   <p class="text-[1.4vh] text-white font-semibold">{{ titular.nombre }}</p>
                   <p class="text-[1.4vh] text-white font-semibold">{{ titular.apellido }}</p>
@@ -314,7 +355,13 @@
                 </div>
                 <div v-for="(suplente, index) in suplentes" :key="'suplente-'+index" class="text-center">
                   <div class="w-[12vh] h-[12vh] mx-auto rounded-full overflow-hidden mb-2 transition-all duration-300 hover:scale-[3.3]">
-                    <img :src="suplente.imagen" :alt="suplente.nombre" loading="lazy" class="w-full h-full object-cover">
+                    <img 
+                      :src="suplente.imagen" 
+                      :alt="suplente.nombre" 
+                      loading="lazy" 
+                      decoding="async"
+                      class="w-full h-full object-cover"
+                    >
                   </div>
                   <p class="text-white font-semibold text-[1.4vh]">{{ suplente.nombre }}</p>
                   <p class="text-white font-semibold text-[1.4vh]">{{ suplente.apellido }}</p>
@@ -399,7 +446,13 @@
                   <div class="grid grid-cols-6 mb-[.5vw]">
                     <div v-for="(persona, index) in miembrosMostrar.slice(0,6)" :key="persona.nombre" class="text-center">
                       <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[6] hover:relative hover:z-40">
-                        <img :src="persona.imagen" :alt="persona.nombre" loading="lazy" class="w-full h-full object-cover">
+                        <img 
+                          :src="persona.imagen" 
+                          :alt="persona.nombre" 
+                          loading="lazy" 
+                          decoding="async"
+                          class="w-full h-full object-cover"
+                        >
                       </div>
                       <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre}}</p>
                       <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido}}</p>
@@ -409,7 +462,13 @@
                   <div class="grid grid-cols-5 mb-[.5vw]">
                     <div v-for="(persona, index) in miembrosMostrar.slice(6,11)" :key="persona.nombre" class="text-center">
                       <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[6] hover:relative hover:z-40">
-                        <img :src="persona.imagen" :alt="persona.nombre" loading="lazy" class="w-full h-full object-cover">
+                        <img 
+                          :src="persona.imagen" 
+                          :alt="persona.nombre" 
+                          loading="lazy" 
+                          decoding="async"
+                          class="w-full h-full object-cover"
+                        >
                       </div>
                       <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre}}</p>
                       <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido}}</p>
@@ -419,7 +478,13 @@
                   <div class="grid grid-cols-5">
                     <div v-for="(persona, index) in miembrosMostrar.slice(11,16)" :key="persona.nombre" class="text-center">
                       <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[6] hover:relative hover:z-40 hover:translate-y-[-12vh]">
-                        <img :src="persona.imagen" :alt="persona.nombre" loading="lazy" class="w-full h-full object-cover">
+                        <img 
+                          :src="persona.imagen" 
+                          :alt="persona.nombre" 
+                          loading="lazy" 
+                          decoding="async"
+                          class="w-full h-full object-cover"
+                        >
                       </div>
                       <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre}}</p>
                       <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido}}</p>
@@ -433,7 +498,13 @@
                   <div class="grid grid-cols-4 mb-[.5vw]">
                     <div v-for="(persona, index) in miembrosMostrar.slice(0,4)" :key="persona.nombre" class="text-center">
                       <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[3] hover:relative hover:z-40">
-                        <img :src="persona.imagen" :alt="persona.nombre" loading="lazy" class="w-full h-full object-cover">
+                        <img 
+                          :src="persona.imagen" 
+                          :alt="persona.nombre" 
+                          loading="lazy" 
+                          decoding="async"
+                          class="w-full h-full object-cover"
+                        >
                       </div>
                       <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre}}</p>
                       <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido}}</p>
@@ -443,7 +514,13 @@
                   <div class="grid grid-cols-4 mb-[.5vw]">
                     <div v-for="(persona, index) in miembrosMostrar.slice(4,8)" :key="persona.nombre" class="text-center">
                       <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[3] hover:relative hover:z-40">
-                        <img :src="persona.imagen" :alt="persona.nombre" loading="lazy" class="w-full h-full object-cover">
+                        <img 
+                          :src="persona.imagen" 
+                          :alt="persona.nombre" 
+                          loading="lazy" 
+                          decoding="async"
+                          class="w-full h-full object-cover"
+                        >
                       </div>
                       <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre}}</p>
                       <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido}}</p>
@@ -453,7 +530,13 @@
                   <div class="grid grid-cols-4">
                     <div v-for="(persona, index) in miembrosMostrar.slice(8,12)" :key="persona.nombre" class="text-center">
                       <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[3] hover:relative hover:z-40">
-                        <img :src="persona.imagen" :alt="persona.nombre" loading="lazy" class="w-full h-full object-cover">
+                        <img 
+                          :src="persona.imagen" 
+                          :alt="persona.nombre" 
+                          loading="lazy" 
+                          decoding="async"
+                          class="w-full h-full object-cover"
+                        >
                       </div>
                       <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre}}</p>
                       <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido}}</p>
@@ -467,7 +550,13 @@
                   <div class="grid grid-cols-3 mb-[.5vw]">
                     <div v-for="(persona, index) in miembrosMostrar.slice(0,3)" :key="persona.nombre" class="text-center">
                       <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[3] hover:relative hover:z-40">
-                        <img :src="persona.imagen" :alt="persona.nombre" loading="lazy" class="w-full h-full object-cover">
+                        <img 
+                          :src="persona.imagen" 
+                          :alt="persona.nombre" 
+                          loading="lazy" 
+                          decoding="async"
+                          class="w-full h-full object-cover"
+                        >
                       </div>
                       <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre}}</p>
                       <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido}}</p>
@@ -477,7 +566,13 @@
                   <div class="grid grid-cols-3 mb-[.5vw]">
                     <div v-for="(persona, index) in miembrosMostrar.slice(3,6)" :key="persona.nombre" class="text-center">
                       <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[3] hover:relative hover:z-40">
-                        <img :src="persona.imagen" :alt="persona.nombre" loading="lazy" class="w-full h-full object-cover">
+                        <img 
+                          :src="persona.imagen" 
+                          :alt="persona.nombre" 
+                          loading="lazy" 
+                          decoding="async"
+                          class="w-full h-full object-cover"
+                        >
                       </div>
                       <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre}}</p>
                       <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido}}</p>
@@ -487,7 +582,13 @@
                   <div class="grid grid-cols-3">
                     <div v-if="miembrosMostrar[6]" class="text-center">
                       <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[3] hover:relative hover:z-40">
-                        <img :src="miembrosMostrar[6].imagen" :alt="miembrosMostrar[6].nombre" loading="lazy" class="w-full h-full object-cover">
+                        <img 
+                          :src="miembrosMostrar[6].imagen" 
+                          :alt="miembrosMostrar[6].nombre" 
+                          loading="lazy" 
+                          decoding="async"
+                          class="w-full h-full object-cover"
+                        >
                       </div>
                       <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ miembrosMostrar[6].nombre }}</p>
                       <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ miembrosMostrar[6].apellido }}</p>
@@ -503,7 +604,13 @@
                   <div class="flex justify-center">
                     <div v-if="miembrosMostrar[0]" class="text-center">
                       <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[3] hover:relative hover:z-40">
-                        <img :src="miembrosMostrar[0].imagen" :alt="miembrosMostrar[0].nombre" loading="lazy" class="w-full h-full object-cover">
+                        <img 
+                          :src="miembrosMostrar[0].imagen" 
+                          :alt="miembrosMostrar[0].nombre" 
+                          loading="lazy" 
+                          decoding="async"
+                          class="w-full h-full object-cover"
+                        >
                       </div>
                       <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ miembrosMostrar[0].nombre }}</p>
                       <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ miembrosMostrar[0].apellido }}</p>
@@ -566,7 +673,7 @@ const fila1 = ref([
     partido: 'Unidad',
     cargo: 'Vicepresidente',
     imagen: '/senadores/g2/CARMEN SOLEDAD CHAPETON TANCARA.png',
-    textoCompleto: 'El Lic. Carlos Mendoza se desempeña como Vicepresidente del Senado. Economista de profesión, ha trabajado en políticas de desarrollo económico y transparencia gubernamental.'
+    textoCompleto: 'C. Soledad Chapetón Tancara, nació en El Alto, es Licenciada en Cs. de la Educación de la UMSA. Fue asambleísta Constituyente y la primera mujer Alcaldesa de El Alto. Su gestión destacó por la Construcción de la Terminal Metropolitana, el Jach’a Uta, la  Estación de bomberos, la revolución del pavimento, impulso más de 80 centros infantiles entre otros proyectos y programas. Actualmente es Senadora, con trayectoria en liderazgo y servicio público.'
   },
   {
     id: 3,
@@ -726,7 +833,7 @@ const comisionesData = {
   6: {
     miembrosGrupo1: [
       { foto: '/new/titulares/g1/ANA MARIA CRISPIN CHOQUE.png', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Ana Maria', apellido:'Crispin Choque', partido: 'PDC' },
-      { foto: '/new/suplentes/g1/VICTOR SEVERO QUISPE SANTANDER.png', cargo: 'SENADORSUPLENTE', nombre: 'Victor Severo', apellido:'Quispe Santander', partido: 'PDC' }
+      { foto: '/new/suplentes/g1/VICTOR SEVERO QUISPE SANTANDER.png', cargo: 'SENADOR SUPLENTE', nombre: 'Victor Severo', apellido:'Quispe Santander', partido: 'PDC' }
     ],
     tituloLinea1: 'COMITÉ DE ENERGÍA, HIDROCARBUROS, MINERÍA Y METALURGIA',
     miembrosGrupo2: [
@@ -1050,6 +1157,52 @@ onUnmounted(() => {
 });
 
 definePageMeta({ layout: 'alter8' });
+
+// Precarga inmediata de imágenes de la Sección 1 (siempre)
+const precargarImagenesCriticas = () => {
+  const imagenesCriticas = [
+    '/senadores/g1/DIEGO ESTEBAN MATEO ÁVILA NAVAJAS.png',
+    '/senadores/g2/CARMEN SOLEDAD CHAPETON TANCARA.png',
+    '/senadores/g3/KHATIA LISBETH QUIROGA FERNÁNDEZ.png',
+    '/senadores/g1/YASMIN ESTIVARIZ VILLARROEL.png'
+  ]
+  
+  console.log('⚡ Precargando imágenes críticas...')
+  imagenesCriticas.forEach(src => {
+    const img = new Image()
+    img.src = src
+  })
+}
+
+// Precarga de la siguiente sección al hacer scroll
+let scrollTimer
+window.addEventListener('scroll', () => {
+  clearTimeout(scrollTimer)
+  scrollTimer = setTimeout(() => {
+    const scrollPosition = window.scrollY
+    const windowHeight = window.innerHeight
+    
+    // Si está cerca de la sección 2 (a 200px de distancia)
+    if (seccion2Ref.value) {
+      const seccion2Top = seccion2Ref.value.offsetTop
+      if (scrollPosition + windowHeight + 200 >= seccion2Top) {
+        console.log('🔮 Precargando imágenes de Sección 2...')
+        const imagenesSeccion2 = [
+          '/new/titulares/g1/DANIEL ANTONIO ORTIZ VELASQUEZ.png',
+          '/new/titulares/g2/FREDDY CASTILLO CHAVEZ.png',
+          '/new/titulares/g3/ERICK NELSON SORUCO ALPIRE.png'
+        ]
+        imagenesSeccion2.forEach(src => {
+          const img = new Image()
+          img.src = src
+        })
+      }
+    }
+  }, 500)
+})
+
+// Ejecutar precarga inmediata
+precargarImagenesCriticas()
 </script>
 
 <style scoped>
