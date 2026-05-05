@@ -133,7 +133,7 @@ import MoreNewsGrid from '@/components/MoreNewsGrid.vue'
 const heroMedia = ref([
   {
     type: 'video',
-    url: 'https://senado.gob.bo/assets/intro2025-C9lburAD.mp4',
+    url: '/video/video web.mp4',
     alt: 'Video institucional del Senado de Bolivia'
   },
   {

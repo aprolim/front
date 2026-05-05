@@ -3,7 +3,7 @@ export const heroMedia = [
   // Video del Senado de Bolivia
   {
     type: 'video',
-    url: 'https://senado.gob.bo//assets/intro2025-C9lburAD.mp4',
+    url: '/video/video web.mp4',
     alt: 'Video institucional del Senado de Bolivia'
   },
   // Imágenes
