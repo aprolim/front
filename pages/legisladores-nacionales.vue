@@ -13,13 +13,9 @@
       ref="seccion1Ref"
     >
       <div class="text-[3vw] w-full text-center mt-[4.1vw] bg-white relative py-[.1vh]">
-        <!-- Línea superior -->
         <div class="absolute top-0 left-0 h-[2px] bg-[#E4D294] animate-slide-right"></div>
-        <!-- Línea inferior -->
         <div class="absolute bottom-0 right-0 h-[2px] bg-[#E4D294] animate-slide-left"></div>
-        <!-- Línea izquierda -->
         <div class="absolute top-0 right-0 w-[2px] bg-[#E4D294] animate-slide-down"></div>
-        <!-- Línea derecha -->
         <div class="absolute bottom-0 left-0 w-[2px] bg-[#E4D294] animate-slide-up"></div>
         
         <h2 class="text-[#E03636] font-semibold py-[-1.3vw]">
@@ -30,11 +26,9 @@
       <div class="mx-[5vw] px-4 z-10 relative mt-[2.3vh]">
         <div class="flex flex-row gap-[2vw] h-full items-center">
           
-          <!-- Columna Izquierda (60%) -->
           <div class="w-[60%] p-[1.5vh] rounded-2xl shadow-left-column" 
               :style="{ backgroundColor: 'rgba(190, 0, 0, 0.60)' }">
             
-            <!-- Primera fila: 3 columnas -->
             <div class="grid grid-cols-3 gap-[.6vh] mb-[1.8vh]">
               <div v-for="persona in fila1" :key="persona.id" 
                 class="text-center cursor-pointer group"
@@ -65,7 +59,6 @@
               </div>
             </div>
 
-            <!-- Segunda fila: 3 columnas -->
             <div class="grid grid-cols-3 gap-[.6vh]">
               <div v-for="persona in fila2" :key="persona.id" 
                 class="text-center cursor-pointer group"
@@ -97,7 +90,6 @@
             </div>
           </div>
           
-          <!-- Columna Derecha (40%) -->
           <div class="w-[40%] flex flex-col items-center justify-center p-[3.0vh] rounded-2xl shadow-right-column"
               :style="{ backgroundColor: 'rgba(0, 0, 0, 0.0)' }">
             <div class="w-[29vh] h-[29vh] rounded-full overflow-hidden mb-[.9vh] transition-all duration-300 circle-shadow-large border-[.4vh]" 
@@ -142,17 +134,14 @@
       style="height: 100vh; position: relative; background: white; overflow-y: auto;"
     >
       <div class="mx-[5vw] mt-[4.2vw] px-4 ">
-        <!-- Header Rojo con texto blanco en mayúsculas -->
         <div class="bg-[#E03636] rounded-lg mb-[3.5vh]">
           <h2 class="text-[5vh] font-bold text-center text-white py-[0.5vw] tracking-wide">
             COMISIONES Y COMITÉS
           </h2>
         </div>
 
-        <!-- Layout de dos columnas: 40% - 60% -->
         <div class="flex flex-col md:flex-row gap-6">
           
-          <!-- Columna Izquierda: 40% - Botones -->
           <div class="w-full md:w-[40%] space-y-[.2vw]">
             <button
               v-for="comision in comisionesList"
@@ -170,15 +159,12 @@
             </button>
           </div>
 
-          <!-- Columna Derecha: 60% - Contenido dinámico -->
           <div class="w-full md:w-[60%] bg-gray-400/90 rounded-lg pt-[1vw] text-[1vw] mt-[-1.8vh]">
             <div v-if="comisionSeleccionada">
-              <!-- Título dinámico (igual al botón seleccionado) -->
               <h3 class="text-[3.5vh] font-bold text-white drop-shadow-md text-center">
                 {{ comisionSeleccionada.nombre }}
               </h3>
 
-              <!-- Grupo 1: Primera fila de 2 fichas -->
               <div class="grid grid-cols-1 md:grid-cols-2 gap-0">
                 <div v-for="(miembro, idx) in comisionSeleccionada.miembrosGrupo1" :key="'g1-'+idx" class="flex items-center gap-0 p-[1vw] rounded-lg pl-[2vw]">
                   <img 
@@ -197,12 +183,10 @@
                 </div>
               </div>
 
-              <!-- Línea roja con título -->
               <div class="py-[.4vw] bg-[#E03636]">
                 <h4 class="font-semibold text-white text-[1em] text-center">{{ comisionSeleccionada.tituloLinea1 }}</h4>
               </div>
 
-              <!-- Grupo 2: Segunda fila de 2 fichas -->
               <div class="grid grid-cols-1 md:grid-cols-2 gap-0">
                 <div v-for="(miembro, idx) in comisionSeleccionada.miembrosGrupo2" :key="'g2-'+idx" class="flex items-center gap-0 p-[1vw] rounded-lg pl-[2vw]">
                   <img 
@@ -221,12 +205,10 @@
                 </div>
               </div>
 
-              <!-- Línea roja con título (segunda) -->
               <div class="py-[.4vw] bg-[#E03636]">
                 <h4 class="text-[1em] font-semibold text-white text-center">{{ comisionSeleccionada.tituloLinea2 }}</h4>
               </div>
 
-              <!-- Grupo 3: Tercera fila de 2 fichas -->
               <div class="grid grid-cols-1 md:grid-cols-2 gap-0">
                 <div v-for="(miembro, idx) in comisionSeleccionada.miembrosGrupo3" :key="'g3-'+idx" class="flex items-center gap-0 p-[1vw] rounded-lg pl-[2vw]">
                   <img 
@@ -246,7 +228,6 @@
               </div>
             </div>
             
-            <!-- Estado vacío (cuando no hay comisión seleccionada) -->
             <div v-else class="flex items-center justify-center h-96">
               <p class="text-gray-500 text-lg">Seleccione una comisión o comité para ver sus miembros</p>
             </div>
@@ -255,7 +236,7 @@
       </div>
     </div>
     
-    <!-- ==================== SECCIÓN 3 - ESCUDOS Y SENADORES ==================== -->
+    <!-- ==================== SECCIÓN 3 ==================== -->
     <div 
       id="brigadas-parlamentarias"
       ref="seccion3Ref" 
@@ -263,7 +244,6 @@
       :class="{ 'animate-in': isSeccion3Visible }"
       style="height: 100vh; position: relative; background: transparent; display: flex; flex-direction: column; overflow-y: auto;"
     >
-      <!-- Título -->
       <div class="w-full text-center mt-[4.1vw] mb-0 relative py-[.2em] flex-shrink-0">
         <div class="absolute top-0 left-0 h-[2px] bg-[#E4D294] animate-slide-right"></div>
         <div class="absolute bottom-0 right-0 h-[2px] bg-[#E4D294] animate-slide-left"></div>
@@ -276,7 +256,6 @@
       </div>
       
       <div class="mx-auto px-4 z-10 relative w-full flex-1 flex flex-col justify-center">
-        <!-- Estado Inicial: Escudos en 2 filas (5 + 4) -->
         <div v-if="!departamentoSeleccionado" class="flex flex-col items-center justify-center">
           <div class="grid grid-cols-5 gap-8 mb-8">
             <div v-for="dep in departamentos.slice(0,5)" :key="dep.id" 
@@ -302,18 +281,14 @@
           </div>
         </div>
         
-        <!-- Estado con Departamento Seleccionado -->
         <transition name="fade-fast" mode="out-in">
           <div v-if="departamentoSeleccionado" :key="departamentoSeleccionado?.id" class="w-full flex flex-col justify-center items-center px-[5vw]">
-            <!-- Fila Principal: 9 escudos en una sola fila -->
             <div class="grid grid-cols-9 gap-5">
               <div v-for="dep in departamentos" :key="dep.id" 
                   @click="seleccionarDepartamento(dep)"
                   class="cursor-pointer text-center group relative">
-                <!-- Escudo que se muestra normalmente (según selección) -->
                 <div v-html="departamentoSeleccionado?.id === dep.id ? dep.escudoReal : dep.escudoDorado" 
                     class="w-[7.5vw] h-[7.5vw] mx-auto transition-all duration-500 group-hover:opacity-0 group-hover:scale-[2.0] group-hover:translate-y-[2vw]"></div>
-                <!-- Escudo real que aparece SOLO en hover -->
                 <div v-html="dep.escudoReal" 
                     class="w-[5.5vw] h-[5.5vw] mx-auto absolute top-0 left-0 right-0 transition-all duration-500 opacity-0 group-hover:opacity-100 group-hover:scale-[2.0] group-hover:translate-y-[2vw] group-hover:z-50"></div>
                 <p class="text-center text-white text-[2.0vh] mt-1 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,1)]">{{ dep.nombre }}</p>
@@ -321,7 +296,6 @@
             </div>
             
             <div class="bg-[rgba(190,0,0,0.6)] pt-[2vw] px-[2vw] pb-[1vw] rounded-lg w-full">
-              <!-- Fila de Titulares (5 columnas) -->
               <div class="grid grid-cols-5 gap-2 mb-[1vw]">
                 <div class="text-center">
                   <div class="text-[1.5vh] mt-[4vw] inline-block px-1 py-2 rounded-full text-white font-semibold w-[12vw]" 
@@ -345,7 +319,6 @@
                 </div>
               </div>
               
-              <!-- Fila de Suplentes (5 columnas) -->
               <div class="grid grid-cols-5 gap-2">
                 <div class="text-center">
                   <div class="text-[1.5vh] mt-[5vw] inline-block px-6 py-2 rounded-full text-white font-semibold w-[12vw]" 
@@ -374,7 +347,7 @@
       </div>
     </div>
 
-    <!-- ==================== SECCIÓN 4 - BANCADAS POLÍTICAS ==================== -->
+    <!-- ==================== SECCIÓN 4 ==================== -->
     <div 
       id="bancadas-politicas"
       ref="seccion4Ref" 
@@ -382,7 +355,6 @@
       :class="{ 'animate-in': isSeccion4Visible }"
       style="height: 100vh; position: relative; background: transparent; overflow-y: auto;"
     >
-      <!-- Título -->
       <div class="w-full text-center mt-[4.1vw] bg-white relative flex-shrink-0">
         <div class="absolute top-0 left-0 h-[1px] bg-[#E4D294] animate-slide-right"></div>
         <div class="absolute bottom-0 right-0 h-[1px] bg-[#E4D294] animate-slide-left"></div>
@@ -395,7 +367,6 @@
       </div>
 
       <div class="mx-[5vw] px-4 z-10 relative pb-8">
-        <!-- Transición para el estado inicial -->
         <transition name="fade-scale" mode="out-in">
           <div v-if="!partidoSeleccionado" key="initial" class="flex flex-col items-center justify-center" style="min-height: 80vh;">
             <div class="flex justify-center gap-12">
@@ -409,10 +380,8 @@
           </div>
         </transition>
 
-        <!-- Transición para el estado con partido seleccionado -->
         <transition name="fade-scale" mode="out-in">
           <div v-if="partidoSeleccionado" key="selected" class="w-full">
-            <!-- 4 Partidos reorganizados arriba -->
             <div class="flex justify-center gap-8 mb-2">
               <div v-for="partido in partidos" :key="partido.id" 
                   @click="seleccionarPartido(partido)"
@@ -427,7 +396,6 @@
               </div>
             </div>
 
-            <!-- Barra Roja con Botón Suplentes/Titulares -->
             <div class="bg-red-700 rounded-lg px-6 py-1 flex items-center justify-between">
               <button 
                 @click="toggleTipoMiembros"
@@ -438,10 +406,8 @@
               <div class="w-[15vw]"></div>
             </div>
 
-            <!-- Grid dinámico según partido seleccionado -->
             <transition name="fade-scale" mode="out-in">
               <div :key="mostrarSuplentes ? 'suplentes' : 'titulares'" class="-mt-1 bg-[rgba(190,0,0,0.6)] ">
-                <!-- PDC -->
                 <div v-if="partidoSeleccionado?.id === 'pdc'" class="group pt-2 rounded-lg aspect-[3000/800] w-100 m-auto">
                   <div class="grid grid-cols-6 mb-[.5vw]">
                     <div v-for="(persona, index) in miembrosMostrar.slice(0,6)" :key="persona.nombre" class="text-center">
@@ -493,7 +459,6 @@
                   </div>
                 </div>
 
-                <!-- LIBRE -->
                 <div v-else-if="partidoSeleccionado?.id === 'libre'" class="group pt-2 rounded-lg aspect-[3000/800] w-100 m-auto">
                   <div class="grid grid-cols-4 mb-[.5vw]">
                     <div v-for="(persona, index) in miembrosMostrar.slice(0,4)" :key="persona.nombre" class="text-center">
@@ -545,7 +510,6 @@
                   </div>
                 </div>
 
-                <!-- ALIANZA -->
                 <div v-else-if="partidoSeleccionado?.id === 'alianza'" class="group pt-2 rounded-lg aspect-[3000/800] w-100 m-auto">
                   <div class="grid grid-cols-3 mb-[.5vw]">
                     <div v-for="(persona, index) in miembrosMostrar.slice(0,3)" :key="persona.nombre" class="text-center">
@@ -599,7 +563,6 @@
                   </div>
                 </div>
 
-                <!-- SUMATE -->
                 <div v-else-if="partidoSeleccionado?.id === 'sumate'" class="group pt-2 rounded-lg aspect-[3000/800] w-100 m-auto">
                   <div class="flex justify-center">
                     <div v-if="miembrosMostrar[0]" class="text-center">
@@ -641,19 +604,16 @@ const partidos = ref(partidosData)
 const { scrolled, scrollProgress, initScrollListener, removeScrollListener } = useScrollEffects()
 const route = useRoute()
 
-// Refs para cada sección
 const seccion1Ref = ref(null)
 const seccion2Ref = ref(null)
 const seccion3Ref = ref(null)
 const seccion4Ref = ref(null)
 
-// Visibilidad de cada sección
 const isSeccion1Visible = ref(true)
 const isSeccion2Visible = ref(false)
 const isSeccion3Visible = ref(false)
 const isSeccion4Visible = ref(false)
 
-// Organizar personas en 2 filas de 3 columnas cada una
 const fila1 = ref([
   {
     id: 1,
@@ -732,7 +692,7 @@ const selectedImage = ref({
   cargo: fila1.value[0].cargo
 })
 
-// ==================== DATOS SECCIÓN 2 - COMISIONES Y COMITES ====================
+// ==================== DATOS SECCIÓN 2 ====================
 const comisionesList = ref([
   { id: 1, nombre: 'Comisión de Constitución, Derechos Humanos, Legislación y Sistema Electoral' },
   { id: 2, nombre: 'Comisión de Justicia Plural, Ministerio Público y Defensa Legal del Estado' },
@@ -748,7 +708,6 @@ const comisionesList = ref([
 
 const comisionSeleccionada = ref(null)
 
-// Datos completos de cada comisión
 const comisionesData = {
   1: {
     miembrosGrupo1: [
@@ -1015,7 +974,7 @@ for (let i = 0; i < sorted.length; i++) {
     apellido: item.sapellido 
   });
 }
-// Organizar por partido
+
 const miembrosPorPartido = {
   pdc: { titulares: [], suplentes: [] },
   libre: { titulares: [], suplentes: [] },
@@ -1060,9 +1019,6 @@ const miembrosMostrar = computed(() => {
 })
 
 const seleccionarPartido = (partido) => {
-  if (partidoSeleccionado.value?.id === partido.id) {
-    // Si es el mismo, no hacer nada o podrías resetear
-  }
   partidoSeleccionado.value = partido
   mostrarSuplentes.value = false
 }
@@ -1126,6 +1082,63 @@ const initScrollObserver = () => {
   });
 };
 
+// ==================== PRECARGA INTELIGENTE (SOLO CLIENTE) ====================
+let scrollTimer = null
+let scrollHandler = null
+
+const precargarImagenesCriticas = () => {
+  const imagenesCriticas = [
+    '/senadores/g1/DIEGO ESTEBAN MATEO ÁVILA NAVAJAS.png',
+    '/senadores/g2/CARMEN SOLEDAD CHAPETON TANCARA.png',
+    '/senadores/g3/KHATIA LISBETH QUIROGA FERNÁNDEZ.png',
+    '/senadores/g1/YASMIN ESTIVARIZ VILLARROEL.png',
+    '/senadores/g4/JULIO DIEGO ROMAÑA GALINDO.png',
+    '/senadores/g2/ROSA TATIANA AÑEZ CARRASCO.png'
+  ]
+  
+  imagenesCriticas.forEach(src => {
+    const img = new Image()
+    img.src = src
+  })
+}
+
+const setupPreloadOnScroll = () => {
+  scrollHandler = () => {
+    clearTimeout(scrollTimer)
+    scrollTimer = setTimeout(() => {
+      const scrollY = window.scrollY
+      const windowH = window.innerHeight
+      
+      if (seccion2Ref.value && scrollY + windowH + 300 >= seccion2Ref.value.offsetTop) {
+        const imagenesSeccion2 = [
+          '/new/titulares/g1/DANIEL ANTONIO ORTIZ VELASQUEZ.png',
+          '/new/titulares/g2/FREDDY CASTILLO CHAVEZ.png',
+          '/new/titulares/g3/ERICK NELSON SORUCO ALPIRE.png',
+          '/new/titulares/g1/JUDITH ROSARIO GARCIA COCA.png'
+        ]
+        imagenesSeccion2.forEach(src => {
+          const img = new Image()
+          img.src = src
+        })
+      }
+      
+      if (seccion3Ref.value && scrollY + windowH + 300 >= seccion3Ref.value.offsetTop) {
+        const imagenesSeccion3 = [
+          '/new/titulares/g1/ANA MARIA CRISPIN CHOQUE.png',
+          '/new/titulares/g2/CARMEN SOLEDAD CHAPETÓN TANCARA.png',
+          '/new/titulares/g3/KATHIA LISBETH QUIROGA FERNÁNDEZ.png'
+        ]
+        imagenesSeccion3.forEach(src => {
+          const img = new Image()
+          img.src = src
+        })
+      }
+    }, 500)
+  }
+  
+  window.addEventListener('scroll', scrollHandler)
+}
+
 onMounted(async () => {
   initScrollListener();
   await nextTick();
@@ -1142,6 +1155,15 @@ onMounted(async () => {
     const id = route.hash.replace('#', '')
     setTimeout(() => scrollToSection(id), 500)
   }
+  
+  // Precarga solo en cliente (después de que el DOM esté listo)
+  if (process.client) {
+    // Pequeño delay para no bloquear la carga inicial
+    setTimeout(() => {
+      precargarImagenesCriticas()
+      setupPreloadOnScroll()
+    }, 500)
+  }
 });
 
 watch(() => route.hash, (newHash) => {
@@ -1154,55 +1176,13 @@ watch(() => route.hash, (newHash) => {
 onUnmounted(() => {
   removeScrollListener();
   if (scrollObserver) scrollObserver.disconnect();
+  if (scrollHandler) {
+    window.removeEventListener('scroll', scrollHandler)
+    clearTimeout(scrollTimer)
+  }
 });
 
 definePageMeta({ layout: 'alter8' });
-
-// Precarga inmediata de imágenes de la Sección 1 (siempre)
-const precargarImagenesCriticas = () => {
-  const imagenesCriticas = [
-    '/senadores/g1/DIEGO ESTEBAN MATEO ÁVILA NAVAJAS.png',
-    '/senadores/g2/CARMEN SOLEDAD CHAPETON TANCARA.png',
-    '/senadores/g3/KHATIA LISBETH QUIROGA FERNÁNDEZ.png',
-    '/senadores/g1/YASMIN ESTIVARIZ VILLARROEL.png'
-  ]
-  
-  console.log('⚡ Precargando imágenes críticas...')
-  imagenesCriticas.forEach(src => {
-    const img = new Image()
-    img.src = src
-  })
-}
-
-// Precarga de la siguiente sección al hacer scroll
-let scrollTimer
-window.addEventListener('scroll', () => {
-  clearTimeout(scrollTimer)
-  scrollTimer = setTimeout(() => {
-    const scrollPosition = window.scrollY
-    const windowHeight = window.innerHeight
-    
-    // Si está cerca de la sección 2 (a 200px de distancia)
-    if (seccion2Ref.value) {
-      const seccion2Top = seccion2Ref.value.offsetTop
-      if (scrollPosition + windowHeight + 200 >= seccion2Top) {
-        console.log('🔮 Precargando imágenes de Sección 2...')
-        const imagenesSeccion2 = [
-          '/new/titulares/g1/DANIEL ANTONIO ORTIZ VELASQUEZ.png',
-          '/new/titulares/g2/FREDDY CASTILLO CHAVEZ.png',
-          '/new/titulares/g3/ERICK NELSON SORUCO ALPIRE.png'
-        ]
-        imagenesSeccion2.forEach(src => {
-          const img = new Image()
-          img.src = src
-        })
-      }
-    }
-  }, 500)
-})
-
-// Ejecutar precarga inmediata
-precargarImagenesCriticas()
 </script>
 
 <style scoped>
@@ -1385,7 +1365,6 @@ footer {
   }
 }
 
-/* Transición simple y elegante */
 .fade-fast-enter-active,
 .fade-fast-leave-active {
   transition: opacity 0.6s ease-in;
@@ -1396,7 +1375,6 @@ footer {
   opacity: 0;
 }
 
-/* Transiciones suaves para la Sección 4 */
 .fade-scale-enter-active,
 .fade-scale-leave-active {
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
