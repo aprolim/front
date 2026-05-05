@@ -1,4 +1,4 @@
-// nuxt.config.ts - SIN PRIMEVUE TEMPORALMENTE
+// nuxt.config.ts
 export default defineNuxtConfig({
   vite: {
     server: {
@@ -11,19 +11,17 @@ export default defineNuxtConfig({
   },
   devtools: { enabled: false },
   
-  // Módulos
   modules: [
     '@pinia/nuxt',
-    '@nuxtjs/tailwindcss'
+    '@nuxtjs/tailwindcss',
+    '@nuxt/image'
   ],
   
-  // CSS Global - solo Tailwind por ahora
   css: [
     '~/assets/css/fonts.css',
     '~/assets/css/main.css'
   ],
   
-  // Configuración de la app
   app: {
     head: {
       title: 'Senado de Bolivia',
@@ -36,11 +34,30 @@ export default defineNuxtConfig({
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
         { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
-        { rel: 'preconnect', href: 'https://fonts.gstatic.com' },
+        { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
         { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap' },
-        { rel: 'preload', href: '/fonts/Montserrat-Regular.otf', as: 'font', type: 'font/otf', crossorigin: '' },
-        { rel: 'preload', href: '/fonts/Montserrat-Bold.otf', as: 'font', type: 'font/otf', crossorigin: '' }
+        { rel: 'preload', href: '/fonts/Montserrat-Regular.otf', as: 'font', type: 'font/otf', crossorigin: 'anonymous' },
+        { rel: 'preload', href: '/fonts/Montserrat-Bold.otf', as: 'font', type: 'font/otf', crossorigin: 'anonymous' }
       ]
+    }
+  },
+  
+  nitro: {
+    compressPublicAssets: {
+      gzip: true,
+      brotli: true
+    },
+    routeRules: {
+      '/senadores/**': { 
+        headers: { 
+          'Cache-Control': 'public, max-age=31536000, immutable' 
+        } 
+      },
+      '/new/**': { 
+        headers: { 
+          'Cache-Control': 'public, max-age=31536000, immutable' 
+        } 
+      }
     }
   }
 })
