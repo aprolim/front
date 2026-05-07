@@ -1465,4 +1465,13 @@ footer {
 .animate-slide-up {
   animation: slide-up 4s ease-in-out infinite;
 }
+/* Oculta el título del SVG */
+svg title {
+  display: none;
+}
+
+/* O también puedes hacer: */
+.group svg title {
+  display: none;
+}
 </style>

@@ -153,7 +153,7 @@
               <!-- Botón Ver más con posición exacta -->
               <div class="absolute left-0 right-0 flex justify-center" style="top: 100%; transform: translateY(-50%);">
                 <NuxtLink 
-                  to="/" 
+                  to="/en-construccion" 
                   class="bg-[#E03636] hover:bg-[#C12F2F] text-white font-bold py-[0.8em] px-[2em] rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg z-10 text-[1em] "
                 >
                   Ver más

@@ -1,4 +1,4 @@
-<!-- layouts/alter8.vue - VERSIÓN COMPLETA CORREGIDA -->
+<!-- layouts/alter8.vue - VERSIÓN COMPLETA CON KEEP-ALIVE -->
 <template>
   <div class="h-screen snap-container">
     <!-- Header rojo fijo y flotante (superpuesto) con menús a la derecha -->
@@ -129,7 +129,15 @@
                 </div>
               </div>
             </div>
-
+            <!-- MENÚ 3: Legisladores y representación -->
+            <div class="">
+              <NuxtLink 
+                to="/centro-de-noticias" 
+                class="inline-block px-[1vw] py-2 text-white font-medium hover:bg-[#C12F2F] rounded-lg transition-colors cursor-pointer"
+              >
+                Centro de Noticias
+              </NuxtLink>
+            </div>
             <!-- MENÚ 4: Cultura y patrimonio -->
             <!-- <div class="relative group/menu">
               <button class="px-[1vw] py-2 text-white font-medium hover:bg-[#C12F2F] rounded-lg transition-colors">
@@ -340,9 +348,11 @@
       </aside>
     </div>
 
-    <!-- Contenido principal -->
+    <!-- ===== MAIN CON KEEP-ALIVE PARA PERSISTENCIA DEL VIDEO ===== -->
     <main class="relative z-10 snap-main">
-      <slot />
+      <KeepAlive :include="keepAlivePages">
+        <slot />
+      </KeepAlive>
     </main>
 
     <!-- Footer (original) -->
@@ -396,6 +406,7 @@
         </div>
       </div>
     </div>
+    <GlobalModals />
   </div>
 </template>
 
@@ -403,8 +414,11 @@
 import { ref, reactive, onMounted, onBeforeUnmount } from 'vue'
 import { navigateTo } from '#app'
 import { socialLinks } from './data/config'
-
+import GlobalModals from '@/components/GlobalModals.vue'
 const sidebarOpen = ref(false)
+
+// Páginas que queremos mantener vivas (donde está el video)
+const keepAlivePages = ref(['IndexPage'])
 
 // Estado para menús móviles
 const mobileMenuState = reactive({

@@ -128,6 +128,9 @@ import HeroContent from '@/components/HeroSection/HeroContent.vue'
 import ScrollProgress from '@/components/UI/ScrollProgress.vue'
 import ImportantNewsSection from '@/components/ImportantNewsSection.vue'
 import MoreNewsGrid from '@/components/MoreNewsGrid.vue'
+defineOptions({
+  name: 'IndexPage'
+})
 
 // Media del hero
 const heroMedia = ref([

@@ -140,9 +140,11 @@
               Luego de varias interrupciones del orden democrático en el país, el día: 10 de octubre del 1982 se posesiona al congreso electo en las elecciones realizadas en 1980, desde entonces, la Asamblea legislativa y el Senado trabajan de manera continua en favor de la legislación, fiscalización y gestión de la nación. 
             </p>
           </div>
-          <button class="text-[.8em] mt-[.5em] bg-[#E03636] hover:bg-[#E03636]/80 text-white font-bold py-[.5em] px-8 rounded-lg transition-all duration-300 transform hover:scale-105 uppercase tracking-wider shadow-lg">
-            Ver más
-          </button>
+          <NuxtLink to="/en-construccion">
+            <button class="text-[.8em] mt-[.5em] bg-[#E03636] hover:bg-[#E03636]/80 text-white font-bold py-[.5em] px-8 rounded-lg transition-all duration-300 transform hover:scale-105 uppercase tracking-wider shadow-lg">
+              Ver más
+            </button>
+          </NuxtLink>
         </div>
       </div>
     </div>
