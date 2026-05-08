@@ -102,12 +102,13 @@
         </h2>
       </div>
 
-      <!-- 3 columnas de videos -->
-      <div class="mx-[5vw] px-4 z-10 relative w-full flex-1 flex flex-col justify-center min-h-[80vh]">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
+      <!-- 3 columnas de videos - CORREGIDO EL CENTRADO -->
+      <div class="w-full flex-1 flex flex-col justify-center min-h-[80vh]">
+        <!-- Grid de videos perfectamente centrado -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mt-8 max-w-6xl mx-auto px-4 w-full">
           <!-- Video 1 - Sesión en vivo -->
           <div class="flex flex-col items-center">
-            <div class="w-full aspect-video rounded-xl overflow-hidden border-4 border-white transition-all duration-300 hover:border-[#E03636] cursor-pointer group">
+            <div class="w-full aspect-video rounded-xl overflow-hidden border-4 border-white transition-all duration-300 hover:border-[#E03636] cursor-pointer group shadow-lg">
               <iframe 
                 class="w-full h-full"
                 src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0&rel=0"
@@ -122,7 +123,7 @@
 
           <!-- Video 2 - 90 Sesión Ordinaria -->
           <div class="flex flex-col items-center">
-            <div class="w-full aspect-video rounded-xl overflow-hidden border-4 border-white transition-all duration-300 hover:border-[#E03636] cursor-pointer group">
+            <div class="w-full aspect-video rounded-xl overflow-hidden border-4 border-white transition-all duration-300 hover:border-[#E03636] cursor-pointer group shadow-lg">
               <iframe 
                 class="w-full h-full"
                 src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0&rel=0"
@@ -137,7 +138,7 @@
 
           <!-- Video 3 - 88 Sesión Ordinaria -->
           <div class="flex flex-col items-center">
-            <div class="w-full aspect-video rounded-xl overflow-hidden border-4 border-white transition-all duration-300 hover:border-[#E03636] cursor-pointer group">
+            <div class="w-full aspect-video rounded-xl overflow-hidden border-4 border-white transition-all duration-300 hover:border-[#E03636] cursor-pointer group shadow-lg">
               <iframe 
                 class="w-full h-full"
                 src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0&rel=0"
@@ -151,28 +152,32 @@
           </div>
         </div>
 
-        <!-- Enlaces a YouTube y Facebook -->
-        <div class="flex justify-center items-center gap-6 mt-12 mb-8">
+        <!-- SOLO ÍCONOS de YouTube y Facebook (sin texto) - como en el widget flotante -->
+        <div class="flex justify-center items-center gap-8 mt-12 mb-8">
           <a 
             href="https://www.youtube.com/@SenadoBolivia" 
             target="_blank"
-            class="group flex items-center gap-3 px-6 py-3 bg-[#E03636] hover:bg-[#C12F2F] text-white rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
+            rel="noopener noreferrer"
+            class="social-icon-wrapper group hover:scale-110 transition-transform duration-300"
           >
-            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.376.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.376-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-            </svg>
-            <span class="font-semibold">YouTube</span>
+            <div class="social-svg w-12 h-12 md:w-16 md:h-16">
+              <svg fill="currentColor" viewBox="0 0 24 24" class="text-[#E03636] hover:text-[#C12F2F] transition-colors">
+                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.376.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.376-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+              </svg>
+            </div>
           </a>
           
           <a 
             href="https://www.facebook.com/SenadoBolivia" 
             target="_blank"
-            class="group flex items-center gap-3 px-6 py-3 bg-[#E03636] hover:bg-[#C12F2F] text-white rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
+            rel="noopener noreferrer"
+            class="social-icon-wrapper group hover:scale-110 transition-transform duration-300"
           >
-            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-            </svg>
-            <span class="font-semibold">Facebook</span>
+            <div class="social-svg w-12 h-12 md:w-16 md:h-16">
+              <svg fill="currentColor" viewBox="0 0 24 24" class="text-[#E03636] hover:text-[#C12F2F] transition-colors">
+                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+              </svg>
+            </div>
           </a>
         </div>
       </div>
@@ -406,9 +411,9 @@ section, .scroll-section {
   visibility: visible;
 }
 
-/* Fondo plomo para la sección 1 */
+/* Fondos de cada sección */
 .seccion1-fondo {
-  background-color: #9e9e9e;
+  background-color: #d9d9d9;
   background-image: none;
 }
 
@@ -446,6 +451,36 @@ iframe {
   pointer-events: auto;
 }
 
+/* Estilos para iconos de redes sociales */
+.social-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 2px;
+  border-radius: 4px;
+}
+
+.social-icon-wrapper:hover {
+  transform: translateX(-4px) scale(1.1);
+}
+
+.social-svg {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  transition: filter 0.3s ease;
+}
+
+.social-icon-wrapper:hover .social-svg {
+  filter: drop-shadow(0 4px 8px rgba(224, 54, 54, 0.3));
+}
+
+.social-svg svg {
+  width: 100%;
+  height: 100%;
+  transition: all 0.3s ease;
+}
+
+/* Animaciones para los bordes del título */
 @keyframes slide-right {
   0% { width: 0%; left: 0; }
   50% { width: 100%; left: 0; }
