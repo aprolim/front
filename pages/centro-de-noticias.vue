@@ -14,35 +14,48 @@
       ref="seccion1Ref"
     >
       <div class="mx-[5vw] px-4 z-10 relative h-full flex flex-col justify-center">
-        <div class="w-full rounded-2xl" :style="{ backgroundColor: 'rgba(0, 0, 0, 0)' }">
+        <div class="w-full rounded-2xl">
           
-          <!-- Dos columnas - 50% cada una -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-            <!-- Columna izquierda - Texto (50%) -->
-            <div>
-              <h2 class="text-[#E03636] text-2xl md:text-3xl lg:text-4xl font-bold mb-4 leading-tight">
-                {{ noticiasCarousel[currentIndex].titulo }}
-              </h2>
-              <div class="text-gray-800 text-sm md:text-base leading-relaxed space-y-3">
-                <p>{{ noticiasCarousel[currentIndex].descripcion }}</p>
-                <p>{{ noticiasCarousel[currentIndex].descripcion2 }}</p>
-                <p class="text-[#E03636] font-semibold">{{ noticiasCarousel[currentIndex].fecha }}</p>
+          <div v-if="noticiasCarousel.length > 0" class="grid grid-cols-1 md:grid-cols-[50%_50%] gap-8 items-center">
+            <!-- Columna izquierda -->
+            <div class="flex flex-col items-center text-center">
+              <div>
+                <h2 class="text-[#E03636] text-xl md:text-2xl lg:text-3xl font-bold mb-4 leading-tight">
+                  {{ noticiasCarousel[currentIndex].titulo }}
+                </h2>
+                <div class="text-gray-800 text-xs md:text-sm leading-relaxed space-y-3 text-justify">
+                  <p>{{ noticiasCarousel[currentIndex].descripcion }}</p>
+                  <p>{{ noticiasCarousel[currentIndex].descripcion2 }}</p>
+                  <p class="text-[#E03636] font-semibold text-right">{{ noticiasCarousel[currentIndex].fechaFormateada }}</p>
+                </div>
+              </div>
+              
+              <div class="flex justify-center items-center gap-4 mt-6">
+                <button 
+                  v-for="(noticia, index) in noticiasCarousel" 
+                  :key="noticia.id"
+                  @click="currentIndex = index"
+                  class="rounded-full transition-all duration-300"
+                  :class="currentIndex === index 
+                    ? 'w-4 h-4 bg-[#E03636] ring-2 ring-[#E03636] ring-offset-2 ring-offset-white' 
+                    : 'w-4 h-4 bg-[#E03636]/40 hover:bg-[#E03636]/70'"
+                ></button>
               </div>
             </div>
             
-            <!-- Columna derecha - Imagen y botón (50%) -->
-            <div>
-              <div class="rounded-xl overflow-hidden shadow-lg">
+            <!-- Columna derecha -->
+            <div class="pt-[4vw]">
+              <div class="rounded-xl overflow-hidden shadow-lg aspect-square w-[80%] mx-auto">
                 <img 
                   :src="noticiasCarousel[currentIndex].imagen"
                   :alt="noticiasCarousel[currentIndex].titulo"
-                  class="w-full h-[400px] md:h-[450px] object-cover"
+                  class="w-full h-full object-cover"
                 />
               </div>
               <div class="flex justify-center mt-6">
                 <button 
                   @click="verNoticia(noticiasCarousel[currentIndex])"
-                  class="px-8 py-3 bg-[#E03636] hover:bg-[#C12F2F] text-white font-semibold rounded-lg transition-all duration-300 flex items-center gap-2 group text-lg"
+                  class="px-8 py-3 bg-[#E03636] hover:bg-[#C12F2F] text-white font-semibold rounded-lg transition-all duration-300 flex items-center gap-2 group text-base md:text-lg"
                 >
                   Ver noticia completa
                   <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -51,19 +64,6 @@
                 </button>
               </div>
             </div>
-          </div>
-          
-          <!-- Bolitas de navegación -->
-          <div class="flex justify-center items-center gap-3 mt-10">
-            <button 
-              v-for="(noticia, index) in noticiasCarousel" 
-              :key="index"
-              @click="currentIndex = index"
-              class="rounded-full transition-all duration-300"
-              :class="currentIndex === index 
-                ? 'bg-[#E03636] w-8 h-3' 
-                : 'bg-white/50 w-3 h-3 hover:bg-white/80'"
-            ></button>
           </div>
         </div>
       </div>
@@ -75,11 +75,9 @@
       ref="seccion2Ref" 
       class="scroll-section opacity-0 transition-all duration-800 ease-out z-10"
       :class="{ 'animate-in': isSeccion2Visible }"
-      style="min-height: 100vh; position: relative; background: white; overflow-y: auto;"
+      style="height: 100vh; position: relative; background: white; display: flex; flex-direction: column; justify-content: flex-start;"
     >
-      <div style="position: relative; z-index: 2; background: transparent; height: 100%;" class="pt-3">
-        <MoreNewsGrid />
-      </div>
+      <MoreNewsGrid />
     </div>
     
     <!-- ==================== SECCIÓN 3 - SESIONES (VIDEOS) ==================== -->
@@ -90,90 +88,47 @@
       :class="{ 'animate-in': isSeccion3Visible }"
       style="min-height: 100vh; position: relative; background: transparent; overflow-y: auto;"
     >
-      <!-- Título con fondo rojo -->
       <div class="w-full text-center mt-[4.1vw] mb-0 relative py-[.2em] flex-shrink-0">
         <div class="absolute top-0 left-0 h-[2px] bg-[#E4D294] animate-slide-right"></div>
         <div class="absolute bottom-0 right-0 h-[2px] bg-[#E4D294] animate-slide-left"></div>
         <div class="absolute top-0 right-0 w-[2px] bg-[#E4D294] animate-slide-down"></div>
         <div class="absolute bottom-0 left-0 w-[2px] bg-[#E4D294] animate-slide-up"></div>
         
-        <h2 class="text-[3vw] text-white font-semibold bg-[#E03636] py-2">
-          Sesiones
-        </h2>
+        <h2 class="text-[3vw] text-white font-semibold bg-[#E03636] py-2">Sesiones</h2>
       </div>
 
-      <!-- 3 columnas de videos - CORREGIDO EL CENTRADO -->
       <div class="w-full flex-1 flex flex-col justify-center min-h-[80vh]">
-        <!-- Grid de videos perfectamente centrado -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mt-8 max-w-6xl mx-auto px-4 w-full">
-          <!-- Video 1 - Sesión en vivo -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-8 mt-8 mx-auto px-[6vw] w-full">
           <div class="flex flex-col items-center">
             <div class="w-full aspect-video rounded-xl overflow-hidden border-4 border-white transition-all duration-300 hover:border-[#E03636] cursor-pointer group shadow-lg">
-              <iframe 
-                class="w-full h-full"
-                src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0&rel=0"
-                title="Sesión en vivo"
-                frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen
-              ></iframe>
+              <iframe class="w-full h-full" src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0&rel=0" title="Sesión en vivo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
-            <p class="text-center font-semibold mt-3 text-white drop-shadow-lg">Sesión en vivo</p>
+            <p class="text-[1.8vw] text-center font-semibold mt-3 text-[#E03636] drop-shadow-lg">Sesión en vivo</p>
           </div>
-
-          <!-- Video 2 - 90 Sesión Ordinaria -->
           <div class="flex flex-col items-center">
             <div class="w-full aspect-video rounded-xl overflow-hidden border-4 border-white transition-all duration-300 hover:border-[#E03636] cursor-pointer group shadow-lg">
-              <iframe 
-                class="w-full h-full"
-                src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0&rel=0"
-                title="90 Sesión Ordinaria"
-                frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen
-              ></iframe>
+              <iframe class="w-full h-full" src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0&rel=0" title="90 Sesión Ordinaria" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
-            <p class="text-center font-semibold mt-3 text-white drop-shadow-lg">90 Sesión Ordinaria</p>
+            <p class="text-[1.8vw] text-center font-semibold mt-3 text-[#E03636] drop-shadow-lg">90 Sesión Ordinaria</p>
           </div>
-
-          <!-- Video 3 - 88 Sesión Ordinaria -->
           <div class="flex flex-col items-center">
             <div class="w-full aspect-video rounded-xl overflow-hidden border-4 border-white transition-all duration-300 hover:border-[#E03636] cursor-pointer group shadow-lg">
-              <iframe 
-                class="w-full h-full"
-                src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0&rel=0"
-                title="88 Sesión Ordinaria"
-                frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen
-              ></iframe>
+              <iframe class="w-full h-full" src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0&rel=0" title="88 Sesión Ordinaria" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
-            <p class="text-center font-semibold mt-3 text-white drop-shadow-lg">88 Sesión Ordinaria</p>
+            <p class="text-[1.8vw] text-center font-semibold mt-3 text-[#E03636] drop-shadow-lg">88 Sesión Ordinaria</p>
           </div>
         </div>
 
-        <!-- SOLO ÍCONOS de YouTube y Facebook (sin texto) - como en el widget flotante -->
-        <div class="flex justify-center items-center gap-8 mt-12 mb-8">
-          <a 
-            href="https://www.youtube.com/@SenadoBolivia" 
-            target="_blank"
-            rel="noopener noreferrer"
-            class="social-icon-wrapper group hover:scale-110 transition-transform duration-300"
-          >
-            <div class="social-svg w-12 h-12 md:w-16 md:h-16">
+        <div class="flex justify-center items-center gap-[4vw] mt-12 mb-8">
+          <a href="https://www.youtube.com/@SenadoBolivia" target="_blank" class="social-icon-wrapper group hover:scale-110 transition-transform duration-300">
+            <div class="social-svg w-[4.5vw] h-[4.5vw]">
               <svg fill="currentColor" viewBox="0 0 24 24" class="text-[#E03636] hover:text-[#C12F2F] transition-colors">
                 <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.376.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.376-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
               </svg>
             </div>
           </a>
-          
-          <a 
-            href="https://www.facebook.com/SenadoBolivia" 
-            target="_blank"
-            rel="noopener noreferrer"
-            class="social-icon-wrapper group hover:scale-110 transition-transform duration-300"
-          >
-            <div class="social-svg w-12 h-12 md:w-16 md:h-16">
+          <a href="https://www.facebook.com/SenadoBolivia" target="_blank" class="social-icon-wrapper group hover:scale-110 transition-transform duration-300">
+            <div class="social-svg w-[3.5vw] h-[3.5vw]">
               <svg fill="currentColor" viewBox="0 0 24 24" class="text-[#E03636] hover:text-[#C12F2F] transition-colors">
                 <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
               </svg>
@@ -189,38 +144,31 @@
       ref="seccion4Ref" 
       class="scroll-section opacity-0 transition-all duration-800 ease-out delay-400 z-10"
       :class="{ 'animate-in': isSeccion4Visible }"
-      style="min-height: 100vh; position: relative; background: transparent; overflow-y: auto;"
+      style="min-height: 100vh; position: relative; overflow-y: auto; background: white;"
     >
-      <!-- Título con fondo rojo -->
       <div class="w-full text-center mt-[4.1vw] mb-0 relative py-[.2em] flex-shrink-0">
         <div class="absolute top-0 left-0 h-[2px] bg-[#E4D294] animate-slide-right"></div>
         <div class="absolute bottom-0 right-0 h-[2px] bg-[#E4D294] animate-slide-left"></div>
         <div class="absolute top-0 right-0 w-[2px] bg-[#E4D294] animate-slide-down"></div>
         <div class="absolute bottom-0 left-0 w-[2px] bg-[#E4D294] animate-slide-up"></div>
         
-        <h2 class="text-[3vw] text-white font-semibold bg-[#E03636] py-2">
-          Producción Audiovisual
-        </h2>
+        <h2 class="text-[3vw] text-white font-semibold bg-[#E03636] py-2">Producción Audiovisual</h2>
       </div>
 
-      <!-- Subtítulo -->
       <div class="text-center mt-4">
-        <h3 class="text-[#E03636] text-xl md:text-2xl font-semibold">
-          Desde el Curul
-        </h3>
+        <h3 class="text-[#E03636] text-[2.3vw] font-semibold">Desde el Curul</h3>
         <div class="w-16 h-0.5 bg-[#E4D294] mx-auto mt-2"></div>
       </div>
-
-      <!-- Imagen centrada -->
-      <div class="mx-auto px-4 z-10 relative w-full flex-1 flex flex-col justify-center min-h-[70vh]">
+      <br><br>
+      
+      <div class="mx-auto px-4 z-10 relative w-full flex-1 flex flex-col justify-center">
         <div class="flex justify-center items-center">
-          <div class="rounded-xl overflow-hidden shadow-2xl max-w-4xl w-full">
-            <img 
-              src="https://images.unsplash.com/photo-1587923623987-c7e408fc830c?w=1200&h=600&fit=crop"
-              alt="Producción Audiovisual - Desde el Curul"
-              class="w-full h-auto object-cover"
-            />
-          </div>
+          <NuxtLink to="https://www.youtube.com/watch?v=M4oGsn60dkE&list=PLa1BPhXlaW2fX3iN-hn6O5nPBHrSYEL5Y" class="image-link-wrapper block rounded-xl overflow-hidden shadow-2xl w-[45%] transition-all duration-500 ease-out hover:shadow-2xl" target="_blank">
+            <div class="relative overflow-hidden">
+              <img src="/images/curul/Recurso 1.jpg" alt="Producción Audiovisual - Desde el Curul" class="w-full h-auto object-cover transition-all duration-700 ease-out" />
+              <div class="absolute inset-0 bg-gradient-to-t from-[#E03636]/0 via-[#E03636]/0 to-[#E03636]/0 transition-all duration-500 ease-out group-hover:from-[#E03636]/10"></div>
+            </div>
+          </NuxtLink>
         </div>
       </div>
     </div>
@@ -229,51 +177,29 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted, nextTick } from 'vue'
+import { useRouter } from 'vue-router'
 import MoreNewsGrid from '@/components/MoreNewsGrid.vue'
+import { getNoticiasImportantes } from '~/data/noticias'
 
-// ==================== SECCIÓN 1 - CARROUSEL ====================
+const router = useRouter()
 const currentIndex = ref(0)
+const noticiasCarousel = ref([])
 
-const noticiasCarousel = ref([
-  {
-    id: 1,
-    titulo: 'Tarija en su aniversario: Leyes, inversión y agenda nacional en una sesión que proyecta desarrollo para Bolivia',
-    descripcion: 'En el marco del aniversario del departamento de Tarija, la Cámara de Senadores realizó una sesión especial donde se aprobaron importantes leyes que beneficiarán al desarrollo productivo de la región. Se destinaron más de Bs 500 millones para proyectos de infraestructura vial y energética.',
-    descripcion2: 'El presidente del Senado destacó el compromiso del gobierno nacional con el desarrollo equitativo de todos los departamentos, anunciando la construcción de la planta procesadora de uva y la ampliación del aeropuerto Capitán Oriel Lea Plaza.',
-    fecha: '15 de abril de 2026',
-    imagen: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800&h=500&fit=crop'
-  },
-  {
-    id: 2,
-    titulo: 'Senado aprueba Ley General de Aguas para garantizar el acceso al agua potable en todo el territorio nacional',
-    descripcion: 'Por unanimidad, la Cámara Alta aprobó la nueva Ley General de Aguas que garantiza el acceso al agua potable como derecho fundamental. La normativa establece mecanismos de distribución equitativa y protección de fuentes hídricas.',
-    descripcion2: 'La ley contempla la creación de un fondo de inversión de Bs 1.200 millones para proyectos de riego tecnificado y plantas de tratamiento en áreas rurales y periurbanas. Se estima beneficiar a más de 2 millones de bolivianos.',
-    fecha: '10 de abril de 2026',
-    imagen: 'https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=800&h=500&fit=crop'
-  },
-  {
-    id: 3,
-    titulo: 'Comisión de Constitución aprueba dictamen de reforma parcial del sistema judicial',
-    descripcion: 'La Comisión de Constitución, Derechos Humanos y Legislación aprobó el proyecto de ley de reforma parcial del Órgano Judicial, que incluye la renovación de altas cortes y mecanismos de transparencia en la elección de autoridades.',
-    descripcion2: 'El senador presidente de la comisión señaló que la reforma busca fortalecer la independencia judicial y agilizar los procesos. Se prevé que el pleno del Senado trate el proyecto en las próximas dos semanas.',
-    fecha: '5 de abril de 2026',
-    imagen: 'https://images.unsplash.com/photo-1529101091764-c3526daf3e28?w=800&h=500&fit=crop'
-  },
-  {
-    id: 4,
-    titulo: 'Bolivia y Chile retoman diálogo bilateral en mesa técnica convocada por el Senado',
-    descripcion: 'Representantes del Senado boliviano y del Congreso chileno se reunieron en una mesa técnica para abordar temas de integración fronteriza, comercio bilateral y cooperación en materia hídrica.',
-    descripcion2: 'El encuentro, realizado en la ciudad de La Paz, contó con la participación de senadores de ambas naciones quienes acordaron establecer una agenda de trabajo conjunta y próximos encuentros en la ciudad de Antofagasta.',
-    fecha: '1 de abril de 2026',
-    imagen: 'https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=800&h=500&fit=crop'
+const cargarNoticias = () => {
+  noticiasCarousel.value = getNoticiasImportantes()
+}
+
+const verNoticia = (noticia) => {
+  if (noticia && noticia.slug) {
+    router.push(`/noticias/${noticia.slug}`)
   }
-])
+}
 
-// ==================== AUTO-PLAY CARROUSEL ====================
 let carouselInterval = null
 
 const startCarousel = () => {
   if (carouselInterval) clearInterval(carouselInterval)
+  if (noticiasCarousel.value.length === 0) return
   carouselInterval = setInterval(() => {
     currentIndex.value = (currentIndex.value + 1) % noticiasCarousel.value.length
   }, 8000)
@@ -286,12 +212,6 @@ const stopCarousel = () => {
   }
 }
 
-// ==================== MÉTODOS ====================
-const verNoticia = (noticia) => {
-  console.log('Ver noticia:', noticia)
-}
-
-// ==================== SCROLL OBSERVER ====================
 const seccion1Ref = ref(null)
 const seccion2Ref = ref(null)
 const seccion3Ref = ref(null)
@@ -347,8 +267,8 @@ const initScrollObserver = () => {
   })
 }
 
-// ==================== LIFECYCLE ====================
 onMounted(async () => {
+  cargarNoticias()
   await nextTick()
   initScrollObserver()
   startCarousel()
@@ -363,161 +283,36 @@ definePageMeta({ layout: 'alter8' })
 </script>
 
 <style scoped>
-.text-style {
-  font-family: 'Montserrat', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-html, body {
-  scroll-behavior: smooth;
-  scroll-snap-type: y mandatory;
-}
-
-section, .scroll-section {
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
-  transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.3, 1.2);
-}
-
-.global-fixed-background {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.8s ease-in-out, visibility 0.8s ease-in-out;
-}
-
-.global-fixed-background::after {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: radial-gradient(circle at 50% 30%, transparent 0%, rgba(0, 0, 0, 0.3) 80%, rgba(0, 0, 0, 0.4) 100%);
-  pointer-events: none;
-  z-index: 1;
-}
-
-.global-fixed-background.show-fixed {
-  opacity: 1;
-  visibility: visible;
-}
-
-/* Fondos de cada sección */
-.seccion1-fondo {
-  background-color: #d9d9d9;
-  background-image: none;
-}
-
-.seccion2-fondo {
-  background-color: #e0e0e0;
-  background-image: none;
-}
-
-.seccion3-fondo {
-  background-color: #9e9e9e;
-  background-image: none;
-}
-
-.seccion4-fondo {
-  background-color: #9e9e9e;
-  background-image: none;
-}
-
-.scroll-section {
-  position: relative;
-  width: 100%;
-  z-index: 5;
-}
-
-.scroll-section.animate-in {
-  opacity: 1 !important;
-  transform: translateY(0) !important;
-}
-
-.aspect-video {
-  aspect-ratio: 16 / 9;
-}
-
-iframe {
-  pointer-events: auto;
-}
-
-/* Estilos para iconos de redes sociales */
-.social-icon-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  padding: 2px;
-  border-radius: 4px;
-}
-
-.social-icon-wrapper:hover {
-  transform: translateX(-4px) scale(1.1);
-}
-
-.social-svg {
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
-  transition: filter 0.3s ease;
-}
-
-.social-icon-wrapper:hover .social-svg {
-  filter: drop-shadow(0 4px 8px rgba(224, 54, 54, 0.3));
-}
-
-.social-svg svg {
-  width: 100%;
-  height: 100%;
-  transition: all 0.3s ease;
-}
-
-/* Animaciones para los bordes del título */
-@keyframes slide-right {
-  0% { width: 0%; left: 0; }
-  50% { width: 100%; left: 0; }
-  100% { width: 0%; left: 100%; }
-}
-
-@keyframes slide-left {
-  0% { width: 0%; right: 0; }
-  50% { width: 100%; right: 0; }
-  100% { width: 0%; right: 100%; }
-}
-
-@keyframes slide-down {
-  0% { height: 0%; top: 0; }
-  50% { height: 100%; top: 0; }
-  100% { height: 0%; top: 100%; }
-}
-
-@keyframes slide-up {
-  0% { height: 0%; bottom: 0; }
-  50% { height: 100%; bottom: 0; }
-  100% { height: 0%; bottom: 100%; }
-}
-
-.animate-slide-right {
-  animation: slide-right 4s ease-in-out infinite;
-}
-
-.animate-slide-left {
-  animation: slide-left 4s ease-in-out infinite;
-}
-
-.animate-slide-down {
-  animation: slide-down 4s ease-in-out infinite;
-}
-
-.animate-slide-up {
-  animation: slide-up 4s ease-in-out infinite;
-}
+.text-style { font-family: 'Montserrat', Tahoma, Geneva, Verdana, sans-serif; }
+html, body { scroll-behavior: smooth; scroll-snap-type: y mandatory; }
+section, .scroll-section { scroll-snap-align: start; scroll-snap-stop: always; transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.3, 1.2); }
+.global-fixed-background { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-size: cover; background-position: center; background-repeat: no-repeat; z-index: 0; pointer-events: none; opacity: 0; visibility: hidden; transition: opacity 0.8s ease-in-out, visibility 0.8s ease-in-out; }
+.global-fixed-background::after { display: none; }
+.global-fixed-background.show-fixed { opacity: 1; visibility: visible; }
+.seccion1-fondo { background-color: #d9d9d9; background-image: none; }
+.seccion2-fondo { background-color: #e0e0e0; background-image: none; }
+.seccion3-fondo { background-image: url('/Recurso 5.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat; }
+.seccion4-fondo { background-color: #ffffff; background-image: none; }
+.scroll-section { position: relative; width: 100%; z-index: 5; background: transparent; }
+.scroll-section.animate-in { opacity: 1 !important; transform: translateY(0) !important; }
+.aspect-video { aspect-ratio: 16 / 9; }
+iframe { pointer-events: auto; }
+.social-icon-wrapper { display: flex; align-items: center; justify-content: center; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); padding: 2px; border-radius: 4px; }
+.social-icon-wrapper:hover { transform: translateX(-4px) scale(1.1); }
+.social-svg { filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1)); transition: filter 0.3s ease; }
+.social-icon-wrapper:hover .social-svg { filter: drop-shadow(0 4px 8px rgba(224, 54, 54, 0.3)); }
+.social-svg svg { width: 100%; height: 100%; transition: all 0.3s ease; }
+.image-link-wrapper { display: block; cursor: pointer; transform: scale(1); }
+.image-link-wrapper:hover { transform: scale(1.02); box-shadow: 0 25px 40px -12px rgba(0, 0, 0, 0.3); }
+.image-link-wrapper:active { transform: scale(0.98); }
+.image-link-wrapper img { transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.3, 1.2); }
+.image-link-wrapper:hover img { transform: scale(1.05); }
+@keyframes slide-right { 0% { width: 0%; left: 0; } 50% { width: 100%; left: 0; } 100% { width: 0%; left: 100%; } }
+@keyframes slide-left { 0% { width: 0%; right: 0; } 50% { width: 100%; right: 0; } 100% { width: 0%; right: 100%; } }
+@keyframes slide-down { 0% { height: 0%; top: 0; } 50% { height: 100%; top: 0; } 100% { height: 0%; top: 100%; } }
+@keyframes slide-up { 0% { height: 0%; bottom: 0; } 50% { height: 100%; bottom: 0; } 100% { height: 0%; bottom: 100%; } }
+.animate-slide-right { animation: slide-right 4s ease-in-out infinite; }
+.animate-slide-left { animation: slide-left 4s ease-in-out infinite; }
+.animate-slide-down { animation: slide-down 4s ease-in-out infinite; }
+.animate-slide-up { animation: slide-up 4s ease-in-out infinite; }
 </style>
