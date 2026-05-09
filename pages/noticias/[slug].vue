@@ -1,6 +1,6 @@
 <!-- pages/noticias/[slug].vue -->
 <template>
-  <div class="min-h-screen bg-gray-50 py-12">
+  <div class="min-h-screen bg-gray-50 pt-[5.2vw] ">
     <div class="container mx-auto px-4 max-w-5xl">
       
       <button 
