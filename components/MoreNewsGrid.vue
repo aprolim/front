@@ -3,7 +3,7 @@
   <div class="w-full">
     
     <!-- ENCABEZADO -->
-    <div class="text-center mb-10">
+    <div class="text-center mb-10 pt-[5.2vw]">
       <h2 class="text-3xl md:text-4xl font-bold text-gray-800">
         Más <span class="text-[#E03636]">Noticias</span>
       </h2>
@@ -19,37 +19,35 @@
     </div>
 
     <!-- GRID DE 4 NOTICIAS -->
-    <div v-else-if="noticiasLocal.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div v-else-if="noticiasLocal.length > 0" class="grid grid-cols-4 gap-[2vw] px-[6vw]">
       <div 
         v-for="noticia in noticiasLocal" 
         :key="noticia.id"
         class="group bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer"
         @click="verNoticia(noticia)"
       >
-        <div class="relative h-48 overflow-hidden">
+        <!-- Contenedor de imagen -->
+        <div class="relative overflow-hidden aspect-[4/5]">
           <img 
             :src="noticia.imagen" 
             :alt="noticia.titulo"
             class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
           />
-          <div class="absolute bottom-2 left-2">
-            <span class="text-xs font-semibold bg-[#E03636] text-white px-2 py-1 rounded">
-              {{ noticia.categoria }}
-            </span>
-          </div>
-        </div>
-        <div class="p-4">
-          <p class="text-gray-500 text-xs mb-2">{{ noticia.fechaFormateada }}</p>
-          <h3 class="font-bold text-gray-800 group-hover:text-[#E03636] transition-colors line-clamp-2 text-sm md:text-base">
-            {{ noticia.titulo }}
-          </h3>
-          <div class="mt-3 flex justify-end">
-            <span class="text-[#E03636] text-sm font-semibold flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-              Leer más
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-              </svg>
-            </span>
+          
+          <!-- Div rojo que ocupa el 40% inferior de la imagen -->
+          <div class="absolute bottom-0 left-0 right-0 h-[40%] bg-[rgba(224,54,54,0.6)] backdrop-blur-sm p-4 flex flex-col justify-end">
+            <p class="text-white text-[.9vw] mb-2 opacity-90">{{ noticia.fechaFormateada }}</p>
+            <h3 class="font-bold text-white group-hover:text-red-200 transition-colors line-clamp-2 text-[1.2vw]">
+              {{ noticia.titulo }}
+            </h3>
+            <div class="mt-[.1vw] flex justify-end">
+              <span class="text-white text-[1.1vw] font-semibold flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                Leer más
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+              </span>
+            </div>
           </div>
         </div>
       </div>
