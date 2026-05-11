@@ -94,7 +94,7 @@
             </div>
           </div>
           
-          <div class="w-[40%] flex flex-col items-center justify-center p-[3.0vh] rounded-2xl shadow-right-column"
+          <div class="w-[40%] flex flex-col items-center justify-center px-[3.0vh] py-[1.0vh] rounded-2xl shadow-right-column"
               :style="{ backgroundColor: 'rgba(0, 0, 0, 0.0)' }">
             <div class="w-[29vh] h-[29vh] rounded-full overflow-hidden mb-[.9vh] transition-all duration-300 circle-shadow-large border-[.4vh]" 
                 style="border-color: #E4D294;">
@@ -118,8 +118,7 @@
               {{ selectedImage.cargo }}
             </p>
             <div class="text-center">
-              <p class="text-white drop-shadow-lg leading-relaxed text-[1.9vh] text-justify">
-                {{ selectedImage.text }}
+              <p class="text-white drop-shadow-lg leading-relaxed text-[1.9vh] text-justify" v-html="selectedImage.text">
               </p>
             </div>
           </div>
@@ -670,7 +669,7 @@ const fila1 = ref([
     apellido: 'Ávila Navajas',
     cargoPartido: 'Presidencia',
     partido: 'PDC',
-    cargo: 'Presidenta del Senado',
+    cargo: 'Presidente del Senado',
     imagen: '/senadores/g1/DIEGO ESTEBAN MATEO ÁVILA NAVAJAS.png',
     textoCompleto: 'Diego Esteban Mateo Ávila Navajas es economista y docente nacido en Tarija, con amplia experiencia en gestión pública y cooperación internacional. Como actual Presidente del Senado (2025–2026), lidera una gestión enfocada en la transparencia, el diálogo político y el desarrollo productivo, buscando fortalecer la institucionalidad legislativa y la estabilidad democrática de Bolivia.'
   },
@@ -692,7 +691,7 @@ const fila1 = ref([
     partido: 'Libre',
     cargo: 'Secretario General',
     imagen: '/senadores/g3/KHATIA LISBETH QUIROGA FERNÁNDEZ.png',
-    textoCompleto: 'Kathia Quiroga Fernández, ingeniera en Sistemas y abogada, es Segunda Vicepresidenta de la Cámara de Senadores para el periodo <strong>2025-2026</strong>. Su gestión impulsa la autonomía mediante un nuevo pacto fiscal, la aprobación urgente de la ley 50/50, reformas al sistema de justicia y un medio ambiente libre de contaminación minera.'
+    textoCompleto: `Kathia Quiroga Fernández, ingeniera en Sistemas y abogada, es Segunda Vicepresidenta de la Cámara de Senadores para el periodo <strong>2025-2026</strong>. Su gestión impulsa la autonomía mediante un nuevo pacto fiscal, la aprobación urgente de la ley 50/50, reformas al sistema de justicia y un medio ambiente libre de contaminación minera.`
   }
 ])
 
