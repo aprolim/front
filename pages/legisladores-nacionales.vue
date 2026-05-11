@@ -692,7 +692,7 @@ const fila1 = ref([
     partido: 'Libre',
     cargo: 'Secretario General',
     imagen: '/senadores/g3/KHATIA LISBETH QUIROGA FERNÁNDEZ.png',
-    textoCompleto: 'Kathia Quiroga Fernández, ingeniera en Sistemas y abogada, es Segunda Vicepresidenta de la Cámara de Senadores para el periodo 2025-2026. Su gestión impulsa la autonomía mediante un nuevo pacto fiscal, la aprobación urgente de la ley 50/50, reformas al sistema de justicia y un medio ambiente libre de contaminación minera.'
+    textoCompleto: 'Kathia Quiroga Fernández, ingeniera en Sistemas y abogada, es Segunda Vicepresidenta de la Cámara de Senadores para el periodo <strong>2025-2026</strong>. Su gestión impulsa la autonomía mediante un nuevo pacto fiscal, la aprobación urgente de la ley 50/50, reformas al sistema de justicia y un medio ambiente libre de contaminación minera.'
   }
 ])
 
@@ -700,12 +700,13 @@ const fila2 = ref([
   {
     id: 4,
     nombre: 'Yasmin',
-    apellido:'Quiroga Fernández',
+    apellido:'Estívariz Villarroel',
     cargoPartido: 'Primera Secretaria',
     partido: 'PDC',
     cargo: 'Directora de Comunicación',
     imagen: '/senadores/g1/YASMIN ESTIVARIZ VILLARROEL.png',
-    textoCompleto: `Yasmin Estívariz Villarroel, licenciada en Psicología del departamento de Oruro, destaca por su labor altruista y su compromiso en favor de niños con discapacidad. Actualmente ejerce el cargo de Primera Secretaria del Senado, gestión 2025–2026, donde promueve alianzas estratégicas institucionales para beneficiar a este sector vulnerable. Asimismo, impulsa iniciativas legislativas orientadas a la protección del medio ambiente frente a la minería ilegal, desarrollando una gestión comprometida con el progreso de Oruro y el bienestar de su población.`
+    textoCompleto: `Yasmin Estívariz Villarroel, licenciada en Psicología del departamento de Oruro, destaca por su labor en favor de niños con discapacidad. Actualmente ejerce el cargo de Primera Secretaria del Senado, gestión <strong>2025-2026</strong>,  donde promueve alianzas estratégicas institucionales para beneficiar a este sector vulnerable.
+Asimismo, impulsa iniciativas legislativas orientadas a la protección del medio ambiente frente a la minería ilegal, desarrollando una gestión comprometida con el progreso de Oruro y el bienestar de su población.`
   },
   {
     id: 5,
@@ -715,7 +716,7 @@ const fila2 = ref([
     partido: 'Libre',
     cargo: 'Jefe de Protocolo',
     imagen: '/senadores/g4/JULIO DIEGO ROMAÑA GALINDO.png',
-    textoCompleto: 'Julio Diego Romaña Galindo es Ingeniero Agrónomo y docente de la Universidad Amazónica de Pando, a sus 33 años fue Vicerrector más joven en la universidad, Senador titular en la gestión 2020-2025 desempeñó funciones como Segundo Secretario y Presidente de la Comisión de Organización Territorial del Estado y Autonomías en dos ocasiones. Actualmente es el Segundo Secretario de la Cámara de Senadores, su gestión, fiscalización y legislación están enfocada en la incorporación a la red vial fundamental y tramo carreteros buscando transparencia, el dialogo y una democracia participativa e equilibrada.'
+    textoCompleto: `Julio Diego Romaña Galindo es Ingeniero Agrónomo y docente de la Universidad Amazónica de Pando, a sus 33 años fue Vicerrector en la universidad, Senador titular en la gestión <strong>2020-2025</strong> desempeñó funciones como Segundo Secretario y Presidente de la Comisión. Actualmente es el Segundo Secretario de la Cámara de Senadores, su gestión, fiscalización y legislación están enfocada en la incorporación a la red vial fundamental y tramo carreteros buscando transparencia, el dialogo y una democracia participativa.`
   },
   {
     id: 6,
