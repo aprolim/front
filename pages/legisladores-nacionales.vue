@@ -248,7 +248,7 @@
       </div>
     </div>
     
-    <!-- ==================== SECCIÓN 3 ==================== -->
+    <!-- ==================== SECCIÓN 3 - BRIGADAS PARLAMENTARIAS ==================== -->
     <div 
       id="brigadas-parlamentarias"
       ref="seccion3Ref" 
@@ -268,102 +268,112 @@
       </div>
       
       <div class="mx-auto px-4 z-10 relative w-full flex-1 flex flex-col justify-center">
-        <div v-if="!departamentoSeleccionado" class="flex flex-col items-center justify-center">
-          <div class="grid grid-cols-5 gap-8 mb-8">
-            <div v-for="dep in departamentos.slice(0,5)" :key="dep.id" 
-                @click="seleccionarDepartamento(dep)"
-                class="cursor-pointer transition-all duration-300 hover:scale-[1.5] text-center group relative hover:z-50">
-              <div v-html="dep.escudoDorado" 
-                  class="w-[15vw] h-[15vw] mx-auto transition-all duration-300 group-hover:opacity-0"></div>
-              <div v-html="dep.escudoReal" 
-                  class="w-[15vw] h-[15vw] mx-auto absolute top-0 left-0 right-0 transition-all duration-300 opacity-0 group-hover:opacity-100 group-hover:z-10"></div>
-              <p class="text-center text-white mt-2 text-[2.4vh] font-semibold relative z-0">{{ dep.nombre }}</p>
-            </div>
-          </div>
-          <div class="grid grid-cols-4 gap-8">
-            <div v-for="dep in departamentos.slice(5,9)" :key="dep.id" 
-                @click="seleccionarDepartamento(dep)"
-                class="cursor-pointer transition-all duration-300 hover:scale-[1.5] text-center group relative hover:z-50">
-              <div v-html="dep.escudoDorado" 
-                  class="w-[15vw] h-[15vw] mx-auto transition-all duration-300 group-hover:opacity-0"></div>
-              <div v-html="dep.escudoReal" 
-                  class="w-[15vw] h-[15vw] mx-auto absolute top-0 left-0 right-0 transition-all duration-300 opacity-0 group-hover:opacity-100 group-hover:z-10"></div>
-              <p class="text-center text-white mt-2 text-[2.4vh] font-semibold relative z-0">{{ dep.nombre }}</p>
-            </div>
-          </div>
+        
+        <!-- SKELETON LOADER mientras cargan los departamentos -->
+        <div v-if="!departamentosLoaded" class="flex flex-col items-center justify-center" style="min-height: 60vh;">
+          <div class="animate-spin rounded-full h-16 w-16 border-4 border-[#E03636] border-t-transparent mb-4"></div>
+          <p class="text-white text-lg">Cargando brigadas parlamentarias...</p>
         </div>
         
-        <transition name="fade-fast" mode="out-in">
-          <div v-if="departamentoSeleccionado" :key="departamentoSeleccionado?.id" class="w-full flex flex-col justify-center items-center px-[5vw]">
-            <div class="grid grid-cols-9 gap-5">
-              <div v-for="dep in departamentos" :key="dep.id" 
+        <!-- CONTENIDO REAL - Solo cuando los datos están cargados -->
+        <template v-else>
+          <div v-if="!departamentoSeleccionado" class="flex flex-col items-center justify-center">
+            <div class="grid grid-cols-5 gap-8 mb-8">
+              <div v-for="dep in departamentos.slice(0,5)" :key="dep.id" 
                   @click="seleccionarDepartamento(dep)"
-                  class="cursor-pointer text-center group relative">
-                <div v-html="departamentoSeleccionado?.id === dep.id ? dep.escudoReal : dep.escudoDorado" 
-                    class="w-[7.5vw] h-[7.5vw] mx-auto transition-all duration-500 group-hover:opacity-0 group-hover:scale-[2.0] group-hover:translate-y-[2vw]"></div>
+                  class="cursor-pointer transition-all duration-300 hover:scale-[1.5] text-center group relative hover:z-50">
+                <div v-html="dep.escudoDorado" 
+                    class="w-[15vw] h-[15vw] mx-auto transition-all duration-300 group-hover:opacity-0"></div>
                 <div v-html="dep.escudoReal" 
-                    class="w-[5.5vw] h-[5.5vw] mx-auto absolute top-0 left-0 right-0 transition-all duration-500 opacity-0 group-hover:opacity-100 group-hover:scale-[2.0] group-hover:translate-y-[2vw] group-hover:z-50"></div>
-                <p class="text-center text-white text-[2.0vh] mt-1 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,1)]">{{ dep.nombre }}</p>
+                    class="w-[15vw] h-[15vw] mx-auto absolute top-0 left-0 right-0 transition-all duration-300 opacity-0 group-hover:opacity-100 group-hover:z-10"></div>
+                <p class="text-center text-white mt-2 text-[2.4vh] font-semibold relative z-0">{{ dep.nombre }}</p>
               </div>
             </div>
-            
-            <div class="bg-[rgba(190,0,0,0.6)] pt-[2vw] px-[2vw] pb-[1vw] rounded-lg w-full">
-              <div class="grid grid-cols-5 gap-2 mb-[1vw]">
-                <div class="text-center">
-                  <div class="text-[1.5vh] mt-[4vw] inline-block px-1 py-2 rounded-full text-white font-semibold w-[12vw]" 
-                      :style="{ backgroundColor: 'rgba(224, 54, 54, 0.8)' }">
-                    {{ departamentoSeleccionado?.nombre }}
-                  </div>
-                </div>
-                <div v-for="(titular, index) in titulares" :key="'titular-'+index" class="text-center">
-                  <div class="w-[12vh] h-[12vh] mx-auto rounded-full overflow-hidden mb-2 transition-all duration-300 hover:scale-[3.3]">
-                    <nuxt-img 
-                      :src="titular.imagen" 
-                      :alt="titular.nombre" 
-                      format="webp"
-                      quality="85"
-                      loading="lazy" 
-                      decoding="async"
-                      class="w-full h-full object-cover"
-                    />
-                  </div>
-                  <p class="text-[1.4vh] text-white font-semibold">{{ titular.nombre }}</p>
-                  <p class="text-[1.4vh] text-white font-semibold">{{ titular.apellido }}</p>
-                  <p v-if="titular.nombre" class="text-gray-300 text-[1.4vh]">{{ titular.partido.toUpperCase() }}</p>
+            <div class="grid grid-cols-4 gap-8">
+              <div v-for="dep in departamentos.slice(5,9)" :key="dep.id" 
+                  @click="seleccionarDepartamento(dep)"
+                  class="cursor-pointer transition-all duration-300 hover:scale-[1.5] text-center group relative hover:z-50">
+                <div v-html="dep.escudoDorado" 
+                    class="w-[15vw] h-[15vw] mx-auto transition-all duration-300 group-hover:opacity-0"></div>
+                <div v-html="dep.escudoReal" 
+                    class="w-[15vw] h-[15vw] mx-auto absolute top-0 left-0 right-0 transition-all duration-300 opacity-0 group-hover:opacity-100 group-hover:z-10"></div>
+                <p class="text-center text-white mt-2 text-[2.4vh] font-semibold relative z-0">{{ dep.nombre }}</p>
+              </div>
+            </div>
+          </div>
+          
+          <transition name="fade-fast" mode="out-in">
+            <div v-if="departamentoSeleccionado" :key="departamentoSeleccionado?.id" class="w-full flex flex-col justify-center items-center px-[5vw]">
+              <div class="grid grid-cols-9 gap-5">
+                <div v-for="dep in departamentos" :key="dep.id" 
+                    @click="seleccionarDepartamento(dep)"
+                    class="cursor-pointer text-center group relative">
+                  <div v-html="departamentoSeleccionado?.id === dep.id ? dep.escudoReal : dep.escudoDorado" 
+                      class="w-[7.5vw] h-[7.5vw] mx-auto transition-all duration-500 group-hover:opacity-0 group-hover:scale-[2.0] group-hover:translate-y-[2vw]"></div>
+                  <div v-html="dep.escudoReal" 
+                      class="w-[5.5vw] h-[5.5vw] mx-auto absolute top-0 left-0 right-0 transition-all duration-500 opacity-0 group-hover:opacity-100 group-hover:scale-[2.0] group-hover:translate-y-[2vw] group-hover:z-50"></div>
+                  <p class="text-center text-white text-[2.0vh] mt-1 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,1)]">{{ dep.nombre }}</p>
                 </div>
               </div>
               
-              <div class="grid grid-cols-5 gap-2">
-                <div class="text-center">
-                  <div class="text-[1.5vh] mt-[5vw] inline-block px-6 py-2 rounded-full text-white font-semibold w-[12vw]" 
-                      :style="{ backgroundColor: 'rgba(224, 54, 54, 0.8)' }">
-                    {{ departamentoSeleccionado?.nombre }}
+              <div class="bg-[rgba(190,0,0,0.6)] pt-[2vw] px-[2vw] pb-[1vw] rounded-lg w-full">
+                <div class="grid grid-cols-5 gap-2 mb-[1vw]">
+                  <div class="text-center">
+                    <div class="text-[1.5vh] mt-[4vw] inline-block px-1 py-2 rounded-full text-white font-semibold w-[12vw]" 
+                        :style="{ backgroundColor: 'rgba(224, 54, 54, 0.8)' }">
+                      {{ departamentoSeleccionado?.nombre }}
+                    </div>
+                  </div>
+                  <div v-for="(titular, index) in titulares" :key="'titular-'+index" class="text-center">
+                    <div class="w-[12vh] h-[12vh] mx-auto rounded-full overflow-hidden mb-2 transition-all duration-300 hover:scale-[3.3]">
+                      <nuxt-img 
+                        :src="titular.imagen" 
+                        :alt="titular.nombre" 
+                        format="webp"
+                        quality="85"
+                        loading="lazy" 
+                        decoding="async"
+                        class="w-full h-full object-cover"
+                      />
+                    </div>
+                    <p class="text-[1.4vh] text-white font-semibold">{{ titular.nombre }}</p>
+                    <p class="text-[1.4vh] text-white font-semibold">{{ titular.apellido }}</p>
+                    <p v-if="titular.nombre" class="text-gray-300 text-[1.4vh]">{{ titular.partido.toUpperCase() }}</p>
                   </div>
                 </div>
-                <div v-for="(suplente, index) in suplentes" :key="'suplente-'+index" class="text-center">
-                  <div class="w-[12vh] h-[12vh] mx-auto rounded-full overflow-hidden mb-2 transition-all duration-300 hover:scale-[3.3]">
-                    <nuxt-img 
-                      :src="suplente.imagen" 
-                      :alt="suplente.nombre" 
-                      format="webp"
-                      quality="85"
-                      loading="lazy" 
-                      decoding="async"
-                      class="w-full h-full object-cover"
-                    />
+                
+                <div class="grid grid-cols-5 gap-2">
+                  <div class="text-center">
+                    <div class="text-[1.5vh] mt-[5vw] inline-block px-6 py-2 rounded-full text-white font-semibold w-[12vw]" 
+                        :style="{ backgroundColor: 'rgba(224, 54, 54, 0.8)' }">
+                      {{ departamentoSeleccionado?.nombre }}
+                    </div>
                   </div>
-                  <p class="text-white font-semibold text-[1.4vh]">{{ suplente.nombre }}</p>
-                  <p class="text-white font-semibold text-[1.4vh]">{{ suplente.apellido }}</p>
-                  <p v-if="suplente.nombre" class="text-gray-300 text-[1.4vh]">{{ suplente.partido.toUpperCase() }}</p>
+                  <div v-for="(suplente, index) in suplentes" :key="'suplente-'+index" class="text-center">
+                    <div class="w-[12vh] h-[12vh] mx-auto rounded-full overflow-hidden mb-2 transition-all duration-300 hover:scale-[3.3]">
+                      <nuxt-img 
+                        :src="suplente.imagen" 
+                        :alt="suplente.nombre" 
+                        format="webp"
+                        quality="85"
+                        loading="lazy" 
+                        decoding="async"
+                        class="w-full h-full object-cover"
+                      />
+                    </div>
+                    <p class="text-white font-semibold text-[1.4vh]">{{ suplente.nombre }}</p>
+                    <p class="text-white font-semibold text-[1.4vh]">{{ suplente.apellido }}</p>
+                    <p v-if="suplente.nombre" class="text-gray-300 text-[1.4vh]">{{ suplente.partido.toUpperCase() }}</p>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </transition>
+          </transition>
+        </template>
       </div>
     </div>
 
-    <!-- ==================== SECCIÓN 4 ==================== -->
+    <!-- ==================== SECCIÓN 4 - BANCADAS POLÍTICAS ==================== -->
     <div 
       id="bancadas-politicas"
       ref="seccion4Ref" 
@@ -627,16 +637,19 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted, nextTick, watch } from 'vue'
+import { ref, onMounted, onUnmounted, nextTick, watch, computed } from 'vue'
 import { useRoute } from 'vue-router'
+import { useDepartamentosStore } from '@/stores/departamentosStore'
 import { useScrollEffects } from '@/composables/useScrollEffects'
 import ScrollProgress from '@/components/UI/ScrollProgress.vue'
-import { departamentosData } from '@/data/departamentos.js'
 import { partidosData } from '~/data/partidos'
 
-const departamentos = ref(departamentosData)
-const partidos = ref(partidosData)
+// ==================== STORE ====================
+const departamentosStore = useDepartamentosStore()
+const departamentos = computed(() => departamentosStore.getDepartamentos || [])
+const departamentosLoaded = computed(() => departamentosStore.isLoaded)
 
+// ==================== DATOS SECCIÓN 1 ====================
 const { scrolled, scrollProgress, initScrollListener, removeScrollListener } = useScrollEffects()
 const route = useRoute()
 
@@ -692,11 +705,7 @@ const fila2 = ref([
     partido: 'PDC',
     cargo: 'Directora de Comunicación',
     imagen: '/senadores/g1/YASMIN ESTIVARIZ VILLARROEL.png',
-    textoCompleto: `Yasmin Estívariz Villarroel, licenciada en Psicología del departamento de Oruro, destaca por su labor altruista y su compromiso en favor de niños con discapacidad.
-
-Actualmente ejerce el cargo de Primera Secretaria del Senado, gestión 2025–2026,  donde promueve alianzas estratégicas institucionales para beneficiar a este sector vulnerable.
-
-Asimismo, impulsa iniciativas legislativas orientadas a la protección del medio ambiente frente a la minería ilegal, desarrollando una gestión comprometida con el progreso de Oruro y el bienestar de su población.`
+    textoCompleto: `Yasmin Estívariz Villarroel, licenciada en Psicología del departamento de Oruro, destaca por su labor altruista y su compromiso en favor de niños con discapacidad. Actualmente ejerce el cargo de Primera Secretaria del Senado, gestión 2025–2026, donde promueve alianzas estratégicas institucionales para beneficiar a este sector vulnerable. Asimismo, impulsa iniciativas legislativas orientadas a la protección del medio ambiente frente a la minería ilegal, desarrollando una gestión comprometida con el progreso de Oruro y el bienestar de su población.`
   },
   {
     id: 5,
@@ -953,6 +962,7 @@ const seleccionarDepartamento = (dep) => {
 // ==================== DATOS SECCIÓN 4 ====================
 const partidoSeleccionado = ref(null)
 const mostrarSuplentes = ref(false)
+const partidos = ref(partidosData)
 
 const senadoresData = [
   { tnombre: 'Cintia Monica', tapellido:'Puerta Campos', snombre: 'Jesus Humberto', sapellido:'Suarez Eguez', partido: 'pdc', departamento:'Pando', imagen:'new/titulares/g3/CINTIA MONICA PUERTA CAMPOS.png', imagensu:'new/suplentes/g3/JESUS HUMBERTO SUAREZ EGUEZ.png', pos:116 },
@@ -1118,11 +1128,8 @@ const initScrollObserver = () => {
   });
 };
 
-// ==================== PRECARGA INTELIGENTE (SOLO CLIENTE) ====================
-let scrollTimer = null
-let scrollHandler = null
-
-const precargarImagenesCriticas = () => {
+// ==================== PRECARGA ====================
+const preloadImagenesCriticas = () => {
   const imagenesCriticas = [
     '/senadores/g1/DIEGO ESTEBAN MATEO ÁVILA NAVAJAS.png',
     '/senadores/g2/CARMEN SOLEDAD CHAPETON TANCARA.png',
@@ -1138,45 +1145,13 @@ const precargarImagenesCriticas = () => {
   })
 }
 
-const setupPreloadOnScroll = () => {
-  scrollHandler = () => {
-    clearTimeout(scrollTimer)
-    scrollTimer = setTimeout(() => {
-      const scrollY = window.scrollY
-      const windowH = window.innerHeight
-      
-      if (seccion2Ref.value && scrollY + windowH + 300 >= seccion2Ref.value.offsetTop) {
-        const imagenesSeccion2 = [
-          '/new/titulares/g1/DANIEL ANTONIO ORTIZ VELASQUEZ.png',
-          '/new/titulares/g2/FREDDY CASTILLO CHAVEZ.png',
-          '/new/titulares/g3/ERICK NELSON SORUCO ALPIRE.png',
-          '/new/titulares/g1/JUDITH ROSARIO GARCIA COCA.png'
-        ]
-        imagenesSeccion2.forEach(src => {
-          const img = new Image()
-          img.src = src
-        })
-      }
-      
-      if (seccion3Ref.value && scrollY + windowH + 300 >= seccion3Ref.value.offsetTop) {
-        const imagenesSeccion3 = [
-          '/new/titulares/g1/ANA MARIA CRISPIN CHOQUE.png',
-          '/new/titulares/g2/CARMEN SOLEDAD CHAPETÓN TANCARA.png',
-          '/new/titulares/g3/KATHIA LISBETH QUIROGA FERNÁNDEZ.png'
-        ]
-        imagenesSeccion3.forEach(src => {
-          const img = new Image()
-          img.src = src
-        })
-      }
-    }, 500)
-  }
-  
-  window.addEventListener('scroll', scrollHandler)
-}
-
+// ==================== LIFECYCLE ====================
 onMounted(async () => {
   initScrollListener();
+  
+  // Precargar departamentos en segundo plano
+  departamentosStore.preload()
+  
   await nextTick();
   initScrollObserver();
   
@@ -1192,12 +1167,10 @@ onMounted(async () => {
     setTimeout(() => scrollToSection(id), 500)
   }
   
-  // Precarga solo en cliente (después de que el DOM esté listo)
+  // Precarga de imágenes críticas
   if (process.client) {
-    // Pequeño delay para no bloquear la carga inicial
     setTimeout(() => {
-      precargarImagenesCriticas()
-      setupPreloadOnScroll()
+      preloadImagenesCriticas()
     }, 500)
   }
 });
@@ -1212,10 +1185,6 @@ watch(() => route.hash, (newHash) => {
 onUnmounted(() => {
   removeScrollListener();
   if (scrollObserver) scrollObserver.disconnect();
-  if (scrollHandler) {
-    window.removeEventListener('scroll', scrollHandler)
-    clearTimeout(scrollTimer)
-  }
 });
 
 definePageMeta({ layout: 'alter8' });
@@ -1465,12 +1434,11 @@ footer {
 .animate-slide-up {
   animation: slide-up 4s ease-in-out infinite;
 }
-/* Oculta el título del SVG */
+
 svg title {
   display: none;
 }
 
-/* O también puedes hacer: */
 .group svg title {
   display: none;
 }

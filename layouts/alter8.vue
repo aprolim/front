@@ -1,4 +1,4 @@
-<!-- layouts/alter8.vue - VERSIÓN COMPLETA CON KEEP-ALIVE -->
+<!-- layouts/alter8.vue - VERSIÓN COMPLETA SIN ERRORES -->
 <template>
   <div class="h-screen snap-container">
     <!-- Header rojo fijo y flotante (superpuesto) con menús a la derecha -->
@@ -129,7 +129,8 @@
                 </div>
               </div>
             </div>
-            <!-- MENÚ 3: Legisladores y representación -->
+            
+            <!-- MENÚ 4: Centro de Noticias -->
             <div class="">
               <NuxtLink 
                 to="/centro-de-noticias" 
@@ -138,50 +139,6 @@
                 Centro de Noticias
               </NuxtLink>
             </div>
-            <!-- MENÚ 4: Cultura y patrimonio -->
-            <!-- <div class="relative group/menu">
-              <button class="px-[1vw] py-2 text-white font-medium hover:bg-[#C12F2F] rounded-lg transition-colors">
-                Cultura
-              </button>
-              <div class="absolute right-0 mt-3 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 
-                          opacity-0 invisible translate-y-[-1rem] 
-                          group-hover/menu:opacity-100 group-hover/menu:visible group-hover/menu:translate-y-0 
-                          transition-all duration-700 ease-in-out z-50">
-                <div class="py-2">
-                  <NuxtLink to="/" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    👨‍⚖️ Patrimonio histórico
-                  </NuxtLink>
-                  <NuxtLink to="/" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    👩‍⚖️ Eventos culturales
-                  </NuxtLink>
-                  <NuxtLink to="/" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    📋 Biblioteca
-                  </NuxtLink>
-                </div>
-              </div>
-            </div> -->
-<!-- 
-            <div class="relative group/menu">
-              <button class="px-[1vw] py-2 text-white font-medium hover:bg-[#C12F2F] rounded-lg transition-colors">
-                Participación
-              </button>
-              <div class="absolute right-0 mt-3 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 
-                          opacity-0 invisible translate-y-[-1rem] 
-                          group-hover/menu:opacity-100 group-hover/menu:visible group-hover/menu:translate-y-0 
-                          transition-all duration-700 ease-in-out z-50">
-                <div class="py-2">
-                  <NuxtLink to="/" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    Audiencias públicas
-                  </NuxtLink>
-                  <NuxtLink to="/" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    Rendición de cuentas
-                  </NuxtLink>
-                  <NuxtLink to="/" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    Transparencia
-                  </NuxtLink>
-                </div>
-              </div>
-            </div> -->
           </div>
 
           <!-- Versión móvil: texto simple -->
@@ -261,7 +218,7 @@
                 </svg>
               </button>
               <div v-show="mobileMenuState.legislators" class="ml-4 mt-1 space-y-1 border-l-2 border-white/30 pl-3">
-                <NuxtLink to="/" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👨‍⚖️ Senadores</NuxtLink>
+                <NuxtLink to="/legisladores-nacionales" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👨‍⚖️ Senadores</NuxtLink>
                 <NuxtLink to="/" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👩‍⚖️ Diputados</NuxtLink>
                 <NuxtLink to="/" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📋 Comisiones</NuxtLink>
               </div>
@@ -285,9 +242,9 @@
                 </svg>
               </button>
               <div v-show="mobileMenuState.legislative" class="ml-4 mt-1 space-y-1 border-l-2 border-white/30 pl-3">
-                <NuxtLink to="/" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👨‍⚖️ Sesión del pleno</NuxtLink>
-                <NuxtLink to="/" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👩‍⚖️ Proyectos de leyes</NuxtLink>
-                <NuxtLink to="/" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📋 Gaceta Legislativa</NuxtLink>
+                <NuxtLink to="/gestion-legislativa" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👨‍⚖️ Sesión del pleno</NuxtLink>
+                <NuxtLink to="/gestion-legislativa#area-de-legislacion" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👩‍⚖️ Proyectos de leyes</NuxtLink>
+                <NuxtLink to="/gestion-legislativa#gaceta-legislativa" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📋 Gaceta Legislativa</NuxtLink>
               </div>
             </div>
             
@@ -340,7 +297,7 @@
             </div>
             
             <!-- Noticias -->
-            <NuxtLink to="/" class="block p-3 text-white hover:bg-white/10 rounded-lg mt-4" @click="sidebarOpen = false">
+            <NuxtLink to="/centro-de-noticias" class="block p-3 text-white hover:bg-white/10 rounded-lg mt-4" @click="sidebarOpen = false">
               📰 Noticias
             </NuxtLink>
           </div>
@@ -415,6 +372,8 @@ import { ref, reactive, onMounted, onBeforeUnmount } from 'vue'
 import { navigateTo } from '#app'
 import { socialLinks } from './data/config'
 import GlobalModals from '@/components/GlobalModals.vue'
+
+// ==================== ESTADO ====================
 const sidebarOpen = ref(false)
 
 // Páginas que queremos mantener vivas (donde está el video)
@@ -429,6 +388,7 @@ const mobileMenuState = reactive({
   participation: false
 })
 
+// ==================== FUNCIONES ====================
 // Función para ir al inicio de la página principal
 const goToHome = () => {
   // Cerrar sidebar si está abierto
@@ -475,8 +435,27 @@ const onEscape = (e) => {
   }
 }
 
+// ==================== PRECARGA SEGURA (OPCIONAL - COMENTADA) ====================
+// Si quieres activar la precarga de departamentos, descomenta esto:
+const preloadDepartamentos = () => {
+  if (process.client) {
+    setTimeout(() => {
+      import('@/stores/departamentosStore')
+        .then(module => {
+          const store = module.useDepartamentosStore()
+          if (store && !store.loaded) {
+            store.fetchDepartamentos()
+          }
+        })
+        .catch(() => {})
+    }, 1500)
+  }
+}
+
+// ==================== LIFECYCLE ====================
 onMounted(() => {
   document.addEventListener('keydown', onEscape)
+  preloadDepartamentos() // Descomentar si quieres precarga
 })
 
 onBeforeUnmount(() => {
@@ -496,7 +475,6 @@ onBeforeUnmount(() => {
   scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
   scroll-snap-stop: always;
-  /* scroll-padding-top: 80px; Añadido para respetar el header */
 }
 
 .snap-main {
@@ -507,7 +485,7 @@ onBeforeUnmount(() => {
   scroll-snap-align: start;
 }
 
-/* Header rojo fijo (nuevo) */
+/* Header rojo fijo */
 header {
   position: fixed;
   top: 0;
@@ -545,7 +523,7 @@ header {
   background-color: rgba(198, 18, 16, 0.6);
 }
 
-/* Scrollbar personalizado (original) */
+/* Scrollbar personalizado */
 aside::-webkit-scrollbar {
   width: 4px;
 }
@@ -563,7 +541,7 @@ aside::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.3);
 }
 
-/* Animaciones para redes sociales (original) */
+/* Animaciones para redes sociales */
 @keyframes bounceIn {
   0% {
     opacity: 0;
@@ -585,7 +563,7 @@ aside::-webkit-scrollbar-thumb:hover {
   animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
-/* Estilos para iconos de redes sociales (original) */
+/* Estilos para iconos de redes sociales */
 .social-icon-wrapper {
   display: flex;
   align-items: center;
@@ -633,7 +611,6 @@ main {
 
 /* Ajuste para el scroll-padding en toda la página */
 html {
-  /* scroll-padding-top: 80px; */
   scroll-behavior: smooth;
 }
 </style>
