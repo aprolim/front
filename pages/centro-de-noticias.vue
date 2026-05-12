@@ -16,7 +16,16 @@
       <div class="mx-[5vw] px-4 z-10 relative h-full flex flex-col justify-center">
         <div class="w-full rounded-2xl">
           
-          <div v-if="noticiasCarousel.length > 0" class="grid grid-cols-1 md:grid-cols-[50%_50%] gap-8 items-center">
+          <!-- Estado de carga -->
+          <div v-if="loadingImportantes" class="flex justify-center items-center h-[60vh]">
+            <div class="text-center">
+              <div class="inline-block w-12 h-12 border-4 border-[#E03636] border-t-transparent rounded-full animate-spin"></div>
+              <p class="mt-4 text-gray-600">Cargando noticias importantes...</p>
+            </div>
+          </div>
+          
+          <!-- Carrusel con datos reales -->
+          <div v-else-if="noticiasCarousel.length > 0" class="grid grid-cols-1 md:grid-cols-[50%_50%] gap-8 items-center">
             <!-- Columna izquierda -->
             <div class="flex flex-col items-center text-center">
               <div>
@@ -25,8 +34,10 @@
                 </h2>
                 <div class="text-gray-800 text-xs md:text-sm leading-relaxed space-y-3 text-justify">
                   <p>{{ noticiasCarousel[currentIndex].descripcion }}</p>
-                  <p>{{ noticiasCarousel[currentIndex].descripcion2 }}</p>
-                  <p class="text-[#E03636] font-semibold text-right">{{ noticiasCarousel[currentIndex].fechaFormateada }}</p>
+                  <p v-if="noticiasCarousel[currentIndex].descripcion2">{{ noticiasCarousel[currentIndex].descripcion2 }}</p>
+                  <p class="text-[#E03636] font-semibold text-right">
+                    {{ formatearFecha(noticiasCarousel[currentIndex].publishedAt || noticiasCarousel[currentIndex].fecha) }}
+                  </p>
                 </div>
               </div>
               
@@ -47,7 +58,7 @@
             <div class="pt-[4vw]">
               <div class="rounded-xl overflow-hidden shadow-lg aspect-square w-[80%] mx-auto">
                 <img 
-                  :src="noticiasCarousel[currentIndex].imagen"
+                  :src="noticiasCarousel[currentIndex].featuredImage?.url || noticiasCarousel[currentIndex].imagen"
                   :alt="noticiasCarousel[currentIndex].titulo"
                   class="w-full h-full object-cover"
                 />
@@ -65,6 +76,17 @@
               </div>
             </div>
           </div>
+          
+          <!-- Sin resultados -->
+          <div v-else-if="!loadingImportantes" class="text-center py-12">
+            <p class="text-gray-600">No hay noticias importantes disponibles</p>
+            <button 
+              @click="cargarDatos"
+              class="mt-4 px-4 py-2 bg-[#E03636] text-white rounded-lg hover:bg-[#C12F2F] transition"
+            >
+              Reintentar
+            </button>
+          </div>
         </div>
       </div>
     </section>
@@ -75,7 +97,7 @@
       ref="seccion2Ref" 
       class="scroll-section opacity-0 transition-all duration-800 ease-out z-10"
       :class="{ 'animate-in': isSeccion2Visible }"
-      style="height: 100vh; position: relative; background: white; display: flex; flex-direction: column; justify-content: flex-start;"
+      style="min-height: 100vh; position: relative; background: white; display: flex; flex-direction: column; justify-content: center;"
     >
       <MoreNewsGrid />
     </div>
@@ -176,30 +198,63 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, nextTick } from 'vue'
+import { ref, onMounted, onUnmounted, nextTick, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import { useNoticias } from '~/composables/useNoticias'
 import MoreNewsGrid from '@/components/MoreNewsGrid.vue'
-import { getNoticiasImportantes } from '~/data/noticias'
 
 const router = useRouter()
-const currentIndex = ref(0)
-const noticiasCarousel = ref([])
 
-const cargarNoticias = () => {
-  noticiasCarousel.value = getNoticiasImportantes()
+// Usar el composable de noticias
+const { 
+  noticiasImportantes, 
+  ultimasNoticias, 
+  loading, 
+  error,
+  fetchNoticiasImportantes,
+  fetchUltimasNoticias
+} = useNoticias()
+
+// Estados locales
+const currentIndex = ref(0)
+const loadingImportantes = ref(true)
+const loadingUltimas = ref(true)
+
+// Computed para el carousel (primeras 4 noticias importantes)
+const noticiasCarousel = computed(() => {
+  const noticias = noticiasImportantes.value.slice(0, 4)
+  console.log('🎠 noticiasCarousel actualizado:', noticias.length)
+  return noticias
+})
+
+// Formatear fecha
+const formatearFecha = (fecha) => {
+  if (!fecha) return ''
+  return new Date(fecha).toLocaleDateString('es-ES', { 
+    day: 'numeric', 
+    month: 'long', 
+    year: 'numeric' 
+  })
 }
 
+// Ver noticia completa
 const verNoticia = (noticia) => {
   if (noticia && noticia.slug) {
+    console.log('🔗 Navegando a noticia:', noticia.slug)
     router.push(`/noticias/${noticia.slug}`)
   }
 }
 
+// Autoplay del carousel
 let carouselInterval = null
 
 const startCarousel = () => {
   if (carouselInterval) clearInterval(carouselInterval)
-  if (noticiasCarousel.value.length === 0) return
+  if (noticiasCarousel.value.length === 0) {
+    console.log('⏸️ Carousel no iniciado: no hay noticias')
+    return
+  }
+  console.log('▶️ Iniciando carousel con', noticiasCarousel.value.length, 'noticias')
   carouselInterval = setInterval(() => {
     currentIndex.value = (currentIndex.value + 1) % noticiasCarousel.value.length
   }, 8000)
@@ -207,11 +262,13 @@ const startCarousel = () => {
 
 const stopCarousel = () => {
   if (carouselInterval) {
+    console.log('⏹️ Deteniendo carousel')
     clearInterval(carouselInterval)
     carouselInterval = null
   }
 }
 
+// Referencias a las secciones para scroll observer
 const seccion1Ref = ref(null)
 const seccion2Ref = ref(null)
 const seccion3Ref = ref(null)
@@ -225,10 +282,12 @@ const isSeccion4Visible = ref(false)
 let scrollObserver = null
 
 const initScrollObserver = () => {
+  console.log('👁️ Inicializando IntersectionObserver')
   scrollObserver = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
+          console.log('📌 Sección visible:', entry.target.id)
           if (entry.target === seccion1Ref.value) {
             isSeccion1Visible.value = true
             isSeccion2Visible.value = false
@@ -267,14 +326,56 @@ const initScrollObserver = () => {
   })
 }
 
+// Cargar datos desde el backend
+const cargarDatos = async () => {
+  console.log('🚀 Cargando noticias desde el backend...')
+  console.log('📡 URL del backend:', 'http://demoback.senado.gob.bo/api/content')
+  
+  loadingImportantes.value = true
+  loadingUltimas.value = true
+  
+  try {
+    await fetchNoticiasImportantes()
+    await fetchUltimasNoticias()
+    
+    console.log('✅ Resultado final:')
+    console.log('   - Noticias importantes:', noticiasImportantes.value.length)
+    console.log('   - Últimas noticias:', ultimasNoticias.value.length)
+    
+    if (noticiasImportantes.value.length > 0) {
+      console.log('   - Primera noticia importante:', noticiasImportantes.value[0]?.titulo?.substring(0, 50))
+    }
+  } catch (err) {
+    console.error('❌ Error cargando datos:', err)
+  } finally {
+    loadingImportantes.value = false
+    loadingUltimas.value = false
+  }
+  
+  if (error.value) {
+    console.error('❌ Error en composable:', error.value)
+  }
+}
+
+// Watch para depurar cambios en noticiasImportantes
+watch(noticiasImportantes, (nuevas) => {
+  console.log('🔄 noticiasImportantes actualizado:', nuevas.length)
+  if (nuevas.length > 0) {
+    console.log('   Primera noticia:', nuevas[0]?.titulo?.substring(0, 60))
+  }
+}, { deep: true })
+
+// Lifecycle
 onMounted(async () => {
-  cargarNoticias()
+  console.log('🚀 [centro-de-noticias] Componente montado')
+  await cargarDatos()
   await nextTick()
   initScrollObserver()
   startCarousel()
 })
 
 onUnmounted(() => {
+  console.log('👋 [centro-de-noticias] Componente desmontado')
   if (scrollObserver) scrollObserver.disconnect()
   stopCarousel()
 })
