@@ -1,8 +1,8 @@
-<!-- pages/noticias/index.vue -->
 <template>
   <div class="min-h-screen bg-gray-50 py-12">
     <div class="container mx-auto px-4">
       
+      <!-- Botón volver -->
       <button 
         @click="volverAtras"
         class="inline-flex items-center gap-2 text-[#E03636] hover:text-[#C12F2F] transition-colors mb-6 group"
@@ -13,6 +13,7 @@
         Volver
       </button>
 
+      <!-- Título -->
       <div class="text-center mb-12">
         <h1 class="text-4xl md:text-5xl font-bold text-gray-800">
           Todas las <span class="text-[#E03636]">Noticias</span>
@@ -33,41 +34,63 @@
         <button @click="recargar" class="bg-[#E03636] text-white px-4 py-2 rounded-lg hover:bg-[#C12F2F] transition">Reintentar</button>
       </div>
 
-      <!-- Grid de noticias -->
-      <div v-else-if="todasLasNoticias.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <!-- Grid de noticias - MISMO ESTILO QUE MORENEWSGRID -->
+      <div v-else-if="todasLasNoticias.length > 0">
+        <!-- Filas con stripe (fondo alternado) -->
         <div 
-          v-for="noticia in noticiasPaginadas" 
-          :key="noticia.id"
-          class="group cursor-pointer bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
-          @click="verNoticia(noticia)"
+          v-for="(fila, filaIndex) in noticiasPorFilas" 
+          :key="filaIndex"
+          :class="['rounded-xl transition-all duration-300', filaIndex % 2 === 1 ? 'bg-gray-100' : '']"
         >
-          <div class="relative h-48 overflow-hidden">
-            <img 
-              :src="noticia.featuredImage?.url || noticia.imagen" 
-              :alt="noticia.titulo" 
-              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
-              loading="lazy" 
-            />
-            <div v-if="noticia.importante" class="absolute top-3 left-3 bg-yellow-500 text-white text-xs px-2 py-1 rounded-full font-semibold">★ Importante</div>
-            <div class="absolute bottom-3 right-3 bg-[#E03636] text-white text-xs px-2 py-1 rounded-full">{{ noticia.categoria || 'Noticia' }}</div>
-          </div>
-          <div class="p-4">
-            <p class="text-gray-500 text-sm mb-2">{{ formatearFecha(noticia.publishedAt || noticia.fecha) }}</p>
-            <h3 class="font-bold text-gray-800 group-hover:text-[#E03636] transition-colors line-clamp-2">{{ noticia.titulo }}</h3>
-            <div class="flex justify-end mt-3">
-              <span class="text-[#E03636] text-sm font-semibold flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-                Leer más
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                </svg>
-              </span>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 p-4">
+            <!-- Tarjeta IDÉNTICA a MoreNewsGrid -->
+            <div 
+              v-for="noticia in fila" 
+              :key="noticia.id"
+              class="group bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer"
+              @click="verNoticia(noticia)"
+            >
+              <!-- Contenedor de imagen -->
+              <div class="relative overflow-hidden aspect-[4/5]">
+                <img 
+                  :src="noticia.featuredImage?.url || noticia.imagen || '/images/default-news.jpg'" 
+                  :alt="noticia.titulo"
+                  class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  loading="lazy"
+                />
+                
+                <!-- Div rojo que ocupa el 40% inferior de la imagen -->
+                <div class="absolute bottom-0 left-0 right-0 h-[40%] bg-[rgba(224,54,54,0.85)] backdrop-blur-sm p-4 flex flex-col justify-end">
+                  <p class="text-white text-[0.7rem] sm:text-[0.8rem] md:text-[0.9rem] lg:text-[1rem] mb-1 opacity-90">
+                    {{ formatearFecha(noticia.publishedAt || noticia.fecha) }}
+                  </p>
+                  <h3 class="font-bold text-white group-hover:text-red-200 transition-colors line-clamp-2 text-[0.8rem] sm:text-[0.9rem] md:text-[1rem] lg:text-[1.1rem] leading-tight">
+                    {{ noticia.titulo }}
+                  </h3>
+                  <div class="mt-2 flex justify-end">
+                    <span class="text-white text-[0.7rem] sm:text-[0.8rem] md:text-[0.9rem] font-semibold flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                      Leer más
+                      <svg class="w-3 h-3 sm:w-3 sm:h-3 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
+      <!-- Sin resultados -->
       <div v-else-if="!loading && todasLasNoticias.length === 0" class="text-center py-20">
         <p class="text-gray-500">No hay noticias disponibles</p>
+        <button 
+          @click="recargar"
+          class="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-[#E03636] text-white rounded-lg hover:bg-[#C12F2F] transition"
+        >
+          Reintentar
+        </button>
       </div>
 
       <!-- Paginación -->
@@ -108,7 +131,6 @@ import { useNoticias } from '~/composables/useNoticias'
 
 const router = useRouter()
 
-// Usar composable
 const { 
   todasLasNoticias,
   loading, 
@@ -120,11 +142,20 @@ const {
 const paginaActual = ref(1)
 const itemsPorPagina = ref(12)
 
-// Computed para noticias paginadas
+// Noticias paginadas
 const noticiasPaginadas = computed(() => {
   const start = (paginaActual.value - 1) * itemsPorPagina.value
   const end = start + itemsPorPagina.value
   return todasLasNoticias.value.slice(start, end)
+})
+
+// Agrupar noticias en filas de 4
+const noticiasPorFilas = computed(() => {
+  const filas = []
+  for (let i = 0; i < noticiasPaginadas.value.length; i += 4) {
+    filas.push(noticiasPaginadas.value.slice(i, i + 4))
+  }
+  return filas
 })
 
 // Total de páginas
@@ -200,5 +231,9 @@ useHead({ title: 'Todas las Noticias - Senado Bolivia' })
   line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+.aspect-\[4\/5\] {
+  aspect-ratio: 4 / 5;
 }
 </style>

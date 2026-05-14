@@ -20,7 +20,7 @@
     </div>
 
     <!-- GRID DE NOTICIAS -->
-    <div v-else-if="noticiasLocal.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[2vw] px-[6vw]">
+    <div v-else-if="noticiasLocal.length > 0" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-[2vw] px-[6vw]">
       <div 
         v-for="noticia in noticiasLocal" 
         :key="noticia.id"

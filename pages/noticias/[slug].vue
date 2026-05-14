@@ -1,4 +1,3 @@
-<!-- pages/noticias/[slug].vue -->
 <template>
   <div class="min-h-screen bg-gray-50 py-12">
     <div class="container mx-auto px-4 max-w-5xl">
@@ -30,16 +29,18 @@
         <div class="relative h-[400px] md:h-[500px] overflow-hidden">
           <img 
             :src="noticiaData.featuredImage?.url || noticiaData.imagen" 
-            :alt="noticiaData.titulo"
+            :alt="noticiaData.title || noticiaData.titulo"
             class="w-full h-full object-cover"
           />
           <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
           <div class="absolute bottom-0 left-0 right-0 p-8">
             <div class="flex flex-wrap gap-2 mb-4">
-              <span class="bg-[#E03636] text-white text-sm px-3 py-1 rounded-full">{{ noticiaData.categoria || 'Noticia' }}</span>
-              <span v-if="noticiaData.importante" class="bg-yellow-500 text-white text-sm px-3 py-1 rounded-full font-semibold">★ Importante</span>
+              <span class="bg-[#E03636] text-white text-sm px-3 py-1 rounded-full">{{ noticiaData.category || noticiaData.categoria || 'Noticia' }}</span>
+              <span v-if="noticiaData.category === 'legislacion' || noticiaData.views > 50" class="bg-yellow-500 text-white text-sm px-3 py-1 rounded-full font-semibold">★ Importante</span>
             </div>
-            <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight">{{ noticiaData.titulo }}</h1>
+            <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight">
+              {{ noticiaData.title || noticiaData.titulo }}
+            </h1>
           </div>
         </div>
 
@@ -72,18 +73,16 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
 const router = useRouter()
 
-// Estados locales
 const noticiaData = ref(null)
 const cargando = ref(true)
 const errorMsg = ref(null)
 
-// Formatear fecha
 const formatearFecha = (fecha) => {
   if (!fecha) return ''
   return new Date(fecha).toLocaleDateString('es-ES', { 
@@ -93,18 +92,16 @@ const formatearFecha = (fecha) => {
   })
 }
 
-// Volver atrás
 const volverAtras = () => {
   router.back()
 }
 
-// Compartir
 const compartir = () => {
   if (noticiaData.value) {
     if (navigator.share) {
       navigator.share({
-        title: noticiaData.value.titulo,
-        text: noticiaData.value.excerpt || noticiaData.value.descripcion,
+        title: noticiaData.value.title || noticiaData.value.titulo,
+        text: noticiaData.value.excerpt,
         url: window.location.href
       })
     } else {
@@ -114,12 +111,10 @@ const compartir = () => {
   }
 }
 
-// Recargar
 const recargar = async () => {
   await cargarNoticia()
 }
 
-// Cargar noticia desde el backend
 const cargarNoticia = async () => {
   cargando.value = true
   errorMsg.value = null
@@ -135,11 +130,10 @@ const cargarNoticia = async () => {
     }
     
     const data = await response.json()
-    console.log('📡 Respuesta:', data)
     
     if (data.success && data.data) {
       noticiaData.value = data.data
-      console.log('✅ Noticia cargada:', noticiaData.value.titulo)
+      console.log('✅ Noticia cargada:', noticiaData.value.title)
     } else {
       throw new Error('Noticia no encontrada')
     }
@@ -152,29 +146,23 @@ const cargarNoticia = async () => {
   }
 }
 
-// Cargar noticia al montar
 onMounted(() => {
   cargarNoticia()
 })
 
 definePageMeta({ layout: 'alter8' })
 
-// SEO dinámico con watch
-import { watch } from 'vue'
-
 watch(noticiaData, (nuevaNoticia) => {
   if (nuevaNoticia) {
     useHead({
-      title: `${nuevaNoticia.titulo} | Senado Bolivia`,
+      title: `${nuevaNoticia.title || nuevaNoticia.titulo} | Senado Bolivia`,
       meta: [
-        { name: 'description', content: nuevaNoticia.excerpt || nuevaNoticia.descripcion },
-        { property: 'og:title', content: nuevaNoticia.titulo },
-        { property: 'og:description', content: nuevaNoticia.excerpt || nuevaNoticia.descripcion },
-        { property: 'og:image', content: nuevaNoticia.featuredImage?.url || nuevaNoticia.imagen }
+        { name: 'description', content: nuevaNoticia.excerpt },
+        { property: 'og:title', content: nuevaNoticia.title || nuevaNoticia.titulo },
+        { property: 'og:description', content: nuevaNoticia.excerpt },
+        { property: 'og:image', content: nuevaNoticia.featuredImage?.url }
       ]
     })
-  } else {
-    useHead({ title: 'Noticia no encontrada | Senado Bolivia' })
   }
 }, { immediate: true })
 </script>

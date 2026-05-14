@@ -1,7 +1,6 @@
 // composables/useNoticias.js
 import { ref } from 'vue'
 
-// Usar la URL de tu backend remoto
 const API_BASE_URL = 'http://demoback.senado.gob.bo/api'
 
 export const useNoticias = () => {
@@ -11,10 +10,37 @@ export const useNoticias = () => {
   const loading = ref(false)
   const error = ref(null)
 
+  // Función para transformar datos del backend al formato del frontend
+  const transformarNoticia = (item) => {
+    // Limpiar HTML para obtener texto plano para la descripción
+    const textoPlano = item.content?.replace(/<[^>]*>/g, '') || ''
+    
+    return {
+      id: item._id,
+      titulo: item.title,
+      slug: item.slug,
+      contenido: item.content,
+      resumen: item.excerpt || textoPlano.substring(0, 200),
+      // 🔥 NUEVOS CAMPOS para el carrusel
+      descripcion: item.excerpt || textoPlano.substring(0, 150),
+      descripcion2: textoPlano.length > 200 ? textoPlano.substring(150, 350) : '',
+      fecha: item.publishedAt,
+      publishedAt: item.publishedAt,
+      imagen: item.featuredImage?.url,
+      featuredImage: item.featuredImage,
+      categoria: item.category,
+      importante: item.category === 'legislacion' || item.views > 50,
+      tipo: item.type,
+      status: item.status,
+      views: item.views,
+      createdAt: item.createdAt,
+      updatedAt: item.updatedAt
+    }
+  }
+
   const fetchTodasLasNoticias = async () => {
     console.log('📡 [fetchTodasLasNoticias] Iniciando...')
     
-    // Evitar múltiples llamadas simultáneas
     if (loading.value) {
       console.log('📡 Ya hay una carga en curso, esperando...')
       return
@@ -24,7 +50,7 @@ export const useNoticias = () => {
     error.value = null
     
     try {
-      const response = await fetch(`${API_BASE_URL}/content?type=news&status=published&limit=100`)
+      const response = await fetch(`${API_BASE_URL}/content?status=published&limit=100`)
       
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
@@ -32,46 +58,43 @@ export const useNoticias = () => {
       
       const data = await response.json()
       
-      console.log('📡 Respuesta completa:', data)
+      console.log('📡 Respuesta recibida:', data)
       
       if (data.success && data.data && data.data.contents) {
-        todasLasNoticias.value = data.data.contents
+        todasLasNoticias.value = data.data.contents.map(transformarNoticia)
         console.log(`✅ Cargadas ${todasLasNoticias.value.length} noticias del backend`)
         
-        // Mostrar las primeras noticias para depuración
         if (todasLasNoticias.value.length > 0) {
-          console.log('📰 Primera noticia:', {
+          console.log('📰 Primera noticia transformada:', {
             id: todasLasNoticias.value[0].id,
-            titulo: todasLasNoticias.value[0].titulo.substring(0, 50),
-            importante: todasLasNoticias.value[0].importante
+            titulo: todasLasNoticias.value[0].titulo?.substring(0, 50),
+            descripcion: todasLasNoticias.value[0].descripcion?.substring(0, 80),
+            descripcion2: todasLasNoticias.value[0].descripcion2?.substring(0, 80)
           })
         }
         
-        // IMPORTANTE: Las noticias importantes son las que tienen importante = true
-        // Según el JSON que mostraste, las primeras 4 tienen importante: true
+        // Noticias importantes: las de legislacion o con más de 50 vistas
         const importantes = todasLasNoticias.value.filter(n => n.importante === true)
-        console.log(`📊 Noticias con importante=true: ${importantes.length}`)
         
-        if (importantes.length > 0) {
-          noticiasImportantes.value = importantes
-          console.log(`✅ ${noticiasImportantes.value.length} noticias importantes asignadas`)
+        if (importantes.length >= 4) {
+          noticiasImportantes.value = importantes.slice(0, 4)
+          console.log(`✅ ${noticiasImportantes.value.length} noticias importantes (por filtro)`)
         } else {
-          // Si no hay marcadas como importantes, tomar las primeras 4
-          noticiasImportantes.value = todasLasNoticias.value.slice(0, 4)
-          console.log(`⚠️ No hay noticias con importante=true, usando primeras 4`)
+          const otras = todasLasNoticias.value.filter(n => !n.importante)
+          noticiasImportantes.value = [...importantes, ...otras].slice(0, 4)
+          console.log(`✅ ${noticiasImportantes.value.length} noticias importantes (completadas)`)
         }
         
-        // Últimas noticias (excluyendo las importantes)
         const idsImportantes = new Set(noticiasImportantes.value.map(n => n.id))
         const noImportantes = todasLasNoticias.value.filter(n => !idsImportantes.has(n.id))
         ultimasNoticias.value = noImportantes.slice(0, 4)
         
         console.log(`✅ ${ultimasNoticias.value.length} últimas noticias asignadas`)
         
-        // Verificar que los datos llegaron
         console.log('📰 Títulos de noticias importantes:')
         noticiasImportantes.value.forEach((n, i) => {
-          console.log(`   ${i+1}. ${n.titulo.substring(0, 60)}...`)
+          console.log(`   ${i+1}. ${n.titulo?.substring(0, 60)}...`)
+          console.log(`      Descripción: ${n.descripcion?.substring(0, 60)}...`)
         })
         
       } else {
@@ -98,7 +121,6 @@ export const useNoticias = () => {
     return ultimasNoticias.value
   }
 
-  // Método para obtener una noticia por slug
   const fetchNoticiaBySlug = async (slug) => {
     console.log(`📡 [fetchNoticiaBySlug] Buscando: ${slug}`)
     loading.value = true
@@ -114,8 +136,9 @@ export const useNoticias = () => {
       const data = await response.json()
       
       if (data.success && data.data) {
-        console.log(`✅ Noticia encontrada: ${data.data.titulo}`)
-        return data.data
+        const noticia = transformarNoticia(data.data)
+        console.log(`✅ Noticia encontrada: ${noticia.titulo}`)
+        return noticia
       } else {
         throw new Error('Noticia no encontrada')
       }
@@ -129,13 +152,11 @@ export const useNoticias = () => {
   }
 
   return {
-    // Estados
     noticiasImportantes,
     ultimasNoticias,
     todasLasNoticias,
     loading,
     error,
-    // Métodos
     fetchTodasLasNoticias,
     fetchNoticiasImportantes,
     fetchUltimasNoticias,

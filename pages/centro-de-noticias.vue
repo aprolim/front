@@ -29,10 +29,10 @@
             <!-- Columna izquierda -->
             <div class="flex flex-col items-center text-center">
               <div>
-                <h2 class="text-[#E03636] text-xl md:text-2xl lg:text-3xl font-bold mb-4 leading-tight">
+                <h2 class="text-[#E03636] text-[2vw] font-bold mb-4 leading-tight">
                   {{ noticiasCarousel[currentIndex].titulo }}
                 </h2>
-                <div class="text-gray-800 text-xs md:text-sm leading-relaxed space-y-3 text-justify">
+                <div class="text-gray-800 text-[1.2vw] leading-relaxed space-y-3 text-justify">
                   <p>{{ noticiasCarousel[currentIndex].descripcion }}</p>
                   <p v-if="noticiasCarousel[currentIndex].descripcion2">{{ noticiasCarousel[currentIndex].descripcion2 }}</p>
                   <p class="text-[#E03636] font-semibold text-right">
