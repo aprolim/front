@@ -764,7 +764,7 @@ const comisionesData = {
       { foto: '/new/titulares/g2/FREDDY CASTILLO CHAVEZ.png', cargo: 'SECRETARIO DE COMITÉ', nombre: 'Freddy', apellido:'Castillo Chavez', partido: 'PDC' },
       { foto: '/new/suplentes/g2/VILLMA COLQUE CAMACHO.png', cargo: 'SENADORA SUPLENTE', nombre: 'Villma ', apellido:'Colque Camacho', partido: 'PDC' }
     ],
-    tituloLinea2: 'COMITE DE CONSTITUCIÓN, LEGISLACIÓN E INTERPRETACIÓN LEGISLATIVA Y CONSTITUCIONAL',
+    tituloLinea2: 'COMITE DE SISTEMA ELECTORAL, DERECHOS HUMANOS Y EQUIDAD SOCIAL',
     miembrosGrupo3: [
       { foto: '/new/titulares/g1/TOMASA YARHUI JACOME.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Tomasa', apellido:'Yarhui Jacome', partido: 'PDC' },
       { foto: '/new/suplentes/g1/HUGO MARCELO CORTEZ CALVIMONTES.png', cargo: 'SENADOR SUPLENTE', nombre: 'Hugo Marcelo', apellido:'Cortez Calvimontes', partido: 'PDC' }
