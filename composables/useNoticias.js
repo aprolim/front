@@ -12,7 +12,6 @@ export const useNoticias = () => {
 
   // Función para transformar datos del backend al formato del frontend
   const transformarNoticia = (item) => {
-    // Limpiar HTML para obtener texto plano para la descripción
     const textoPlano = item.content?.replace(/<[^>]*>/g, '') || ''
     
     return {
@@ -21,7 +20,6 @@ export const useNoticias = () => {
       slug: item.slug,
       contenido: item.content,
       resumen: item.excerpt || textoPlano.substring(0, 200),
-      // 🔥 NUEVOS CAMPOS para el carrusel
       descripcion: item.excerpt || textoPlano.substring(0, 150),
       descripcion2: textoPlano.length > 200 ? textoPlano.substring(150, 350) : '',
       fecha: item.publishedAt,
@@ -64,15 +62,6 @@ export const useNoticias = () => {
         todasLasNoticias.value = data.data.contents.map(transformarNoticia)
         console.log(`✅ Cargadas ${todasLasNoticias.value.length} noticias del backend`)
         
-        if (todasLasNoticias.value.length > 0) {
-          console.log('📰 Primera noticia transformada:', {
-            id: todasLasNoticias.value[0].id,
-            titulo: todasLasNoticias.value[0].titulo?.substring(0, 50),
-            descripcion: todasLasNoticias.value[0].descripcion?.substring(0, 80),
-            descripcion2: todasLasNoticias.value[0].descripcion2?.substring(0, 80)
-          })
-        }
-        
         // Noticias importantes: las de legislacion o con más de 50 vistas
         const importantes = todasLasNoticias.value.filter(n => n.importante === true)
         
@@ -85,16 +74,24 @@ export const useNoticias = () => {
           console.log(`✅ ${noticiasImportantes.value.length} noticias importantes (completadas)`)
         }
         
+        // 🔥 CORREGIDO: Últimas noticias = las 4 más RECIENTES que NO son importantes
         const idsImportantes = new Set(noticiasImportantes.value.map(n => n.id))
-        const noImportantes = todasLasNoticias.value.filter(n => !idsImportantes.has(n.id))
+        const noImportantes = todasLasNoticias.value
+          .filter(n => !idsImportantes.has(n.id))
+          .sort((a, b) => new Date(b.publishedAt || b.fecha) - new Date(a.publishedAt || a.fecha))
+        
         ultimasNoticias.value = noImportantes.slice(0, 4)
         
-        console.log(`✅ ${ultimasNoticias.value.length} últimas noticias asignadas`)
+        console.log(`✅ ${ultimasNoticias.value.length} últimas noticias asignadas (las más recientes)`)
         
         console.log('📰 Títulos de noticias importantes:')
         noticiasImportantes.value.forEach((n, i) => {
           console.log(`   ${i+1}. ${n.titulo?.substring(0, 60)}...`)
-          console.log(`      Descripción: ${n.descripcion?.substring(0, 60)}...`)
+        })
+        
+        console.log('📰 Últimas noticias (más recientes):')
+        ultimasNoticias.value.forEach((n, i) => {
+          console.log(`   ${i+1}. ${n.titulo?.substring(0, 60)}... - ${new Date(n.publishedAt).toLocaleDateString()}`)
         })
         
       } else {

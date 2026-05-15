@@ -192,7 +192,7 @@
             <span class="back-icon">←</span>
             <span class="back-text">Volver</span>
           </button>
-          <div class="global-search-box z-30">
+          <div class="global-search-box z-30 translate-x-[7.5vw]">
             <input 
               type="text" 
               v-model="busquedaGlobal"
