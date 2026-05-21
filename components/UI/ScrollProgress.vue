@@ -12,8 +12,18 @@
 </template>
 
 <script setup>
+// Este componente NO tiene event listeners propios,
+// solo recibe props del composable useScrollEffects
+// que ya corregimos con { passive: true }
+
 const props = defineProps({
-  scrolled: Boolean,
-  scrollProgress: Number
+  scrolled: {
+    type: Boolean,
+    default: false
+  },
+  scrollProgress: {
+    type: Number,
+    default: 0
+  }
 })
 </script>

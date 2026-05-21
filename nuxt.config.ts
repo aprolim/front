@@ -8,6 +8,11 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     '@nuxt/image'
   ],
+  plugins: [
+    { src: '~/plugins/adaptive-image-loader.client.ts', mode: 'client' },
+    { src: '~/plugins/clean-console.client.ts', mode: 'client' },
+    { src: '~/plugins/sw-register.client.ts', mode: 'client' }
+  ],
   
   // ============================================
   // CONFIGURACIÓN DE IMÁGENES CON IPX - CORREGIDA

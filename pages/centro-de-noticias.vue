@@ -223,7 +223,6 @@ const loadingUltimas = ref(true)
 // Computed para el carousel (primeras 4 noticias importantes)
 const noticiasCarousel = computed(() => {
   const noticias = noticiasImportantes.value.slice(0, 4)
-  console.log('🎠 noticiasCarousel actualizado:', noticias.length)
   return noticias
 })
 
@@ -240,7 +239,6 @@ const formatearFecha = (fecha) => {
 // Ver noticia completa
 const verNoticia = (noticia) => {
   if (noticia && noticia.slug) {
-    console.log('🔗 Navegando a noticia:', noticia.slug)
     router.push(`/noticias/${noticia.slug}`)
   }
 }
@@ -250,11 +248,7 @@ let carouselInterval = null
 
 const startCarousel = () => {
   if (carouselInterval) clearInterval(carouselInterval)
-  if (noticiasCarousel.value.length === 0) {
-    console.log('⏸️ Carousel no iniciado: no hay noticias')
-    return
-  }
-  console.log('▶️ Iniciando carousel con', noticiasCarousel.value.length, 'noticias')
+  if (noticiasCarousel.value.length === 0) return
   carouselInterval = setInterval(() => {
     currentIndex.value = (currentIndex.value + 1) % noticiasCarousel.value.length
   }, 8000)
@@ -262,7 +256,6 @@ const startCarousel = () => {
 
 const stopCarousel = () => {
   if (carouselInterval) {
-    console.log('⏹️ Deteniendo carousel')
     clearInterval(carouselInterval)
     carouselInterval = null
   }
@@ -281,13 +274,21 @@ const isSeccion4Visible = ref(false)
 
 let scrollObserver = null
 
+// ============================================
+// INTERSECTION OBSERVER CORREGIDO
+// ============================================
 const initScrollObserver = () => {
-  console.log('👁️ Inicializando IntersectionObserver')
-  scrollObserver = new IntersectionObserver(
-    (entries) => {
+  // Usar requestAnimationFrame para mejor rendimiento
+  const options = {
+    threshold: 0.3,
+    rootMargin: '0px 0px 0px 0px'
+  }
+  
+  scrollObserver = new IntersectionObserver((entries) => {
+    // Usar requestAnimationFrame para no bloquear el scroll
+    requestAnimationFrame(() => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          console.log('📌 Sección visible:', entry.target.id)
           if (entry.target === seccion1Ref.value) {
             isSeccion1Visible.value = true
             isSeccion2Visible.value = false
@@ -316,9 +317,8 @@ const initScrollObserver = () => {
           entry.target.classList.add('animate-in')
         }
       })
-    },
-    { threshold: 0.3 }
-  )
+    })
+  }, options)
   
   const sections = [seccion1Ref.value, seccion2Ref.value, seccion3Ref.value, seccion4Ref.value]
   sections.forEach(section => {
@@ -328,46 +328,29 @@ const initScrollObserver = () => {
 
 // Cargar datos desde el backend
 const cargarDatos = async () => {
-  console.log('🚀 Cargando noticias desde el backend...')
-  console.log('📡 URL del backend:', 'http://demoback.senado.gob.bo/api/content')
-  
   loadingImportantes.value = true
   loadingUltimas.value = true
   
   try {
     await fetchNoticiasImportantes()
     await fetchUltimasNoticias()
-    
-    console.log('✅ Resultado final:')
-    console.log('   - Noticias importantes:', noticiasImportantes.value.length)
-    console.log('   - Últimas noticias:', ultimasNoticias.value.length)
-    
-    if (noticiasImportantes.value.length > 0) {
-      console.log('   - Primera noticia importante:', noticiasImportantes.value[0]?.titulo?.substring(0, 50))
-    }
   } catch (err) {
-    console.error('❌ Error cargando datos:', err)
+    console.error('Error cargando datos:', err)
   } finally {
     loadingImportantes.value = false
     loadingUltimas.value = false
-  }
-  
-  if (error.value) {
-    console.error('❌ Error en composable:', error.value)
   }
 }
 
 // Watch para depurar cambios en noticiasImportantes
 watch(noticiasImportantes, (nuevas) => {
-  console.log('🔄 noticiasImportantes actualizado:', nuevas.length)
-  if (nuevas.length > 0) {
-    console.log('   Primera noticia:', nuevas[0]?.titulo?.substring(0, 60))
+  if (nuevas.length > 0 && carouselInterval === null && isSeccion1Visible.value) {
+    startCarousel()
   }
 }, { deep: true })
 
 // Lifecycle
 onMounted(async () => {
-  console.log('🚀 [centro-de-noticias] Componente montado')
   await cargarDatos()
   await nextTick()
   initScrollObserver()
@@ -375,7 +358,6 @@ onMounted(async () => {
 })
 
 onUnmounted(() => {
-  console.log('👋 [centro-de-noticias] Componente desmontado')
   if (scrollObserver) scrollObserver.disconnect()
   stopCarousel()
 })
