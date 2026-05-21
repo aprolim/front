@@ -88,6 +88,14 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useNoticias } from '~/composables/useNoticias'
 
+// Props - parámetro opcional
+const props = defineProps({
+  targetRoute: {
+    type: String,
+    default: null  // Por defecto null, significa que usa el comportamiento original
+  }
+})
+
 const router = useRouter()
 
 // Usar el composable de noticias directamente
@@ -95,7 +103,6 @@ const { ultimasNoticias, loading, fetchUltimasNoticias } = useNoticias()
 
 // Estado local
 const noticiasLocal = ref([])
-const loadingLocal = ref(false)
 
 // Formatear fecha
 const formatearFecha = (fecha) => {
@@ -116,15 +123,25 @@ const verNoticia = (noticia) => {
 
 // Ir a todas las noticias
 const irATodasLasNoticias = () => {
-  router.push('/noticias')
+  // Si no se envió el parámetro, usar comportamiento original (/noticias)
+  if (!props.targetRoute) {
+    router.push('/noticias')
+    return
+  }
+  
+  // Si se envió el parámetro y contiene hash
+  if (props.targetRoute.includes('#')) {
+    const [path, hash] = props.targetRoute.split('#')
+    router.push({ path, hash: `#${hash}` })
+  } else {
+    router.push(props.targetRoute)
+  }
 }
 
 // Cargar noticias
 const cargarNoticias = async () => {
-  loadingLocal.value = true
   await fetchUltimasNoticias()
   noticiasLocal.value = ultimasNoticias.value
-  loadingLocal.value = false
 }
 
 // Inicializar

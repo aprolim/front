@@ -51,7 +51,7 @@
     >
       <!-- Contenedor del contenido con fondo transparente -->
       <div style="position: relative; z-index: 2; background: transparent; height: 100%;" class="pt-3">
-        <MoreNewsGrid />
+        <MoreNewsGrid targetRoute="/centro-de-noticias#noticias-importantes"/>
       </div>
     </div>
     

@@ -199,11 +199,12 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted, nextTick, computed, watch } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useNoticias } from '~/composables/useNoticias'
 import MoreNewsGrid from '@/components/MoreNewsGrid.vue'
 
 const router = useRouter()
+const route = useRoute()
 
 // Usar el composable de noticias
 const { 
@@ -275,17 +276,41 @@ const isSeccion4Visible = ref(false)
 let scrollObserver = null
 
 // ============================================
-// INTERSECTION OBSERVER CORREGIDO
+// FUNCIÓN PARA HACER SCROLL AL HASH
+// ============================================
+const scrollToHash = () => {
+  const hash = route.hash
+  if (hash && hash !== '') {
+    // Esperar a que la página esté completamente cargada
+    nextTick(() => {
+      const elementId = hash.replace('#', '')
+      const element = document.getElementById(elementId)
+      
+      if (element) {
+        // Pequeño retraso para asegurar que todo está renderizado
+        setTimeout(() => {
+          element.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start' 
+          })
+        }, 500)
+      } else {
+        console.warn(`Elemento con id "${elementId}" no encontrado`)
+      }
+    })
+  }
+}
+
+// ============================================
+// INTERSECTION OBSERVER
 // ============================================
 const initScrollObserver = () => {
-  // Usar requestAnimationFrame para mejor rendimiento
   const options = {
     threshold: 0.3,
     rootMargin: '0px 0px 0px 0px'
   }
   
   scrollObserver = new IntersectionObserver((entries) => {
-    // Usar requestAnimationFrame para no bloquear el scroll
     requestAnimationFrame(() => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
@@ -349,12 +374,22 @@ watch(noticiasImportantes, (nuevas) => {
   }
 }, { deep: true })
 
+// Watch para cambios en la ruta (por si navegan desde otro lugar)
+watch(() => route.hash, (newHash) => {
+  if (newHash && newHash !== '') {
+    scrollToHash()
+  }
+})
+
 // Lifecycle
 onMounted(async () => {
   await cargarDatos()
   await nextTick()
   initScrollObserver()
   startCarousel()
+  
+  // Hacer scroll al hash después de cargar todo
+  scrollToHash()
 })
 
 onUnmounted(() => {

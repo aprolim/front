@@ -37,7 +37,7 @@
             <!-- MENÚ 1: La institución -->
             <div class="relative group/menu">
               <NuxtLink 
-                to="/la-institucion" 
+                to="/la-institucion#mandato" 
                 class="inline-block px-[1vw] py-2 text-white font-medium hover:bg-[#C12F2F] rounded-lg transition-colors cursor-pointer"
               >
                 La institución
@@ -78,7 +78,7 @@
             <!-- MENÚ 2: Gestión Legislativa -->
             <div class="relative group/menu">
               <NuxtLink 
-                to="/gestion-legislativa" 
+                to="/gestion-legislativa#sesiones-pleno" 
                 class="inline-block px-[1vw] py-2 text-white font-medium hover:bg-[#C12F2F] rounded-lg transition-colors cursor-pointer"
               >
                 Gestión Legislativa
@@ -104,7 +104,7 @@
             <!-- MENÚ 3: Legisladores y representación -->
             <div class="relative group/menu">
               <NuxtLink 
-                to="/legisladores-nacionales" 
+                to="/legisladores-nacionales#directiva-camaral" 
                 class="inline-block px-[1vw] py-2 text-white font-medium hover:bg-[#C12F2F] rounded-lg transition-colors cursor-pointer"
               >
                 Legisladores Nacionales
