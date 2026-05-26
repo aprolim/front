@@ -1,4 +1,4 @@
-<!-- layouts/alter8.vue - VERSIÓN COMPLETA SIN ERRORES -->
+<!-- layouts/alter8.vue - VERSIÓN CORREGIDA CON SCROLL-SNAP FUNCIONAL -->
 <template>
   <div class="h-screen snap-container">
     <!-- Header rojo fijo y flotante (superpuesto) con menús a la derecha -->
@@ -464,7 +464,7 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-/* ===== SNAP SCROLL CONFIGURACIÓN (ORIGINAL) ===== */
+/* ===== SNAP SCROLL CONFIGURACIÓN CORREGIDA ===== */
 *{
   font-family: 'Montserrat';
 }
@@ -475,13 +475,26 @@ onBeforeUnmount(() => {
   scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
   scroll-snap-stop: always;
+  /* Forzar que el scroll comience desde el inicio */
+  scroll-padding-top: 0;
 }
 
 .snap-main {
   scroll-snap-align: start;
 }
 
+/* El footer también debe ser punto de snap */
 .snap-footer {
+  scroll-snap-align: start;
+}
+
+/* Elemento invisible al final para asegurar que el footer sea alcanzable */
+.snap-container::after {
+  content: '';
+  display: block;
+  height: 1px;
+  width: 100%;
+  opacity: 0;
   scroll-snap-align: start;
 }
 

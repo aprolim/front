@@ -37,11 +37,11 @@
       </div>
     </div>
 
-    <!-- DOS COLUMNAS: Texto (izquierda) + Carrusel (derecha) - MÁS COMPACTO -->
-    <div class="mx-auto px-[5vw] mt-[1vw] flex-1 w-full ">
-      <div class="grid grid-cols-2 gap-[3vw] h-full">
+    <!-- DOS COLUMNAS: Texto (izquierda) + Carrusel (derecha) - CON ALINEACIÓN VERTICAL CENTRADA -->
+    <div class="mx-auto px-[5vw] flex-1 w-full flex items-center">
+      <div class="grid grid-cols-2 gap-[3vw] w-full items-center">
         
-        <!-- COLUMNA IZQUIERDA: Texto y controles - MÁS PEQUEÑA -->
+        <!-- COLUMNA IZQUIERDA: Texto y controles -->
         <div class="flex flex-col h-full relative text-[1.4vw]" style="min-height: 37.1vw;">
           <!-- CONTENIDO PRINCIPAL - OCUPA TODO EL ESPACIO DISPONIBLE -->
           <div class="flex-1 flex flex-col justify-center">
@@ -79,7 +79,7 @@
           </div>
         </div>
 
-        <!-- COLUMNA DERECHA: Carrusel de imágenes - MÁS PEQUEÑO -->
+        <!-- COLUMNA DERECHA: Carrusel de imágenes -->
         <div class="relative w-full overflow-hidden rounded-lg shadow-xl" style="height: 36vw;">
           <!-- Imágenes del carrusel -->
           <div 
@@ -104,11 +104,11 @@
             <!-- Título de la imagen - MÁS PEQUEÑO -->
             <div v-if="slide.image.title" class="absolute bottom-0 left-0 right-0 p-3 text-white">
               <h3 class="font-bold text-[1.4vw]">{{ slide.image.title }}</h3>
-              <p v-if="slide.image.caption" class="text-white/80  text-[1.15vw]">{{ slide.image.caption }}</p>
+              <p v-if="slide.image.caption" class="text-white/80 text-[1.15vw]">{{ slide.image.caption }}</p>
             </div>
           </div>
 
-          <!-- Flechas de navegación - MÁS PEQUEÑAS -->
+          <!-- Flechas de navegación - MÁS PEQUEÑAS (COMENTADAS) -->
           <!-- <button 
             @click="prevSlide"
             class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white rounded-full w-8 h-8 flex items-center justify-center transition-all duration-300 z-10 text-lg"

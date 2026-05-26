@@ -3,12 +3,12 @@
     <div class="h-[4.4vw]"></div>
     
     <!-- Título (opcional) -->
-    <h2 v-if="title" class="text-2xl font-bold text-center mb-8 text-[#E03636] uppercase tracking-wide">
+    <h2 v-if="title" class="text-[2.5vw] font-bold text-center mb-8 text-[#E03636] uppercase tracking-wide">
       {{ title }}
     </h2>
 
     <!-- Contenedor del carrusel -->
-    <div class="relative w-full mx-auto px-12">
+    <div class="relative w-full mx-auto px-12 pb-[1.3vw]">
       
       <!-- Flecha izquierda -->
       <button 
@@ -73,7 +73,7 @@
     </div>
     <NuxtLink to="en-construccion">
       <button 
-        class="text-[.8em] mt-[.5em] bg-[#E03636] hover:bg-[#E03636]/80 text-white font-bold py-[.5em] px-8 rounded-lg transition-all duration-300 transform hover:scale-105 uppercase tracking-wider shadow-lg"
+        class="text-[1.2vw] bg-[#E03636] hover:bg-[#E03636]/80 text-white font-bold py-[.5em] px-8 rounded-[.5vw] transition-all duration-300 transform hover:scale-105 uppercase tracking-wider shadow-lg"
       >
         Ver más
       </button>

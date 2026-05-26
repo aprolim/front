@@ -11,7 +11,7 @@
       class="relative h-screen overflow-y-auto transition-all duration-500"
       ref="seccion1Ref"
     >
-      <div class="text-[3vw] w-full text-center mt-[4.1vw] bg-white relative py-[.1vh]">
+      <div class="text-[3vw] w-full text-center mt-[4.1vw] bg-white relative py-[.08vw]">
         <div class="absolute top-0 left-0 h-[2px] bg-[#E4D294] animate-slide-right"></div>
         <div class="absolute bottom-0 right-0 h-[2px] bg-[#E4D294] animate-slide-left"></div>
         <div class="absolute top-0 right-0 w-[2px] bg-[#E4D294] animate-slide-down"></div>
@@ -25,7 +25,7 @@
       <div class="mx-[5vw] px-4 z-10 relative mt-[2.3vh]">
         <div class="flex flex-row gap-[2vw] h-full items-center">
           
-          <div class="w-[60%] p-[1.5vh] rounded-2xl shadow-left-column" 
+          <div class="w-[60%] p-[0.8vw] rounded-2xl shadow-left-column" 
               :style="{ backgroundColor: 'rgba(190, 0, 0, 0.60)' }">
             
             <div class="grid grid-cols-3 gap-[.6vh] mb-[1.8vh]">
@@ -124,26 +124,28 @@
     <div 
       id="comisiones-y-comites"
       ref="seccion2Ref" 
-      class="scroll-section opacity-0 transition-all duration-800 ease-out z-10"
+      class="scroll-section opacity-0 transition-all duration-800 ease-out z-10 pt-[4.2vw]"
       :class="{ 'animate-in': isSeccion2Visible }"
       style="height: 100vh; position: relative; background: white; overflow-y: auto;"
     >
-      <div class="mx-[5vw] mt-[4.2vw] px-4 ">
-        <div class="bg-[#E03636] rounded-lg mb-[3.5vh]">
-          <h2 class="text-[5vh] font-bold text-center text-white py-[0.5vw] tracking-wide">
+      <div class="mx-[5vw] px-4 h-full flex flex-col">
+        <div class="bg-[#E03636] rounded-lg flex-shrink-0">
+          <h2 class="text-[2.2vw] font-bold text-center text-white py-[0.5vw] tracking-wide">
             COMISIONES Y COMITÉS
           </h2>
         </div>
 
-        <div class="flex flex-col md:flex-row gap-6">
+        <!-- Contenedor padre con flex y items-center para alinear verticalmente - AHORA OCUPA TODO EL ALTO -->
+        <div class="flex flex-col md:flex-row gap-6 flex-1 items-center">
           
+          <!-- COLUMNA IZQUIERDA: Lista de comisiones -->
           <div class="w-full md:w-[40%] space-y-[.2vw]">
             <button
               v-for="comision in comisionesList"
               :key="comision.id"
               @click="seleccionarComision(comision)"
               :class="[
-                'w-full py-[.1vh] px-4 rounded-lg font-semibold transition-all duration-300 text-left text-[2.4vh]',
+                'w-full py-[.1vw] px-4 rounded-lg font-semibold transition-all duration-300 text-left text-[1.25vw]',
                 comisionSeleccionada?.id === comision.id 
                   ? 'bg-[#E03636] text-white' 
                   : 'bg-white text-[#E03636] border border-[#E03636] hover:bg-[#E03636] hover:text-white'
@@ -154,9 +156,10 @@
             </button>
           </div>
 
-          <div class="w-full md:w-[60%] bg-gray-400/90 rounded-lg pt-[1vw] text-[1vw] mt-[-1.8vh]">
+          <!-- COLUMNA DERECHA: Detalle de la comisión -->
+          <div class="w-full md:w-[60%] bg-gray-400/90 rounded-lg pt-[1vw] text-[1vw]">
             <div v-if="comisionSeleccionada">
-              <h3 class="text-[3.5vh] font-bold text-white drop-shadow-md text-center">
+              <h3 class="text-[1.9vw] font-bold text-white drop-shadow-md text-center">
                 {{ comisionSeleccionada.nombre }}
               </h3>
 
@@ -166,9 +169,9 @@
                     :src="miembro.foto" 
                     :alt="miembro.nombre" 
                     loading="lazy" 
-                    class="w-[14vh] h-[14vh] rounded-full object-cover transition-all duration-700 hover:scale-[3.2] hover:z-50"
+                    class="w-[8vw] h-[8vw] rounded-full object-cover transition-all duration-700 hover:scale-[3.2] hover:z-50"
                   />
-                  <div class="text-white text-center text-[2vh]">
+                  <div class="text-white text-center text-[1.1vw]">
                     <p class="font-bold drop-shadow-md">{{ miembro.cargo }}</p>
                     <p class="drop-shadow-md">{{ miembro.nombre }}</p>
                     <p class="drop-shadow-md">{{ miembro.apellido }}</p>
@@ -187,9 +190,9 @@
                     :src="miembro.foto" 
                     :alt="miembro.nombre" 
                     loading="lazy" 
-                    class="w-[14vh] h-[14vh] rounded-full object-cover transition-all duration-700 hover:scale-[3.2] hover:z-50"
+                    class="w-[8vw] h-[8vw] rounded-full object-cover transition-all duration-700 hover:scale-[3.2] hover:z-50"
                   />
-                  <div class="text-white text-center text-[2vh]">
+                  <div class="text-white text-center text-[1.1vw]">
                     <p class="font-bold drop-shadow-md">{{ miembro.cargo }}</p>
                     <p class="drop-shadow-md">{{ miembro.nombre }}</p>
                     <p class="drop-shadow-md">{{ miembro.apellido }}</p>
@@ -208,9 +211,9 @@
                     :src="miembro.foto" 
                     :alt="miembro.nombre" 
                     loading="lazy" 
-                    class="w-[14vh] h-[14vh] rounded-full object-cover transition-all duration-700 hover:scale-[3.2] hover:z-50"
+                    class="w-[8vw] h-[8vw] rounded-full object-cover transition-all duration-700 hover:scale-[3.2] hover:z-50"
                   />
-                  <div class="text-white text-center text-[2vh]">
+                  <div class="text-white text-center text-[1.1vw]">
                     <p class="font-bold drop-shadow-md">{{ miembro.cargo }}</p>
                     <p class="drop-shadow-md">{{ miembro.nombre }}</p>
                     <p class="drop-shadow-md">{{ miembro.apellido }}</p>

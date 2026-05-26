@@ -11,14 +11,14 @@
       </h2>
     </div>
 
-    <div class="flex-1 mx-auto px-4 pt-[4vw]">
-      <div class="grid grid-cols-1 md:grid-cols-1 gap-8 md:gap-12 lg:gap-16 mx-auto">
+    <div class="flex-1 mx-auto px-4 flex items-center">
+      <div class="grid grid-cols-1 gap-8 mx-auto w-full max-w-4xl">
         <div class="flex flex-col h-full group px-[6vw]">
-          <div class="relative w-full h-[26vw] overflow-hidden shadow-xl mb-6 bg-white p-[0.6em]">
+          <div class="relative w-full h-[26vw] overflow-hidden shadow-xl mb-6 bg-white p-[0.6em] rounded-lg">
             <img 
               src="/images/gaceta-historica.jpg" 
               alt="Gaceta Histórica" 
-              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 cursor-pointer"
+              class="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110 cursor-pointer rounded"
               @click="abrirUltimoTomoRedactor"
             />
           </div>

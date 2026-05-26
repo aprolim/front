@@ -1,4 +1,4 @@
-<!-- pages/gestion-legislativa.vue - VERSIÓN COMPLETA CON TODAS LAS SECCIONES -->
+<!-- pages/gestion-legislativa.vue - VERSIÓN CORREGIDA -->
 <template>
   <div class="min-h-screen text-style">
     <!-- Fondo fijo GLOBAL - PARA las secciones que lo necesiten -->
@@ -19,35 +19,27 @@
       />
     </section>
 
-    <!-- Sección Directiva Camaral (SEGUNDA SECCIÓN) - VACÍA -->
+    <!-- Sección Directiva Camaral (SEGUNDA SECCIÓN) -->
     <div 
       id="area-de-legislacion"
       ref="section2Ref" 
       class="scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out z-10"
       :class="{ 'animate-in': isSection2Visible }"
-      style="min-height: 100vh; position: relative; background: transparent;align-items: center; display: flex;
-justify-content: center;
-flex-direction: column;"
+      style="min-height: 100vh; position: relative; background: transparent; align-items: center; display: flex; justify-content: center; flex-direction: column;"
     >
-      <!-- <div class="w-full h-full flex items-center justify-center">
-        <p><strong>Parámetros:</strong> {{hashParams}}</p>
-        <p>{{ JSON.stringify($route.query) }}</p>
-      </div> -->
       <LegislationTable
         :hash="hashParams" 
         :query="$route.query"
       ></LegislationTable>
     </div>
     
-    <!-- Sección Reseña Histórica Original (TERCERA SECCIÓN) - VACÍA -->
+    <!-- Sección Reseña Histórica Original (TERCERA SECCIÓN) -->
     <div 
       id="area-de-fiscalizacion"
       ref="section3Ref" 
       class="scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out delay-200 z-10"
       :class="{ 'animate-in': isSection3Visible }"
-      style="min-height: 100vh; position: relative; background: transparent;align-items: center;display: flex;
-justify-content: center;
-flex-direction: column;"
+      style="min-height: 100vh; position: relative; background: transparent; align-items: center; display: flex; justify-content: center; flex-direction: column;"
     >
       <FiscalizationTable
         :hash="hashParams" 
@@ -55,15 +47,13 @@ flex-direction: column;"
       ></FiscalizationTable>
     </div>
 
-    <!-- Sección Reseña Histórica Duplicada (CUARTA SECCIÓN) - VACÍA -->
+    <!-- Sección Reseña Histórica Duplicada (CUARTA SECCIÓN) -->
     <div 
       id="area-de-gestion"
       ref="section4Ref" 
       class="scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out delay-200 z-10"
       :class="{ 'animate-in': isSection4Visible }"
-      style="min-height: 100vh; position: relative; background: transparent; align-items: center;display: flex;
-justify-content: center;
-flex-direction: column;"
+      style="min-height: 100vh; position: relative; background: transparent; align-items: center; display: flex; justify-content: center; flex-direction: column;"
     >
       <ManagementTable
         :hash="hashParams" 
@@ -85,7 +75,7 @@ flex-direction: column;"
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, nextTick, watch } from 'vue'
+import { ref, onMounted, onUnmounted, nextTick, watch, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useScrollEffects } from '@/composables/useScrollEffects'
 import ScrollProgress from '@/components/UI/ScrollProgress.vue'
@@ -98,7 +88,7 @@ import ManagementTable from '~/components/ManagementTable.vue'
 const hashParams = computed(() => {
   const hash = route.hash
   if (!hash) return {}
-  return  hash.substring(1)
+  return hash.substring(1)
 })
 
 const { scrolled, scrollProgress, initScrollListener, removeScrollListener } = useScrollEffects()
@@ -245,6 +235,13 @@ section, .scroll-section {
   transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.3, 1.2);
 }
 
+/* El footer también hace snap - ESTO ES CRUCIAL */
+footer {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.3, 1.2);
+}
+
 /* ===== FONDO FIJO ===== */
 .global-fixed-background {
   position: fixed;
@@ -353,6 +350,17 @@ section, .scroll-section {
 
 html {
   scroll-behavior: smooth;
+}
+
+/* Asegurar que el footer sea visible - ESTO ES CRUCIAL */
+footer {
+  display: block !important;
+  position: relative !important;
+  z-index: 100 !important;
+  background-image: url('/footer-main.png') !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
 }
 
 @media (prefers-reduced-motion: reduce) {

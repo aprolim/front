@@ -1,4 +1,4 @@
-<!-- pages/la-institucion.vue - VERSIÓN COMPLETA CORREGIDA -->
+<!-- pages/la-institucion.vue - VERSIÓN COMPLETA CON CENTRADO VERTICAL -->
 <template>
   <div class="min-h-screen text-style">
     <!-- Fondo fijo GLOBAL - PARA Senate Directors Y Reseña Histórica -->
@@ -246,6 +246,30 @@ footer {
   transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.3, 1.2);
 }
 
+/* ===== CENTRADO VERTICAL DE TODAS LAS SECCIONES ===== */
+.scroll-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Centrado vertical */
+  align-items: center; /* Centrado horizontal opcional */
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* Para mantener el ancho original de los componentes hijos */
+.scroll-section > div {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Ajuste específico para el contenido interno - evita que se estire innecesariamente */
+.scroll-section :deep(.container),
+.scroll-section :deep(.max-w-7xl),
+.scroll-section :deep(.mx-auto) {
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /* ===== FONDO FIJO PARA SENATE DIRECTORS ===== */
 .global-fixed-background {
   position: fixed;
@@ -399,9 +423,26 @@ footer {
   position: relative;
   z-index: 10;
 }
+
+/* ===== RESPONSIVE: Ajustes para móviles ===== */
+@media (max-width: 768px) {
+  .scroll-section {
+    justify-content: flex-start; /* En móvil, mejor al inicio para evitar espacios extra */
+    padding-top: 4rem;
+    padding-bottom: 2rem;
+  }
+}
+
+/* ===== Ajuste para pantallas muy altas ===== */
+@media (min-height: 900px) {
+  .scroll-section {
+    justify-content: center;
+  }
+}
 </style>
 
 <style>
+/* ===== ESTILOS GLOBALES (sin scoped) ===== */
 .scroll-section {
   will-change: transform, opacity;
   backface-visibility: hidden;
@@ -461,6 +502,20 @@ footer {
   background-size: cover !important;
   background-position: center !important;
   background-repeat: no-repeat !important;
+}
+
+/* Evitar que el centrado afecte al hero section */
+section:first-of-type {
+  display: block !important;
+}
+
+/* Asegurar que los componentes internos mantengan su comportamiento */
+.senate-directors-container,
+.historical-review-container,
+.horizontal-carousel-container {
+  width: 100%;
+  position: relative;
+  z-index: 2;
 }
 
 @media (prefers-reduced-motion: reduce) {

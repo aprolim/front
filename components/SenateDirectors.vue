@@ -14,12 +14,12 @@
     </h2>
 
     <!-- Tres columnas -->
-    <div class="mx-auto px-[2.5vw] mt-[2vw] flex-1 text-[1.60vw]">
-      <div class="flex justify-center items-stretch gap-[1.25em] h-full">
+    <div class="mx-auto px-[2.5vw] flex-1 text-[1.60vw] w-full flex items-center">
+      <div class="flex justify-center gap-[1.25em] w-full">
         
-        <!-- COLUMNA IZQUIERDA (transparente, 5% más pequeña) -->
-        <div class="w-[30%] bg-transparent rounded-2xl shadow-xl border border-white/20 p-[1.25em] origin-right text-[#000]">
-          <div class="h-full flex flex-col text-[.7em] text-justify">
+        <!-- COLUMNA IZQUIERDA -->
+        <div class="w-[30%] bg-transparent rounded-2xl shadow-xl border border-white/20 p-[1.25em] origin-right text-[#000] flex items-center">
+          <div class="flex flex-col text-[.7em] text-justify w-full">
             <p class="text-center text-[1.2em] text-[#E03636]">Rol Institucional de la Directiva</p>
             <br>
             <div class="font-extralight">
@@ -32,36 +32,31 @@
           </div>
         </div>
 
-        <!-- COLUMNA CENTRAL (rojo transparente) -->
-        <div class="w-[40%] bg-[#E03636]/80 rounded-2xl shadow-2xl border border-white/20 p-[.5em] scale-105">
-          <!-- Grid de 2 columnas con 6 fotos -->
-          <div class="grid grid-cols-2 h-full content-center">
+        <!-- COLUMNA CENTRAL -->
+        <div class="w-[40%] bg-[#E03636]/80 rounded-2xl shadow-2xl border border-white/20 p-[.5em] flex items-center">
+          <div class="grid grid-cols-2 gap-y-4 w-full">
             <div 
               v-for="(senador, index) in senadores" 
               :key="index"
               @click="selectedSenador = senador"
-              class="flex flex-col items-center cursor-pointer transition-all duration-300 hover:scale-105 pt-[.25em]"
-              :class="{ 'rounded-[.45em] scale-105 m-[.8em] border border-[#E4D294]': selectedSenador?.nombre === senador.nombre }"
+              class="flex flex-col items-center cursor-pointer transition-all duration-300 hover:scale-105 py-2"
+              :class="{ 'rounded-[.45em] scale-105 border border-[#E4D294] bg-[#E03636]/20': selectedSenador?.nombre === senador.nombre }"
               >
-              <!-- :class="{ 'ring-4 ring-yellow-600/50 rounded-lg scale-105': selectedSenador?.nombre === senador.nombre }" -->
-              <!-- Foto circular con borde dorado opaco -->
-              <div class="w-[5em] h-[5em] rounded-full overflow-hidden border-[.20em] border-[#E4D294] shadow-lg mb-[.1em]">
+              <div class="w-[5em] h-[5em] rounded-full overflow-hidden border-[.20em] border-[#E4D294] shadow-lg">
                 <img 
                   :src="senador.foto" 
                   :alt="senador.nombre"
                   class="w-full h-full object-cover"
                 />
               </div>
-              <!-- Texto blanco (cargo) -->
-              <p class="text-white text-[0.7em] text-center font-medium " >{{ senador.cargo }}</p>
+              <p class="text-white text-[0.7em] text-center font-medium mt-1">{{ senador.cargo }}</p>
             </div>
           </div>
         </div>
 
-        <!-- COLUMNA DERECHA (transparente, 5% más pequeña) -->
-        <div class="w-[30%] bg-transparent rounded-2xl shadow-xl border border-white/20 p-4 origin-left text-[#000] text-[1.4vw]">
-          <div v-if="selectedSenador" class="h-full flex flex-col items-center justify-center">
-            <!-- Foto del senador seleccionado -->
+        <!-- COLUMNA DERECHA -->
+        <div class="w-[30%] bg-transparent rounded-2xl shadow-xl border border-white/20 p-4 origin-left text-[#000] text-[1.4vw] flex items-center">
+          <div v-if="selectedSenador" class="w-full flex flex-col items-center justify-center">
             <div class="w-[12em] h-[12em] rounded-full overflow-hidden border-[.25em] border-[#E4D294] shadow-2xl mb-[.50em]">
               <img 
                 :src="selectedSenador.foto" 
@@ -69,14 +64,11 @@
                 class="w-full h-full object-cover"
               />
             </div>
-            <!-- Cargo en negro -->
-            <p class="text-[#E03636] text-center mt-2 font-extrabold uppercase ">{{ selectedSenador.cargo }}</p>
-            <!-- Nombre en rojo -->
+            <p class="text-[#E03636] text-center mt-2 font-extrabold uppercase">{{ selectedSenador.cargo }}</p>
             <h3 class="text-[#E03636] font-light text-[.9em] text-center">{{ selectedSenador.nombre }}</h3>
-            <!-- Función específica en texto blanco -->
             <p class="text-justify mt-4 text-[.7em]">{{ selectedSenador.funcion }}</p>
           </div>
-          <div v-else class="h-full flex items-center justify-center">
+          <div v-else class="w-full flex items-center justify-center">
             <p class="text-center">Selecciona un senador para ver sus detalles</p>
           </div>
         </div>
@@ -127,30 +119,17 @@ const senadores = ref([
   }
 ])
 
-const selectedSenador = ref(null)
-selectedSenador.value=senadores.value[0]
+const selectedSenador = ref(senadores.value[0])
 </script>
 
 <style scoped>
-/* Eliminar backdrop-blur-sm ya que los fondos son transparentes */
 .border-3 {
   border-width: 3px;
 }
 
-/* Animación suave al seleccionar */
 .transition-all {
   transition-property: all;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 300ms;
-}
-
-/* Asegurar que las columnas tengan la misma altura */
-.items-stretch {
-  align-items: stretch;
-}
-
-/* Para que el anillo se vea bien cuando está seleccionado */
-.ring-4 {
-  ring-width: 4px;
 }
 </style>

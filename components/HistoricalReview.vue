@@ -2,11 +2,11 @@
   <div class="relative z-10 mx-auto min-h-screen flex flex-col w-full text-[1.5vw]">
     <div class="h-[4.4vw]"></div>
 
-    <div class="mx-auto px-[4.5vw] flex-1">
-      <div class="flex gap-[2em] h-full pt-[2em]">
+    <div class="mx-auto px-[4.5vw] flex-1 flex items-center">
+      <div class="flex gap-[2em] w-full items-center">
         
         <!-- COLUMNA IZQUIERDA (65%) -->
-        <div class="w-[65%] bg-transparent rounded-2xl shadow-2xl border border-white/20 p-6">
+        <div class="w-[65%] bg-transparent rounded-[1.5vw] shadow-2xl border border-white/20 p-[1.8vw]">
           <div class="relative h-full flex flex-col">
             
             <div class="relative w-full h-[34vw]">
@@ -16,7 +16,7 @@
                 <!-- IMAGEN IZQUIERDA -->
                 <div 
                   @click="prevImage"
-                  class="absolute left-0 top-0 w-[35%] h-[45%] rounded-xl overflow-hidden shadow-2xl border-3 border-[#E4D294]/50 z-10 cursor-pointer hover:scale-105 transition-all duration-500"
+                  class="absolute left-0 top-0 w-[35%] h-[45%] rounded-[.8vw] overflow-hidden shadow-2xl border-3 border-[#E4D294]/50 z-10 cursor-pointer hover:scale-105 transition-all duration-500"
                 >
                   <img :src="imageData[prevIndex].url" class="w-full h-full object-cover" />
                   <div class="absolute inset-0 bg-gray-500/60"></div>
@@ -27,7 +27,7 @@
                 
                 <!-- IMAGEN CENTRAL -->
                 <div 
-                  class="absolute left-[20%] top-[15%] w-[60%] h-[80%] rounded-xl overflow-hidden shadow-2xl border-4 border-[#E4D294]/70 z-30 cursor-pointer"
+                  class="absolute left-[20%] top-[15%] w-[60%] h-[80%] rounded-[.8vw] overflow-hidden shadow-2xl border-4 border-[#E4D294]/70 z-30 cursor-pointer"
                 >
                   <img :src="imageData[currentIndex].url" class="w-full h-full object-cover" />
                   <div 
@@ -35,9 +35,9 @@
                     :class="showFullText ? 'h-full' : 'h-1/4'"
                     @click="toggleFullText"
                   >
-                    <div class="p-4 h-full flex flex-col overflow-y-auto">
+                    <div class="p-[1vw] h-full flex flex-col overflow-y-auto">
                       <div v-if="!showFullText" class="h-full flex flex-col justify-center">
-                        <p class="text-[1.2vw]">
+                        <p class="text-[1.1vw]">
                           {{ truncateText(imageData[currentIndex].descripcion, 100) }}
                           <span class="font-bold inline-flex items-center gap-1 hover:underline">
                             Leer más
@@ -58,7 +58,7 @@
                 <!-- IMAGEN DERECHA -->
                 <div 
                   @click="nextImage"
-                  class="absolute right-0 top-0 w-[35%] h-[45%] rounded-xl overflow-hidden shadow-2xl border-3 border-[#E4D294]/50 z-10 cursor-pointer hover:scale-105 transition-all duration-500"
+                  class="absolute right-0 top-0 w-[35%] h-[45%] rounded-[.8vw] overflow-hidden shadow-2xl border-3 border-[#E4D294]/50 z-10 cursor-pointer hover:scale-105 transition-all duration-500"
                 >
                   <img :src="imageData[nextIndex].url" class="w-full h-full object-cover" />
                   <div class="absolute inset-0 bg-gray-500/60"></div>
@@ -72,7 +72,7 @@
               <template v-else>
                 <!-- IMAGEN QUE SALE (el antiguo centro) - VIAJA A SU POSICIÓN FINAL LATERAL -->
                 <div 
-                  class="absolute rounded-xl overflow-hidden shadow-2xl border-4 border-[#E4D294]/70 z-40"
+                  class="absolute rounded-[.8vw] overflow-hidden shadow-2xl border-4 border-[#E4D294]/70 z-40"
                   :class="animationOutClass"
                 >
                   <img :src="imageData[oldIndexValue].url" class="w-full h-full object-cover" />
@@ -85,7 +85,7 @@
 
                 <!-- IMAGEN QUE ENTRA (la nueva central) - VIENE DESDE SU POSICIÓN LATERAL -->
                 <div 
-                  class="absolute rounded-xl overflow-hidden shadow-2xl border-4 border-[#E4D294]/70 z-50"
+                  class="absolute rounded-[.8vw] overflow-hidden shadow-2xl border-4 border-[#E4D294]/70 z-50"
                   :class="animationInClass"
                 >
                   <img :src="imageData[newIndexValue].url" class="w-full h-full object-cover" />
@@ -108,7 +108,7 @@
 
             <!-- CONTROLES -->
             <div class="flex justify-center z-50 mt-4">
-              <div class="flex justify-center space-x-4 bg-black/30 backdrop-blur-md py-3 px-6 rounded-full border border-white/30">
+              <div class="flex justify-center space-x-[1vw] bg-black/30 backdrop-blur-md py-[0.7vw] px-6 rounded-full border border-white/30">
                 <button 
                   v-for="(_, index) in imageData" 
                   :key="index"
@@ -116,10 +116,10 @@
                   class="transition-all duration-300 focus:outline-none rounded-full"
                   :class="[
                     currentIndex === index 
-                      ? 'bg-[#E4D294] scale-125 ring-2 ring-white' 
+                      ? 'bg-[#E4D294] scale-125 ring-[.2vw] ring-white' 
                       : 'bg-white/50 hover:bg-[#E4D294]/50'
                   ]"
-                  :style="{ width: '14px', height: '14px' }"
+                  :style="{ width: '.8vw', height: '.8vw' }"
                 ></button>
               </div>
             </div>
@@ -244,15 +244,9 @@ const goToImage = (index) => {
 </script>
 
 <style scoped>
-/* ==================== ANIMACIONES CORREGIDAS ==================== */
+/* ==================== ANIMACIONES ==================== */
 
-/* 
-  CLIC EN DERECHA (next):
-  - Centro (sale) → se mueve a posición IZQUIERDA (0%, 0%, 35%, 45%)
-  - Derecha (entra) → viene desde posición DERECHA (65%, 0%, 35%, 45%) al CENTRO
-*/
-
-/* SALE HACIA IZQUIERDA (termina exactamente en posición izquierda) */
+/* SALE HACIA IZQUIERDA */
 .animate-out-to-left {
   animation: slideToLeft 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   position: absolute;
@@ -278,7 +272,7 @@ const goToImage = (index) => {
   }
 }
 
-/* SALE HACIA DERECHA (termina exactamente en posición derecha) */
+/* SALE HACIA DERECHA */
 .animate-out-to-right {
   animation: slideToRight 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   position: absolute;
@@ -304,7 +298,7 @@ const goToImage = (index) => {
   }
 }
 
-/* ENTRA DESDE DERECHA (viene desde posición derecha al centro) */
+/* ENTRA DESDE DERECHA */
 .animate-in-from-right {
   animation: slideFromRight 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   position: absolute;
@@ -326,7 +320,7 @@ const goToImage = (index) => {
   }
 }
 
-/* ENTRA DESDE IZQUIERDA (viene desde posición izquierda al centro) */
+/* ENTRA DESDE IZQUIERDA */
 .animate-in-from-left {
   animation: slideFromLeft 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   position: absolute;
@@ -348,12 +342,8 @@ const goToImage = (index) => {
   }
 }
 
-/* Capa gris que aparece gradualmente en la imagen que sale */
-.gray-fade-in-left {
-  animation: grayFade 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
-
-.gray-fade-in-right {
+/* Capa gris */
+.gray-fade-in-left, .gray-fade-in-right {
   animation: grayFade 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
