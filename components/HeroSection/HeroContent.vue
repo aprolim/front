@@ -1,6 +1,6 @@
 <template>  
   <!-- Contenedor principal con flex column -->
-  <div class="relative z-10 mx-auto md:pt-20 md:mt-32 min-h-screen flex flex-col">
+  <div class="relative z-10 mx-auto min-h-screen flex flex-col justify-end">
     <!-- Contenido superior que empuja los botones hacia abajo -->
     <div class="flex-grow"></div>
     
@@ -12,7 +12,7 @@
 
     <!-- FRANJA ROJA DE ANCHO COMPLETO -->
     <div class="relative w-screen left-1/2 right-1/2 -mx-[50vw]">
-      <div class="relative bg-gradient-to-r from-red-700/70 via-red-800/70 to-red-900/70 pb-0 pt-2 sm:pt-2 sm:pb-0 md:pb-8 lg:pb-10 xl:pb-10 xl:pt-4 2xl:pb-10 3xl:pb-12 4xl:pb-12 4xl:pt-8 5xl:pb-15 shadow-2xl overflow-hidden group full-width-franja">
+      <div class="relative bg-gradient-to-r from-red-700/70 via-red-800/70 to-red-900/70 pb-0 pt-2 sm:pt-2 shadow-2xl overflow-hidden group full-width-franja">
         
         <!-- Patrón de fondo sutil -->
         <div class="absolute inset-0 opacity-5">

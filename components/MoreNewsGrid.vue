@@ -1,7 +1,5 @@
-<!-- components/MoreNewsGrid.vue -->
 <template>
   <div class="w-full">
-    
     <!-- ENCABEZADO -->
     <div class="text-center mb-10 pt-[5.2vw]">
       <h2 class="text-3xl md:text-4xl font-bold text-gray-800">
@@ -27,7 +25,6 @@
         class="group bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer"
         @click="verNoticia(noticia)"
       >
-        <!-- Contenedor de imagen -->
         <div class="relative overflow-hidden aspect-[4/5]">
           <img 
             :src="noticia.featuredImage?.url || noticia.imagen" 
@@ -36,7 +33,6 @@
             loading="lazy"
           />
           
-          <!-- Div rojo que ocupa el 40% inferior de la imagen -->
           <div class="absolute bottom-0 left-0 right-0 h-[40%] bg-[rgba(224,54,54,0.85)] backdrop-blur-sm p-4 flex flex-col justify-end">
             <p class="text-white text-[0.7rem] sm:text-[0.8rem] md:text-[0.9rem] lg:text-[1rem] mb-1 opacity-90">
               {{ formatearFecha(noticia.publishedAt || noticia.fecha) }}
@@ -57,7 +53,6 @@
       </div>
     </div>
 
-    <!-- Sin resultados -->
     <div v-else-if="!loading && noticiasLocal.length === 0" class="text-center py-12">
       <p class="text-gray-500">No hay noticias disponibles en este momento</p>
       <button 
@@ -68,7 +63,7 @@
       </button>
     </div>
 
-    <!-- BOTÓN VER TODAS -->
+    <!-- 🔥 BOTÓN VER TODAS LAS NOTICIAS - Usa targetRoute de props -->
     <div v-if="noticiasLocal.length > 0" class="text-center mt-10 mb-8">
       <button 
         @click="irATodasLasNoticias"
@@ -84,27 +79,22 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useNoticias } from '~/composables/useNoticias'
 
-// Props - parámetro opcional
+// 🔥 Recibir targetRoute como prop
 const props = defineProps({
   targetRoute: {
     type: String,
-    default: null  // Por defecto null, significa que usa el comportamiento original
+    default: '/noticias'
   }
 })
 
 const router = useRouter()
-
-// Usar el composable de noticias directamente
-const { ultimasNoticias, loading, fetchUltimasNoticias } = useNoticias()
-
-// Estado local
+const { ultimasNoticias, loading, cargarDatos } = useNoticias()
 const noticiasLocal = ref([])
 
-// Formatear fecha
 const formatearFecha = (fecha) => {
   if (!fecha) return ''
   return new Date(fecha).toLocaleDateString('es-ES', { 
@@ -114,41 +104,38 @@ const formatearFecha = (fecha) => {
   })
 }
 
-// Ver noticia completa
 const verNoticia = (noticia) => {
   if (noticia && noticia.slug) {
     router.push(`/noticias/${noticia.slug}`)
   }
 }
 
-// Ir a todas las noticias
+// 🔥 Usar el targetRoute recibido
 const irATodasLasNoticias = () => {
-  // Si no se envió el parámetro, usar comportamiento original (/noticias)
-  if (!props.targetRoute) {
-    router.push('/noticias')
-    return
-  }
-  
-  // Si se envió el parámetro y contiene hash
-  if (props.targetRoute.includes('#')) {
-    const [path, hash] = props.targetRoute.split('#')
-    router.push({ path, hash: `#${hash}` })
-  } else {
-    router.push(props.targetRoute)
-  }
+  console.log(`🔗 [MoreNewsGrid] Navegando a: ${props.targetRoute}`)
+  router.push(props.targetRoute)
 }
 
-// Cargar noticias
 const cargarNoticias = async () => {
-  await fetchUltimasNoticias()
-  noticiasLocal.value = ultimasNoticias.value
+  console.log('📡 [MoreNewsGrid] Cargando noticias...')
+  await cargarDatos()
+  noticiasLocal.value = [...ultimasNoticias.value]
+  console.log(`✅ [MoreNewsGrid] ${noticiasLocal.value.length} noticias`)
 }
 
-// Inicializar
+watch(ultimasNoticias, (nuevas) => {
+  if (nuevas.length > 0 && noticiasLocal.value.length === 0) {
+    noticiasLocal.value = [...nuevas]
+  }
+}, { immediate: true })
+
 onMounted(async () => {
-  console.log('📦 [MoreNewsGrid] Montado, cargando noticias...')
-  await cargarNoticias()
-  console.log('📦 [MoreNewsGrid] Noticias cargadas:', noticiasLocal.value.length)
+  console.log('📦 [MoreNewsGrid] Montado')
+  if (ultimasNoticias.value.length === 0) {
+    await cargarNoticias()
+  } else {
+    noticiasLocal.value = [...ultimasNoticias.value]
+  }
 })
 </script>
 

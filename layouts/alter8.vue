@@ -1,13 +1,12 @@
-<!-- layouts/alter8.vue - VERSIÓN CORREGIDA CON SCROLL-SNAP FUNCIONAL -->
+<!-- layouts/alter8.vue - VERSIÓN COMPLETA -->
 <template>
   <div class="h-screen snap-container">
-    <!-- Header rojo fijo y flotante (superpuesto) con menús a la derecha -->
+    <!-- Header rojo fijo -->
     <header class="fixed top-0 left-0 right-0 z-50 bg-[#E03636] shadow-lg">
       <div class="mx-auto px-[1px] py-[.3vw] text-[1.5vw]">
         <div class="flex items-center justify-between">
-          <!-- Logo y botón hamburguesa (solo móvil) -->
+          <!-- Logo y botón hamburguesa -->
           <div class="flex items-center gap-4">
-            <!-- Botón hamburguesa solo para móvil -->
             <button 
               @click="toggleSidebar"
               class="sm:hidden p-2 text-white hover:bg-[#C12F2F] rounded-lg transition-colors"
@@ -18,21 +17,16 @@
               </svg>
             </button>
 
-            <!-- Logo como botón para ir al inicio -->
             <button 
               @click="goToHome"
               class="ml-[1em] w-[2.5em] h-[2.5em] rounded-lg overflow-hidden flex items-center justify-center bg-[#E03636]"
               aria-label="Ir al inicio"
             >
-              <img 
-                src="/senadores2.png" 
-                alt="Logo" 
-                class="w-full h-full object-cover"
-              />
+              <img src="/senadores2.png" alt="Logo" class="w-full h-full object-cover" />
             </button>
           </div>
 
-          <!-- 5 MENÚS PRINCIPALES - ARRIBA A LA DERECHA (SIN FLECHAS) -->
+          <!-- Menús principales - desktop -->
           <div class="hidden sm:flex items-center gap-[0.5vw] text-[.8em]">
             <!-- MENÚ 1: La institución -->
             <div class="relative group/menu">
@@ -42,35 +36,12 @@
               >
                 La institución
               </NuxtLink>
-              <div class="absolute right-0 mt-3 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 
-                          opacity-0 invisible translate-y-[-1rem] 
-                          group-hover/menu:opacity-100 group-hover/menu:visible group-hover/menu:translate-y-0 
-                          transition-all duration-700 ease-in-out z-50">
+              <div class="absolute right-0 mt-3 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible translate-y-[-1rem] group-hover/menu:opacity-100 group-hover/menu:visible group-hover/menu:translate-y-0 transition-all duration-700 ease-in-out z-50">
                 <div class="py-2">
-                  <NuxtLink 
-                    to="/la-institucion#mandato" 
-                    class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors"
-                  >
-                    Mandato constitucional
-                  </NuxtLink>
-                  <NuxtLink 
-                    to="/la-institucion#directiva-camaral" 
-                    class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors"
-                  >
-                    Directiva camaral
-                  </NuxtLink>
-                  <NuxtLink 
-                    to="/la-institucion#resena-historica" 
-                    class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors"
-                  >
-                    Reseña histórica
-                  </NuxtLink>
-                  <NuxtLink 
-                    to="/la-institucion#museo" 
-                    class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors"
-                  >
-                    Galería de imágenes
-                  </NuxtLink>
+                  <NuxtLink to="/la-institucion#mandato" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Mandato constitucional</NuxtLink>
+                  <NuxtLink to="/la-institucion#directiva-camaral" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Directiva camaral</NuxtLink>
+                  <NuxtLink to="/la-institucion#resena-historica" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Reseña histórica</NuxtLink>
+                  <NuxtLink to="/la-institucion#museo" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Galería de imágenes</NuxtLink>
                 </div>
               </div>
             </div>
@@ -83,20 +54,11 @@
               >
                 Gestión Legislativa
               </NuxtLink>
-              <div class="absolute right-0 mt-3 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 
-                          opacity-0 invisible translate-y-[-1rem] 
-                          group-hover/menu:opacity-100 group-hover/menu:visible group-hover/menu:translate-y-0 
-                          transition-all duration-700 ease-in-out z-50">
+              <div class="absolute right-0 mt-3 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible translate-y-[-1rem] group-hover/menu:opacity-100 group-hover/menu:visible group-hover/menu:translate-y-0 transition-all duration-700 ease-in-out z-50">
                 <div class="py-2">
-                  <NuxtLink to="/gestion-legislativa#sesiones-pleno" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    Sesiónes del pleno
-                  </NuxtLink>
-                  <NuxtLink to="/gestion-legislativa#area-de-legislacion" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    Gestión legislativa
-                  </NuxtLink>
-                  <NuxtLink to="/gestion-legislativa#gaceta-legislativa" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    Gaceta legislativa
-                  </NuxtLink>
+                  <NuxtLink to="/gestion-legislativa#sesiones-pleno" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Sesiónes del pleno</NuxtLink>
+                  <NuxtLink to="/gestion-legislativa#area-de-legislacion" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Gestión legislativa</NuxtLink>
+                  <NuxtLink to="/gestion-legislativa#gaceta-legislativa" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Gaceta legislativa</NuxtLink>
                 </div>
               </div>
             </div>
@@ -109,23 +71,12 @@
               >
                 Legisladores Nacionales
               </NuxtLink>
-              <div class="absolute right-0 mt-3 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 
-                          opacity-0 invisible translate-y-[-1rem] 
-                          group-hover/menu:opacity-100 group-hover/menu:visible group-hover/menu:translate-y-0 
-                          transition-all duration-700 ease-in-out z-50">
+              <div class="absolute right-0 mt-3 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible translate-y-[-1rem] group-hover/menu:opacity-100 group-hover/menu:visible group-hover/menu:translate-y-0 transition-all duration-700 ease-in-out z-50">
                 <div class="py-2">
-                  <NuxtLink to="/legisladores-nacionales#directiva-camaral" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    Directiva Camaral
-                  </NuxtLink>
-                  <NuxtLink to="/legisladores-nacionales#comisiones-y-comites" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    Comisiones y comites
-                  </NuxtLink>
-                  <NuxtLink to="/legisladores-nacionales#brigadas-parlamentarias" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    Brigadas parlamentarias
-                  </NuxtLink>
-                  <NuxtLink to="/legisladores-nacionales#bancadas-politicas" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">
-                    Bancadas politicas
-                  </NuxtLink>
+                  <NuxtLink to="/legisladores-nacionales#directiva-camaral" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Directiva Camaral</NuxtLink>
+                  <NuxtLink to="/legisladores-nacionales#comisiones-y-comites" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Comisiones y comites</NuxtLink>
+                  <NuxtLink to="/legisladores-nacionales#brigadas-parlamentarias" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Brigadas parlamentarias</NuxtLink>
+                  <NuxtLink to="/legisladores-nacionales#bancadas-politicas" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Bancadas politicas</NuxtLink>
                 </div>
               </div>
             </div>
@@ -141,7 +92,6 @@
             </div>
           </div>
 
-          <!-- Versión móvil: texto simple -->
           <div class="sm:hidden flex items-center">
             <span class="text-white text-sm font-medium">Menú</span>
           </div>
@@ -149,14 +99,13 @@
       </div>
     </header>
 
-    <!-- Sidebar móvil (solo visible en móvil) -->
+    <!-- Sidebar móvil -->
     <div 
       :class="[
         'fixed inset-0 z-40 transition-all duration-300 lg:hidden',
         sidebarOpen ? 'visible' : 'invisible'
       ]"
     >
-      <!-- Overlay -->
       <div 
         :class="[
           'absolute inset-0 bg-black/50 transition-opacity duration-300',
@@ -165,7 +114,6 @@
         @click="sidebarOpen = false"
       ></div>
 
-      <!-- Sidebar móvil con fondo rojo -->
       <aside 
         :class="[
           'absolute left-0 w-72 bg-gradient-to-b from-[#E03636] to-[#C12F2F] text-white shadow-2xl transform transition-transform duration-300 ease-in-out',
@@ -175,20 +123,10 @@
       >
         <div class="p-4 overflow-y-auto h-full">
           <div class="space-y-2">
-            <!-- Menú móvil: La institución -->
             <div class="mb-2">
-              <button 
-                @click="toggleMobileMenu('institution')"
-                class="w-full flex items-center justify-between p-3 text-white hover:bg-white/10 rounded-lg transition-colors"
-              >
+              <button @click="toggleMobileMenu('institution')" class="w-full flex items-center justify-between p-3 text-white hover:bg-white/10 rounded-lg transition-colors">
                 <span class="font-medium">La institución</span>
-                <svg 
-                  class="w-5 h-5 transition-transform duration-200"
-                  :class="{ 'rotate-180': mobileMenuState.institution }"
-                  fill="none" 
-                  stroke="currentColor" 
-                  viewBox="0 0 24 24"
-                >
+                <svg class="w-5 h-5 transition-transform duration-200" :class="{ 'rotate-180': mobileMenuState.institution }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                 </svg>
               </button>
@@ -200,20 +138,10 @@
               </div>
             </div>
             
-            <!-- Menú móvil: Legisladores -->
             <div class="mb-2">
-              <button 
-                @click="toggleMobileMenu('legislators')"
-                class="w-full flex items-center justify-between p-3 text-white hover:bg-white/10 rounded-lg transition-colors"
-              >
+              <button @click="toggleMobileMenu('legislators')" class="w-full flex items-center justify-between p-3 text-white hover:bg-white/10 rounded-lg transition-colors">
                 <span class="font-medium">Legisladores</span>
-                <svg 
-                  class="w-5 h-5 transition-transform duration-200"
-                  :class="{ 'rotate-180': mobileMenuState.legislators }"
-                  fill="none" 
-                  stroke="currentColor" 
-                  viewBox="0 0 24 24"
-                >
+                <svg class="w-5 h-5 transition-transform duration-200" :class="{ 'rotate-180': mobileMenuState.legislators }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                 </svg>
               </button>
@@ -224,20 +152,10 @@
               </div>
             </div>
             
-            <!-- Menú móvil: Gestión Legislativa -->
             <div class="mb-2">
-              <button 
-                @click="toggleMobileMenu('legislative')"
-                class="w-full flex items-center justify-between p-3 text-white hover:bg-white/10 rounded-lg transition-colors"
-              >
+              <button @click="toggleMobileMenu('legislative')" class="w-full flex items-center justify-between p-3 text-white hover:bg-white/10 rounded-lg transition-colors">
                 <span class="font-medium">Gestión Legislativa</span>
-                <svg 
-                  class="w-5 h-5 transition-transform duration-200"
-                  :class="{ 'rotate-180': mobileMenuState.legislative }"
-                  fill="none" 
-                  stroke="currentColor" 
-                  viewBox="0 0 24 24"
-                >
+                <svg class="w-5 h-5 transition-transform duration-200" :class="{ 'rotate-180': mobileMenuState.legislative }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                 </svg>
               </button>
@@ -248,20 +166,10 @@
               </div>
             </div>
             
-            <!-- Menú móvil: Cultura -->
             <div class="mb-2">
-              <button 
-                @click="toggleMobileMenu('culture')"
-                class="w-full flex items-center justify-between p-3 text-white hover:bg-white/10 rounded-lg transition-colors"
-              >
+              <button @click="toggleMobileMenu('culture')" class="w-full flex items-center justify-between p-3 text-white hover:bg-white/10 rounded-lg transition-colors">
                 <span class="font-medium">Cultura</span>
-                <svg 
-                  class="w-5 h-5 transition-transform duration-200"
-                  :class="{ 'rotate-180': mobileMenuState.culture }"
-                  fill="none" 
-                  stroke="currentColor" 
-                  viewBox="0 0 24 24"
-                >
+                <svg class="w-5 h-5 transition-transform duration-200" :class="{ 'rotate-180': mobileMenuState.culture }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                 </svg>
               </button>
@@ -272,20 +180,10 @@
               </div>
             </div>
             
-            <!-- Menú móvil: Participación -->
             <div class="mb-2">
-              <button 
-                @click="toggleMobileMenu('participation')"
-                class="w-full flex items-center justify-between p-3 text-white hover:bg-white/10 rounded-lg transition-colors"
-              >
+              <button @click="toggleMobileMenu('participation')" class="w-full flex items-center justify-between p-3 text-white hover:bg-white/10 rounded-lg transition-colors">
                 <span class="font-medium">Participación</span>
-                <svg 
-                  class="w-5 h-5 transition-transform duration-200"
-                  :class="{ 'rotate-180': mobileMenuState.participation }"
-                  fill="none" 
-                  stroke="currentColor" 
-                  viewBox="0 0 24 24"
-                >
+                <svg class="w-5 h-5 transition-transform duration-200" :class="{ 'rotate-180': mobileMenuState.participation }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                 </svg>
               </button>
@@ -296,7 +194,6 @@
               </div>
             </div>
             
-            <!-- Noticias -->
             <NuxtLink to="/centro-de-noticias" class="block p-3 text-white hover:bg-white/10 rounded-lg mt-4" @click="sidebarOpen = false">
               📰 Noticias
             </NuxtLink>
@@ -305,14 +202,12 @@
       </aside>
     </div>
 
-    <!-- ===== MAIN CON KEEP-ALIVE PARA PERSISTENCIA DEL VIDEO ===== -->
+    <!-- MAIN -->
     <main class="relative z-10 snap-main">
-      <KeepAlive :include="keepAlivePages">
-        <slot />
-      </KeepAlive>
+      <slot />
     </main>
 
-    <!-- Footer (original) -->
+    <!-- Footer -->
     <footer class="text-white back-image snap-footer text-[4px] sm:text-[6px] md:text-[7px] lg:text-[10px] xl:text-[14px] 2xl:text-[16px] 3xl:text-[21px] 4xl:text-[28px] 5xl:text-[40px]">
       <div class="mx-auto">
         <div class="text-center">
@@ -327,18 +222,14 @@
               <div class="grid grid-cols-12 gap-6 items-center">
                 <div class="col-span-3 flex items-center justify-start space-x-3">
                   <img src="/footer-img/Recurso 8.png" alt="Senado Bolivia" class="h-6 2xl:h-9 4xl:h-16 5xl:h-24 w-auto">
-                  <div>
-                    <a href="https://diputados.gob.bo/" target="_blank">https://diputados.gob.bo/</a>
-                  </div>
+                  <div><a href="https://diputados.gob.bo/" target="_blank">https://diputados.gob.bo/</a></div>
                 </div>
                 <div class="col-span-6 text-center">
                   <p>Calle Comercio esquina Colón - Telf.: (591) 2158701 - www.senado.gob.bo - La Paz - Bolivia</p>
                 </div>
                 <div class="col-span-3 flex items-center justify-end space-x-3">
                   <img src="/footer-img/Recurso 7.png" alt="Escudo Senado" class="h-9 2xl:h-24 5xl:h-32 w-auto">
-                  <div class="text-right">
-                    <a href="https://www.vicepresidencia.gob.bo/" target="_blank">https://www.vicepresidencia.gob.bo/</a>
-                  </div>
+                  <div class="text-right"><a href="https://www.vicepresidencia.gob.bo/" target="_blank">https://www.vicepresidencia.gob.bo/</a></div>
                 </div>
               </div>
             </div>
@@ -347,15 +238,14 @@
       </div>
     </footer>
 
-    <!-- Widget de Redes Sociales (original - con animaciones) -->
+    <!-- Widget de Redes Sociales -->
     <div class="fixed right-[clamp(8px,1.8vw,24px)] 2xl:right-8 3xl:right-9 4xl:right-10 5xl:right-16 top-1/2 transform -translate-y-1/2 z-40">
       <div class="flex flex-col gap-[clamp(6px,1.2vh,16px)] items-end">
         <div class="flex flex-col gap-2 lg:gap-4 4xl:gap-8 items-end">
           <a v-for="(social, index) in socialLinks" :key="social.name"
             :href="social.url" target="_blank" :title="social.name"
             class="social-icon-wrapper group"
-            :style="`animation-delay: ${index * 0.1}s;`"
-            :class="{ 'animate-bounce-in': sidebarOpen }">
+            :style="`animation-delay: ${index * 0.1}s;`">
             <div v-html="social.svgIcon" 
                 class="social-svg w-[clamp(10px,4vh,80px)] h-[clamp(10px,4vh,80px)] 4xl:w-[clamp(30px,5vh,80px)] 4xl:h-[clamp(30px,4.4vh,80px)] 5xl:w-[clamp(50px,5vh,180px)] 5xl:h-[clamp(50px,4.4vh,180px)]">
             </div>
@@ -369,17 +259,17 @@
 
 <script setup>
 import { ref, reactive, onMounted, onBeforeUnmount } from 'vue'
-import { navigateTo } from '#app'
+import { navigateTo, useRoute, useRouter } from '#app'
 import { socialLinks } from './data/config'
 import GlobalModals from '@/components/GlobalModals.vue'
 
-// ==================== ESTADO ====================
+const route = useRoute()
+const router = useRouter()
+
+console.log('🏗️ [LAYOUT] alter8.vue - INICIALIZANDO LAYOUT')
+console.log('📍 [LAYOUT] Ruta actual:', route.path)
+
 const sidebarOpen = ref(false)
-
-// Páginas que queremos mantener vivas (donde está el video)
-const keepAlivePages = ref(['IndexPage'])
-
-// Estado para menús móviles
 const mobileMenuState = reactive({
   institution: false,
   legislators: false,
@@ -388,35 +278,22 @@ const mobileMenuState = reactive({
   participation: false
 })
 
-// ==================== FUNCIONES ====================
-// Función para ir al inicio de la página principal
 const goToHome = () => {
-  // Cerrar sidebar si está abierto
+  console.log('🏠 [LAYOUT] Navegando al inicio')
   sidebarOpen.value = false
-  
-  // Navegar a la página principal
   navigateTo('/')
-  
-  // Múltiples intentos de scroll al contenedor con snap
-  const scrollToTop = () => {
+  setTimeout(() => {
     const snapContainer = document.querySelector('.snap-container')
     if (snapContainer) {
       snapContainer.scrollTop = 0
       snapContainer.scrollTo({ top: 0, behavior: 'smooth' })
     }
-    // Por si acaso
     window.scrollTo(0, 0)
-  }
-  
-  // Intentar varias veces para asegurar
-  setTimeout(scrollToTop, 50)
-  setTimeout(scrollToTop, 150)
-  setTimeout(scrollToTop, 300)
+  }, 100)
 }
 
 const toggleSidebar = () => {
   sidebarOpen.value = !sidebarOpen.value
-  // Cerrar todos los submenús al abrir/cerrar sidebar
   if (!sidebarOpen.value) {
     Object.keys(mobileMenuState).forEach(key => {
       mobileMenuState[key] = false
@@ -428,44 +305,25 @@ const toggleMobileMenu = (menu) => {
   mobileMenuState[menu] = !mobileMenuState[menu]
 }
 
-// Cerrar menú con tecla Escape
 const onEscape = (e) => {
   if (e.key === 'Escape' && sidebarOpen.value) {
     sidebarOpen.value = false
   }
 }
 
-// ==================== PRECARGA SEGURA (OPCIONAL - COMENTADA) ====================
-// Si quieres activar la precarga de departamentos, descomenta esto:
-const preloadDepartamentos = () => {
-  if (process.client) {
-    setTimeout(() => {
-      import('@/stores/departamentosStore')
-        .then(module => {
-          const store = module.useDepartamentosStore()
-          if (store && !store.loaded) {
-            store.fetchDepartamentos()
-          }
-        })
-        .catch(() => {})
-    }, 1500)
-  }
-}
-
-// ==================== LIFECYCLE ====================
 onMounted(() => {
+  console.log('✅ [LAYOUT] alter8.vue - LAYOUT MONTADO')
   document.addEventListener('keydown', onEscape)
-  preloadDepartamentos() // Descomentar si quieres precarga
 })
 
 onBeforeUnmount(() => {
+  console.log('🗑️ [LAYOUT] alter8.vue - LAYOUT DESMONTANDO')
   document.removeEventListener('keydown', onEscape)
 })
 </script>
 
 <style scoped>
-/* ===== SNAP SCROLL CONFIGURACIÓN CORREGIDA ===== */
-*{
+* {
   font-family: 'Montserrat';
 }
 
@@ -475,7 +333,6 @@ onBeforeUnmount(() => {
   scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
   scroll-snap-stop: always;
-  /* Forzar que el scroll comience desde el inicio */
   scroll-padding-top: 0;
 }
 
@@ -483,12 +340,10 @@ onBeforeUnmount(() => {
   scroll-snap-align: start;
 }
 
-/* El footer también debe ser punto de snap */
 .snap-footer {
   scroll-snap-align: start;
 }
 
-/* Elemento invisible al final para asegurar que el footer sea alcanzable */
 .snap-container::after {
   content: '';
   display: block;
@@ -498,7 +353,6 @@ onBeforeUnmount(() => {
   scroll-snap-align: start;
 }
 
-/* Header rojo fijo */
 header {
   position: fixed;
   top: 0;
@@ -509,12 +363,10 @@ header {
   z-index: 50;
 }
 
-/* Rotación para flechas en móvil */
 .rotate-180 {
   transform: rotate(180deg);
 }
 
-/* Hover en menús desktop */
 .group\/menu:hover .group-hover\/menu\:opacity-100 {
   opacity: 1;
 }
@@ -523,7 +375,6 @@ header {
   visibility: visible;
 }
 
-/* Footer original */
 .back-image {
   background-image: url('/footer-main.png');
   background-size: cover;
@@ -536,7 +387,6 @@ header {
   background-color: rgba(198, 18, 16, 0.6);
 }
 
-/* Scrollbar personalizado */
 aside::-webkit-scrollbar {
   width: 4px;
 }
@@ -554,29 +404,17 @@ aside::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.3);
 }
 
-/* Animaciones para redes sociales */
 @keyframes bounceIn {
-  0% {
-    opacity: 0;
-    transform: scale(0.3);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.05);
-  }
-  70% {
-    transform: scale(0.9);
-  }
-  100% {
-    transform: scale(1);
-  }
+  0% { opacity: 0; transform: scale(0.3); }
+  50% { opacity: 1; transform: scale(1.05); }
+  70% { transform: scale(0.9); }
+  100% { transform: scale(1); }
 }
 
 .animate-bounce-in {
   animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
-/* Estilos para iconos de redes sociales */
 .social-icon-wrapper {
   display: flex;
   align-items: center;
@@ -605,13 +443,11 @@ aside::-webkit-scrollbar-thumb:hover {
   transition: all 0.3s ease;
 }
 
-/* Asegurar que el contenido esté debajo */
 main {
   padding-top: 0 !important;
   margin-top: 0 !important;
 }
 
-/* Estilos de selección de texto */
 ::selection {
   background-color: #E03636;
   color: white;
@@ -622,7 +458,6 @@ main {
   color: white;
 }
 
-/* Ajuste para el scroll-padding en toda la página */
 html {
   scroll-behavior: smooth;
 }

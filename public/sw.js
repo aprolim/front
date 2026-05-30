@@ -1,28 +1,49 @@
 // public/sw.js
-// Service Worker - VERSIÓN CORREGIDA (excluye videos)
+const isDevelopment = self.location.hostname === 'localhost' || 
+                      self.location.hostname === '127.0.0.1'
+
+if (isDevelopment) {
+  console.log('[SW] Modo desarrollo - Service Worker inactivo')
+  
+  self.addEventListener('install', () => {
+    self.skipWaiting()
+  })
+  
+  self.addEventListener('fetch', (event) => {
+    event.respondWith(fetch(event.request))
+  })
+  
+  self.addEventListener('activate', (event) => {
+    event.waitUntil(
+      caches.keys().then(keys => Promise.all(keys.map(key => caches.delete(key))))
+    )
+  })
+  
+  return
+}
+
+// ============================================
+// PRODUCCIÓN - Solo para páginas que no son Centro de Noticias
+// ============================================
 
 const CACHE_NAME = 'senado-cache-v1'
 const IMAGE_CACHE_NAME = 'senado-images-v1'
 
-// Verificar si es una imagen
 const isImageRequest = (url) => {
   const imageExtensions = ['.png', '.jpg', '.jpeg', '.webp', '.svg', '.gif']
   return imageExtensions.some(ext => url.pathname.toLowerCase().includes(ext))
 }
 
-// Verificar si es un video (NO se cachean)
 const isVideoRequest = (url) => {
   const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov', '.avi', '.mkv']
   return videoExtensions.some(ext => url.pathname.toLowerCase().endsWith(ext))
 }
 
-// Verificar si es un archivo grande (no cachear)
 const isLargeFile = (url) => {
   const largeExtensions = ['.mp4', '.webm', '.pdf', '.zip']
   return largeExtensions.some(ext => url.pathname.toLowerCase().endsWith(ext))
 }
 
-// Placeholder para imágenes
 const getPlaceholderSVG = () => {
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
     <rect width="100" height="100" fill="#8B0000"/>
@@ -36,9 +57,6 @@ const getPlaceholderSVG = () => {
   })
 }
 
-// ============================================
-// INSTALACIÓN
-// ============================================
 self.addEventListener('install', (event) => {
   console.log('[SW] Instalando...')
   event.waitUntil(
@@ -48,9 +66,6 @@ self.addEventListener('install', (event) => {
   )
 })
 
-// ============================================
-// ACTIVACIÓN
-// ============================================
 self.addEventListener('activate', (event) => {
   console.log('[SW] Activando...')
   event.waitUntil(
@@ -67,21 +82,15 @@ self.addEventListener('activate', (event) => {
   )
 })
 
-// ============================================
-// ESTRATEGIA: SOLO PARA IMÁGENES
-// ============================================
 const handleImageRequest = async (request, fetchEvent) => {
   const cache = await caches.open(IMAGE_CACHE_NAME)
   
   try {
-    // Buscar en caché
     const cachedResponse = await cache.match(request)
     
-    // Actualizar en segundo plano (solo si no es video)
     const fetchPromise = fetch(request.clone())
       .then(async (networkResponse) => {
         if (networkResponse && networkResponse.ok) {
-          // Verificar que no sea respuesta parcial (206)
           if (networkResponse.status !== 206) {
             await cache.put(request, networkResponse.clone())
           }
@@ -93,13 +102,11 @@ const handleImageRequest = async (request, fetchEvent) => {
         return null
       })
     
-    // Si hay caché, devolverla inmediatamente
     if (cachedResponse) {
       fetchEvent.waitUntil(fetchPromise)
       return cachedResponse
     }
     
-    // Si no hay caché, esperar la red
     const networkResponse = await fetch(request.clone())
     if (networkResponse && networkResponse.ok && networkResponse.status !== 206) {
       await cache.put(request, networkResponse.clone())
@@ -112,31 +119,29 @@ const handleImageRequest = async (request, fetchEvent) => {
   }
 }
 
-// ============================================
-// INTERCEPTAR PETICIONES
-// ============================================
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url)
   
-  // Solo peticiones HTTP/HTTPS
-  if (!url.protocol.startsWith('http')) return
-  
-  // Para VIDEOS y archivos grandes: NO interceptar, ir directamente a la red
-  if (isVideoRequest(url) || isLargeFile(url)) {
-    // Dejar que el navegador maneje el video normalmente
+  // 🔥 EXCLUIR Centro de Noticias del caché
+  if (url.pathname === '/centro-de-noticias' || 
+      url.pathname.startsWith('/centro-de-noticias/')) {
+    event.respondWith(fetch(event.request))
     return
   }
   
-  // Solo mismo dominio para caché
+  if (!url.protocol.startsWith('http')) return
+  
+  if (isVideoRequest(url) || isLargeFile(url)) {
+    return
+  }
+  
   if (url.hostname !== self.location.hostname) return
   
-  // Para imágenes: usar estrategia especial
   if (isImageRequest(url)) {
     event.respondWith(handleImageRequest(event.request, event))
     return
   }
   
-  // Para recursos estáticos (CSS/JS)
   if (url.pathname.includes('/_nuxt/')) {
     event.respondWith(
       caches.open(CACHE_NAME).then(async (cache) => {
@@ -153,7 +158,6 @@ self.addEventListener('fetch', (event) => {
     return
   }
   
-  // Para navegación (páginas)
   if (event.request.mode === 'navigate') {
     event.respondWith(
       fetch(event.request).catch(() => caches.match('/'))

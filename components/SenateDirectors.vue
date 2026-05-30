@@ -85,37 +85,37 @@ const senadores = ref([
     nombre: 'Diego Esteban Mateo Ávila Navajas',
     cargo: 'Presidente',
     funcion: 'El Presidente representa a la Cámara y dirige sus sesiones, garantizando el orden y el cumplimiento del reglamento. Aprueba la agenda legislativa, remite asuntos a comisiones y firma leyes sancionadas. Además, supervisa la administración, dirige el presupuesto anual y puede presidir la Asamblea Legislativa ante ausencia del Vicepresidente del Estado.',
-    foto: '/senadores/g1/DIEGO ESTEBAN MATEO ÁVILA NAVAJAS.png'
+    foto: '/new/titulares/g2/DIEGO ESTEBAN MATEO ÁVILA NAVAJAS.png'
   },
   {
     nombre: 'Yasmin Estivariz Villarroel',
     cargo: 'Primera Secretaría',
     funcion: 'La Primera Secretaria es responsable de la lectura del Orden del Día, correspondencia y documentos durante el debate. Comprueba el quórum, registra votaciones y firma obligatoriamente las leyes y resoluciones. Además, vigila los procedimientos legislativos, registra la asistencia para fines remunerativos y convoca a senadores suplentes cuando corresponde.',
-    foto: '/senadores/g1/YASMIN ESTIVARIZ VILLARROEL.png'
+    foto: '/new/titulares/g2/YASMIN ESTIVARIZ VILLARROEL.png'
   },
   {
     nombre: 'Carmen Soledad Chapeton Tancara',
     cargo: 'Primera Vicepresidencia',
     funcion: 'La Primera Vicepresidente reemplaza al Presidente ante ausencias temporales y coordina las relaciones institucionales con otros órganos del Estado y organismos internacionales. Además, apoya a la Presidencia en la vinculación con bancadas, brigadas departamentales y la sociedad civil, ejerciendo también tuición sobre los medios de comunicación de la Cámara.',
-    foto: '/senadores/g2/CARMEN SOLEDAD CHAPETON TANCARA.png'
+    foto: '/new/titulares/g1/CARMEN SOLEDAD CHAPETÓN TANCARA.png'
   },
   {
     nombre: 'Julio Diego Romaña Galindo',
     cargo: 'Segunda Secretaría',
     funcion: 'El Segundo Secretario supervisa la redacción de actas y dirige las publicaciones oficiales de la Cámara. Sus funciones incluyen el seguimiento a las Peticiones de Informe hacia los órganos Ejecutivo, Judicial y Electoral para garantizar el cumplimiento de plazos, además de refrendar leyes, resoluciones y declaraciones aprobadas.',
-    foto: '/senadores/g4/JULIO DIEGO ROMAÑA GALINDO.png'
+    foto: '/new/titulares/g3/JULIO DIEGO ROMAÑA GALINDO.png'
   },
   {
     nombre: 'Khatia Lisbeth Quiroga Fernández',
     cargo: 'Segunda Vicepresidencia',
     funcion: 'La Segunda Vicepresidente reemplaza al Presidente o al Primer Vicepresidente ante ausencias o impedimentos. Sus funciones incluyen promover la modernización legislativa e institucional, además de apoyar a la Primera Vicepresidencia en el seguimiento de relaciones con organismos interparlamentarios y en la vinculación de la Cámara con la sociedad civil.',
-    foto: '/senadores/g3/KHATIA LISBETH QUIROGA FERNÁNDEZ.png'
+    foto: '/new/titulares/g3/KATHIA LISBETH QUIROGA FERNÁNDEZ.png'
   },
   {
     nombre: 'Rosa Tatiana añez Carrasco',
     cargo: 'Tercera Secretaría',
     funcion: 'La Tercera Secretaria vigila y evalúa los sistemas de apoyo técnico y administrativo, informando periódicamente a la Directiva. Apoya a la Presidencia en la elaboración del presupuesto anual y controla su ejecución. Además, coordina las relaciones con medios de comunicación, la seguridad de la Cámara y la Unidad de Ceremonial Legislativo.',
-    foto: '/senadores/g2/ROSA TATIANA AÑEZ CARRASCO.png'
+    foto: '/new/titulares/g3/ROSA TATIANA AÑEZ CARRASCO.png'
   }
 ])
 

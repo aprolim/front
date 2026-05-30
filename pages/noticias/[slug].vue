@@ -12,96 +12,76 @@
       </button>
 
       <!-- Estado de carga -->
-      <div v-if="cargando" class="flex justify-center items-center py-20">
+      <div v-if="pending && !noticiaData?.noticia" class="flex justify-center items-center py-20">
         <div class="inline-block w-12 h-12 border-4 border-[#E03636] border-t-transparent rounded-full animate-spin"></div>
         <p class="ml-3 text-gray-500">Cargando noticia...</p>
       </div>
 
       <!-- Estado de error -->
-      <div v-else-if="errorMsg" class="text-center py-12 bg-white rounded-xl">
-        <p class="text-red-600 mb-4">{{ errorMsg }}</p>
+      <div v-else-if="errorMsg || error" class="text-center py-12 bg-white rounded-xl">
+        <p class="text-red-600 mb-4">{{ errorMsg || error?.message || 'Error al cargar la noticia' }}</p>
         <button @click="recargar" class="bg-[#E03636] text-white px-4 py-2 rounded-lg hover:bg-[#C12F2F] transition">Reintentar</button>
       </div>
 
       <!-- Noticia encontrada -->
-      <article v-else-if="noticiaData" class="bg-white rounded-xl shadow-lg overflow-hidden">
+      <article v-else-if="noticiaData?.noticia" class="bg-white rounded-xl shadow-lg overflow-hidden">
         <!-- TITULO -->
         <div class="p-6 md:p-8 pb-0">
           <div class="flex flex-wrap gap-2 mb-4">
-            <span class="bg-[#E03636] text-white text-sm px-3 py-1 rounded-full">{{ noticiaData.category || noticiaData.categoria || 'Noticia' }}</span>
-            <span v-if="noticiaData.category === 'legislacion' || noticiaData.views > 50" class="bg-yellow-500 text-white text-sm px-3 py-1 rounded-full font-semibold">★ Importante</span>
+            <span class="bg-[#E03636] text-white text-sm px-3 py-1 rounded-full">{{ noticiaData.noticia.categoria || 'Noticia' }}</span>
+            <span v-if="noticiaData.noticia.category === 'legislacion'" class="bg-yellow-500 text-white text-sm px-3 py-1 rounded-full font-semibold">★ Importante</span>
           </div>
           <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
-            {{ noticiaData.title || noticiaData.titulo }}
+            {{ noticiaData.noticia.title }}
           </h1>
-          <div class="flex flex-wrap items-center justify-between gap-4 pt-4 pb-6">
-            <p class="text-gray-500">{{ formatearFecha(noticiaData.publishedAt || noticiaData.fecha) }}</p>
-            <button 
-              @click="compartir"
-              class="flex items-center gap-2 text-gray-500 hover:text-[#E03636] transition-colors"
-            >
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.05 4.11c-.05.23-.09.46-.09.7 0 1.66 1.34 3 3 3s3-1.34 3-3-1.34-3-3-3z"/>
-              </svg>
-              Compartir
-            </button>
-          </div>
+          <p class="text-gray-600 text-base md:text-lg mt-4 leading-relaxed">
+            {{ noticiaData.noticia.excerpt }}
+          </p>
         </div>
 
-        <!-- CARRUSEL CON EFECTO DE TRES IMÁGENES VISIBLES -->
-        <div class="px-6 md:px-8 mb-8">
+        <!-- CARRUSEL -->
+        <div class="px-6 md:px-8 mt-6 mb-4">
           <div class="relative">
-            <!-- Contenedor del carrusel estilo "peek" -->
-            <div class="relative overflow-hidden rounded-2xl bg-gray-900 shadow-2xl">
-              <!-- Contenedor de las 3 imágenes visibles -->
-              <div class="flex">
-                <!-- Imagen anterior (peek izquierdo) -->
-                <div class="flex-shrink-0 transition-all duration-500 ease-out overflow-hidden"
-                     :style="{ width: `${peekWidth}%` }">
-                  <div class="relative h-full" :style="{ paddingBottom: '56.25%' }">
+            <div class="relative overflow-hidden rounded-2xl bg-gray-900 shadow-2xl" style="height: 500px;">
+              <div class="flex h-full">
+                <div class="flex-shrink-0 transition-all duration-500 ease-out overflow-hidden h-full cursor-pointer"
+                     :style="{ width: `${peekLeftWidth}%` }"
+                     @click="anteriorImagen">
+                  <div class="relative w-full h-full">
                     <img 
                       :src="imagenAnterior?.url || imagenActual?.url"
                       :alt="imagenAnterior?.alt || 'Imagen anterior'"
-                      class="absolute inset-0 w-full h-full object-cover filter blur-[2px] brightness-75"
+                      class="w-full h-full object-cover"
                     />
-                    <div class="absolute inset-0 bg-black/40"></div>
+                    <div class="absolute inset-0 bg-black/30"></div>
                   </div>
                 </div>
 
-                <!-- Imagen actual (central) -->
-                <div class="flex-shrink-0 transition-all duration-500"
+                <div class="flex-shrink-0 transition-all duration-500 h-full"
                      :style="{ width: `${imagenActualWidth}%` }">
-                  <div class="relative overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900"
-                       :style="{ paddingBottom: imagenActual?.orientation === 'vertical' ? '120%' : '56.25%' }">
+                  <div class="relative w-full h-full overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900">
                     <img 
                       :src="imagenActual?.url"
                       :alt="imagenActual?.alt"
-                      class="absolute inset-0 w-full h-full transition-transform duration-700 hover:scale-105"
-                      :class="imagenActual?.orientation === 'vertical' ? 'object-contain' : 'object-cover'"
+                      class="w-full h-full object-contain"
                     />
-                    
-                    <!-- Badge de orientación (solo demo) -->
-                    <div class="absolute bottom-3 left-3 bg-black/60 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-full">
-                      {{ imagenActual?.orientation === 'vertical' ? '📱 Vertical' : '🖥️ Horizontal' }}
-                    </div>
                   </div>
                 </div>
 
-                <!-- Imagen siguiente (peek derecho) -->
-                <div class="flex-shrink-0 transition-all duration-500 overflow-hidden"
-                     :style="{ width: `${peekWidth}%` }">
-                  <div class="relative h-full" :style="{ paddingBottom: '56.25%' }">
+                <div class="flex-shrink-0 transition-all duration-500 overflow-hidden h-full cursor-pointer"
+                     :style="{ width: `${peekRightWidth}%` }"
+                     @click="siguienteImagen">
+                  <div class="relative w-full h-full">
                     <img 
                       :src="imagenSiguiente?.url || imagenActual?.url"
                       :alt="imagenSiguiente?.alt || 'Imagen siguiente'"
-                      class="absolute inset-0 w-full h-full object-cover filter blur-[2px] brightness-75"
+                      class="w-full h-full object-cover"
                     />
-                    <div class="absolute inset-0 bg-black/40"></div>
+                    <div class="absolute inset-0 bg-black/30"></div>
                   </div>
                 </div>
               </div>
 
-              <!-- Flecha izquierda -->
               <button 
                 v-if="imagenesCarrusel.length > 1"
                 @click="anteriorImagen"
@@ -112,7 +92,6 @@
                 </svg>
               </button>
 
-              <!-- Flecha derecha -->
               <button 
                 v-if="imagenesCarrusel.length > 1"
                 @click="siguienteImagen"
@@ -123,26 +102,17 @@
                 </svg>
               </button>
 
-              <!-- Indicadores -->
-              <div v-if="imagenesCarrusel.length > 1" class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
-                <button
-                  v-for="(_, idx) in imagenesCarrusel"
-                  :key="idx"
-                  @click="currentIndex = idx"
-                  class="transition-all duration-300 rounded-full"
-                  :class="currentIndex === idx 
-                    ? 'bg-[#E03636] w-8 h-2' 
-                    : 'bg-white/50 hover:bg-white/80 w-2 h-2'"
-                ></button>
-              </div>
-
-              <!-- Contador -->
               <div v-if="imagenesCarrusel.length > 1" class="absolute top-4 right-4 bg-black/70 text-white text-sm px-3 py-1.5 rounded-full backdrop-blur-sm font-medium z-10">
                 {{ String(currentIndex + 1).padStart(2, '0') }} / {{ String(imagenesCarrusel.length).padStart(2, '0') }}
               </div>
             </div>
 
-            <!-- Miniaturas de navegación -->
+            <div class="text-center mt-3">
+              <p class="text-gray-600 text-sm md:text-base italic">
+                {{ imagenActual?.alt || 'Sin descripción' }}
+              </p>
+            </div>
+
             <div v-if="imagenesCarrusel.length > 1" class="flex justify-center gap-2 mt-4 overflow-x-auto pb-2">
               <button
                 v-for="(img, idx) in imagenesCarrusel"
@@ -162,14 +132,108 @@
           </div>
         </div>
 
-        <!-- CONTENIDO DE LA NOTICIA -->
-        <div class="p-6 md:p-8 pt-0 border-t border-gray-100">
-          <div class="prose prose-lg max-w-none text-gray-700" v-html="noticiaData.content || noticiaData.contenidoCompleto"></div>
+        <!-- REDES SOCIALES -->
+        <div class="px-6 md:px-8 mb-6">
+          <div class="flex justify-end items-center gap-2 py-2 border-b border-gray-200">
+            <span class="text-gray-500 text-sm mr-1">Compartir:</span>
+            
+            <a 
+              :href="`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(windowLocation)}`"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="social-icon rounded-lg border border-gray-300 hover:border-[#E03636] transition-all duration-300"
+              aria-label="Compartir en Facebook"
+            >
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+              </svg>
+            </a>
+
+            <a 
+              :href="`https://twitter.com/intent/tweet?text=${encodeURIComponent(noticiaData.noticia.title)}&url=${encodeURIComponent(windowLocation)}`"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="social-icon rounded-lg border border-gray-300 hover:border-[#E03636] transition-all duration-300"
+              aria-label="Compartir en X"
+            >
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+              </svg>
+            </a>
+
+            <a 
+              :href="`https://www.instagram.com/?url=${encodeURIComponent(windowLocation)}`"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="social-icon rounded-lg border border-gray-300 hover:border-[#E03636] transition-all duration-300"
+              aria-label="Compartir en Instagram"
+            >
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069z"/>
+              </svg>
+            </a>
+
+            <a 
+              :href="`https://www.youtube.com/results?search_query=${encodeURIComponent(noticiaData.noticia.title)}`"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="social-icon rounded-lg border border-gray-300 hover:border-[#E03636] transition-all duration-300"
+              aria-label="Buscar en YouTube"
+            >
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- CONTENIDO VARIABLE DE LA NOTICIA -->
+        <div class="p-6 md:p-8 pt-0">
+          <div 
+            v-for="(block, index) in noticiaData.noticia.blocks" 
+            :key="index"
+            class="block-item"
+          >
+            <!-- Párrafo normal -->
+            <div v-if="block.type === 'paragraph'" class="prose prose-lg max-w-none text-gray-700 mb-6">
+              <p>{{ block.content }}</p>
+            </div>
+
+            <!-- CITA DESTACADA -->
+            <div v-else-if="block.type === 'quote'" class="quote-block my-8">
+              <div class="quote-badge">
+                <div class="badge-name">{{ block.author }}</div>
+                <div class="badge-role">{{ block.role }}</div>
+              </div>
+              <div class="quote-container">
+                <div class="quote-content-wrapper">
+                  <span class="quote-mark quote-open">“</span>
+                  <p class="quote-text">{{ block.content }}</p>
+                  <span class="quote-mark quote-close">”</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Video -->
+            <div v-else-if="block.type === 'video'" class="video-block my-8">
+              <div class="relative aspect-video rounded-xl overflow-hidden shadow-lg">
+                <iframe 
+                  :src="block.url" 
+                  :title="block.title || 'Video'"
+                  class="absolute inset-0 w-full h-full"
+                  frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowfullscreen
+                ></iframe>
+              </div>
+              <p v-if="block.caption" class="text-sm text-gray-500 text-center mt-2">{{ block.caption }}</p>
+            </div>
+          </div>
         </div>
       </article>
 
       <!-- Noticia no encontrada -->
-      <div v-else-if="!cargando && !errorMsg && noticiaData === null" class="text-center py-12 bg-white rounded-xl">
+      <div v-else-if="!pending && !noticiaData?.noticia && !error" class="text-center py-12 bg-white rounded-xl">
         <h1 class="text-2xl font-bold text-gray-800 mb-4">Noticia no encontrada</h1>
         <p class="text-gray-500 mb-6">Lo sentimos, la noticia que buscas no existe o ha sido removida.</p>
         <button @click="volverAtras" class="inline-block bg-[#E03636] text-white px-6 py-3 rounded-lg hover:bg-[#C12F2F] transition">Volver atrás</button>
@@ -179,38 +243,149 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
 const router = useRouter()
 
-const noticiaData = ref(null)
-const cargando = ref(true)
-const errorMsg = ref(null)
+const windowLocation = ref('')
 const currentIndex = ref(0)
 const imagenesCarrusel = ref([])
+const errorMsg = ref(null)
 
-// Configuración del peek: 15% para cada lateral, 70% para el centro
-const peekWidth = computed(() => {
-  // Si la imagen actual es vertical, reducimos el peek para dar más espacio
-  if (imagenActual.value?.orientation === 'vertical') {
-    return 10
+const { data: noticiaData, pending, error, refresh } = await useAsyncData(
+  `noticia-${route.params.slug}`,
+  async () => {
+    console.log(`🚀 [SSR] Cargando en: ${process.server ? 'SERVIDOR' : 'CLIENTE'}`)
+    
+    const generarBloques = () => {
+      const textosParagraph = [
+        'La Comisión de Constitución analizó el proyecto de ley en detalle, revisando cada uno de sus artículos y escuchando las observaciones de los diferentes sectores involucrados. Este proceso de análisis duró varias semanas y contó con la participación de expertos en la materia.',
+        'Senadores de diferentes regiones del país expresaron su respaldo a la iniciativa, destacando la importancia de trabajar de manera coordinada por el desarrollo de Bolivia. Las diferentes bancadas políticas lograron acuerdos importantes que permitieron avanzar en la discusión.',
+        'La norma fue trabajada en consenso con todos los sectores involucrados, demostrando el compromiso del Senado con la participación ciudadana y la transparencia. Se realizaron más de 15 reuniones de trabajo con organizaciones sociales y gremiales.',
+        'El presidente del Senado destacó la importancia del diálogo político y la necesidad de construir acuerdos que beneficien a toda la población boliviana. En sus declaraciones, enfatizó que este es un ejemplo de cómo la política puede resolver problemas concretos.',
+        'Organizaciones sociales manifestaron su satisfacción con el resultado, señalando que esta ley responde a las necesidades reales de la ciudadanía. Representantes de diferentes sectores aplaudieron la iniciativa y se comprometieron a coadyuvar en su implementación.',
+        'La votación final está programada para la próxima sesión ordinaria, donde se espera contar con el respaldo necesario para su aprobación definitiva. Los líderes de bancada se mostraron optimistas respecto al resultado de la votación.',
+        'El proyecto ahora pasa a la Cámara de Diputados para su revisión y posterior sanción, completando así el proceso legislativo. Se espera que en las próximas semanas se inicie el tratamiento en la cámara baja.',
+        'Esta iniciativa legislativa forma parte de un paquete de reformas que el Senado viene impulsando para modernizar el marco normativo del país. Se prevé que en los próximos meses se presenten proyectos complementarios.'
+      ]
+      
+      const citas = [
+        { content: 'La transparencia y el diálogo son fundamentales para el fortalecimiento de nuestra democracia. Este proyecto es una prueba de que cuando trabajamos juntos, podemos lograr grandes cosas para el país.', author: 'Diego Esteban Mateo Ávila Navajas', role: 'Presidente del Senado' },
+        { content: 'Este es un paso histórico para el desarrollo legislativo de nuestro país. Nunca antes se había logrado un consenso tan amplio en una iniciativa de esta naturaleza.', author: 'Carmen Soledad Chapetón Tancara', role: 'Primera Vicepresidenta del Senado' },
+        { content: 'El consenso alcanzado demuestra la madurez política de nuestra democracia. Las diferentes fuerzas políticas han antepuesto el interés nacional por encima de cualquier consideración partidaria.', author: 'Khatia Lisbeth Quiroga Fernández', role: 'Segunda Vicepresidenta del Senado' },
+        { content: 'Trabajamos incansablemente para garantizar el bienestar de todos los bolivianos. Esta ley es una muestra de nuestro compromiso con la gente.', author: 'Yasmin Estívariz Villarroel', role: 'Primera Secretaria del Senado' },
+        { content: 'La participación ciudadana es el pilar fundamental de nuestra labor legislativa. Hemos recorrido el país escuchando a la gente y este proyecto refleja sus necesidades.', author: 'Julio Diego Romaña Galindo', role: 'Segundo Secretario del Senado' }
+      ]
+      
+      const bloques = []
+      const numParrafos = Math.floor(Math.random() * 3) + 5
+      for (let i = 0; i < numParrafos; i++) {
+        bloques.push({
+          type: 'paragraph',
+          content: textosParagraph[Math.floor(Math.random() * textosParagraph.length)]
+        })
+      }
+      
+      const cita = citas[Math.floor(Math.random() * citas.length)]
+      const posicionCita = Math.min(Math.floor(Math.random() * 2) + 2, bloques.length - 1)
+      bloques.splice(posicionCita, 0, {
+        type: 'quote',
+        content: cita.content,
+        author: cita.author,
+        role: cita.role
+      })
+      
+      bloques.push({
+        type: 'video',
+        url: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+        title: 'Sesión plenaria del Senado',
+        caption: 'Registro audiovisual de la sesión donde se debatió esta importante iniciativa legislativa'
+      })
+      
+      return bloques
+    }
+    
+    const noticiasBase = {
+      'senado-aprueba-ley-ambiental': {
+        title: 'Senado aprueba nueva ley de protección ambiental',
+        categoria: 'Legislación',
+        publishedAt: new Date().toISOString(),
+        excerpt: 'El pleno del Senado aprobó por unanimidad la nueva Ley de Protección Ambiental, una normativa histórica que establece medidas para la preservación de los recursos naturales y la lucha contra el cambio climático.'
+      },
+      'senado-rechaza-proyecto-controversial': {
+        title: 'Senado rechaza proyecto de ley controversial',
+        categoria: 'Política',
+        publishedAt: new Date().toISOString(),
+        excerpt: 'Por mayoría absoluta, la Cámara de Senadores decidió rechazar el proyecto de ley que generaba controversia en diversos sectores de la sociedad boliviana.'
+      }
+    }
+    
+    let noticiaBase = noticiasBase[route.params.slug]
+    
+    if (!noticiaBase) {
+      const slugLimpio = route.params.slug.replace(/-/g, ' ')
+      noticiaBase = {
+        title: slugLimpio.charAt(0).toUpperCase() + slugLimpio.slice(1),
+        categoria: 'Noticia',
+        publishedAt: new Date().toISOString(),
+        excerpt: `Información completa sobre ${slugLimpio}, una de las noticias más relevantes del acontecer legislativo en Bolivia.`
+      }
+    }
+    
+    const noticia = {
+      ...noticiaBase,
+      blocks: generarBloques()
+    }
+    
+    const imagenes = [
+      { url: 'https://picsum.photos/id/1015/1920/1080', alt: 'Montaña con lago - Hermoso paisaje natural', orientation: 'horizontal' },
+      { url: 'https://picsum.photos/id/104/1080/1920', alt: 'Caminante en la naturaleza - Persona disfrutando del paisaje', orientation: 'vertical' },
+      { url: 'https://picsum.photos/id/15/1920/1080', alt: 'Bosque con niebla - Ambiente místico y sereno', orientation: 'horizontal' },
+      { url: 'https://picsum.photos/id/169/1080/1920', alt: 'Atardecer - Colores cálidos al final del día', orientation: 'vertical' },
+      { url: 'https://picsum.photos/id/155/1920/1080', alt: 'Carretera en el bosque - Camino entre árboles', orientation: 'horizontal' },
+      { url: 'https://picsum.photos/id/30/1080/1920', alt: 'Hojas de café - Detalle de cultivo', orientation: 'vertical' }
+    ]
+    
+    return { noticia, imagenes }
+  },
+  {
+    lazy: false,
+    server: true,
+    default: () => ({ noticia: null, imagenes: [] })
   }
-  return 15
-})
+)
 
-const imagenActualWidth = computed(() => {
-  return 100 - (peekWidth.value * 2)
-})
+if (noticiaData.value?.imagenes) {
+  imagenesCarrusel.value = noticiaData.value.imagenes
+}
 
-// Imagen actual
+watch(noticiaData, (newData) => {
+  if (newData?.imagenes) {
+    imagenesCarrusel.value = newData.imagenes
+  }
+  if (newData?.noticia) {
+    useHead({
+      title: `${newData.noticia.title} | Senado Bolivia`,
+      meta: [
+        { name: 'description', content: newData.noticia.excerpt },
+        { property: 'og:title', content: newData.noticia.title },
+        { property: 'og:image', content: newData.imagenes?.[0]?.url }
+      ]
+    })
+  }
+}, { immediate: true })
+
+if (error.value) {
+  errorMsg.value = error.value.message
+}
+
 const imagenActual = computed(() => {
   if (imagenesCarrusel.value.length === 0) return null
   return imagenesCarrusel.value[currentIndex.value]
 })
 
-// Imagen anterior (para peek izquierdo)
 const imagenAnterior = computed(() => {
   if (imagenesCarrusel.value.length === 0) return null
   if (imagenesCarrusel.value.length === 1) return imagenActual.value
@@ -220,7 +395,6 @@ const imagenAnterior = computed(() => {
   return imagenesCarrusel.value[prevIndex]
 })
 
-// Imagen siguiente (para peek derecho)
 const imagenSiguiente = computed(() => {
   if (imagenesCarrusel.value.length === 0) return null
   if (imagenesCarrusel.value.length === 1) return imagenActual.value
@@ -230,63 +404,17 @@ const imagenSiguiente = computed(() => {
   return imagenesCarrusel.value[nextIndex]
 })
 
-// Detectar orientación de imagen
-const detectarOrientacion = (url) => {
-  return new Promise((resolve) => {
-    const img = new Image()
-    img.onload = () => {
-      resolve(img.width > img.height ? 'horizontal' : 'vertical')
-    }
-    img.onerror = () => {
-      resolve('horizontal')
-    }
-    img.src = url
-  })
-}
+const peekWidth = computed(() => {
+  if (imagenActual.value?.orientation === 'vertical') return 22
+  return 12
+})
 
-// Imágenes simuladas para demo (3 horizontales + 3 verticales)
-const cargarImagenesSimuladas = async () => {
-  const imagenesSimuladas = [
-    {
-      url: 'https://picsum.photos/id/1015/1920/1080',
-      alt: 'Montaña con lago - Horizontal',
-      title: 'Vista panorámica'
-    },
-    {
-      url: 'https://picsum.photos/id/104/1080/1920',
-      alt: 'Caminante - Vertical',
-      title: 'Momento único'
-    },
-    {
-      url: 'https://picsum.photos/id/15/1920/1080',
-      alt: 'Bosque con niebla - Horizontal',
-      title: 'Naturaleza'
-    },
-    {
-      url: 'https://picsum.photos/id/169/1080/1920',
-      alt: 'Atardecer - Vertical',
-      title: 'Atardecer mágico'
-    },
-    {
-      url: 'https://picsum.photos/id/155/1920/1080',
-      alt: 'Carretera - Horizontal',
-      title: 'Viaje'
-    },
-    {
-      url: 'https://picsum.photos/id/30/1080/1920',
-      alt: 'Hojas de café - Vertical',
-      title: 'Detalles naturales'
-    }
-  ]
-  
-  // Detectar orientación
-  const conOrientacion = []
-  for (const img of imagenesSimuladas) {
-    const orientacion = await detectarOrientacion(img.url)
-    conOrientacion.push({ ...img, orientation: orientacion })
-  }
-  return conOrientacion
-}
+const imagenActualWidth = computed(() => {
+  return 100 - (peekWidth.value * 2)
+})
+
+const peekLeftWidth = computed(() => peekWidth.value)
+const peekRightWidth = computed(() => peekWidth.value)
 
 const siguienteImagen = () => {
   if (imagenesCarrusel.value.length <= 1) return
@@ -314,11 +442,11 @@ const volverAtras = () => {
 }
 
 const compartir = () => {
-  if (noticiaData.value) {
+  if (noticiaData.value?.noticia) {
     if (navigator.share) {
       navigator.share({
-        title: noticiaData.value.title || noticiaData.value.titulo,
-        text: noticiaData.value.excerpt,
+        title: noticiaData.value.noticia.title,
+        text: noticiaData.value.noticia.excerpt,
         url: window.location.href
       })
     } else {
@@ -328,53 +456,10 @@ const compartir = () => {
   }
 }
 
-const recargar = async () => {
-  await cargarNoticia()
+const recargar = () => {
+  refresh()
 }
 
-const cargarNoticia = async () => {
-  cargando.value = true
-  errorMsg.value = null
-  currentIndex.value = 0
-  
-  try {
-    const slug = route.params.slug
-    
-    // SIMULACIÓN (reemplazar con API real)
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    const demoData = {
-      success: true,
-      data: {
-        title: 'Senado aprueba nueva ley de protección ambiental',
-        categoria: 'Legislación',
-        publishedAt: new Date().toISOString(),
-        excerpt: 'Una nueva ley que protege nuestros recursos naturales...',
-        content: `
-          <p>En una histórica sesión, la Cámara de Senadores aprobó por unanimidad la nueva Ley de Protección Ambiental.</p>
-          <h2>Medidas principales</h2>
-          <p>La ley contempla sanciones más severas para actividades contaminantes.</p>
-          <ul>
-            <li>Reducción del 40% de emisiones para 2030</li>
-            <li>Creación de 10,000 empleos verdes</li>
-            <li>Protección de 5 millones de hectáreas</li>
-          </ul>
-        `
-      }
-    }
-    noticiaData.value = demoData.data
-    
-    // Cargar imágenes del carrusel
-    imagenesCarrusel.value = await cargarImagenesSimuladas()
-    
-  } catch (err) {
-    errorMsg.value = err.message
-    noticiaData.value = null
-  } finally {
-    cargando.value = false
-  }
-}
-
-// Navegación por teclado
 const handleKeydown = (e) => {
   if (e.key === 'ArrowLeft') {
     anteriorImagen()
@@ -384,55 +469,223 @@ const handleKeydown = (e) => {
 }
 
 onMounted(() => {
-  cargarNoticia()
+  windowLocation.value = window.location.href
   window.addEventListener('keydown', handleKeydown)
+  console.log('✅ [onMounted] Cliente hidratado')
 })
 
-import { onUnmounted } from 'vue'
 onUnmounted(() => {
   window.removeEventListener('keydown', handleKeydown)
 })
 
 definePageMeta({ layout: 'alter8' })
-
-watch(noticiaData, (nuevaNoticia) => {
-  if (nuevaNoticia) {
-    useHead({
-      title: `${nuevaNoticia.title || nuevaNoticia.titulo} | Senado Bolivia`,
-      meta: [
-        { name: 'description', content: nuevaNoticia.excerpt },
-        { property: 'og:title', content: nuevaNoticia.title || nuevaNoticia.titulo },
-        { property: 'og:image', content: imagenesCarrusel.value[0]?.url }
-      ]
-    })
-  }
-}, { immediate: true })
 </script>
 
 <style scoped>
-.prose {
-  font-family: 'Montserrat', Tahoma, Geneva, Verdana, sans-serif;
+/* ========== CAPITOLIUM NEWS - SOLO PARA ESTA PÁGINA ========== */
+@font-face {
+  font-family: 'Capitolium News';
+  src: url('/fonts/Capitolium News W01 2 Regular/Capitolium News W01 2 Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
 
-.prose p {
-  margin-bottom: 1.5rem;
-  line-height: 1.8;
+@font-face {
+  font-family: 'Capitolium News';
+  src: url('/fonts/Capitolium News W01 2 Bold/Capitolium News W01 2 Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
 }
 
-.prose h2, .prose h3 {
+@font-face {
+  font-family: 'Capitolium News';
+  src: url('/fonts/Capitolium News W01 2 Italic/Capitolium News W01 2 Italic.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Capitolium News';
+  src: url('/fonts/Capitolium News W01 2 SemiBold/Capitolium News W01 2 SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Aplicar Capitolium News a TODO el contenido de esta página */
+.text-style,
+.prose,
+.prose p,
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6,
+.prose li,
+.prose ul,
+.prose ol,
+article,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+span,
+div,
+section,
+.quote-badge .badge-name,
+.quote-badge .badge-role,
+.quote-text,
+button,
+a,
+.quote-container,
+.quote-block,
+.quote-content-wrapper,
+.social-icon,
+.social-icon svg {
+  font-family: 'Capitolium News', 'Montserrat', Tahoma, Geneva, Verdana, sans-serif !important;
+}
+
+/* Títulos con negrita */
+h1, h2, h3, .titulo-principal, .title {
+  font-weight: 700 !important;
+}
+
+/* ========== CITAS: SOLO el texto de la cita va en Montserrat itálica ========== */
+.quote-text {
+  font-family: 'Montserrat', sans-serif !important;
+  font-style: italic !important;
+  font-weight: 400 !important;
+}
+
+/* Comillas mantienen su estilo */
+.quote-mark {
+  font-family: Georgia, 'Times New Roman', serif !important;
+}
+
+/* ========== ESTILOS DE CITA ========== */
+.quote-block {
+  margin: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.quote-badge {
+  background-color: #1a1a1a;
+  color: white;
+  padding: 0.5rem 1.2rem;
+  display: inline-block;
+  text-align: right;
+  margin-bottom: 0;
+  width: auto;
+}
+
+.badge-name {
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+}
+
+.badge-role {
+  font-size: 0.65rem;
+  opacity: 0.8;
+  margin-top: 0.15rem;
+}
+
+.quote-container {
+  background-color: #f5f5f5;
+  width: 100%;
+  margin-top: 0;
+  padding: 1.5rem 2rem;
+}
+
+.quote-content-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.quote-mark {
+  font-size: 4rem;
+  color: #9ca3af;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.quote-open {
+  align-self: flex-start;
+}
+
+.quote-close {
+  align-self: flex-end;
+}
+
+.quote-text {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #333;
+  margin: 0;
+  flex: 1;
+  text-align: left;
+}
+
+/* Video block */
+.video-block iframe {
+  transition: transform 0.3s ease;
+}
+
+.video-block:hover iframe {
+  transform: scale(1.01);
+}
+
+/* Animación de entrada */
+.block-item {
+  animation: fadeInUp 0.5s ease-out forwards;
+  opacity: 0;
+}
+
+.block-item:nth-child(1) { animation-delay: 0.05s; }
+.block-item:nth-child(2) { animation-delay: 0.1s; }
+.block-item:nth-child(3) { animation-delay: 0.15s; }
+.block-item:nth-child(4) { animation-delay: 0.2s; }
+.block-item:nth-child(5) { animation-delay: 0.25s; }
+.block-item:nth-child(6) { animation-delay: 0.3s; }
+.block-item:nth-child(7) { animation-delay: 0.35s; }
+.block-item:nth-child(8) { animation-delay: 0.4s; }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.social-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  color: #1f2937;
+  background-color: transparent;
+  transition: all 0.3s ease;
+}
+
+.social-icon:hover {
   color: #E03636;
-  margin-top: 2rem;
-  margin-bottom: 1rem;
-  font-weight: bold;
-}
-
-.prose ul, .prose ol {
-  margin: 1rem 0;
-  padding-left: 2rem;
-}
-
-.prose li {
-  margin: 0.5rem 0;
+  border-color: #E03636;
+  transform: translateY(-2px);
 }
 
 @keyframes fadeIn {

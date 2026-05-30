@@ -1,6 +1,6 @@
 // nuxt.config.ts
 export default defineNuxtConfig({
-  ssr: false,
+  ssr: true,
   devtools: { enabled: false },
   
   modules: [
@@ -8,32 +8,20 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     '@nuxt/image'
   ],
+  
   plugins: [
     { src: '~/plugins/adaptive-image-loader.client.ts', mode: 'client' },
     { src: '~/plugins/clean-console.client.ts', mode: 'client' },
     { src: '~/plugins/sw-register.client.ts', mode: 'client' }
   ],
   
-  // ============================================
-  // CONFIGURACIÓN DE IMÁGENES CON IPX - CORREGIDA
-  // ============================================
   image: {
-    // Provider IPX
     provider: 'ipx',
-    
-    // Configuración de IPX (sin cache que no existe)
     ipx: {
-      // Base URL para las imágenes procesadas
       baseURL: '/_ipx/'
     },
-    
-    // Dominios permitidos
     domains: ['demoap.senado.gob.bo', 'localhost'],
-    
-    // Calidad por defecto
     quality: 80,
-    
-    // Screens responsive
     screens: {
       xs: 320,
       sm: 640,
@@ -42,8 +30,6 @@ export default defineNuxtConfig({
       xl: 1280,
       xxl: 1536
     },
-    
-    // Presets para diferentes usos
     presets: {
       avatar: {
         modifiers: {
@@ -71,14 +57,14 @@ export default defineNuxtConfig({
   
   app: {
     baseURL: '/',
-    buildAssetsDir: '/_nuxt/',
     head: {
       title: 'Senado de Bolivia',
       htmlAttrs: { lang: 'es' },
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: 'Portal Oficial del Senado Nacional de Bolivia' }
+        { name: 'description', content: 'Portal Oficial del Senado Nacional de Bolivia' },
+        { 'http-equiv': 'Cache-Control', content: 'no-cache' }
       ],
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
@@ -91,32 +77,66 @@ export default defineNuxtConfig({
   
   css: [
     '~/assets/css/fonts.css',
-    '~/assets/css/main.css'
+    '~/assets/css/main.css',
+    '~/assets/css/tailwind.css'
   ],
   
   nitro: {
-    preset: 'static',
+    preset: 'node-server',
     output: {
       publicDir: 'dist'
-    },
-    prerender: {
-      routes: ['/'],
-      crawlLinks: true,
-      failOnError: false
     },
     compressPublicAssets: {
       gzip: true,
       brotli: true
+    },
+    storage: {
+      'cache': {
+        driver: 'memory',
+        maxEntries: 100
+      }
+    }
+  },
+  
+  routeRules: {
+    '/centro-de-noticias': { 
+      ssr: true,
+      swr: false,
+      cache: false
+    },
+    '/centro-de-noticias/**': { 
+      ssr: true,
+      swr: false,
+      cache: false
     }
   },
   
   vite: {
     server: {
+      hmr: {
+        protocol: 'ws',
+        host: 'localhost',
+        clientPort: 3001,
+        port: 3001
+      },
       allowedHosts: [
         'demoap.senado.gob.bo',
         'localhost',
         '127.0.0.1'
       ]
+    },
+    css: {
+      devSourcemap: true
+    },
+    optimizeDeps: {
+      include: ['nuxt', '@nuxtjs/tailwindcss'],
+      exclude: []
     }
+  },
+  
+  tailwindcss: {
+    cssPath: '~/assets/css/tailwind.css',
+    configPath: 'tailwind.config.js',
+    viewer: false
   }
 })

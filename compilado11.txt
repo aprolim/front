@@ -1,0 +1,1326 @@
+COMPILADO DE ARCHIVOS - Parte 11 
+ 
+ 
+================================= 
+pages\noticias\[slug].vue 
+================================= 
+ 
+<template>
+  <div class="min-h-screen bg-gray-50 py-12">
+    <div class="container mx-auto px-4 max-w-6xl">
+      <button 
+        @click="volverAtras"
+        class="inline-flex items-center gap-2 text-[#E03636] hover:text-[#C12F2F] transition-colors mb-6 group"
+      >
+        <svg class="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+        Volver
+      </button>
+
+      <!-- Estado de carga (usando pending de useAsyncData) -->
+      <div v-if="pending && !noticiaData?.noticia" class="flex justify-center items-center py-20">
+        <div class="inline-block w-12 h-12 border-4 border-[#E03636] border-t-transparent rounded-full animate-spin"></div>
+        <p class="ml-3 text-gray-500">Cargando noticia...</p>
+      </div>
+
+      <!-- Estado de error -->
+      <div v-else-if="errorMsg || error" class="text-center py-12 bg-white rounded-xl">
+        <p class="text-red-600 mb-4">{{ errorMsg || error?.message || 'Error al cargar la noticia' }}</p>
+        <button @click="recargar" class="bg-[#E03636] text-white px-4 py-2 rounded-lg hover:bg-[#C12F2F] transition">Reintentar</button>
+      </div>
+
+      <!-- Noticia encontrada -->
+      <article v-else-if="noticiaData?.noticia" class="bg-white rounded-xl shadow-lg overflow-hidden">
+        <!-- TITULO -->
+        <div class="p-6 md:p-8 pb-0">
+          <div class="flex flex-wrap gap-2 mb-4">
+            <span class="bg-[#E03636] text-white text-sm px-3 py-1 rounded-full">{{ noticiaData.noticia.categoria || 'Noticia' }}</span>
+            <span v-if="noticiaData.noticia.category === 'legislacion'" class="bg-yellow-500 text-white text-sm px-3 py-1 rounded-full font-semibold">★ Importante</span>
+          </div>
+          <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
+            {{ noticiaData.noticia.title }}
+          </h1>
+          <div class="flex flex-wrap items-center justify-between gap-4 pt-4 pb-6">
+            <p class="text-gray-500">
+              {{ formatearFecha(noticiaData.noticia.publishedAt) }}
+              <span class="text-xs text-green-600 ml-2">✓ Renderizado en Servidor</span>
+            </p>
+            <button 
+              @click="compartir"
+              class="flex items-center gap-2 text-gray-500 hover:text-[#E03636] transition-colors"
+            >
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.05 4.11c-.05.23-.09.46-.09.7 0 1.66 1.34 3 3 3s3-1.34 3-3-1.34-3-3-3z"/>
+              </svg>
+              Compartir
+            </button>
+          </div>
+        </div>
+
+        <!-- CARRUSEL CON EFECTO DE TRES IMÁGENES VISIBLES -->
+        <div class="px-6 md:px-8 mb-8">
+          <div class="relative">
+            <div class="relative overflow-hidden rounded-2xl bg-gray-900 shadow-2xl">
+              <div class="flex">
+                <!-- Imagen anterior (peek izquierdo) -->
+                <div class="flex-shrink-0 transition-all duration-500 ease-out overflow-hidden"
+                     :style="{ width: `${peekWidth}%` }">
+                  <div class="relative h-full" :style="{ paddingBottom: '56.25%' }">
+                    <img 
+                      :src="imagenAnterior?.url || imagenActual?.url"
+                      :alt="imagenAnterior?.alt || 'Imagen anterior'"
+                      class="absolute inset-0 w-full h-full object-cover filter blur-[2px] brightness-75"
+                    />
+                    <div class="absolute inset-0 bg-black/40"></div>
+                  </div>
+                </div>
+
+                <!-- Imagen actual (central) -->
+                <div class="flex-shrink-0 transition-all duration-500"
+                     :style="{ width: `${imagenActualWidth}%` }">
+                  <div class="relative overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900"
+                       :style="{ paddingBottom: imagenActual?.orientation === 'vertical' ? '120%' : '56.25%' }">
+                    <img 
+                      :src="imagenActual?.url"
+                      :alt="imagenActual?.alt"
+                      class="absolute inset-0 w-full h-full transition-transform duration-700 hover:scale-105"
+                      :class="imagenActual?.orientation === 'vertical' ? 'object-contain' : 'object-cover'"
+                    />
+                    <div class="absolute bottom-3 left-3 bg-black/60 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-full">
+                      {{ imagenActual?.orientation === 'vertical' ? '📱 Vertical' : '🖥️ Horizontal' }}
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Imagen siguiente (peek derecho) -->
+                <div class="flex-shrink-0 transition-all duration-500 overflow-hidden"
+                     :style="{ width: `${peekWidth}%` }">
+                  <div class="relative h-full" :style="{ paddingBottom: '56.25%' }">
+                    <img 
+                      :src="imagenSiguiente?.url || imagenActual?.url"
+                      :alt="imagenSiguiente?.alt || 'Imagen siguiente'"
+                      class="absolute inset-0 w-full h-full object-cover filter blur-[2px] brightness-75"
+                    />
+                    <div class="absolute inset-0 bg-black/40"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Flecha izquierda -->
+              <button 
+                v-if="imagenesCarrusel.length > 1"
+                @click="anteriorImagen"
+                class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-[#E03636] text-white rounded-full p-3 transition-all duration-300 backdrop-blur-sm z-10 group"
+              >
+                <svg class="w-6 h-6 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path>
+                </svg>
+              </button>
+
+              <!-- Flecha derecha -->
+              <button 
+                v-if="imagenesCarrusel.length > 1"
+                @click="siguienteImagen"
+                class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-[#E03636] text-white rounded-full p-3 transition-all duration-300 backdrop-blur-sm z-10 group"
+              >
+                <svg class="w-6 h-6 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path>
+                </svg>
+              </button>
+
+              <!-- Indicadores -->
+              <div v-if="imagenesCarrusel.length > 1" class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+                <button
+                  v-for="(_, idx) in imagenesCarrusel"
+                  :key="idx"
+                  @click="currentIndex = idx"
+                  class="transition-all duration-300 rounded-full"
+                  :class="currentIndex === idx 
+                    ? 'bg-[#E03636] w-8 h-2' 
+                    : 'bg-white/50 hover:bg-white/80 w-2 h-2'"
+                ></button>
+              </div>
+
+              <!-- Contador -->
+              <div v-if="imagenesCarrusel.length > 1" class="absolute top-4 right-4 bg-black/70 text-white text-sm px-3 py-1.5 rounded-full backdrop-blur-sm font-medium z-10">
+                {{ String(currentIndex + 1).padStart(2, '0') }} / {{ String(imagenesCarrusel.length).padStart(2, '0') }}
+              </div>
+            </div>
+
+            <!-- Miniaturas de navegación -->
+            <div v-if="imagenesCarrusel.length > 1" class="flex justify-center gap-2 mt-4 overflow-x-auto pb-2">
+              <button
+                v-for="(img, idx) in imagenesCarrusel"
+                :key="idx"
+                @click="currentIndex = idx"
+                class="relative flex-shrink-0 transition-all duration-300 rounded-lg overflow-hidden"
+                :class="currentIndex === idx ? 'ring-2 ring-[#E03636] scale-105' : 'opacity-60 hover:opacity-100'"
+                style="width: 80px; height: 60px;"
+              >
+                <img 
+                  :src="img.url" 
+                  :alt="`Miniatura ${idx + 1}`"
+                  class="w-full h-full object-cover"
+                />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONTENIDO DE LA NOTICIA -->
+        <div class="p-6 md:p-8 pt-0 border-t border-gray-100">
+          <div class="prose prose-lg max-w-none text-gray-700" v-html="noticiaData.noticia.content"></div>
+        </div>
+      </article>
+
+      <!-- Noticia no encontrada -->
+      <div v-else-if="!pending && !noticiaData?.noticia && !error" class="text-center py-12 bg-white rounded-xl">
+        <h1 class="text-2xl font-bold text-gray-800 mb-4">Noticia no encontrada</h1>
+        <p class="text-gray-500 mb-6">Lo sentimos, la noticia que buscas no existe o ha sido removida.</p>
+        <button @click="volverAtras" class="inline-block bg-[#E03636] text-white px-6 py-3 rounded-lg hover:bg-[#C12F2F] transition">Volver atrás</button>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+
+const route = useRoute()
+const router = useRouter()
+
+// Variables reactivas
+const currentIndex = ref(0)
+const imagenesCarrusel = ref([])
+const errorMsg = ref(null)
+
+// 🔑 CLAVE: useAsyncData para SSR
+const { data: noticiaData, pending, error, refresh } = await useAsyncData(
+  `noticia-${route.params.slug}`,
+  async () => {
+    console.log(`🚀 [SSR] Cargando en: ${process.server ? 'SERVIDOR' : 'CLIENTE'}`)
+    
+    const slug = route.params.slug
+    
+    // ============================================
+    // SIMULACIÓN DE API (reemplazar con tu endpoint real)
+    // ============================================
+    await new Promise(resolve => setTimeout(resolve, 100))
+    
+    const noticia = {
+      title: 'Senado aprueba nueva ley de protección ambiental',
+      categoria: 'Legislación',
+      publishedAt: new Date().toISOString(),
+      excerpt: 'Una nueva ley que protege nuestros recursos naturales...',
+      content: `
+        <p>En una histórica sesión, la Cámara de Senadores aprobó por unanimidad la nueva Ley de Protección Ambiental.</p>
+        <h2>Medidas principales</h2>
+        <p>La ley contempla sanciones más severas para actividades contaminantes.</p>
+        <ul>
+          <li>Reducción del 40% de emisiones para 2030</li>
+          <li>Creación de 10,000 empleos verdes</li>
+          <li>Protección de 5 millones de hectáreas</li>
+        </ul>
+      `
+    }
+    
+    // Imágenes del carrusel (simuladas)
+    const imagenes = [
+      { url: 'https://picsum.photos/id/1015/1920/1080', alt: 'Montaña con lago - Horizontal', orientation: 'horizontal' },
+      { url: 'https://picsum.photos/id/104/1080/1920', alt: 'Caminante - Vertical', orientation: 'vertical' },
+      { url: 'https://picsum.photos/id/15/1920/1080', alt: 'Bosque con niebla - Horizontal', orientation: 'horizontal' },
+      { url: 'https://picsum.photos/id/169/1080/1920', alt: 'Atardecer - Vertical', orientation: 'vertical' },
+      { url: 'https://picsum.photos/id/155/1920/1080', alt: 'Carretera - Horizontal', orientation: 'horizontal' },
+      { url: 'https://picsum.photos/id/30/1080/1920', alt: 'Hojas de café - Vertical', orientation: 'vertical' }
+    ]
+    
+    // ============================================
+    // LLAMADA REAL A TU API (descomentar cuando tengas)
+    // ============================================
+    // const response = await fetch(`http://demoback.senado.gob.bo/api/content/slug/${slug}`)
+    // if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
+    // const data = await response.json()
+    // if (!data.success || !data.data) throw new Error('Noticia no encontrada')
+    // 
+    // const noticia = {
+    //   title: data.data.title || data.data.titulo,
+    //   categoria: data.data.category || data.data.categoria,
+    //   publishedAt: data.data.publishedAt || data.data.fecha,
+    //   excerpt: data.data.excerpt,
+    //   content: data.data.content || data.data.contenidoCompleto
+    // }
+    // 
+    // // Procesar imágenes
+    // const imagenes = []
+    // if (data.data.featuredImage?.url) {
+    //   imagenes.push({
+    //     url: data.data.featuredImage.url,
+    //     alt: data.data.featuredImage.alt || noticia.title,
+    //     orientation: 'horizontal' // o detectar
+    //   })
+    // }
+    // if (data.data.gallery) {
+    //   data.data.gallery.forEach(img => {
+    //     if (img.url) imagenes.push({ ...img, orientation: 'horizontal' })
+    //   })
+    // }
+    
+    return { noticia, imagenes }
+  },
+  {
+    lazy: false,
+    server: true,
+    default: () => ({ noticia: null, imagenes: [] })
+  }
+)
+
+// Asignar imágenes cuando lleguen los datos
+if (noticiaData.value?.imagenes) {
+  imagenesCarrusel.value = noticiaData.value.imagenes
+}
+
+// Watcher para cuando cambien los datos (cliente)
+watch(noticiaData, (newData) => {
+  if (newData?.imagenes) {
+    imagenesCarrusel.value = newData.imagenes
+  }
+  if (newData?.noticia) {
+    // Actualizar metadata SEO
+    useHead({
+      title: `${newData.noticia.title} | Senado Bolivia`,
+      meta: [
+        { name: 'description', content: newData.noticia.excerpt },
+        { property: 'og:title', content: newData.noticia.title },
+        { property: 'og:image', content: newData.imagenes?.[0]?.url }
+      ]
+    })
+  }
+}, { immediate: true })
+
+// Mostrar error si existe
+if (error.value) {
+  errorMsg.value = error.value.message
+}
+
+// Computed para el carrusel
+const peekWidth = computed(() => {
+  if (imagenActual.value?.orientation === 'vertical') return 10
+  return 15
+})
+
+const imagenActualWidth = computed(() => {
+  return 100 - (peekWidth.value * 2)
+})
+
+const imagenActual = computed(() => {
+  if (imagenesCarrusel.value.length === 0) return null
+  return imagenesCarrusel.value[currentIndex.value]
+})
+
+const imagenAnterior = computed(() => {
+  if (imagenesCarrusel.value.length === 0) return null
+  if (imagenesCarrusel.value.length === 1) return imagenActual.value
+  const prevIndex = currentIndex.value === 0 
+    ? imagenesCarrusel.value.length - 1 
+    : currentIndex.value - 1
+  return imagenesCarrusel.value[prevIndex]
+})
+
+const imagenSiguiente = computed(() => {
+  if (imagenesCarrusel.value.length === 0) return null
+  if (imagenesCarrusel.value.length === 1) return imagenActual.value
+  const nextIndex = currentIndex.value === imagenesCarrusel.value.length - 1 
+    ? 0 
+    : currentIndex.value + 1
+  return imagenesCarrusel.value[nextIndex]
+})
+
+// Métodos
+const siguienteImagen = () => {
+  if (imagenesCarrusel.value.length <= 1) return
+  currentIndex.value = (currentIndex.value + 1) % imagenesCarrusel.value.length
+}
+
+const anteriorImagen = () => {
+  if (imagenesCarrusel.value.length <= 1) return
+  currentIndex.value = currentIndex.value === 0 
+    ? imagenesCarrusel.value.length - 1 
+    : currentIndex.value - 1
+}
+
+const formatearFecha = (fecha) => {
+  if (!fecha) return ''
+  return new Date(fecha).toLocaleDateString('es-ES', { 
+    day: 'numeric', 
+    month: 'long', 
+    year: 'numeric' 
+  })
+}
+
+const volverAtras = () => {
+  router.back()
+}
+
+const compartir = () => {
+  if (noticiaData.value?.noticia) {
+    if (navigator.share) {
+      navigator.share({
+        title: noticiaData.value.noticia.title,
+        text: noticiaData.value.noticia.excerpt,
+        url: window.location.href
+      })
+    } else {
+      navigator.clipboard.writeText(window.location.href)
+      alert('¡Enlace copiado al portapapeles!')
+    }
+  }
+}
+
+const recargar = () => {
+  refresh()
+}
+
+// Navegación por teclado
+const handleKeydown = (e) => {
+  if (e.key === 'ArrowLeft') {
+    anteriorImagen()
+  } else if (e.key === 'ArrowRight') {
+    siguienteImagen()
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('keydown', handleKeydown)
+  console.log('✅ [onMounted] Cliente hidratado')
+})
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleKeydown)
+})
+
+definePageMeta({ layout: 'alter8' })
+</script>
+
+<style scoped>
+.prose {
+  font-family: 'Montserrat', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.prose p {
+  margin-bottom: 1.5rem;
+  line-height: 1.8;
+}
+
+.prose h2, .prose h3 {
+  color: #E03636;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  font-weight: bold;
+}
+
+.prose ul, .prose ol {
+  margin: 1rem 0;
+  padding-left: 2rem;
+}
+
+.prose li {
+  margin: 0.5rem 0;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+article {
+  animation: fadeIn 0.6s ease-out;
+}
+
+.overflow-x-auto::-webkit-scrollbar {
+  height: 4px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb {
+  background: #E03636;
+  border-radius: 10px;
+}
+</style> 
+================================= 
+plugins\adaptive-image-loader.client.ts 
+================================= 
+ 
+// plugins/adaptive-image-loader.client.ts
+export default defineNuxtPlugin(() => {
+  // No necesitas process.client, el plugin ya es .client.ts
+  
+  // ============================================
+  // DETECTOR DE CALIDAD DE RED
+  // ============================================
+  
+  let networkQuality: 'excellent' | 'good' | 'poor' | 'very-poor' | 'offline' = 'good'
+  let isOffline = false
+  
+  // Detectar calidad de red
+  if (typeof navigator !== 'undefined' && 'connection' in navigator) {
+    const connection = (navigator as any).connection
+    const updateQuality = () => {
+      const type = connection.effectiveType || '4g'
+      if (type === 'slow-2g' || type === '2g') networkQuality = 'very-poor'
+      else if (type === '3g') networkQuality = connection.downlink < 1 ? 'poor' : 'good'
+      else if (type === '4g') networkQuality = connection.downlink < 5 ? 'good' : 'excellent'
+      else networkQuality = 'good'
+    }
+    updateQuality()
+    connection.addEventListener('change', updateQuality)
+  }
+  
+  if (typeof window !== 'undefined') {
+    window.addEventListener('online', () => {
+      isOffline = false
+      networkQuality = 'good'
+      // Reintentar imágenes pendientes
+      document.querySelectorAll('img[data-pending="true"]').forEach(img => {
+        retryImage(img as HTMLImageElement)
+      })
+    })
+    window.addEventListener('offline', () => {
+      isOffline = true
+      networkQuality = 'offline'
+    })
+  }
+  
+  // ============================================
+  // CONFIGURACIÓN SEGÚN CALIDAD DE RED
+  // ============================================
+  
+  const getConfig = () => {
+    switch (networkQuality) {
+      case 'very-poor':
+        return { timeout: 45000, maxRetries: 2, retryDelay: 5000, label: '📡 Conexión lenta...' }
+      case 'poor':
+        return { timeout: 25000, maxRetries: 3, retryDelay: 2000, label: '📶 Conectando...' }
+      case 'good':
+        return { timeout: 12000, maxRetries: 3, retryDelay: 1000, label: '' }
+      case 'excellent':
+        return { timeout: 8000, maxRetries: 3, retryDelay: 600, label: '' }
+      default:
+        return { timeout: 15000, maxRetries: 3, retryDelay: 1000, label: '' }
+    }
+  }
+  
+  // ============================================
+  // SISTEMA DE REINTENTOS
+  // ============================================
+  
+  const imageStatus = new Map<HTMLImageElement, { retries: number; timeoutId?: ReturnType<typeof setTimeout> }>()
+  
+  const retryImage = (img: HTMLImageElement) => {
+    const config = getConfig()
+    const status = imageStatus.get(img)
+    const retries = status?.retries || 0
+    
+    if (retries < config.maxRetries && !isOffline) {
+      const originalSrc = img.dataset.originalSrc || img.src.split('?')[0]
+      const delay = config.retryDelay * Math.pow(1.5, retries)
+      
+      // Mostrar estado de carga manteniendo estilos originales
+      img.style.opacity = '0.6'
+      img.style.transition = 'opacity 0.3s'
+      
+      // Agregar badge de conexión lenta (opcional, no afecta estilos)
+      if (config.label && !img.parentElement?.querySelector('.connection-badge')) {
+        const badge = document.createElement('span')
+        badge.className = 'connection-badge'
+        badge.textContent = config.label
+        badge.style.cssText = `
+          position: absolute;
+          bottom: 4px;
+          right: 4px;
+          background: rgba(0,0,0,0.6);
+          color: white;
+          font-size: 10px;
+          padding: 2px 6px;
+          border-radius: 12px;
+          z-index: 10;
+          pointer-events: none;
+        `
+        if (img.parentElement) {
+          img.parentElement.style.position = 'relative'
+          img.parentElement.appendChild(badge)
+          setTimeout(() => badge.remove(), 3000)
+        }
+      }
+      
+      setTimeout(() => {
+        const newSrc = `${originalSrc}?retry=${retries + 1}&t=${Date.now()}`
+        img.src = newSrc
+        imageStatus.set(img, { retries: retries + 1 })
+      }, delay)
+    } else if (retries >= config.maxRetries || isOffline) {
+      // Fallback: mantener la imagen pero con opacity reducido
+      img.style.opacity = '0.5'
+      
+      // Agregar botón de reintento manual (opcional)
+      if (img.parentElement && !img.parentElement.querySelector('.manual-retry')) {
+        const retryBtn = document.createElement('button')
+        retryBtn.className = 'manual-retry'
+        retryBtn.textContent = '⟳'
+        retryBtn.style.cssText = `
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background: #E03636;
+          color: white;
+          border: none;
+          width: 28px;
+          height: 28px;
+          border-radius: 50%;
+          cursor: pointer;
+          z-index: 20;
+          font-size: 14px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        `
+        retryBtn.onclick = (e) => {
+          e.stopPropagation()
+          retryBtn.remove()
+          img.style.opacity = ''
+          imageStatus.delete(img)
+          retryImage(img)
+        }
+        img.parentElement.style.position = 'relative'
+        img.parentElement.appendChild(retryBtn)
+        
+        // Auto-remover después de 10 segundos
+        setTimeout(() => retryBtn.remove(), 10000)
+      }
+    }
+  }
+  
+  // ============================================
+  // INTERCEPTOR GLOBAL DE IMÁGENES
+  // ============================================
+  
+  if (typeof document !== 'undefined') {
+    // Interceptar errores de imágenes a nivel global
+    document.addEventListener('error', (e) => {
+      const target = e.target as HTMLElement
+      if (target.tagName === 'IMG') {
+        const img = target as HTMLImageElement
+        
+        // No procesar si ya está siendo manejada
+        if (img.dataset.processing === 'true') return
+        
+        img.dataset.processing = 'true'
+        
+        // Guardar src original
+        if (!img.dataset.originalSrc) {
+          img.dataset.originalSrc = img.src.split('?')[0]
+        }
+        
+        // Iniciar reintentos
+        if (!imageStatus.has(img)) {
+          imageStatus.set(img, { retries: 0 })
+        }
+        
+        retryImage(img)
+        
+        setTimeout(() => {
+          delete img.dataset.processing
+        }, 1000)
+      }
+    }, true) // Captura en fase de captura
+    
+    // ============================================
+    // PROCESAR IMÁGENES EXISTENTES
+    // ============================================
+    
+    // Inicializar imágenes ya presentes
+    const initExistingImages = () => {
+      document.querySelectorAll('img').forEach(img => {
+        if (img.complete && img.naturalHeight === 0) {
+          // Imagen rota
+          if (!img.dataset.originalSrc) {
+            img.dataset.originalSrc = img.src.split('?')[0]
+          }
+          retryImage(img)
+        } else if (!img.complete) {
+          // Imagen aún cargando, agregar timeout
+          const config = getConfig()
+          const timeoutId = setTimeout(() => {
+            if (!img.complete || img.naturalHeight === 0) {
+              if (!img.dataset.originalSrc) {
+                img.dataset.originalSrc = img.src.split('?')[0]
+              }
+              retryImage(img)
+            }
+          }, config.timeout)
+          
+          img.addEventListener('load', () => clearTimeout(timeoutId), { once: true })
+        }
+      })
+    }
+    
+    // Observar nuevas imágenes agregadas al DOM
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        mutation.addedNodes.forEach((node) => {
+          if (node.nodeType === Node.ELEMENT_NODE) {
+            const element = node as Element
+            if (element.tagName === 'IMG') {
+              const img = element as HTMLImageElement
+              if (!img.complete) {
+                const config = getConfig()
+                const timeoutId = setTimeout(() => {
+                  if (!img.complete || img.naturalHeight === 0) {
+                    if (!img.dataset.originalSrc) {
+                      img.dataset.originalSrc = img.src.split('?')[0]
+                    }
+                    retryImage(img)
+                  }
+                }, config.timeout)
+                img.addEventListener('load', () => clearTimeout(timeoutId), { once: true })
+              }
+            } else if (element.querySelectorAll) {
+              element.querySelectorAll('img').forEach((img: HTMLImageElement) => {
+                if (!img.complete) {
+                  const config = getConfig()
+                  const timeoutId = setTimeout(() => {
+                    if (!img.complete || img.naturalHeight === 0) {
+                      if (!img.dataset.originalSrc) {
+                        img.dataset.originalSrc = img.src.split('?')[0]
+                      }
+                      retryImage(img)
+                    }
+                  }, config.timeout)
+                  img.addEventListener('load', () => clearTimeout(timeoutId), { once: true })
+                }
+              })
+            }
+          }
+        })
+      })
+    })
+    
+    observer.observe(document.body, { childList: true, subtree: true })
+    
+    // Iniciar cuando el DOM esté listo
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initExistingImages)
+    } else {
+      initExistingImages()
+    }
+    
+    // Estilos globales mínimos (no interfieren con estilos existentes)
+    const style = document.createElement('style')
+    style.textContent = `
+      img[data-pending="true"] {
+        opacity: 0.6;
+        transition: opacity 0.3s;
+      }
+      .manual-retry:hover {
+        transform: scale(1.1);
+        transition: transform 0.2s;
+      }
+    `
+    document.head.appendChild(style)
+  }
+}) 
+================================= 
+plugins\clean-console.client.ts 
+================================= 
+ 
+// plugins/clean-console.client.ts
+export default defineNuxtPlugin(() => {
+  
+  const originalError = console.error
+  const originalWarn = console.warn
+  const originalLog = console.log
+  
+  // Lista de mensajes a silenciar completamente
+  const silentMessages: string[] = [
+    // WebSocket / Vite HMR
+    'WebSocket', 'websocket', 'failed to connect', 'vite', 'hmr',
+    // Permissions Policy
+    'Permissions policy', 'compute-pressure', 'is not allowed',
+    // Passive event listeners
+    'Added non-passive event listener', 'scroll-blocking', 'touchstart', 'touchmove',
+    // Timeout violations
+    'setTimeout', 'handler took', 'Violation',
+    // YouTube específico (esto es clave)
+    'base.js', 'm=r78Drb', 'dQw4w9WgXcQ', 'youtube.com', 'ytimg',
+    'loadNewVideoConfig', 'player', '_.YC', '_.FD', '_.qc',
+    // Imágenes 404 (el AdaptiveImageLoader ya los maneja)
+    '404', '.png', '.jpg', '.jpeg', '.webp'
+  ]
+  
+  const shouldSilence = (message: string): boolean => {
+    if (!message) return false
+    const msg = message.toString().toLowerCase()
+    return silentMessages.some(silent => msg.includes(silent.toLowerCase()))
+  }
+  
+  // Silenciar console.error
+  console.error = (...args: any[]) => {
+    const firstArg = args[0]?.toString() || ''
+    if (shouldSilence(firstArg)) return
+    originalError.apply(console, args)
+  }
+  
+  // Silenciar console.warn
+  console.warn = (...args: any[]) => {
+    const firstArg = args[0]?.toString() || ''
+    if (shouldSilence(firstArg)) return
+    originalWarn.apply(console, args)
+  }
+  
+  // En producción, silenciar todo
+  if (typeof window !== 'undefined' && window.location?.hostname !== 'localhost') {
+    console.log = () => {}
+    console.info = () => {}
+    console.debug = () => {}
+    console.warn = () => {}
+    console.error = () => {}
+  } else {
+    // En desarrollo, mantener logs útiles
+    console.log = (...args: any[]) => {
+      const firstArg = args[0]?.toString() || ''
+      if (firstArg.includes('[SW]') ||
+          firstArg.includes('✅') ||
+          firstArg.includes('📦') ||
+          firstArg.includes('🚀') ||
+          firstArg.includes('Cargadas')) {
+        originalLog.apply(console, args)
+      }
+    }
+  }
+}) 
+================================= 
+plugins\sw-register.client.ts 
+================================= 
+ 
+// plugins/sw-register.client.ts
+export default defineNuxtPlugin(() => {
+  const isDevelopment = window.location.hostname === 'localhost' || 
+                        window.location.hostname === '127.0.0.1' ||
+                        window.location.hostname.includes('.local')
+  
+  if (isDevelopment) {
+    console.log('🧹 [SW] Modo desarrollo - Service Worker desactivado')
+    
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(registrations => {
+        registrations.forEach(registration => {
+          registration.unregister()
+          console.log('✅ [SW] Service Worker desregistrado')
+        })
+      })
+      
+      if ('caches' in window) {
+        caches.keys().then(cacheNames => {
+          cacheNames.forEach(cacheName => {
+            caches.delete(cacheName)
+            console.log(`✅ [SW] Caché eliminada: ${cacheName}`)
+          })
+        })
+      }
+    }
+    return
+  }
+  
+  if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then((registration) => {
+          console.log('[SW] Registrado correctamente')
+          setInterval(() => registration.update(), 60 * 60 * 1000)
+        })
+        .catch((error) => {
+          console.log('[SW] No se pudo registrar:', error.message)
+        })
+    })
+  }
+}) 
+================================= 
+public\robots.txt 
+================================= 
+ 
+User-Agent: *
+Disallow:
+ 
+================================= 
+public\sw.js 
+================================= 
+ 
+// public/sw.js
+const isDevelopment = self.location.hostname === 'localhost' || 
+                      self.location.hostname === '127.0.0.1'
+
+if (isDevelopment) {
+  console.log('[SW] Modo desarrollo - Service Worker inactivo')
+  
+  self.addEventListener('install', () => {
+    self.skipWaiting()
+  })
+  
+  self.addEventListener('fetch', (event) => {
+    event.respondWith(fetch(event.request))
+  })
+  
+  self.addEventListener('activate', (event) => {
+    event.waitUntil(
+      caches.keys().then(keys => Promise.all(keys.map(key => caches.delete(key))))
+    )
+  })
+  
+  return
+}
+
+// ============================================
+// PRODUCCIÓN - Solo para páginas que no son Centro de Noticias
+// ============================================
+
+const CACHE_NAME = 'senado-cache-v1'
+const IMAGE_CACHE_NAME = 'senado-images-v1'
+
+const isImageRequest = (url) => {
+  const imageExtensions = ['.png', '.jpg', '.jpeg', '.webp', '.svg', '.gif']
+  return imageExtensions.some(ext => url.pathname.toLowerCase().includes(ext))
+}
+
+const isVideoRequest = (url) => {
+  const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov', '.avi', '.mkv']
+  return videoExtensions.some(ext => url.pathname.toLowerCase().endsWith(ext))
+}
+
+const isLargeFile = (url) => {
+  const largeExtensions = ['.mp4', '.webm', '.pdf', '.zip']
+  return largeExtensions.some(ext => url.pathname.toLowerCase().endsWith(ext))
+}
+
+const getPlaceholderSVG = () => {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+    <rect width="100" height="100" fill="#8B0000"/>
+    <circle cx="50" cy="35" r="18" fill="white" opacity="0.6"/>
+    <path d="M50 58 C35 58 22 68 22 82 L78 82 C78 68 65 58 50 58Z" fill="white" opacity="0.6"/>
+    <text x="50" y="92" text-anchor="middle" fill="white" font-size="10" opacity="0.7">Cargando</text>
+  </svg>`
+  
+  return new Response(svg, {
+    headers: { 'Content-Type': 'image/svg+xml' }
+  })
+}
+
+self.addEventListener('install', (event) => {
+  console.log('[SW] Instalando...')
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then((cache) => cache.addAll(['/']))
+      .then(() => self.skipWaiting())
+  )
+})
+
+self.addEventListener('activate', (event) => {
+  console.log('[SW] Activando...')
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.map((cacheName) => {
+          if (cacheName !== CACHE_NAME && cacheName !== IMAGE_CACHE_NAME) {
+            console.log('[SW] Eliminando cache antiguo:', cacheName)
+            return caches.delete(cacheName)
+          }
+        })
+      )
+    }).then(() => self.clients.claim())
+  )
+})
+
+const handleImageRequest = async (request, fetchEvent) => {
+  const cache = await caches.open(IMAGE_CACHE_NAME)
+  
+  try {
+    const cachedResponse = await cache.match(request)
+    
+    const fetchPromise = fetch(request.clone())
+      .then(async (networkResponse) => {
+        if (networkResponse && networkResponse.ok) {
+          if (networkResponse.status !== 206) {
+            await cache.put(request, networkResponse.clone())
+          }
+        }
+        return networkResponse
+      })
+      .catch((error) => {
+        console.log('[SW] Error fetching image:', error)
+        return null
+      })
+    
+    if (cachedResponse) {
+      fetchEvent.waitUntil(fetchPromise)
+      return cachedResponse
+    }
+    
+    const networkResponse = await fetch(request.clone())
+    if (networkResponse && networkResponse.ok && networkResponse.status !== 206) {
+      await cache.put(request, networkResponse.clone())
+    }
+    return networkResponse
+    
+  } catch (error) {
+    console.log('[SW] Error handling image:', error)
+    return getPlaceholderSVG()
+  }
+}
+
+self.addEventListener('fetch', (event) => {
+  const url = new URL(event.request.url)
+  
+  // 🔥 EXCLUIR Centro de Noticias del caché
+  if (url.pathname === '/centro-de-noticias' || 
+      url.pathname.startsWith('/centro-de-noticias/')) {
+    event.respondWith(fetch(event.request))
+    return
+  }
+  
+  if (!url.protocol.startsWith('http')) return
+  
+  if (isVideoRequest(url) || isLargeFile(url)) {
+    return
+  }
+  
+  if (url.hostname !== self.location.hostname) return
+  
+  if (isImageRequest(url)) {
+    event.respondWith(handleImageRequest(event.request, event))
+    return
+  }
+  
+  if (url.pathname.includes('/_nuxt/')) {
+    event.respondWith(
+      caches.open(CACHE_NAME).then(async (cache) => {
+        const cached = await cache.match(event.request)
+        if (cached) return cached
+        
+        const response = await fetch(event.request)
+        if (response.ok && response.status !== 206) {
+          cache.put(event.request, response.clone())
+        }
+        return response
+      })
+    )
+    return
+  }
+  
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request).catch(() => caches.match('/'))
+    )
+    return
+  }
+}) 
+================================= 
+public\css\fonts.css 
+================================= 
+ 
+/* MONTSERRAT REGULAR (para Montserrat Alternates usa 'Montserrat Alternates' como font-family) */
+@font-face {
+  font-family: 'Montserrat';
+  src: url('/fonts/Montserrat-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('/fonts/Montserrat-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('/fonts/Montserrat-SemiBold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('/fonts/Montserrat-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('/fonts/Montserrat-ExtraBold.otf') format('opentype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('/fonts/Montserrat-Italic.otf') format('opentype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('/fonts/Montserrat-BoldItalic.otf') format('opentype');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* MONTSERRAT ALTERNATES (si prefieres esta variante) */
+@font-face {
+  font-family: 'Montserrat Alternates';
+  src: url('/fonts/MontserratAlternates-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Montserrat Alternates';
+  src: url('/fonts/MontserratAlternates-SemiBold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Montserrat Alternates';
+  src: url('/fonts/MontserratAlternates-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+} 
+================================= 
+public\css\main.css 
+================================= 
+ 
+/* assets/css/main.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities; 
+================================= 
+public\fonts\fonts.css 
+================================= 
+ 
+/* MONTSERRAT REGULAR (para Montserrat Alternates usa 'Montserrat Alternates' como font-family) */
+@font-face {
+  font-family: 'Montserrat';
+  src: url('/Montserrat-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('/Montserrat-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('/Montserrat-SemiBold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('/Montserrat-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('/Montserrat-ExtraBold.otf') format('opentype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('/Montserrat-Italic.otf') format('opentype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('/Montserrat-BoldItalic.otf') format('opentype');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* MONTSERRAT ALTERNATES (si prefieres esta variante) */
+@font-face {
+  font-family: 'Montserrat Alternates';
+  src: url('/MontserratAlternates-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Montserrat Alternates';
+  src: url('/MontserratAlternates-SemiBold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Montserrat Alternates';
+  src: url('/MontserratAlternates-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+} 
+================================= 
+stores\counter.ts 
+================================= 
+ 
+// stores/counter.ts
+export const useCounterStore = defineStore('counter', {
+  state: () => ({
+    count: 0
+  }),
+  actions: {
+    increment() {
+      this.count++
+    }
+  }
+}) 
+================================= 
+stores\departamentosStore.js 
+================================= 
+ 
+// stores/departamentosStore.js
+import { defineStore } from 'pinia'
+
+export const useDepartamentosStore = defineStore('departamentos', {
+  state: () => ({
+    departamentos: [],
+    isLoading: false,
+    loaded: false,
+    error: null
+  }),
+  
+  actions: {
+    async fetchDepartamentos() {
+      // Si ya están cargados, retornar inmediatamente
+      if (this.loaded && this.departamentos.length > 0) {
+        return this.departamentos
+      }
+      
+      // Evitar múltiples cargas simultáneas
+      if (this.isLoading) {
+        return new Promise((resolve) => {
+          const checkInterval = setInterval(() => {
+            if (this.loaded) {
+              clearInterval(checkInterval)
+              resolve(this.departamentos)
+            }
+          }, 50)
+        })
+      }
+      
+      this.isLoading = true
+      
+      try {
+        // Importación dinámica con manejo de errores
+        const { departamentosData } = await import('@/data/departamentos.js')
+        this.departamentos = departamentosData || []
+        this.loaded = true
+        return this.departamentos
+      } catch (error) {
+        console.error('Error cargando departamentos:', error)
+        this.error = error
+        // Cargar datos de respaldo para no romper la UI
+        this.departamentos = []
+        this.loaded = true
+        return []
+      } finally {
+        this.isLoading = false
+      }
+    },
+    
+    // Precargar en segundo plano (llamada segura)
+    preload() {
+      if (!this.loaded && !this.isLoading) {
+        return this.fetchDepartamentos().catch(() => null)
+      }
+      return Promise.resolve(null)
+    }
+  },
+  
+  getters: {
+    getDepartamentos: (state) => state.departamentos,
+    isLoaded: (state) => state.loaded
+  }
+}) 
+================================= 
+stores\modalStore.js 
+================================= 
+ 
+// stores/modalStore.js
+import { defineStore } from 'pinia'
+
+export const useModalStore = defineStore('modal', {
+  state: () => ({
+    activeModal: null,
+    modalProps: null
+  }),
+  
+  actions: {
+    openModal(modalName, props = {}) {
+      this.activeModal = modalName
+      this.modalProps = props
+      document.body.style.overflow = 'hidden'
+      document.body.classList.add('modal-open')
+    },
+    
+    closeModal() {
+      this.activeModal = null
+      this.modalProps = null
+      document.body.style.overflow = ''
+      document.body.classList.remove('modal-open')
+    }
+  }
+}) 

@@ -7,9 +7,11 @@
     "dev": "cross-env PORT=3001 nuxt dev --port 3001 --open",
     "generate": "nuxt generate",
     "preview": "cross-env PORT=3000 nuxt preview --port 3000",
+    "start": "cross-env PORT=3000 node .output/server/index.mjs",
     "postinstall": "nuxt prepare",
     "dev:win": "set PORT=3001 && nuxt dev --port 3001 --open",
-    "preview:win": "set PORT=3001 && nuxt preview --port 3001"
+    "preview:win": "set PORT=3001 && nuxt preview --port 3001",
+    "start:win": "set PORT=3000 && node .output/server/index.mjs"
   },
   "dependencies": {
     "@heroicons/vue": "^2.2.0",

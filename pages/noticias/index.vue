@@ -34,23 +34,20 @@
         <button @click="recargar" class="bg-[#E03636] text-white px-4 py-2 rounded-lg hover:bg-[#C12F2F] transition">Reintentar</button>
       </div>
 
-      <!-- Grid de noticias - MISMO ESTILO QUE MORENEWSGRID -->
+      <!-- Grid de noticias -->
       <div v-else-if="todasLasNoticias.length > 0">
-        <!-- Filas con stripe (fondo alternado) -->
         <div 
           v-for="(fila, filaIndex) in noticiasPorFilas" 
           :key="filaIndex"
           :class="['rounded-xl transition-all duration-300', filaIndex % 2 === 1 ? 'bg-gray-100' : '']"
         >
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 p-4">
-            <!-- Tarjeta IDÉNTICA a MoreNewsGrid -->
             <div 
               v-for="noticia in fila" 
               :key="noticia.id"
               class="group bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer"
               @click="verNoticia(noticia)"
             >
-              <!-- Contenedor de imagen -->
               <div class="relative overflow-hidden aspect-[4/5]">
                 <img 
                   :src="noticia.featuredImage?.url || noticia.imagen || '/images/default-news.jpg'" 
@@ -59,7 +56,6 @@
                   loading="lazy"
                 />
                 
-                <!-- Div rojo que ocupa el 40% inferior de la imagen -->
                 <div class="absolute bottom-0 left-0 right-0 h-[40%] bg-[rgba(224,54,54,0.85)] backdrop-blur-sm p-4 flex flex-col justify-end">
                   <p class="text-white text-[0.7rem] sm:text-[0.8rem] md:text-[0.9rem] lg:text-[1rem] mb-1 opacity-90">
                     {{ formatearFecha(noticia.publishedAt || noticia.fecha) }}
@@ -125,9 +121,11 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onActivated, onDeactivated, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import { useNoticias } from '~/composables/useNoticias'
+
+definePageMeta({ layout: 'alter8', ssr: true })
 
 const router = useRouter()
 
@@ -141,6 +139,29 @@ const {
 // Paginación local
 const paginaActual = ref(1)
 const itemsPorPagina = ref(12)
+
+// 🔥 FUNCIÓN PARA FORZAR SCROLL AL INICIO
+const scrollToTop = () => {
+  console.log('📍 [NoticiasPage] Forzando scroll al inicio')
+  
+  // Múltiples intentos para asegurar
+  const doScroll = () => {
+    // Intentar con el contenedor de scroll-snap
+    const container = document.querySelector('.snap-container')
+    if (container) {
+      container.scrollTop = 0
+      container.scrollTo({ top: 0, behavior: 'instant' })
+    }
+    // También scroll normal
+    window.scrollTo(0, 0)
+  }
+  
+  doScroll()
+  setTimeout(doScroll, 50)
+  setTimeout(doScroll, 150)
+  setTimeout(doScroll, 300)
+  setTimeout(doScroll, 500)
+}
 
 // Noticias paginadas
 const noticiasPaginadas = computed(() => {
@@ -205,21 +226,34 @@ const volverAtras = () => {
 const cambiarPagina = (pagina) => {
   if (pagina >= 1 && pagina <= totalPaginas.value) {
     paginaActual.value = pagina
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    // Al cambiar de página, forzar scroll al inicio
+    setTimeout(scrollToTop, 100)
   }
 }
 
 // Recargar
 const recargar = async () => {
   await fetchTodasLasNoticias()
+  scrollToTop()
 }
+
+// 🔥 KeepAlive hook - cuando se reactiva la página
+onActivated(() => {
+  console.log('🔄 [NoticiasPage] Reactivada - Forzando scroll al inicio')
+  scrollToTop()
+})
+
+onDeactivated(() => {
+  console.log('💤 [NoticiasPage] Desactivada')
+})
 
 // Cargar noticias al montar
 onMounted(async () => {
+  console.log('🎬 [NoticiasPage] Montada')
   await fetchTodasLasNoticias()
+  await nextTick()
+  scrollToTop()
 })
-
-definePageMeta({ layout: 'alter8' })
 
 useHead({ title: 'Todas las Noticias - Senado Bolivia' })
 </script>

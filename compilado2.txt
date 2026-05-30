@@ -1,0 +1,2889 @@
+COMPILADO DE ARCHIVOS - Parte 2 
+ 
+ 
+================================= 
+components\FiscalizationTable.vue 
+================================= 
+ 
+<template>
+  <div class="fiscalization-container">
+    <!-- Mostrar tabla SOLO si hash cumple condición Y el filtro es válido -->
+    <template v-if="hashValido && filtroValido" class="mt-[3.5vw]">
+      <div class="mt-[4vw]"></div>
+      <!-- Header con título, contador y botón volver -->
+      <div class="fiscalization-header">
+        <div class="header-left">
+          <button 
+            class="back-button"
+            @click="volverAOpciones"
+            title="Volver a las opciones de fiscalización"
+          >
+            <span class="back-icon">←</span>
+            <span class="back-text">Volver</span>
+          </button>
+          <!-- Icono SVG del link seleccionado -->
+          <div v-if="iconoActivo" class="title-icon-svg" v-html="iconoActivo"></div>
+          <div v-else class="title-icon-placeholder"></div>
+          <h2 class="fiscalization-title">
+            {{ tituloSeccion }}
+            <span v-if="!loading && !error" class="badge">{{ totalItems }} registros</span>
+          </h2>
+        </div>
+        
+        <div class="header-controls">
+          <!-- Selector de filas por página -->
+          <div class="rows-per-page">
+            <span>Mostrar</span>
+            <select v-model.number="itemsPorPagina" @change="cambiarFilasPorPagina">
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="15">15</option>
+              <option value="20">20</option>
+              <option value="25">25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
+            <span>filas</span>
+          </div>
+
+          <!-- Buscador local -->
+          <div class="search-box">
+            <input 
+              type="text" 
+              v-model="terminoBusquedaLocal"
+              @keyup.enter="aplicarBusquedaLocal"
+              placeholder="Buscar por título, resumen o destinatario..."
+              class="search-input"
+            >
+            <button @click="aplicarBusquedaLocal" class="search-button" :disabled="loading">
+              <span class="search-icon">🔍</span>
+            </button>
+            <button 
+              v-if="terminoBusquedaLocal" 
+              @click="limpiarBusquedaLocal" 
+              class="clear-button"
+              title="Limpiar búsqueda"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Estado de carga -->
+      <div v-if="loading" class="loading-state">
+        <div class="spinner"></div>
+        <p>Cargando peticiones de informe...</p>
+      </div>
+
+      <!-- Estado de error -->
+      <div v-else-if="error" class="error-state">
+        <span class="error-icon">⚠️</span>
+        <p>{{ error }}</p>
+        <button @click="cargarDatosCompletos" class="retry-button">Reintentar</button>
+      </div>
+
+      <!-- Tabla de resultados -->
+      <div v-else class="table-responsive">
+        <table class="fiscalization-table">
+          <thead>
+            <tr>
+              <th @click="ordenarPor('titulo')" class="sortable">
+                Título / Número
+                <span class="sort-icon">{{ getSortIcon('titulo') }}</span>
+              </th>
+              <th @click="ordenarPor('resumen')" class="sortable">
+                Resumen / Asunto
+                <span class="sort-icon">{{ getSortIcon('resumen') }}</span>
+              </th>
+              <th class="actions-column">Documento</th>
+             </tr>
+          </thead>
+          <tbody>
+            <tr v-for="item in itemsPaginados" :key="item.id" class="fiscalization-row">
+              <td class="title-cell">
+                <div class="titulo-principal">{{ item.titulo }}</div>
+                <div class="numero-ley">ID: {{ item.id }}</div>
+               </td>
+              <td class="asunto-cell">
+                <div class="asunto-texto">{{ truncarTexto(item.resumen, 80) }}</div>
+                <div v-if="item.tipo_destinatario" class="destinatario-info">
+                  <span class="destinatario-label">Destinatario:</span> {{ item.tipo_destinatario }}
+                </div>
+                <div v-if="item.fecha_recepcion" class="fecha-info">
+                  <span class="fecha-label">Recibido:</span> {{ formatearFecha(item.fecha_recepcion) }}
+                </div>
+               </td>
+              <td class="actions-cell">
+                <a 
+                  v-if="item.doc_archivo"
+                  :href="`https://apisi.senado.gob.bo/${item.doc_archivo}`" 
+                  target="_blank"
+                  class="btn-documento"
+                  title="Ver documento PDF"
+                >
+                  <span class="btn-icon">📄</span>
+                  <span class="btn-text">PDF</span>
+                </a>
+                <span v-else class="sin-documento">Sin documento</span>
+               </td>
+             </tr>
+            
+            <!-- Fila cuando no hay resultados -->
+            <tr v-if="itemsFiltrados.length === 0">
+              <td colspan="3" class="empty-state">
+                <p>No se encontraron peticiones de informe</p>
+               </td>
+             </tr>
+          </tbody>
+         </table>
+        
+        <!-- Información de depuración (opcional) -->
+        <div class="debug-info p-2 text-xs border-t border-gray-200 bg-gray-50">
+          <p>Página: {{ paginaActual }} | Items por página: {{ itemsPorPagina }} | Total items: {{ itemsOrdenados.length }} | Mostrando: {{ itemsPaginados.length }} items | Filtro: {{ filtroActual || 'ninguno' }}</p>
+        </div>
+      </div>
+
+      <!-- Pie de tabla con paginación -->
+      <div v-if="itemsFiltrados.length > 0 && !loading" class="table-footer">
+        <div class="pagination-info">
+          Mostrando {{ (paginaActual - 1) * itemsPorPagina + 1 }} - 
+          {{ Math.min(paginaActual * itemsPorPagina, itemsFiltrados.length) }} de 
+          {{ itemsFiltrados.length }} peticiones
+        </div>
+        
+        <div class="pagination-controls">
+          <button 
+            class="pagination-btn" 
+            :disabled="paginaActual === 1"
+            @click="cambiarPagina(paginaActual - 1)"
+          >
+            ← Anterior
+          </button>
+          
+          <div class="pagination-numbers">
+            <button 
+              v-for="page in paginasMostradas" 
+              :key="page"
+              class="pagination-number"
+              :class="{ active: page === paginaActual }"
+              @click="cambiarPagina(page)"
+            >
+              {{ page }}
+            </button>
+          </div>
+          
+          <button 
+            class="pagination-btn" 
+            :disabled="paginaActual === totalPaginas"
+            @click="cambiarPagina(paginaActual + 1)"
+          >
+            Siguiente →
+          </button>
+        </div>
+      </div>
+    </template>
+
+    <!-- Contenido cuando el filtro NO es válido o no está establecido -->
+    <template v-else>
+      <!-- BUSCADOR GLOBAL CON BOTÓN VOLVER A LA IZQUIERDA -->
+      <div class="global-search-container">
+        <div class="global-search-wrapper">
+          <!-- Botón Volver a la izquierda del buscador -->
+          <button 
+            v-if="busquedaGlobal && resultadosGlobal.length > 0" 
+            class="back-from-search-button"
+            @click="limpiarBusquedaGlobal"
+            title="Volver a las opciones"
+          >
+            <span class="back-icon">←</span>
+            <span class="back-text">Volver</span>
+          </button>
+          <div class="global-search-box z-30 translate-x-[7.5vw]">
+            <input 
+              type="text" 
+              v-model="busquedaGlobal"
+              @keyup.enter="realizarBusquedaGlobal"
+              placeholder="Buscar en todas las peticiones de informe (título, resumen, destinatario)..."
+              class="global-search-input"
+            >
+            <button @click="realizarBusquedaGlobal" class="global-search-button" :disabled="buscandoGlobal">
+              <span class="search-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16.9982 16.7411" class="size-[2vw]">
+                  <path d="M16.5731,14.3456l-3.8-3.6938a1.3964,1.3964,0,0,0-.705-.3665,6.6049,6.6049,0,1,0-1.6263,1.6729,1.395,1.395,0,0,0,.3888.6942L14.63,16.3465a1.3947,1.3947,0,0,0,1.9434-2.0009Zm-6.44-4.3121a4.9289,4.9289,0,1,1-.1015-6.971A4.9351,4.9351,0,0,1,10.1331,10.0335Z" 
+                        fill="currentColor" />
+                </svg>
+              </span>
+              <span v-if="buscandoGlobal" class="loading-spinner-small"></span>
+            </button>
+            <button 
+              v-if="busquedaGlobal" 
+              @click="limpiarBusquedaGlobal" 
+              class="global-clear-button"
+              title="Limpiar búsqueda"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+        
+        <!-- Resultados de búsqueda global CON ORDENAMIENTO -->
+        <div v-if="resultadosGlobal.length > 0 && !buscandoGlobal" class="resultados-global">
+          <div class="resultados-header">
+            <h3>Resultados de búsqueda: "{{ busquedaGlobal }}"</h3>
+            <span class="resultados-count">{{ resultadosGlobal.length }} resultados encontrados</span>
+          </div>
+          
+          <!-- Selector de filas por página para resultados globales -->
+          <div class="resultados-controls">
+            <div class="rows-per-page">
+              <span>Mostrar</span>
+              <select v-model.number="resultadosItemsPorPagina" @change="resetearPaginaResultados">
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+              </select>
+              <span>filas</span>
+            </div>
+          </div>
+          
+          <div class="resultados-tabs">
+            <button 
+              v-for="(resultados, categoria) in resultadosPorCategoria" 
+              :key="categoria"
+              class="resultado-tab"
+              :class="{ active: categoriaActiva === categoria }"
+              @click="cambiarCategoriaResultados(categoria)"
+            >
+              {{ obtenerNombreCategoria(categoria) }}
+              <span class="tab-count">{{ resultados.length }}</span>
+            </button>
+          </div>
+          
+          <div class="resultados-tabla-container">
+            <table class="resultados-tabla">
+              <thead>
+                 <tr>
+                  <th @click="ordenarResultadosPor('titulo')" class="sortable">
+                    Título / Número
+                    <span class="sort-icon">{{ getResultadosSortIcon('titulo') }}</span>
+                  </th>
+                  <th @click="ordenarResultadosPor('resumen')" class="sortable">
+                    Resumen
+                    <span class="sort-icon">{{ getResultadosSortIcon('resumen') }}</span>
+                  </th>
+                  <th @click="ordenarResultadosPor('destinatario')" class="sortable">
+                    Destinatario
+                    <span class="sort-icon">{{ getResultadosSortIcon('destinatario') }}</span>
+                  </th>
+                  <th @click="ordenarResultadosPor('fecha')" class="sortable">
+                    Fecha
+                    <span class="sort-icon">{{ getResultadosSortIcon('fecha') }}</span>
+                  </th>
+                  <th class="actions-column">Documento</th>
+                 </tr>
+              </thead>
+              <tbody>
+                <tr v-for="item in itemsResultadosPaginados" :key="item.id">
+                  <td class="resultado-titulo">
+                    <div class="resultado-titulo-principal">{{ item.titulo }}</div>
+                    <div class="resultado-id">ID: {{ item.id }}</div>
+                   </td>
+                  <td class="resultado-resumen">
+                    {{ truncarTexto(item.resumen, 100) }}
+                   </td>
+                  <td class="resultado-destinatario">
+                    {{ item.tipo_destinatario || '-' }}
+                   </td>
+                  <td class="resultado-fecha">
+                    {{ formatearFecha(item.fecha_recepcion) }}
+                   </td>
+                  <td class="resultado-documento">
+                    <a 
+                      v-if="item.doc_archivo"
+                      :href="`https://apisi.senado.gob.bo/${item.doc_archivo}`" 
+                      target="_blank"
+                      class="btn-documento-small"
+                      title="Ver documento PDF"
+                    >
+                      📄 PDF
+                    </a>
+                    <span v-else class="sin-documento-small">Sin documento</span>
+                   </td>
+                 </tr>
+              </tbody>
+            </table>
+          </div>
+          
+          <!-- Paginación para resultados globales -->
+          <div v-if="itemsResultadosFiltrados.length > 0" class="resultados-pagination">
+            <div class="pagination-info">
+              Mostrando {{ (resultadosPaginaActual - 1) * resultadosItemsPorPagina + 1 }} - 
+              {{ Math.min(resultadosPaginaActual * resultadosItemsPorPagina, itemsResultadosFiltrados.length) }} de 
+              {{ itemsResultadosFiltrados.length }} resultados
+            </div>
+            
+            <div class="pagination-controls">
+              <button 
+                class="pagination-btn" 
+                :disabled="resultadosPaginaActual === 1"
+                @click="resultadosPaginaActual--"
+              >
+                ← Anterior
+              </button>
+              
+              <div class="pagination-numbers">
+                <button 
+                  v-for="page in resultadosPaginasMostradas" 
+                  :key="page"
+                  class="pagination-number"
+                  :class="{ active: page === resultadosPaginaActual }"
+                  @click="resultadosPaginaActual = page"
+                >
+                  {{ page }}
+                </button>
+              </div>
+              
+              <button 
+                class="pagination-btn" 
+                :disabled="resultadosPaginaActual === resultadosTotalPaginas"
+                @click="resultadosPaginaActual++"
+              >
+                Siguiente →
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <div v-else-if="buscandoGlobal" class="loading-state">
+          <div class="spinner-small"></div>
+          <p>Buscando en todas las categorías...</p>
+        </div>
+        
+        <div v-else-if="busquedaGlobal && resultadosGlobal.length === 0 && !buscandoGlobal" class="no-resultados">
+          <p>No se encontraron resultados para "{{ busquedaGlobal }}"</p>
+          <button class="back-from-search-button" @click="limpiarBusquedaGlobal">
+            <span class="back-icon">←</span>
+            <span class="back-text">Volver a opciones</span>
+          </button>
+        </div>
+        
+        <!-- Grid de Tarjetas (se muestra cuando no hay búsqueda) -->
+        <div v-if="!busquedaGlobal" class="tabs-content px-1 sm:px-2 md:px-3 lg:px-4 xl:px-5 py-2 sm:py-3 md:py-4 lg:py-5 xl:py-6">
+          <!-- Header de Sección (Fiscalización) -->
+          <div class="section-header text-center pb-0.5 sm:pb-1 mb-1 sm:mb-2 border-b border-[#E03636] border-opacity-30">
+            <h2 class="section-title font-bold text-[#E03636] text-[3.0vw] mb-0 translate-y-[-7vw]">
+              {{ areaFiscalizacion?.titulo || 'Fiscalización' }}
+            </h2>
+            <p class="section-description text-gray-600 text-[.9vw] mx-auto translate-y-[-7vw]">
+              {{ areaFiscalizacion?.descripcion || 'Sistema de control y seguimiento de actividades institucionales' }}
+            </p>
+          </div>
+          
+          <!-- Grid de Tarjetas -->
+          <div class="links-grid grid gap-1 sm:gap-1.5 md:gap-2 xl:gap-4 3xl:gap-6 5xl:gap-9"
+            :class="gridColsClass"
+          >
+            <NuxtLink
+              v-for="link in linksFiscalizacion"
+              :key="link.id"
+              :to="link.path" 
+              class="link-card flex items-center bg-white bg-opacity-85 backdrop-blur-[10px] 
+                rounded-sm sm:rounded-md md:rounded-lg lg:rounded-xl shadow-sm hover:shadow-md 
+                p-1 sm:p-1.5 md:p-2
+                hover:-translate-y-0.5 transition-all duration-300
+                text-gray-900 no-underline
+                group"
+              @mouseenter="hoveredCard = link.id"
+              @mouseleave="hoveredCard = null"
+            >
+              <!-- Contenedor del icono -->
+              <div 
+                class="icon-container flex-shrink-0 
+                  m-2.5 sm:m-3 md:m-3 lg:m-4 xl:m-5 2xl:m-6 3xl:m-8 4xl:m-10 5xl:m-12
+                  w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 xl:w-16 xl:h-16 
+                  2xl:w-20 2xl:h-20 3xl:w-24 3xl:h-24 4xl:w-28 4xl:h-28 5xl:w-32 5xl:h-32
+                  rounded-full transition-all duration-300"
+                :class="{
+                  'bg-[#E03636]': hoveredCard === link.id,
+                  'scale-110': hoveredCard === link.id
+                }"
+              >
+                <div 
+                  class="w-full h-full flex items-center justify-center transition-colors duration-300"
+                  :class="hoveredCard === link.id ? 'text-white' : 'text-[#E03636]'"
+                >
+                  <div class="svg-wrapper w-[97%] h-[97%]" v-html="link.icono"></div>
+                </div>
+              </div>
+              
+              <div class="link-content flex-1 min-w-0">
+                <h3 class="link-title font-semibold text-gray-900
+                  text-[7px] sm:text-[8px] md:text-[9px] lg:text-[10px] xl:text-[13px] 
+                  2xl:text-[17px] 3xl:text-[22px] 4xl:text-[32px] 5xl:text-[50px] 
+                  mb-0 leading-tight truncate">
+                  {{ link.titulo }}
+                </h3>
+                <p class="link-description text-gray-600
+                  text-[5px] sm:text-[7px] md:text-[8px] lg:text-[9px] xl:text-[12px] 
+                  2xl:text-[16px] 3xl:text-[19px] 4xl:text-[30px] 5xl:text-[45px]
+                  leading-tight line-clamp-2">
+                  {{ link.descripcion }}
+                </p>
+              </div>
+              
+              <div class="link-arrow text-[#E03636] ml-0.5 flex-shrink-0
+                text-[10px] sm:text-[12px] md:text-[13px] lg:text-[15px] xl:text-[18px] 
+                2xl:text-[22px] 3xl:text-[27px] 4xl:text-[35px] 5xl:text-[70px]">
+                ›
+              </div>
+            </NuxtLink>
+          </div>
+        </div>
+      </div>
+    </template>
+  </div>
+</template>
+
+<script setup>
+import { ref, computed, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+
+// Estado para controlar qué tarjeta está en hover
+const hoveredCard = ref(null)
+const route = useRoute()
+const router = useRouter()
+
+// Estado para búsqueda global
+const busquedaGlobal = ref('')
+const buscandoGlobal = ref(false)
+const resultadosGlobal = ref([])
+const categoriaActiva = ref('')
+
+// Variables para paginación de resultados de búsqueda global
+const resultadosPaginaActual = ref(1)
+const resultadosItemsPorPagina = ref(5)
+
+// Variables para ordenamiento de resultados de búsqueda
+const resultadosOrden = ref({
+  columna: 'fecha',
+  direccion: 'desc'
+})
+
+// Mapa de íconos por filtro
+const iconosPorFiltro = ref({})
+
+// Configuración de endpoints para fiscalización
+const ENDPOINTS = {
+  'peticion-informe-escrito': {
+    url: 'https://apisi.senado.gob.bo/page/peticion-informe-escrito',
+    titulo: 'Peticiones de Informe Escrito',
+    icono: '',
+    procesarRespuesta: (data) => {
+      if (data.data && data.data.data) {
+        return data.data.data.map(item => ({ ...item, _categoria: 'peticion-informe-escrito' }))
+      }
+      return []
+    },
+    obtenerTotalPaginas: (data) => {
+      return data.data?.last_page || 1
+    }
+  },
+  'peticion-informe-oral': {
+    url: 'https://apisi.senado.gob.bo/page/peticion-informe-oral',
+    titulo: 'Peticiones de Informe Oral',
+    icono: '',
+    procesarRespuesta: (data) => {
+      if (data.data && data.data.data) {
+        return data.data.data.map(item => ({ ...item, _categoria: 'peticion-informe-oral' }))
+      }
+      return []
+    },
+    obtenerTotalPaginas: (data) => {
+      return data.data?.last_page || 1
+    }
+  }
+}
+
+const props = defineProps({
+  hash: {
+    type: [String, Object],
+    default: "fiscalizacion"
+  },
+  query: {
+    type: Object,
+    validator: (obj) => {
+      return obj && typeof obj === 'object'
+    }
+  }
+})
+
+const emit = defineEmits(['update:query'])
+
+// Datos de tabs desde la API externa
+const tabsData = ref(null)
+const cargandoTabs = ref(false)
+const errorTabs = ref(null)
+
+// Datos para la tabla
+const todosLosDatos = ref([])
+const loading = ref(false)
+const error = ref(null)
+const paginaActual = ref(1)
+const itemsPorPagina = ref(5)
+const terminoBusquedaLocal = ref('')
+const busquedaLocalActiva = ref('')
+const orden = ref({
+  columna: 'titulo',
+  direccion: 'desc'
+})
+
+// Computed para columnas de grid
+const gridColsClass = computed(() => {
+  const count = linksFiscalizacion.value.length
+  if (count === 2) {
+    return 'grid-cols-2'
+  }
+  return 'grid-cols-3'
+})
+
+// Computed properties
+const hashValido = computed(() => {
+  return props.hash === 'permitido' || true
+})
+
+const filtroActual = computed(() => {
+  return props.query?.filtro || route.query?.filtro
+})
+
+const filtroValido = computed(() => {
+  return ENDPOINTS.hasOwnProperty(filtroActual.value)
+})
+
+const endpointConfig = computed(() => {
+  if (!filtroValido.value) return null
+  return ENDPOINTS[filtroActual.value]
+})
+
+const tituloSeccion = computed(() => {
+  return endpointConfig.value?.titulo || 'Peticiones de Informe'
+})
+
+// Icono activo para el título de la tabla
+const iconoActivo = computed(() => {
+  if (!filtroActual.value) return ''
+  if (iconosPorFiltro.value[filtroActual.value]) {
+    return iconosPorFiltro.value[filtroActual.value]
+  }
+  const link = linksFiscalizacion.value.find(l => {
+    return l.path && l.path.includes(`filtro=${filtroActual.value}`)
+  })
+  return link?.icono || ''
+})
+
+// Datos de fiscalización desde la API de tabs
+const areaFiscalizacion = computed(() => {
+  return tabsData.value?.areas?.fiscalizacion || null
+})
+
+const linksFiscalizacion = computed(() => {
+  return tabsData.value?.links?.fiscalizacion || []
+})
+
+// Funciones para extraer datos del título
+const extraerNumeroTitulo = (titulo) => {
+  if (!titulo) return 0
+  const match = titulo.match(/N[°\s]*(\d+)/i)
+  return match ? parseInt(match[1], 10) : 0
+}
+
+const extraerAnioTitulo = (titulo) => {
+  if (!titulo) return 0
+  const match = titulo.match(/\/(\d{4})-\d{4}/)
+  return match ? parseInt(match[1], 10) : 0
+}
+
+// Computed para resultados ordenados correctamente
+const resultadosOrdenados = computed(() => {
+  if (!resultadosGlobal.value.length) return []
+  
+  return [...resultadosGlobal.value].sort((a, b) => {
+    const anioA = extraerAnioTitulo(a.titulo)
+    const anioB = extraerAnioTitulo(b.titulo)
+    
+    if (resultadosOrden.value.columna === 'fecha') {
+      const fechaA = a.fecha_recepcion ? new Date(a.fecha_recepcion) : new Date(0)
+      const fechaB = b.fecha_recepcion ? new Date(b.fecha_recepcion) : new Date(0)
+      if (resultadosOrden.value.direccion === 'asc') {
+        return fechaA - fechaB
+      } else {
+        return fechaB - fechaA
+      }
+    } else if (resultadosOrden.value.columna === 'titulo') {
+      if (anioA !== anioB) {
+        return resultadosOrden.value.direccion === 'asc' ? anioA - anioB : anioB - anioA
+      }
+      const numeroA = extraerNumeroTitulo(a.titulo)
+      const numeroB = extraerNumeroTitulo(b.titulo)
+      if (resultadosOrden.value.direccion === 'asc') {
+        return numeroA - numeroB
+      } else {
+        return numeroB - numeroA
+      }
+    } else if (resultadosOrden.value.columna === 'resumen') {
+      const resumenA = a.resumen || ''
+      const resumenB = b.resumen || ''
+      if (resultadosOrden.value.direccion === 'asc') {
+        return resumenA.localeCompare(resumenB)
+      } else {
+        return resumenB.localeCompare(resumenA)
+      }
+    } else if (resultadosOrden.value.columna === 'destinatario') {
+      const destA = a.tipo_destinatario || ''
+      const destB = b.tipo_destinatario || ''
+      if (resultadosOrden.value.direccion === 'asc') {
+        return destA.localeCompare(destB)
+      } else {
+        return destB.localeCompare(destA)
+      }
+    }
+    return 0
+  })
+})
+
+// Resultados por categoría para búsqueda global (usando resultados ordenados)
+const resultadosPorCategoria = computed(() => {
+  const porCategoria = {}
+  resultadosOrdenados.value.forEach(item => {
+    const categoria = item._categoria || 'otros'
+    if (!porCategoria[categoria]) {
+      porCategoria[categoria] = []
+    }
+    porCategoria[categoria].push(item)
+  })
+  return porCategoria
+})
+
+// Computed para los resultados filtrados por categoría activa
+const itemsResultadosFiltrados = computed(() => {
+  if (!categoriaActiva.value) return []
+  return resultadosPorCategoria.value[categoriaActiva.value] || []
+})
+
+// Computed para los resultados paginados
+const itemsResultadosPaginados = computed(() => {
+  const inicio = (resultadosPaginaActual.value - 1) * resultadosItemsPorPagina.value
+  const fin = inicio + resultadosItemsPorPagina.value
+  return itemsResultadosFiltrados.value.slice(inicio, fin)
+})
+
+// Computed para total de páginas de resultados
+const resultadosTotalPaginas = computed(() => {
+  return Math.ceil(itemsResultadosFiltrados.value.length / resultadosItemsPorPagina.value)
+})
+
+// Computed para páginas mostradas en paginación
+const resultadosPaginasMostradas = computed(() => {
+  const total = resultadosTotalPaginas.value
+  const actual = resultadosPaginaActual.value
+  const rango = 5
+  
+  let inicio = Math.max(1, actual - Math.floor(rango / 2))
+  let fin = Math.min(total, inicio + rango - 1)
+  
+  if (fin - inicio + 1 < rango) {
+    inicio = Math.max(1, fin - rango + 1)
+  }
+  
+  return Array.from({ length: fin - inicio + 1 }, (_, i) => inicio + i)
+})
+
+// Computed para la tabla
+const itemsFiltrados = computed(() => {
+  let datos = [...todosLosDatos.value]
+  
+  if (busquedaLocalActiva.value && busquedaLocalActiva.value.trim() !== '') {
+    const termino = busquedaLocalActiva.value.toLowerCase().trim()
+    datos = datos.filter(item => 
+      (item.titulo && item.titulo.toLowerCase().includes(termino)) ||
+      (item.resumen && item.resumen.toLowerCase().includes(termino)) ||
+      (item.tipo_destinatario && item.tipo_destinatario.toLowerCase().includes(termino))
+    )
+  }
+  
+  return datos
+})
+
+const itemsOrdenados = computed(() => {
+  if (!itemsFiltrados.value.length) return []
+  
+  return [...itemsFiltrados.value].sort((a, b) => {
+    if (orden.value.columna === 'titulo') {
+      const anioA = extraerAnioTitulo(a.titulo)
+      const anioB = extraerAnioTitulo(b.titulo)
+      
+      if (anioA !== anioB) {
+        return orden.value.direccion === 'asc' ? anioA - anioB : anioB - anioA
+      }
+      const numeroA = extraerNumeroTitulo(a.titulo)
+      const numeroB = extraerNumeroTitulo(b.titulo)
+      if (orden.value.direccion === 'asc') {
+        return numeroA - numeroB
+      } else {
+        return numeroB - numeroA
+      }
+    } else if (orden.value.columna === 'resumen') {
+      const resumenA = a.resumen || ''
+      const resumenB = b.resumen || ''
+      if (orden.value.direccion === 'asc') {
+        return resumenA.localeCompare(resumenB)
+      } else {
+        return resumenB.localeCompare(resumenA)
+      }
+    }
+    return 0
+  })
+})
+
+const itemsPaginados = computed(() => {
+  const itemsPorPaginaNum = Number(itemsPorPagina.value)
+  const inicio = (paginaActual.value - 1) * itemsPorPaginaNum
+  const fin = inicio + itemsPorPaginaNum
+  return itemsOrdenados.value.slice(inicio, fin)
+})
+
+const totalItems = computed(() => {
+  return todosLosDatos.value.length
+})
+
+const totalPaginas = computed(() => {
+  const itemsPorPaginaNum = Number(itemsPorPagina.value)
+  return Math.ceil(itemsFiltrados.value.length / itemsPorPaginaNum)
+})
+
+const paginasMostradas = computed(() => {
+  const total = totalPaginas.value
+  const actual = paginaActual.value
+  const rango = 5
+  
+  let inicio = Math.max(1, actual - Math.floor(rango / 2))
+  let fin = Math.min(total, inicio + rango - 1)
+  
+  if (fin - inicio + 1 < rango) {
+    inicio = Math.max(1, fin - rango + 1)
+  }
+  
+  return Array.from({ length: fin - inicio + 1 }, (_, i) => inicio + i)
+})
+
+// Funciones auxiliares
+const formatearFecha = (fecha) => {
+  if (!fecha) return ''
+  return new Date(fecha).toLocaleDateString('es-BO')
+}
+
+const truncarTexto = (texto, longitud) => {
+  if (!texto) return ''
+  if (texto.length <= longitud) return texto
+  return texto.substring(0, longitud) + '...'
+}
+
+const obtenerNombreCategoria = (categoriaKey) => {
+  const nombres = {
+    'peticion-informe-escrito': 'Informe Escrito',
+    'peticion-informe-oral': 'Informe Oral'
+  }
+  return nombres[categoriaKey] || categoriaKey
+}
+
+const resetearTodo = () => {
+  todosLosDatos.value = []
+  tabsData.value = null
+  paginaActual.value = 1
+  terminoBusquedaLocal.value = ''
+  busquedaLocalActiva.value = ''
+  error.value = null
+  errorTabs.value = null
+}
+
+// Función para cambiar de categoría y resetear paginación
+const cambiarCategoriaResultados = (categoria) => {
+  categoriaActiva.value = categoria
+  resultadosPaginaActual.value = 1
+}
+
+// Función para resetear paginación al cambiar número de filas
+const resetearPaginaResultados = () => {
+  resultadosPaginaActual.value = 1
+}
+
+// Función para ordenar resultados de búsqueda
+const ordenarResultadosPor = (columna) => {
+  if (resultadosOrden.value.columna === columna) {
+    resultadosOrden.value.direccion = resultadosOrden.value.direccion === 'asc' ? 'desc' : 'asc'
+  } else {
+    resultadosOrden.value.columna = columna
+    resultadosOrden.value.direccion = 'desc'
+  }
+  resultadosPaginaActual.value = 1
+}
+
+const getResultadosSortIcon = (columna) => {
+  if (resultadosOrden.value.columna !== columna) return '↕️'
+  return resultadosOrden.value.direccion === 'asc' ? '↑' : '↓'
+}
+
+// Función para cargar datos de un endpoint completo
+const cargarEndpointCompleto = async (key, endpoint) => {
+  try {
+    const primeraPagina = await obtenerPaginaEndpoint(key, endpoint, 1)
+    if (!primeraPagina) return []
+    
+    const datosPrimeraPagina = endpoint.procesarRespuesta(primeraPagina) || []
+    const todosLosItems = [...datosPrimeraPagina]
+    
+    const totalPaginas = endpoint.obtenerTotalPaginas(primeraPagina)
+    
+    if (totalPaginas > 1) {
+      const paginasRestantes = Array.from({ length: totalPaginas - 1 }, (_, i) => i + 2)
+      const promesas = paginasRestantes.map(page => obtenerPaginaEndpoint(key, endpoint, page))
+      const resultados = await Promise.all(promesas)
+      
+      resultados.forEach(res => {
+        if (res) {
+          const datosPagina = endpoint.procesarRespuesta(res) || []
+          todosLosItems.push(...datosPagina)
+        }
+      })
+    }
+    
+    return todosLosItems
+  } catch (err) {
+    console.error(`Error cargando endpoint ${key}:`, err)
+    return []
+  }
+}
+
+const obtenerPaginaEndpoint = async (key, endpoint, page) => {
+  const url = `${endpoint.url}?page=${page}`
+  try {
+    const response = await fetch(url)
+    return await response.json()
+  } catch (err) {
+    console.error(`Error cargando página ${page} de ${key}:`, err)
+    return null
+  }
+}
+
+// Búsqueda global
+const realizarBusquedaGlobal = async () => {
+  if (!busquedaGlobal.value.trim()) {
+    resultadosGlobal.value = []
+    return
+  }
+  
+  buscandoGlobal.value = true
+  resultadosGlobal.value = []
+  resultadosPaginaActual.value = 1
+  
+  const termino = busquedaGlobal.value.toLowerCase().trim()
+  const endpointsKeys = Object.keys(ENDPOINTS)
+  
+  try {
+    const promesas = endpointsKeys.map(key => cargarEndpointCompleto(key, ENDPOINTS[key]))
+    const resultadosPorEndpoint = await Promise.all(promesas)
+    
+    let todosLosResultados = []
+    resultadosPorEndpoint.forEach((items, index) => {
+      const key = endpointsKeys[index]
+      items.forEach(item => {
+        if ((item.titulo && item.titulo.toLowerCase().includes(termino)) ||
+            (item.resumen && item.resumen.toLowerCase().includes(termino)) ||
+            (item.tipo_destinatario && item.tipo_destinatario.toLowerCase().includes(termino))) {
+          todosLosResultados.push(item)
+        }
+      })
+    })
+    
+    resultadosGlobal.value = todosLosResultados
+    
+    const categorias = Object.keys(resultadosPorCategoria.value)
+    if (categorias.length > 0 && !categoriaActiva.value) {
+      categoriaActiva.value = categorias[0]
+    }
+  } catch (err) {
+    console.error('Error en búsqueda global:', err)
+  } finally {
+    buscandoGlobal.value = false
+  }
+}
+
+const limpiarBusquedaGlobal = () => {
+  busquedaGlobal.value = ''
+  resultadosGlobal.value = []
+  categoriaActiva.value = ''
+  resultadosPaginaActual.value = 1
+  resultadosItemsPorPagina.value = 5
+  resultadosOrden.value = { columna: 'fecha', direccion: 'desc' }
+}
+
+// Función para volver a las opciones de fiscalización
+const volverAOpciones = () => {
+  emit('update:query', { filtro: '' })
+  if (route.query.filtro) {
+    router.replace({ query: {} })
+  }
+  resetearTodo()
+  cargarTabsFiscalizacion()
+}
+
+const obtenerPagina = async (page) => {
+  const url = `${endpointConfig.value.url}?page=${page}`
+  
+  try {
+    const response = await fetch(url)
+    const data = await response.json()
+    return data
+  } catch (err) {
+    console.error(`Error cargando página ${page}:`, err)
+    return null
+  }
+}
+
+const cargarDatosCompletos = async () => {
+  if (!endpointConfig.value) {
+    error.value = `Filtro "${filtroActual.value}" no válido`
+    return
+  }
+  
+  loading.value = true
+  error.value = null
+  
+  try {
+    const primeraPagina = await obtenerPagina(1)
+    
+    if (!primeraPagina) {
+      throw new Error('No se pudo obtener la primera página')
+    }
+    
+    const datosPrimeraPagina = endpointConfig.value.procesarRespuesta(primeraPagina) || []
+    const todasLasPeticiones = [...datosPrimeraPagina]
+    
+    const totalPaginas = endpointConfig.value.obtenerTotalPaginas(primeraPagina)
+    
+    if (totalPaginas > 1) {
+      const paginasRestantes = Array.from(
+        { length: totalPaginas - 1 }, 
+        (_, i) => i + 2
+      )
+      
+      const promesas = paginasRestantes.map(page => obtenerPagina(page))
+      const resultados = await Promise.all(promesas)
+      
+      resultados.forEach(res => {
+        if (res) {
+          const datosPagina = endpointConfig.value.procesarRespuesta(res) || []
+          todasLasPeticiones.push(...datosPagina)
+        }
+      })
+    }
+    
+    todosLosDatos.value = todasLasPeticiones
+    paginaActual.value = 1
+    
+    console.log(`✅ Cargados ${todosLosDatos.value.length} registros para filtro: ${filtroActual.value}`)
+  } catch (err) {
+    error.value = 'Error al cargar los datos: ' + err.message
+    console.error('Error:', err)
+  } finally {
+    loading.value = false
+  }
+}
+
+const cargarTabsFiscalizacion = async () => {
+  cargandoTabs.value = true
+  errorTabs.value = null
+  
+  try {
+    const response = await fetch('http://demoback.senado.gob.bo/api/tabs')
+    const data = await response.json()
+    
+    if (data?.success && data?.data) {
+      tabsData.value = data.data
+      
+      if (tabsData.value?.links?.fiscalizacion) {
+        tabsData.value.links.fiscalizacion.forEach(link => {
+          const filtroKey = link.path?.match(/filtro=([^&#]+)/)?.[1]
+          if (filtroKey) {
+            iconosPorFiltro.value[filtroKey] = link.icono
+            if (ENDPOINTS[filtroKey]) {
+              ENDPOINTS[filtroKey].icono = link.icono
+            }
+          }
+        })
+      }
+    } else {
+      throw new Error('Formato de respuesta inválido')
+    }
+  } catch (err) {
+    errorTabs.value = 'Error al cargar opciones: ' + err.message
+    console.error('Error cargando tabs:', err)
+  } finally {
+    cargandoTabs.value = false
+  }
+}
+
+const aplicarBusquedaLocal = () => {
+  busquedaLocalActiva.value = terminoBusquedaLocal.value || ''
+  paginaActual.value = 1
+}
+
+const limpiarBusquedaLocal = () => {
+  terminoBusquedaLocal.value = ''
+  busquedaLocalActiva.value = ''
+  paginaActual.value = 1
+}
+
+const cambiarPagina = (pagina) => {
+  if (pagina >= 1 && pagina <= totalPaginas.value) {
+    paginaActual.value = pagina
+  }
+}
+
+const cambiarFilasPorPagina = () => {
+  itemsPorPagina.value = Number(itemsPorPagina.value)
+  paginaActual.value = 1
+}
+
+const ordenarPor = (columna) => {
+  if (orden.value.columna === columna) {
+    orden.value.direccion = orden.value.direccion === 'asc' ? 'desc' : 'asc'
+  } else {
+    orden.value.columna = columna
+    orden.value.direccion = 'desc'
+  }
+  paginaActual.value = 1
+}
+
+const getSortIcon = (columna) => {
+  if (orden.value.columna !== columna) return '↕️'
+  return orden.value.direccion === 'asc' ? '↑' : '↓'
+}
+
+// Watchers
+watch(() => props.hash, () => {
+  resetearTodo()
+  if (hashValido.value) {
+    if (filtroValido.value) {
+      cargarDatosCompletos()
+    } else {
+      cargarTabsFiscalizacion()
+    }
+  }
+}, { immediate: true })
+
+watch(() => props.query, (nuevoQuery, viejoQuery) => {
+  if (hashValido.value) {
+    const nuevoFiltro = nuevoQuery?.filtro
+    const viejoFiltro = viejoQuery?.filtro
+    
+    if (nuevoFiltro !== viejoFiltro) {
+      resetearTodo()
+      if (nuevoFiltro && ENDPOINTS.hasOwnProperty(nuevoFiltro)) {
+        cargarDatosCompletos()
+      } else {
+        cargarTabsFiscalizacion()
+      }
+    }
+  }
+}, { immediate: true, deep: true })
+
+watch(() => route.query, (nuevoQuery, viejoQuery) => {
+  if (hashValido.value) {
+    const nuevoFiltro = nuevoQuery?.filtro
+    const viejoFiltro = viejoQuery?.filtro
+    
+    if (nuevoFiltro !== viejoFiltro) {
+      emit('update:query', { filtro: nuevoFiltro || '' })
+      resetearTodo()
+      if (nuevoFiltro && ENDPOINTS.hasOwnProperty(nuevoFiltro)) {
+        cargarDatosCompletos()
+      } else {
+        cargarTabsFiscalizacion()
+      }
+    }
+  }
+}, { immediate: true, deep: true })
+</script>
+
+<style scoped>
+.fiscalization-container {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px;
+  background: transparent;
+}
+
+.fiscalization-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.back-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid #e2e8f0;
+  padding: 6px 12px;
+  border-radius: 8px;
+  color: #475569;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.back-button:hover {
+  background: #E03636;
+  border-color: #E03636;
+  color: white;
+}
+
+.back-button:hover .back-icon {
+  transform: translateX(-2px);
+}
+
+.back-icon {
+  font-size: 1rem;
+  transition: transform 0.2s;
+}
+
+.back-text {
+  font-size: 0.85rem;
+}
+
+.title-icon-svg {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #E03636;
+  flex-shrink: 0;
+}
+
+.title-icon-svg svg {
+  width: 100%;
+  height: 100%;
+  max-width: 32px;
+  max-height: 32px;
+}
+
+.title-icon-placeholder {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+@media (min-width: 768px) {
+  .title-icon-svg {
+    width: 36px;
+    height: 36px;
+  }
+  .title-icon-svg svg {
+    max-width: 36px;
+    max-height: 36px;
+  }
+  .title-icon-placeholder {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+.fiscalization-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+
+.badge {
+  background: linear-gradient(135deg, #E03636, #b82c2c);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 16px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.header-controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.rows-per-page {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: white;
+  padding: 4px 8px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  font-size: 0.85rem;
+  color: #475569;
+}
+
+.rows-per-page select {
+  border: 1px solid #e2e8f0;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: white;
+  color: #0f172a;
+  font-size: 0.85rem;
+  cursor: pointer;
+  outline: none;
+}
+
+.rows-per-page select:hover {
+  border-color: #E03636;
+}
+
+.search-box {
+  display: flex;
+  gap: 4px;
+  background: white;
+  padding: 3px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  position: relative;
+}
+
+.search-input {
+  border: 1px solid #e2e8f0;
+  padding: 6px 10px;
+  font-size: 0.85rem;
+  width: 260px;
+  border-radius: 6px;
+  outline: none;
+  transition: all 0.2s;
+  padding-right: 65px;
+}
+
+.search-input:focus {
+  border-color: #E03636;
+  box-shadow: 0 0 0 2px rgba(224, 54, 54, 0.2);
+}
+
+.search-button {
+  background: #E03636;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.85rem;
+  position: absolute;
+  right: 3px;
+  top: 3px;
+}
+
+.search-button:hover:not(:disabled) {
+  background: #b82c2c;
+}
+
+.search-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.clear-button {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 0 6px;
+  position: absolute;
+  right: 60px;
+  top: 50%;
+  transform: translateY(-50%);
+  line-height: 1;
+}
+
+.clear-button:hover {
+  color: #E03636;
+}
+
+.table-responsive {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  overflow: auto;
+  margin-bottom: 16px;
+}
+
+.fiscalization-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.fiscalization-table th {
+  background: #f8fafc;
+  padding: 8px 12px;
+  text-align: left;
+  font-weight: 600;
+  color: #475569;
+  border-bottom: 2px solid #e2e8f0;
+  white-space: nowrap;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.sortable {
+  cursor: pointer;
+  user-select: none;
+}
+
+.sortable:hover {
+  background: #f1f5f9;
+}
+
+.sort-icon {
+  margin-left: 4px;
+  font-size: 0.75rem;
+  opacity: 0.6;
+}
+
+.fiscalization-row td {
+  padding: 8px 12px;
+  border-bottom: 1px solid #eef2f6;
+  color: #334155;
+  line-height: 1.3;
+}
+
+.fiscalization-row:hover td {
+  background-color: #f8fafc;
+}
+
+.title-cell {
+  min-width: 200px;
+}
+
+.titulo-principal {
+  font-weight: 500;
+  color: #0f172a;
+  margin-bottom: 2px;
+  font-size: 0.85rem;
+}
+
+.numero-ley {
+  font-size: 0.7rem;
+  color: #64748b;
+  background: #f1f5f9;
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.asunto-cell {
+  max-width: 400px;
+}
+
+.asunto-texto {
+  line-height: 1.3;
+  color: #475569;
+  font-size: 0.8rem;
+  margin-bottom: 4px;
+}
+
+.destinatario-info {
+  font-size: 0.7rem;
+  color: #E03636;
+  margin-top: 2px;
+}
+
+.destinatario-label {
+  font-weight: 500;
+  color: #64748b;
+}
+
+.fecha-info {
+  font-size: 0.65rem;
+  color: #94a3b8;
+  margin-top: 2px;
+}
+
+.fecha-label {
+  font-weight: 500;
+  color: #64748b;
+}
+
+.actions-cell {
+  width: 70px;
+  text-align: center;
+}
+
+.btn-documento {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #E03636;
+  color: white;
+  text-decoration: none;
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-documento:hover {
+  background: #b82c2c;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(224, 54, 54, 0.3);
+}
+
+.sin-documento {
+  font-size: 0.7rem;
+  color: #94a3b8;
+}
+
+.debug-info {
+  background-color: #f1f5f9;
+  border-radius: 0 0 10px 10px;
+  font-family: monospace;
+  color: #334155;
+}
+
+.table-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 12px 0;
+  font-size: 0.85rem;
+}
+
+.pagination-info {
+  color: #64748b;
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pagination-btn {
+  background: white;
+  border: 1px solid #e2e8f0;
+  padding: 6px 12px;
+  border-radius: 6px;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background: #E03636;
+  color: white;
+  border-color: #E03636;
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination-numbers {
+  display: flex;
+  gap: 4px;
+}
+
+.pagination-number {
+  min-width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e2e8f0;
+  background: white;
+  border-radius: 6px;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.pagination-number:hover:not(.active):not(:disabled) {
+  background: #f1f5f9;
+  border-color: #E03636;
+}
+
+.pagination-number.active {
+  background: #E03636;
+  color: white;
+  border-color: #E03636;
+}
+
+.loading-state {
+  text-align: center;
+  padding: 40px;
+  background: white;
+  border-radius: 10px;
+}
+
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid #e2e8f0;
+  border-top-color: #E03636;
+  border-radius: 50%;
+  margin: 0 auto 12px;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.error-state {
+  text-align: center;
+  padding: 40px;
+  background: white;
+  border-radius: 10px;
+}
+
+.error-icon {
+  font-size: 2rem;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.retry-button {
+  background: #E03636;
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 12px;
+}
+
+.retry-button:hover {
+  background: #b82c2c;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px !important;
+  color: #94a3b8;
+  font-size: 0.95rem;
+}
+
+/* Estilos para el buscador global */
+.global-search-container {
+  margin-bottom: 24px;
+}
+
+.global-search-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.back-from-search-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid #e2e8f0;
+  padding: 8px 16px;
+  border-radius: 8px;
+  color: #475569;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.back-from-search-button:hover {
+  background: #E03636;
+  border-color: #E03636;
+  color: white;
+}
+
+.back-from-search-button:hover .back-icon {
+  transform: translateX(-2px);
+}
+
+.global-search-box {
+  display: flex;
+  gap: 8px;
+  background: white;
+  padding: 4px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  position: relative;
+  flex: 1;
+  max-width: 300px;
+}
+
+.global-search-input {
+  flex: 1;
+  border: 1px solid #e2e8f0;
+  padding: 4px 8px;
+  font-size: 1rem;
+  border-radius: 8px;
+  outline: none;
+  transition: all 0.2s;
+  padding-right: 70px;
+}
+
+.global-search-input:focus {
+  border-color: #E03636;
+  box-shadow: 0 0 0 2px rgba(224, 54, 54, 0.2);
+}
+
+.global-search-button {
+  color: black;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 1rem;
+  position: absolute;
+  right: 4px;
+  top: 4px;
+  bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.global-search-button:hover:not(:disabled) {
+  scale: 1.1;
+}
+
+.global-search-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.global-clear-button {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0 12px;
+  position: absolute;
+  right: 80px;
+  top: 50%;
+  transform: translateY(-50%);
+  line-height: 1;
+}
+
+.global-clear-button:hover {
+  color: #E03636;
+}
+
+.loading-spinner-small {
+  width: 16px;
+  height: 16px;
+  border: 2px solid white;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  display: inline-block;
+}
+
+.spinner-small {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #e2e8f0;
+  border-top-color: #E03636;
+  border-radius: 50%;
+  margin: 0 auto 12px;
+  animation: spin 0.8s linear infinite;
+}
+
+/* Resultados de búsqueda */
+.resultados-global {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.resultados-header {
+  padding: 16px 20px;
+  background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.resultados-header h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #0f172a;
+  margin: 0;
+}
+
+.resultados-count {
+  font-size: 0.85rem;
+  color: #64748b;
+  background: #f1f5f9;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.resultados-controls {
+  display: flex;
+  justify-content: flex-end;
+  padding: 12px 16px;
+  background: white;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.resultados-controls .rows-per-page {
+  background: #f8fafc;
+  margin: 0;
+}
+
+.resultados-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 12px 16px 0 16px;
+  background: white;
+  border-bottom: 1px solid #e2e8f0;
+  flex-wrap: wrap;
+}
+
+.resultado-tab {
+  padding: 8px 16px;
+  background: transparent;
+  border: none;
+  border-radius: 8px 8px 0 0;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.resultado-tab:hover {
+  background: #f1f5f9;
+  color: #E03636;
+}
+
+.resultado-tab.active {
+  background: #E03636;
+  color: white;
+}
+
+.tab-count {
+  background: rgba(0, 0, 0, 0.1);
+  padding: 2px 6px;
+  border-radius: 12px;
+  font-size: 0.7rem;
+}
+
+.resultado-tab.active .tab-count {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.resultados-tabla-container {
+  overflow-x: auto;
+  padding: 16px;
+}
+
+.resultados-tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.resultados-tabla th {
+  text-align: left;
+  padding: 12px 12px;
+  background: #f8fafc;
+  font-weight: 600;
+  color: #475569;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.resultados-tabla td {
+  padding: 12px;
+  border-bottom: 1px solid #eef2f6;
+  color: #334155;
+}
+
+.resultado-titulo-principal {
+  font-weight: 500;
+  color: #0f172a;
+  margin-bottom: 4px;
+}
+
+.resultado-id {
+  font-size: 0.7rem;
+  color: #64748b;
+  background: #f1f5f9;
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.resultado-resumen {
+  max-width: 400px;
+  line-height: 1.4;
+  color: #475569;
+}
+
+.resultado-destinatario {
+  color: #E03636;
+  font-weight: 500;
+}
+
+.resultado-fecha {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  white-space: nowrap;
+}
+
+.resultado-documento {
+  text-align: center;
+}
+
+.btn-documento-small {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #E03636;
+  color: white;
+  text-decoration: none;
+  padding: 4px 10px;
+  border-radius: 5px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.btn-documento-small:hover {
+  background: #b82c2c;
+  transform: translateY(-1px);
+}
+
+.sin-documento-small {
+  font-size: 0.7rem;
+  color: #94a3b8;
+}
+
+.resultados-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 16px;
+  background: white;
+  border-top: 1px solid #e2e8f0;
+}
+
+.resultados-pagination .pagination-info {
+  color: #64748b;
+  font-size: 0.85rem;
+}
+
+.resultados-pagination .pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.resultados-pagination .pagination-btn {
+  background: white;
+  border: 1px solid #e2e8f0;
+  padding: 6px 12px;
+  border-radius: 6px;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.resultados-pagination .pagination-btn:hover:not(:disabled) {
+  background: #E03636;
+  color: white;
+  border-color: #E03636;
+}
+
+.resultados-pagination .pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.resultados-pagination .pagination-numbers {
+  display: flex;
+  gap: 4px;
+}
+
+.resultados-pagination .pagination-number {
+  min-width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e2e8f0;
+  background: white;
+  border-radius: 6px;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.resultados-pagination .pagination-number:hover:not(.active):not(:disabled) {
+  background: #f1f5f9;
+  border-color: #E03636;
+}
+
+.resultados-pagination .pagination-number.active {
+  background: #E03636;
+  color: white;
+  border-color: #E03636;
+}
+
+.no-resultados {
+  text-align: center;
+  padding: 40px;
+  background: white;
+  border-radius: 12px;
+  color: #64748b;
+  margin-bottom: 24px;
+}
+
+/* Estilos para las tarjetas */
+.tabs-content {
+  background: transparent;
+}
+
+.section-header {
+  border-bottom: 1px solid rgba(224, 54, 54, 0.3);
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.section-title {
+  font-weight: bold;
+  color: #E03636;
+  margin-bottom: 0;
+}
+
+.section-description {
+  color: #4b5563;
+  margin: 0 auto;
+}
+
+.links-grid {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.grid-cols-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-cols-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.link-card {
+  display: flex;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  border-radius: 0.125rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  padding: 0.25rem;
+  color: #111827;
+  text-decoration: none;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.link-card:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  transform: translateY(-0.125rem);
+}
+
+.icon-container {
+  flex-shrink: 0;
+  margin: 0.625rem;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 9999px;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-container.bg-\[\#E03636\] {
+  background-color: #E03636;
+}
+
+.icon-container.scale-110 {
+  transform: scale(1.1);
+}
+
+.svg-wrapper {
+  width: 97%;
+  height: 97%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.svg-wrapper svg {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  display: block !important;
+}
+
+.link-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.link-title {
+  font-weight: 600;
+  color: #111827;
+  font-size: 7px;
+  margin-bottom: 0;
+  line-height: 1.25;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.link-description {
+  color: #4b5563;
+  font-size: 5px;
+  line-height: 1.25;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.link-arrow {
+  color: #E03636;
+  margin-left: 0.125rem;
+  flex-shrink: 0;
+  font-size: 10px;
+}
+
+/* Media queries responsivas */
+@media (min-width: 640px) {
+  .links-grid { gap: 0.375rem; }
+  .link-card { border-radius: 0.375rem; padding: 0.375rem; }
+  .icon-container { margin: 0.75rem; width: 2.5rem; height: 2.5rem; }
+  .link-title { font-size: 8px; }
+  .link-description { font-size: 7px; }
+  .link-arrow { font-size: 12px; }
+}
+
+@media (min-width: 768px) {
+  .links-grid { gap: 0.5rem; }
+  .link-card { border-radius: 0.5rem; padding: 0.5rem; }
+  .icon-container { margin: 0.75rem; width: 3rem; height: 3rem; }
+  .link-title { font-size: 9px; }
+  .link-description { font-size: 8px; }
+  .link-arrow { font-size: 13px; }
+}
+
+@media (min-width: 1024px) {
+  .link-card { border-radius: 0.75rem; }
+  .icon-container { margin: 1rem; width: 3.5rem; height: 3.5rem; }
+  .link-title { font-size: 10px; }
+  .link-description { font-size: 9px; }
+  .link-arrow { font-size: 15px; }
+}
+
+@media (min-width: 1280px) {
+  .links-grid { gap: 1rem; }
+  .icon-container { margin: 1.25rem; width: 4rem; height: 4rem; }
+  .link-title { font-size: 13px; }
+  .link-description { font-size: 12px; }
+  .link-arrow { font-size: 18px; }
+}
+
+@media (min-width: 1536px) {
+  .icon-container { margin: 1.5rem; width: 5rem; height: 5rem; }
+  .link-title { font-size: 17px; }
+  .link-description { font-size: 16px; }
+  .link-arrow { font-size: 22px; }
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.min-w-0 {
+  min-width: 0;
+}
+
+@supports (backdrop-filter: blur(10px)) {
+  .backdrop-blur-\[10px\] {
+    backdrop-filter: blur(10px);
+  }
+}
+
+@media (max-width: 768px) {
+  .fiscalization-container {
+    padding: 12px;
+  }
+  
+  .header-left {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+  
+  .header-controls {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .rows-per-page {
+    justify-content: center;
+  }
+  
+  .search-input {
+    width: 100%;
+  }
+  
+  .table-footer {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .pagination-controls {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .btn-text {
+    display: none;
+  }
+  
+  .back-text {
+    display: none;
+  }
+  
+  .back-button {
+    padding: 6px 10px;
+  }
+  
+  .global-search-wrapper {
+    flex-direction: column;
+  }
+  
+  .global-search-box {
+    max-width: 100%;
+    width: 100%;
+  }
+  
+  .back-from-search-button {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .resultados-tabla th,
+  .resultados-tabla td {
+    padding: 8px;
+  }
+  
+  .resultado-resumen {
+    max-width: 200px;
+  }
+  
+  .resultados-pagination {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .resultados-controls {
+    justify-content: center;
+  }
+}
+</style> 
+================================= 
+components\GlobalModals.vue 
+================================= 
+ 
+<!-- components/GlobalModals.vue -->
+<template>
+  <Teleport to="body">
+    <div 
+      v-if="modalStore.activeModal === 'redactor'" 
+      class="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center p-2 sm:p-4 modal-backdrop"
+      @click.self="modalStore.closeModal"
+    >
+      <div class="bg-white rounded-xl shadow-2xl w-full max-w-[98vw] sm:max-w-[95vw] lg:max-w-[90vw] xl:max-w-[1400px] max-h-[95vh] overflow-hidden modal-container">
+        
+        <!-- Header -->
+        <div class="bg-[#E03636] text-white px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center">
+          <div>
+            <h3 class="text-xl sm:text-2xl font-bold">Gaceta Legislativa - Redactor</h3>
+            <p class="text-xs sm:text-sm text-white/80 mt-1">Seleccione un tomo para visualizar</p>
+          </div>
+          <button 
+            @click="modalStore.closeModal"
+            class="text-white hover:text-gray-200 transition-colors p-2 hover:bg-white/10 rounded-lg"
+          >
+            <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Contenido -->
+        <div class="overflow-y-auto modal-content" style="max-height: calc(85vh - 120px);">
+          <div v-for="periodo in periodosDisponibles" :key="periodo.key" class="mb-8 sm:mb-10">
+            <!-- Encabezado del periodo legislativo (muestra el rango de años completo) -->
+            <div class="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-5 sticky top-0 bg-white z-10">
+              <h4 class="text-xl sm:text-2xl font-bold text-white bg-[#E03636] w-full text-center">REDACTOR LEGISLATURA {{ periodo.nombre }}</h4>
+              <!-- <div class="flex-1 h-px bg-gray-200"></div>
+              <span class="text-xs sm:text-sm text-gray-500 bg-gray-100 px-2 sm:px-3 py-1 rounded-full">
+                {{ totalTomosPorPeriodo(periodo.key) }} tomos
+              </span> -->
+            </div>
+            
+            <!-- Grid de tomos - SIEMPRE 6 columnas -->
+            <div v-if="obtenerTomosPorPeriodo(periodo.key).length > 0">
+              <div class="grid grid-cols-6 gap-2 sm:gap-3 md:gap-4 mb-4 px-[4vh]">
+                <div 
+                  v-for="item in getTomosPaginados(periodo.key)" 
+                  :key="item.id"
+                  @click="abrirPdf(item.pdfUrl, item)"
+                  class="bg-gradient-to-br from-white to-gray-50 rounded-lg p-2 sm:p-3 cursor-pointer transition-all duration-300 hover:shadow-xl hover:scale-105 border-2 border-gray-200 hover:border-[#E03636] group"
+                >
+                  <div class="flex flex-col items-center text-center">
+                    <!-- Título del Tomo -->
+                    <h5 class="text-sm sm:text-base font-bold text-[#E03636] mt-1">TOMO {{ item.tomo }}</h5>
+                    
+                    <!-- Portada específica del periodo y tomo -->
+                    <div class="w-full aspect-square mb-2 overflow-hidden rounded-lg shadow-md bg-gray-100">
+                      <img 
+                        :src="item.portada || getPortadaPorDefecto(periodo.key, item.tomo)"
+                        :alt="`Tomo ${item.tomo} - Gestión ${periodo.nombre}`"
+                        class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                        loading="lazy"
+                        @error="(e) => handleImageError(e, periodo.key, item.tomo)"
+                      />
+                    </div>
+                    
+                    <!-- Badge de PDF -->
+                    <div class="mt-2 inline-flex items-center gap-1 px-2 py-0.5 bg-[#E03636]/10 rounded-full text-[#E03636] text-xs opacity-0 group-hover:opacity-100 transition-opacity">
+                      <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                      </svg>
+                      <span>PDF</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Paginación -->
+              <div v-if="totalTomosPorPeriodo(periodo.key) > 6" class="flex flex-wrap justify-center items-center gap-2 mt-4 mb-2">
+                <button 
+                  @click="paginaAnterior(periodo.key)"
+                  :disabled="paginaActual[periodo.key] === 1"
+                  class="px-2 sm:px-3 py-1 rounded-lg transition-all duration-300 text-xs sm:text-sm font-medium"
+                  :class="paginaActual[periodo.key] === 1 
+                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
+                    : 'bg-gray-200 text-gray-700 hover:bg-[#E03636] hover:text-white'"
+                >
+                  ← Anterior
+                </button>
+                
+                <div class="flex gap-1 flex-wrap justify-center">
+                  <button 
+                    v-for="pag in totalPaginas(periodo.key)"
+                    :key="pag"
+                    @click="irAPagina(periodo.key, pag)"
+                    class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg transition-all duration-300 text-xs sm:text-sm font-medium"
+                    :class="paginaActual[periodo.key] === pag 
+                      ? 'bg-[#E03636] text-white' 
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'"
+                  >
+                    {{ pag }}
+                  </button>
+                </div>
+                
+                <button 
+                  @click="paginaSiguiente(periodo.key)"
+                  :disabled="paginaActual[periodo.key] === totalPaginas(periodo.key)"
+                  class="px-2 sm:px-3 py-1 rounded-lg transition-all duration-300 text-xs sm:text-sm font-medium"
+                  :class="paginaActual[periodo.key] === totalPaginas(periodo.key) 
+                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
+                    : 'bg-gray-200 text-gray-700 hover:bg-[#E03636] hover:text-white'"
+                >
+                  Siguiente →
+                </button>
+              </div>
+
+              <!-- Indicador de rango -->
+              <div v-if="totalTomosPorPeriodo(periodo.key) > 6" class="text-center text-xs text-gray-400 mt-2">
+                Mostrando {{ inicioIndice(periodo.key) }} - {{ finIndice(periodo.key) }} de {{ totalTomosPorPeriodo(periodo.key) }} tomos
+              </div>
+            </div>
+
+            <!-- Mensaje si no hay tomos -->
+            <div v-else class="text-center py-6 sm:py-8 bg-gray-50 rounded-lg">
+              <p class="text-gray-400 text-sm">No hay tomos disponibles para este periodo</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="border-t border-gray-200 px-4 sm:px-6 py-3 sm:py-4 bg-gray-50 flex flex-col sm:flex-row justify-between items-center gap-3">
+          <button 
+            @click="modalStore.closeModal"
+            class="w-full sm:w-auto px-4 sm:px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-all duration-300 font-medium flex items-center justify-center gap-2"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+            Cerrar
+          </button>
+          
+          <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+            <button 
+              v-if="ultimoTomoAbierto"
+              @click="abrirPdfDirecto(ultimoTomoAbierto)"
+              class="w-full sm:w-auto px-4 sm:px-6 py-2 bg-[#E4D294] text-[#E03636] rounded-lg hover:bg-[#d4c284] transition-all duration-300 font-medium flex items-center justify-center gap-2 shadow-md"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+              </svg>
+              Último Visto: Tomo {{ ultimoTomoAbierto }}
+            </button>
+            
+            <button 
+              @click="abrirUltimoTomo"
+              class="w-full sm:w-auto px-4 sm:px-6 py-2 bg-[#E03636] text-white rounded-lg hover:bg-[#C12F2F] transition-all duration-300 font-medium flex items-center justify-center gap-2 shadow-md"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+              </svg>
+              Último Tomo
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </Teleport>
+</template>
+
+<script setup>
+import { ref, computed } from 'vue'
+import { useModalStore } from '@/stores/modalStore'
+
+const modalStore = useModalStore()
+
+// Estado de paginación
+const paginaActual = ref({})
+const registrosPorPagina = 6
+
+// Último tomo visto
+const ultimoTomoAbierto = ref(null)
+
+// Cargar último tomo visto
+if (process.client) {
+  const saved = localStorage.getItem('ultimoTomoRedactor')
+  if (saved) ultimoTomoAbierto.value = saved
+}
+
+// Computed para periodos disponibles (agrupados por rango de años)
+const periodosDisponibles = computed(() => {
+  const periodosMap = new Map()
+  const tomos = modalStore.modalProps?.tomos || []
+  
+  tomos.forEach(tomo => {
+    if (tomo.periodo && !periodosMap.has(tomo.periodo)) {
+      periodosMap.set(tomo.periodo, {
+        key: tomo.periodo,
+        nombre: tomo.periodo
+      })
+    }
+  })
+  
+  // Ordenar periodos de más reciente a más antiguo
+  return Array.from(periodosMap.values()).sort((a, b) => {
+    const getEndYear = (periodo) => {
+      const years = periodo.split('-')
+      return parseInt(years[years.length - 1]) || 0
+    }
+    return getEndYear(b.key) - getEndYear(a.key)
+  })
+})
+
+// Obtener tomos por periodo
+const obtenerTomosPorPeriodo = (periodo) => {
+  const todosLosTomos = modalStore.modalProps?.tomos || []
+  return todosLosTomos
+    .filter(tomo => tomo.periodo === periodo && tomo.disponible !== false)
+    .sort((a, b) => {
+      const numA = romanoAEntero(a.tomo)
+      const numB = romanoAEntero(b.tomo)
+      return numA - numB
+    })
+}
+
+// Función auxiliar para convertir romano a entero
+const romanoAEntero = (romano) => {
+  const romanos = {
+    'I': 1, 'II': 2, 'III': 3, 'IV': 4, 'V': 5,
+    'VI': 6, 'VII': 7, 'VIII': 8, 'IX': 9, 'X': 10,
+    'XI': 11, 'XII': 12, 'XIII': 13, 'XIV': 14, 'XV': 15
+  }
+  return romanos[romano] || 0
+}
+
+// Total de tomos por periodo
+const totalTomosPorPeriodo = (periodo) => {
+  return obtenerTomosPorPeriodo(periodo).length
+}
+
+// Total de páginas
+const totalPaginas = (periodo) => {
+  return Math.ceil(totalTomosPorPeriodo(periodo) / registrosPorPagina)
+}
+
+// Inicializar página
+const inicializarPagina = (periodo) => {
+  if (!paginaActual.value[periodo]) {
+    paginaActual.value[periodo] = 1
+  }
+}
+
+// Obtener tomos paginados
+const getTomosPaginados = (periodo) => {
+  inicializarPagina(periodo)
+  const tomos = obtenerTomosPorPeriodo(periodo)
+  const inicio = (paginaActual.value[periodo] - 1) * registrosPorPagina
+  const fin = inicio + registrosPorPagina
+  return tomos.slice(inicio, fin)
+}
+
+// Índices
+const inicioIndice = (periodo) => {
+  inicializarPagina(periodo)
+  return (paginaActual.value[periodo] - 1) * registrosPorPagina + 1
+}
+
+const finIndice = (periodo) => {
+  inicializarPagina(periodo)
+  const fin = paginaActual.value[periodo] * registrosPorPagina
+  return Math.min(fin, totalTomosPorPeriodo(periodo))
+}
+
+// Navegación
+const paginaAnterior = (periodo) => {
+  inicializarPagina(periodo)
+  if (paginaActual.value[periodo] > 1) paginaActual.value[periodo]--
+}
+
+const paginaSiguiente = (periodo) => {
+  inicializarPagina(periodo)
+  if (paginaActual.value[periodo] < totalPaginas(periodo)) paginaActual.value[periodo]++
+}
+
+const irAPagina = (periodo, pagina) => {
+  paginaActual.value[periodo] = pagina
+}
+
+// Obtener portada por defecto
+const getPortadaPorDefecto = (periodo, tomo) => {
+  return `/images/portadas/${periodo}/tomo-${tomo}.jpg`
+}
+
+// Manejar error de imagen
+const handleImageError = (e, periodo, tomo) => {
+  e.target.src = `/images/portadas/default.jpg`
+}
+
+// Obtener último tomo
+const ultimoTomo = computed(() => {
+  return modalStore.modalProps?.obtenerUltimoTomo?.()
+})
+
+// Abrir PDF
+const abrirPdf = (url, tomoInfo) => {
+  if (url) {
+    window.open(url, '_blank')
+    if (tomoInfo && tomoInfo.tomo) {
+      localStorage.setItem('ultimoTomoRedactor', tomoInfo.tomo)
+      ultimoTomoAbierto.value = tomoInfo.tomo
+    }
+  } else {
+    alert('Este documento no está disponible actualmente')
+  }
+}
+
+const abrirPdfDirecto = (tomoId) => {
+  const todosLosTomos = modalStore.modalProps?.tomos || []
+  const tomo = todosLosTomos.find(t => t.tomo === tomoId)
+  if (tomo && tomo.pdfUrl) {
+    window.open(tomo.pdfUrl, '_blank')
+  } else {
+    alert('No se encontró el documento')
+  }
+}
+
+const abrirUltimoTomo = () => {
+  if (ultimoTomo.value && ultimoTomo.value.pdfUrl) {
+    window.open(ultimoTomo.value.pdfUrl, '_blank')
+    localStorage.setItem('ultimoTomoRedactor', ultimoTomo.value.tomo)
+    ultimoTomoAbierto.value = ultimoTomo.value.tomo
+  } else {
+    alert('No hay tomos disponibles')
+  }
+}
+</script>
+
+<style scoped>
+/* Grid fijo de 6 columnas */
+.grid-cols-6 {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+@media (max-width: 640px) {
+  .grid-cols-6 {
+    gap: 0.5rem;
+  }
+}
+
+.modal-backdrop {
+  z-index: 9999999 !important;
+  background-color: rgba(0, 0, 0, 0.85) !important;
+  backdrop-filter: blur(4px);
+}
+
+.modal-container {
+  z-index: 10000000 !important;
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modal-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+  background: #E03636;
+  border-radius: 4px;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.aspect-square {
+  aspect-ratio: 4 / 5;
+}
+</style> 
+================================= 
+components\HeroWithCarousel.vue 
+================================= 
+ 
+<template>
+  <div class="relative z-10 mx-auto min-h-screen flex flex-col w-full">
+    <!-- FRANJA ROJA DE ANCHO COMPLETO (superior) - CON MARGEN PARA HEADER -->
+    <div class="relative w-screen left-1/2 right-1/2 -mx-[50vw] mt-[4.4vw]">
+      <!-- <div class="relative bg-gradient-to-r from-red-700/70 via-red-800/70 to-red-900/70 py-2 sm:py-3 md:py-4 shadow-2xl overflow-hidden group full-width-franja"> -->
+      <div class="relative bg-[#E03636] py-[0.8vw] shadow-2xl overflow-hidden group full-width-franja">
+        
+        <!-- Patrón de fondo sutil (más pequeño) -->
+        <div class="absolute inset-0 opacity-5">
+          <div class="absolute top-0 left-0 w-16 h-16 border-t-2 border-l-2 border-yellow-300 rounded-tl-lg"></div>
+          <div class="absolute bottom-0 right-0 w-16 h-16 border-b-2 border-r-2 border-yellow-300 rounded-br-lg"></div>
+        </div>
+
+        <!-- Líneas decorativas animadas (más delgadas) -->
+        <div class="absolute top-0 left-0 right-0 h-[.2vw] bg-gradient-to-r from-transparent via-yellow-400 to-transparent animate-pulse"></div>
+        <div class="absolute bottom-0 left-0 right-0 h-[.2vw] bg-gradient-to-r from-transparent via-yellow-400 to-transparent animate-pulse"></div>
+
+        <!-- Contenido principal centrado -->
+        <div class="container mx-auto px-4 relative z-10 text-center">
+          <!-- Texto principal - MÁS PEQUEÑO -->
+          <p class="font-bold text-white text-[2vw]">
+            <span class="bg-clip-text text-transparent bg-gradient-to-r from-white via-yellow-100 to-yellow-200">
+              <span class="inline-flex items-center justify-center text-white text-[.8em] mx-[.8em]">⚪</span> 
+              PRIMERA LEGISLATURA DEL TRICENTENARIO
+              <span class="inline-flex items-center justify-center text-white text-[.8em] mx-[.8em]">⚪</span>
+            </span>
+          </p>
+
+         
+        </div>
+
+        <!-- Elementos decorativos en las esquinas - MÁS PEQUEÑOS -->
+        <div class="absolute top-2 left-2 w-2 h-2 border border-yellow-300/50 rounded-full animate-ping"></div>
+        <div class="absolute top-2 right-2 w-2 h-2 border border-yellow-300/50 rounded-full animate-ping" style="animation-delay: 0.5s;"></div>
+        <div class="absolute bottom-2 left-2 w-2 h-2 border border-yellow-300/50 rounded-full animate-ping" style="animation-delay: 1s;"></div>
+        <div class="absolute bottom-2 right-2 w-2 h-2 border border-yellow-300/50 rounded-full animate-ping" style="animation-delay: 1.5s;"></div>
+      </div>
+    </div>
+
+    <!-- DOS COLUMNAS: Texto (izquierda) + Carrusel (derecha) - CON ALINEACIÓN VERTICAL CENTRADA -->
+    <div class="mx-auto px-[5vw] flex-1 w-full flex items-center">
+      <div class="grid grid-cols-2 gap-[3vw] w-full items-center">
+        
+        <!-- COLUMNA IZQUIERDA: Texto y controles -->
+        <div class="flex flex-col h-full relative text-[1.4vw]" style="min-height: 37.1vw;">
+          <!-- CONTENIDO PRINCIPAL - OCUPA TODO EL ESPACIO DISPONIBLE -->
+          <div class="flex-1 flex flex-col justify-center">
+            <!-- Texto - TAMAÑOS REDUCIDOS -->
+            <div class="space-y-3">
+              <h1 class="font-extrabold text-[#E03636] text-[1.6em] text-center">
+                {{ slides[currentSlide].title }}
+                <br>
+              </h1>
+              <p class="text-gray-700 leading-relaxed text-[.75em] text-justify" v-html="slides[currentSlide].description">
+              </p>
+              <div v-if="slides[currentSlide].additionalText" class="text-gray-600 text-[clamp(0.8rem,1.2vw,1rem)]">
+                {{ slides[currentSlide].additionalText }}
+              </div>
+            </div>
+          </div>
+
+          <!-- CONTROLES DEL CAROUSEL - SIEMPRE AL FONDO -->
+          <div class="flex justify-center z-50 py-[0.0em]">
+            <div class="flex justify-center space-x-[1.5em] bg-transparent py-[.6em] px-5 rounded-full">
+              <button 
+                v-for="(_, index) in slides" 
+                :key="index"
+                @click="currentSlide = index"
+                class="transition-all duration-300 rounded-full"
+                :class="[
+                  currentSlide === index 
+                    ? 'bg-[#E03636] ring-[.45em] ring-white outline outline-[.17em] outline-[#E03636] outline-offset-[.17em]' 
+                    : 'bg-[#E03636] hover:bg-[#E03636]/50'
+                ]"
+                :style="{ width: '.8em', height: '.8em' }"
+                :aria-label="`Ir a imagen ${index + 1}`"
+              ></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- COLUMNA DERECHA: Carrusel de imágenes -->
+        <div class="relative w-full overflow-hidden rounded-lg shadow-xl" style="height: 36vw;">
+          <!-- Imágenes del carrusel -->
+          <div 
+            v-for="(slide, index) in slides" 
+            :key="index"
+            class="absolute inset-0 transition-all duration-700 ease-in-out"
+            :class="[
+              currentSlide === index 
+                ? 'opacity-100 translate-x-0' 
+                : 'opacity-0 translate-x-full'
+            ]"
+          >
+            <img 
+              :src="slide.image.url" 
+              :alt="slide.image.alt"
+              class="w-full h-full object-cover"
+              loading="lazy"
+            />
+            <!-- Overlay gradiente más sutil -->
+            <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+            
+            <!-- Título de la imagen - MÁS PEQUEÑO -->
+            <div v-if="slide.image.title" class="absolute bottom-0 left-0 right-0 p-3 text-white">
+              <h3 class="font-bold text-[1.4vw]">{{ slide.image.title }}</h3>
+              <p v-if="slide.image.caption" class="text-white/80 text-[1.15vw]">{{ slide.image.caption }}</p>
+            </div>
+          </div>
+
+          <!-- Flechas de navegación - MÁS PEQUEÑAS (COMENTADAS) -->
+          <!-- <button 
+            @click="prevSlide"
+            class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white rounded-full w-8 h-8 flex items-center justify-center transition-all duration-300 z-10 text-lg"
+            aria-label="Imagen anterior"
+          >
+            ←
+          </button>
+          <button 
+            @click="nextSlide"
+            class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white rounded-full w-8 h-8 flex items-center justify-center transition-all duration-300 z-10 text-lg"
+            aria-label="Siguiente imagen"
+          >
+            →
+          </button> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref } from 'vue'
+
+const props = defineProps({
+  bannerTextSize: {
+    type: String,
+    default: '1.5vw' /* REDUCIDO de 2vw a 1.5vw */
+  },
+  slides: {
+    type: Array,
+    default: () => [
+      {
+        title: 'Mandato Constitucional Senado',
+        description: 'La Constitución Política del Estado establece: <br> <br> <b>Artículo 12.</b><br><br> <b>I. </b>	El Estado se organiza y estructura su poder público a través de los órganos Legislativo, Ejecutivo, Judicial y Electoral. La organización del Estado está fundamentada en la independencia, separación, coordinación y cooperación de estos órganos. <br> <br> <b>Artículo 148.</b> <br><br> <b>I. </b> La Cámara de Senadores estará conformada por un total de 36 miembros.<br> <b>II. </b> En cada departamento se eligen 4 Senadores en circunscripción departamental, por votación universal, directa y secreta.<br> <b>III. </b> La asignación de los escaños de Senadores en cada departamento se hará mediante el sistema proporcional, de acuerdo a la Ley.',
+        additionalText: '',
+        image: {
+          url: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f',
+          alt: 'Edificio del Senado',
+          title: 'Edificio del Senado',
+          caption: 'Sede de la Cámara de Senadores'
+        }
+      },
+      {
+        title: 'La Asamblea Legislativa Plurinacional',
+        description: 'La Constitución Política del Estado establece: <br><br>  <b>Artículo 145.</b><br><br> La Asamblea Legislativa Plurinacional está compuesta por dos cámaras, la Cámara de Diputados y la Cámara de Senadores, y es la única con facultad de aprobar y sancionar leyes que rigen para todo el territorio boliviano.',
+        additionalText: '',
+        image: {
+          url: 'https://images.unsplash.com/photo-1541872703-74c5e44368f9',
+          alt: 'Sesión del Senado',
+          title: 'Sesión Plenaria',
+          caption: 'Senadores en debate'
+        }
+      },
+      {
+        title: 'El Rol del Senado en la Asamblea Legislativa Plurinacional',
+        description: 'El Reglamento General de la Cámara de Senadores establece: <br><br> <b>Artículo 2.</b><br><br>(Marco Constitucional). En el marco de lo establecido por la Constitución Política del Estado, la Cámara de Senadores de la Asamblea Legislativa Plurinacional reside en el Órgano Legislativo y ejerce las atribuciones de legislación, fiscalización y gestión, bajo los principios de coordinación y cooperación, promoviendo la participación activa de la ciudadanía en todo el territorio boliviano.',
+        additionalText: '',
+        image: {
+          url: 'https://images.unsplash.com/photo-1627556592933-ffe99c1cd9eb',
+          alt: 'Hemiciclo',
+          title: 'Hemiciclo',
+          caption: 'Vista del hemiciclo'
+        }
+      }
+    ]
+  }
+})
+
+const currentSlide = ref(0)
+
+const nextSlide = () => {
+  currentSlide.value = (currentSlide.value + 1) % props.slides.length
+}
+
+const prevSlide = () => {
+  currentSlide.value = (currentSlide.value - 1 + props.slides.length) % props.slides.length
+}
+</script>
+
+<style scoped>
+@keyframes gentleGlow {
+  0%, 100% { box-shadow: 0 0 15px rgba(224, 54, 54, 0.2); }
+  50% { box-shadow: 0 0 25px rgba(224, 54, 54, 0.4); }
+}
+
+.full-width-franja {
+  animation: gentleGlow 3s ease-in-out infinite;
+}
+
+.w-screen { width: 100vw; }
+.left-1\/2 { left: 50%; }
+.right-1\/2 { right: 50%; }
+.-mx-\[50vw\] { margin-left: -50vw; margin-right: -50vw; }
+.translate-x-0 { transform: translateX(0); }
+.translate-x-full { transform: translateX(100%); }
+button:focus-visible { outline: 2px solid #E03636; outline-offset: 2px; }
+</style>

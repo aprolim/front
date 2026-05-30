@@ -1,24 +1,42 @@
 // plugins/sw-register.client.ts
 export default defineNuxtPlugin(() => {
-  // Verificar que estamos en el navegador
+  const isDevelopment = window.location.hostname === 'localhost' || 
+                        window.location.hostname === '127.0.0.1' ||
+                        window.location.hostname.includes('.local')
+  
+  if (isDevelopment) {
+    console.log('🧹 [SW] Modo desarrollo - Service Worker desactivado')
+    
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(registrations => {
+        registrations.forEach(registration => {
+          registration.unregister()
+          console.log('✅ [SW] Service Worker desregistrado')
+        })
+      })
+      
+      if ('caches' in window) {
+        caches.keys().then(cacheNames => {
+          cacheNames.forEach(cacheName => {
+            caches.delete(cacheName)
+            console.log(`✅ [SW] Caché eliminada: ${cacheName}`)
+          })
+        })
+      }
+    }
+    return
+  }
+  
   if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
-    // Esperar a que la página cargue
-    const register = () => {
+    window.addEventListener('load', () => {
       navigator.serviceWorker.register('/sw.js')
         .then((registration) => {
           console.log('[SW] Registrado correctamente')
+          setInterval(() => registration.update(), 60 * 60 * 1000)
         })
         .catch((error) => {
-          // Esto no afecta la funcionalidad de la página
           console.log('[SW] No se pudo registrar:', error.message)
         })
-    }
-    
-    // Registrar cuando el DOM esté listo
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', register)
-    } else {
-      register()
-    }
+    })
   }
 })

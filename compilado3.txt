@@ -1,0 +1,920 @@
+COMPILADO DE ARCHIVOS - Parte 3 
+ 
+ 
+================================= 
+components\HistoricalReview.vue 
+================================= 
+ 
+<template>
+  <div class="relative z-10 mx-auto min-h-screen flex flex-col w-full text-[1.5vw]">
+    <div class="h-[4.4vw]"></div>
+
+    <div class="mx-auto px-[4.5vw] flex-1 flex items-center">
+      <div class="flex gap-[2em] w-full items-center">
+        
+        <!-- COLUMNA IZQUIERDA (65%) -->
+        <div class="w-[65%] bg-transparent rounded-[1.5vw] shadow-2xl border border-white/20 p-[1.8vw]">
+          <div class="relative h-full flex flex-col">
+            
+            <div class="relative w-full h-[34vw]">
+              
+              <!-- ==================== IMÁGENES ESTÁTICAS (solo cuando NO hay animación) ==================== -->
+              <template v-if="!isAnimating">
+                <!-- IMAGEN IZQUIERDA -->
+                <div 
+                  @click="prevImage"
+                  class="absolute left-0 top-0 w-[35%] h-[45%] rounded-[.8vw] overflow-hidden shadow-2xl border-3 border-[#E4D294]/50 z-10 cursor-pointer hover:scale-105 transition-all duration-500"
+                >
+                  <img :src="imageData[prevIndex].url" class="w-full h-full object-cover" />
+                  <div class="absolute inset-0 bg-gray-500/60"></div>
+                  <div class="absolute bottom-0 left-0 right-0 h-1/4 bg-[#E03636]/90 text-white p-2 flex items-center justify-center">
+                    <p class="text-[0.8vw] text-center line-clamp-2">{{ truncateText(imageData[prevIndex].descripcion, 60) }}</p>
+                  </div>
+                </div>
+                
+                <!-- IMAGEN CENTRAL -->
+                <div 
+                  class="absolute left-[20%] top-[15%] w-[60%] h-[80%] rounded-[.8vw] overflow-hidden shadow-2xl border-4 border-[#E4D294]/70 z-30 cursor-pointer"
+                >
+                  <img :src="imageData[currentIndex].url" class="w-full h-full object-cover" />
+                  <div 
+                    class="absolute bottom-0 left-0 right-0 bg-[#E03636]/90 text-white transition-all duration-500 overflow-hidden"
+                    :class="showFullText ? 'h-full' : 'h-1/4'"
+                    @click="toggleFullText"
+                  >
+                    <div class="p-[1vw] h-full flex flex-col overflow-y-auto">
+                      <div v-if="!showFullText" class="h-full flex flex-col justify-center">
+                        <p class="text-[1.1vw]">
+                          {{ truncateText(imageData[currentIndex].descripcion, 100) }}
+                          <span class="font-bold inline-flex items-center gap-1 hover:underline">
+                            Leer más
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                          </span>
+                        </p>
+                      </div>
+                      <div v-if="showFullText" class="mt-2">
+                        <h4 class="font-bold text-[1.3vw] mb-[.2vw] text-center">{{ imageData[currentIndex].titulo }}</h4>
+                        <p class="text-[1.2vw] whitespace-pre-line text-justify">{{ imageData[currentIndex].descripcion }}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- IMAGEN DERECHA -->
+                <div 
+                  @click="nextImage"
+                  class="absolute right-0 top-0 w-[35%] h-[45%] rounded-[.8vw] overflow-hidden shadow-2xl border-3 border-[#E4D294]/50 z-10 cursor-pointer hover:scale-105 transition-all duration-500"
+                >
+                  <img :src="imageData[nextIndex].url" class="w-full h-full object-cover" />
+                  <div class="absolute inset-0 bg-gray-500/60"></div>
+                  <div class="absolute bottom-0 left-0 right-0 h-1/4 bg-[#E03636]/90 text-white p-2 flex items-center justify-center">
+                    <p class="text-[0.8vw] text-center line-clamp-2">{{ truncateText(imageData[nextIndex].descripcion, 60) }}</p>
+                  </div>
+                </div>
+              </template>
+
+              <!-- ==================== ELEMENTOS DE ANIMACIÓN (solo durante animación) ==================== -->
+              <template v-else>
+                <!-- IMAGEN QUE SALE (el antiguo centro) - VIAJA A SU POSICIÓN FINAL LATERAL -->
+                <div 
+                  class="absolute rounded-[.8vw] overflow-hidden shadow-2xl border-4 border-[#E4D294]/70 z-40"
+                  :class="animationOutClass"
+                >
+                  <img :src="imageData[oldIndexValue].url" class="w-full h-full object-cover" />
+                  <!-- Capa gris que aparece al final -->
+                  <div class="absolute inset-0 bg-gray-500/0" :class="grayOverlayClass"></div>
+                  <div class="absolute bottom-0 left-0 right-0 h-1/4 bg-[#E03636]/90 text-white p-2 flex items-center justify-center">
+                    <p class="text-[0.8vw] text-center line-clamp-2">{{ truncateText(imageData[oldIndexValue].descripcion, 60) }}</p>
+                  </div>
+                </div>
+
+                <!-- IMAGEN QUE ENTRA (la nueva central) - VIENE DESDE SU POSICIÓN LATERAL -->
+                <div 
+                  class="absolute rounded-[.8vw] overflow-hidden shadow-2xl border-4 border-[#E4D294]/70 z-50"
+                  :class="animationInClass"
+                >
+                  <img :src="imageData[newIndexValue].url" class="w-full h-full object-cover" />
+                  <div class="absolute bottom-0 left-0 right-0 h-1/4 bg-[#E03636]/90 text-white p-2 flex items-center justify-center">
+                    <p class="text-[0.8vw] text-center line-clamp-2">{{ truncateText(imageData[newIndexValue].descripcion, 60) }}</p>
+                  </div>
+                </div>
+
+                <!-- IMÁGENES LATERALES FANTASMA (opacas durante animación) -->
+                <div class="absolute left-0 top-0 w-[35%] h-[45%] rounded-xl overflow-hidden opacity-30 pointer-events-none">
+                  <img :src="imageData[prevIndex].url" class="w-full h-full object-cover" />
+                  <div class="absolute inset-0 bg-gray-500/80"></div>
+                </div>
+                <div class="absolute right-0 top-0 w-[35%] h-[45%] rounded-xl overflow-hidden opacity-30 pointer-events-none">
+                  <img :src="imageData[nextIndex].url" class="w-full h-full object-cover" />
+                  <div class="absolute inset-0 bg-gray-500/80"></div>
+                </div>
+              </template>
+            </div>
+
+            <!-- CONTROLES -->
+            <div class="flex justify-center z-50 mt-4">
+              <div class="flex justify-center space-x-[1vw] bg-black/30 backdrop-blur-md py-[0.7vw] px-6 rounded-full border border-white/30">
+                <button 
+                  v-for="(_, index) in imageData" 
+                  :key="index"
+                  @click="goToImage(index)"
+                  class="transition-all duration-300 focus:outline-none rounded-full"
+                  :class="[
+                    currentIndex === index 
+                      ? 'bg-[#E4D294] scale-125 ring-[.2vw] ring-white' 
+                      : 'bg-white/50 hover:bg-[#E4D294]/50'
+                  ]"
+                  :style="{ width: '.8vw', height: '.8vw' }"
+                ></button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- COLUMNA DERECHA (35%) -->
+        <div class="text-[1.3vw] w-[35%] bg-white/10 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-[1.5em] flex flex-col">
+          <h3 class="font-bold text-[1.0em] text-[#E03636] mb-[1.1em] tracking-wide border-b-[.10em] border-[#E03636]/30 pb-[0.5em]">
+            Reseña Histórica del Senado
+          </h3>
+          <div class="custom-scroll flex-1">
+            <p class="text-[#000] text-[.70em] leading-relaxed text-justify">
+              El 9 de febrero de 1825 por decreto del Mariscal Antonio José de Sucre se convoca a la primera Asamblea Nacional con el objetivo de dirimir el destino de las provincias de la futura República de Bolivia, por lo cual se establece la fundación del Poder Legislativo un 10 de julio del 1825.
+              <br><br>
+              El día 6 de agosto de 1825, se aprobó la independencia de la República de Bolívar por amplia mayoría, en consecuencia, en la sesión del 13 de agosto de 1825, Bolivia es declarada como una República representativa, la cual contaría con tres poderes: Ejecutivo, Judicial y Legislativo.
+              <br><br>
+              Luego de varias interrupciones del orden democrático en el país, el día: 10 de octubre del 1982 se posesiona al congreso electo en las elecciones realizadas en 1980, desde entonces, la Asamblea legislativa y el Senado trabajan de manera continua en favor de la legislación, fiscalización y gestión de la nación. 
+            </p>
+          </div>
+          <NuxtLink to="/en-construccion">
+            <button class="text-[.8em] mt-[.5em] bg-[#E03636] hover:bg-[#E03636]/80 text-white font-bold py-[.5em] px-8 rounded-lg transition-all duration-300 transform hover:scale-105 uppercase tracking-wider shadow-lg">
+              Ver más
+            </button>
+          </NuxtLink>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, computed } from 'vue'
+
+// DATOS DE LAS IMÁGENES CON TEXTO ESPECÍFICO
+const imageData = ref([
+  {
+    url: '/resena historica/img1.png',
+    titulo: 'Fundación del Poder Legislativo',
+    descripcion: `El 9 de febrero de 1825 por decreto del Mariscal Antonio José de Sucre se convoca a la primera Asamblea Nacional con el objetivo de dirimir el destino de las provincias de la futura República de Bolivia, por lo cual se establece la fundación del Poder Legislativo un 10 de julio del 1825. El día 6 de agosto de 1825, se aprobó la independencia de la República de Bolívar por amplia mayoría, en consecuencia, en la sesión del 13 de agosto de 1825, Bolivia es declarada como una República representativa, la cual contaría con tres poderes: Ejecutivo, Judicial y Legislativo.`
+  },
+  {
+    url: '/resena historica/img2.png',
+    titulo: 'Primera Asamblea Constituyente',
+    descripcion: `La primera Asamblea Constituyente de Bolivia se instaló el 10 de julio de 1825 en la ciudad de Chuquisaca, actual Sucre. Este hito marcó el inicio de la vida republicana y la construcción del Estado boliviano. Los representantes de las provincias del Alto Perú deliberaron sobre el futuro de la nación, decidiendo finalmente la independencia absoluta de las Provincias Unidas del Río de la Plata y del Perú.`
+  },
+  {
+    url: '/resena historica/img3.png',
+    titulo: 'Creación del Senado Boliviano',
+    descripcion: `El Senado de Bolivia fue establecido mediante la primera Constitución Política del país, promulgada el 19 de noviembre de 1826 por el Mariscal Antonio José de Sucre. La Cámara de Senadores se conformó como cámara revisora y representante de los departamentos, consolidando el sistema bicameral que perdura hasta nuestros días como pilar fundamental del Poder Legislativo.`
+  }
+])
+
+const truncateText = (text, max) => text.length > max ? text.substring(0, max) + '...' : text
+
+const currentIndex = ref(0)
+const showFullText = ref(false)
+
+// Control de animación
+const isAnimating = ref(false)
+const direction = ref(null) // 'next' o 'prev'
+const oldIndexValue = ref(0)
+const newIndexValue = ref(0)
+
+// Índices calculados
+const prevIndex = computed(() => (currentIndex.value - 1 + imageData.value.length) % imageData.value.length)
+const nextIndex = computed(() => (currentIndex.value + 1) % imageData.value.length)
+
+// Clases de animación
+const animationOutClass = computed(() => {
+  if (!isAnimating.value) return ''
+  return direction.value === 'next' ? 'animate-out-to-left' : 'animate-out-to-right'
+})
+
+const animationInClass = computed(() => {
+  if (!isAnimating.value) return ''
+  return direction.value === 'next' ? 'animate-in-from-right' : 'animate-in-from-left'
+})
+
+const grayOverlayClass = computed(() => {
+  if (!isAnimating.value) return ''
+  return direction.value === 'next' ? 'gray-fade-in-left' : 'gray-fade-in-right'
+})
+
+const toggleFullText = () => {
+  showFullText.value = !showFullText.value
+}
+
+const animateTransition = async (newIdx, dir) => {
+  if (isAnimating.value) return
+  
+  isAnimating.value = true
+  direction.value = dir
+  oldIndexValue.value = currentIndex.value
+  newIndexValue.value = newIdx
+  
+  await new Promise(resolve => setTimeout(resolve, 500))
+  
+  currentIndex.value = newIdx
+  showFullText.value = false
+  isAnimating.value = false
+  direction.value = null
+}
+
+const nextImage = () => {
+  const newIdx = nextIndex.value
+  if (newIdx === currentIndex.value) return
+  animateTransition(newIdx, 'next')
+}
+
+const prevImage = () => {
+  const newIdx = prevIndex.value
+  if (newIdx === currentIndex.value) return
+  animateTransition(newIdx, 'prev')
+}
+
+const goToImage = (index) => {
+  if (isAnimating.value || index === currentIndex.value) return
+  const dir = index > currentIndex.value ? 'next' : 'prev'
+  animateTransition(index, dir)
+}
+</script>
+
+<style scoped>
+/* ==================== ANIMACIONES ==================== */
+
+/* SALE HACIA IZQUIERDA */
+.animate-out-to-left {
+  animation: slideToLeft 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  position: absolute;
+  left: 20%;
+  top: 15%;
+  width: 60%;
+  height: 80%;
+  z-index: 45;
+}
+
+@keyframes slideToLeft {
+  0% {
+    left: 20%;
+    top: 15%;
+    width: 60%;
+    height: 80%;
+  }
+  100% {
+    left: 0%;
+    top: 0%;
+    width: 35%;
+    height: 45%;
+  }
+}
+
+/* SALE HACIA DERECHA */
+.animate-out-to-right {
+  animation: slideToRight 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  position: absolute;
+  left: 20%;
+  top: 15%;
+  width: 60%;
+  height: 80%;
+  z-index: 45;
+}
+
+@keyframes slideToRight {
+  0% {
+    left: 20%;
+    top: 15%;
+    width: 60%;
+    height: 80%;
+  }
+  100% {
+    left: 65%;
+    top: 0%;
+    width: 35%;
+    height: 45%;
+  }
+}
+
+/* ENTRA DESDE DERECHA */
+.animate-in-from-right {
+  animation: slideFromRight 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  position: absolute;
+  z-index: 50;
+}
+
+@keyframes slideFromRight {
+  0% {
+    left: 65%;
+    top: 0%;
+    width: 35%;
+    height: 45%;
+  }
+  100% {
+    left: 20%;
+    top: 15%;
+    width: 60%;
+    height: 80%;
+  }
+}
+
+/* ENTRA DESDE IZQUIERDA */
+.animate-in-from-left {
+  animation: slideFromLeft 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  position: absolute;
+  z-index: 50;
+}
+
+@keyframes slideFromLeft {
+  0% {
+    left: 0%;
+    top: 0%;
+    width: 35%;
+    height: 45%;
+  }
+  100% {
+    left: 20%;
+    top: 15%;
+    width: 60%;
+    height: 80%;
+  }
+}
+
+/* Capa gris */
+.gray-fade-in-left, .gray-fade-in-right {
+  animation: grayFade 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes grayFade {
+  0% {
+    background-color: rgba(107, 114, 128, 0);
+  }
+  100% {
+    background-color: rgba(107, 114, 128, 0.6);
+  }
+}
+
+/* Otros estilos */
+.custom-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+.custom-scroll::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+}
+.custom-scroll::-webkit-scrollbar-thumb {
+  background: #E03636;
+  border-radius: 10px;
+}
+.border-3 {
+  border-width: 3px;
+}
+.h-1\/4 {
+  height: 25%;
+}
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+</style> 
+================================= 
+components\HorizontalCarousel.vue 
+================================= 
+ 
+<template>
+  <div class="relative w-full h-full flex flex-col items-center justify-center px-[4vw]">
+    <div class="h-[4.4vw]"></div>
+    
+    <!-- Título (opcional) -->
+    <h2 v-if="title" class="text-[2.5vw] font-bold text-center mb-8 text-[#E03636] uppercase tracking-wide">
+      {{ title }}
+    </h2>
+
+    <!-- Contenedor del carrusel -->
+    <div class="relative w-full mx-auto px-12 pb-[1.3vw]">
+      
+      <!-- Flecha izquierda -->
+      <button 
+        @click="prevSlide"
+        class="absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-white/80 hover:bg-white text-[#E03636] rounded-full w-10 h-10 flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-110 border-2 border-[#E03636]/30"
+        :disabled="!hasImages"
+        :class="{ 'opacity-50 cursor-not-allowed': !hasImages }"
+        aria-label="Imagen anterior"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+      </button>
+
+      <!-- Contenedor de imágenes -->
+      <div class="overflow-hidden">
+        <div 
+          v-if="hasImages"
+          class="flex transition-transform duration-500 ease-in-out"
+          :style="{ transform: `translateX(-${currentIndex * 100}%)` }"
+        >
+          <div 
+            v-for="(group, groupIndex) in imageGroups" 
+            :key="groupIndex"
+            class="flex-shrink-0 w-full grid grid-cols-4 gap-4"
+          >
+            <div 
+              v-for="(image, imgIndex) in group" 
+              :key="imgIndex"
+              class="relative group overflow-hidden rounded-xl shadow-2xl border-4 border-white aspect-square"
+            >
+              <img 
+                :src="image.url" 
+                :alt="image.alt || `Imagen ${groupIndex * 4 + imgIndex + 1}`"
+                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              />
+              <div v-if="image.title" class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+                <p class="text-white p-4 font-medium">{{ image.title }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Mensaje si no hay imágenes -->
+        <div v-else class="flex items-center justify-center h-64 bg-gray-100 rounded-xl border-4 border-white shadow-2xl">
+          <p class="text-gray-500 text-lg">No hay imágenes disponibles</p>
+        </div>
+      </div>
+
+      <!-- Flecha derecha -->
+      <button 
+        @click="nextSlide"
+        class="absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-white/80 hover:bg-white text-[#E03636] rounded-full w-10 h-10 flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-110 border-2 border-[#E03636]/30"
+        :disabled="!hasImages"
+        :class="{ 'opacity-50 cursor-not-allowed': !hasImages }"
+        aria-label="Imagen siguiente"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
+    </div>
+    <NuxtLink to="en-construccion">
+      <button 
+        class="text-[1.2vw] bg-[#E03636] hover:bg-[#E03636]/80 text-white font-bold py-[.5em] px-8 rounded-[.5vw] transition-all duration-300 transform hover:scale-105 uppercase tracking-wider shadow-lg"
+      >
+        Ver más
+      </button>
+    </NuxtLink>
+  </div>
+</template>
+
+<script setup>
+import { ref, computed } from 'vue'
+
+const props = defineProps({
+  images: {
+    type: Array,
+    default: () => [
+      {
+        url: '/horizontal carousel/c1.png',
+        alt: 'Edificio del Senado',
+        title: 'Edificio del Senado Nacional'
+      },
+      {
+        url: '/horizontal carousel/c2.png',
+        alt: 'Sesión del Senado',
+        title: 'Sesión Plenaria'
+      },
+      {
+        url: '/horizontal carousel/c3.png',
+        alt: 'Hemiciclo',
+        title: 'Hemiciclo del Senado'
+      },
+      {
+        url: '/horizontal carousel/c4.png',
+        alt: 'Bandera de Bolivia',
+        title: 'Bandera Nacional'
+      },
+      {
+        url: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+        alt: 'Edificio del Senado',
+        title: 'Edificio del Senado Nacional'
+      },
+      {
+        url: 'https://images.unsplash.com/photo-1541872703-74c5e44368f9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+        alt: 'Sesión del Senado',
+        title: 'Sesión Plenaria'
+      },
+      {
+        url: 'https://images.unsplash.com/photo-1627556592933-ffe99c1cd9eb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+        alt: 'Hemiciclo',
+        title: 'Hemiciclo del Senado'
+      },
+      {
+        url: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+        alt: 'Bandera de Bolivia',
+        title: 'Bandera Nacional'
+      }
+    ]
+  },
+  title: {
+    type: String,
+    default: 'Galería Institucional'
+  }
+})
+
+const hasImages = computed(() => props.images && props.images.length > 0)
+
+// Agrupar imágenes en grupos de 4
+const imageGroups = computed(() => {
+  const groups = []
+  for (let i = 0; i < props.images.length; i += 4) {
+    groups.push(props.images.slice(i, i + 4))
+  }
+  return groups
+})
+
+const currentIndex = ref(0)
+
+const nextSlide = () => {
+  if (currentIndex.value < imageGroups.value.length - 1) {
+    currentIndex.value++
+  } else {
+    currentIndex.value = 0
+  }
+}
+
+const prevSlide = () => {
+  if (currentIndex.value > 0) {
+    currentIndex.value--
+  } else {
+    currentIndex.value = imageGroups.value.length - 1
+  }
+}
+</script>
+
+<style scoped>
+.transition-transform {
+  transition-property: transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.shadow-2xl {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.border-white {
+  border-color: #ffffff;
+}
+
+.hover\:scale-110:hover {
+  transform: scale(1.1);
+}
+
+/* Hace que las imágenes sean cuadradas */
+.aspect-square {
+  aspect-ratio: 1 / 1;
+}
+</style> 
+================================= 
+components\ImportantNewsSection.vue 
+================================= 
+ 
+<template>
+  <div class="tabs-container font-montserrat mx-auto rounded-[24px] overflow-hidden isolate">
+    <!-- Header de Tabs -->
+    <div class="text-center mb-4 xs:mb-5 sm:mb-6 md:mb-8 lg:mb-10 xl:mb-12 2xl:mb-16">
+      <h2 class="font-bold text-white leading-tight [text-shadow:_0_0_2px_#000] 
+      inline-block text-[16px] xs:text-[14px] sm:text-[22px] md:text-[28px] lg:text-[36px] xl:text-[42px] 2xl:text-[60px] 3xl:text-[70px] 4xl:text-[90px] 5xl:text-[120px]">
+        <span>
+          Gesti&oacute;n
+        </span>
+        <span class="text-[#E03636] ml-1 sm:ml-2">
+          Legislativa
+        </span>
+      </h2>
+      <!-- <p class="mx-auto text-gray-600 text-[12px] xs:text-[10px] sm:text-[14px] md:text-[15px] lg:text-[16px] xl:text-[18px] 2xl:text-[28px] 4xl:text-[36px] 5xl:text-[52px] px-4" 
+          style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+        {{ subtitle }}
+      </p> -->
+    </div>
+
+    <!-- Header de Tabs con bordes redondeados -->
+    <div class="tabs-header flex flex-row">
+      <button 
+        v-for="(tab, index) in tabs" 
+        :key="tab.id"
+        :class="[
+          'tab-button w-full sm:flex-1 flex items-center justify-center bg-black border-none text-white font-semibold cursor-pointer transition-all duration-300',
+          'gap-0.5 sm:gap-1',
+          'px-1 py-1 sm:px-2 sm:py-1.5 md:px-3 md:py-2 lg:px-4 lg:py-3 xl:px-5 xl:py-4',
+          'text-[7px] sm:text-[8px] md:text-[11px] lg:text-[14px] xl:text-[17px] 2xl:text-[20px] 3xl:text-[26px] 4xl:text-[38px] 5xl:text-[57px]',
+          index === 0 ? 'rounded-le-[24px]' : '',
+          index === tabs.length - 1 ? 'rounded-ri-[24px]' : '',
+          { 
+            'active bg-[#706F6F]': activeTab === tab.id,
+            'hover:bg-[#3A3A3A]': activeTab !== tab.id
+          }
+        ]"
+        @click="activeTab = tab.id"
+        :disabled="pending"
+        :style="activeTab === tab.id ? activeTabStyle : {}"
+      >
+        <span class="tab-label">{{ tab.label }}</span>
+      </button>
+    </div>
+
+    <!-- Estado de Carga -->
+    <div v-if="pending" class="loading-state flex flex-col items-center justify-center min-h-[80px]">
+      <div class="spinner w-4 h-4 border-2 border-gray-200 border-t-[#E03636] rounded-full animate-spin mb-0.5"></div>
+      <p class="text-[6px] sm:text-[7px] md:text-[8px]">Cargando...</p>
+    </div>
+
+    <!-- Estado de Error -->
+    <div v-else-if="error" class="error-state text-center min-h-[80px] flex flex-col items-center justify-center">
+      <p class="text-red-600 text-[6px] sm:text-[7px] md:text-[8px] mb-0.5">{{ error }}</p>
+      <button @click="refresh" class="retry-button bg-[#E03636] text-white rounded hover:bg-opacity-90 transition px-1 py-0.5 text-[5px] sm:text-[6px] md:text-[7px]">
+        Reintentar
+      </button>
+    </div>
+
+    <!-- Contenido de Tabs -->
+    <div v-else class="tabs-content px-1 sm:px-2 md:px-3 lg:px-4 xl:px-5 py-2 sm:py-3 md:py-4 lg:py-5 xl:py-6 min-h-[150px] md:min-h-[180px] lg:min-h-[250px] 2xl:min-h-[320px] 3xl:min-h-[360px] 4xl:min-h-[450px] 5xl:min-h-[550px]">
+      <div 
+        v-for="tab in tabs" 
+        :key="tab.id"
+        v-show="activeTab === tab.id"
+        class="tab-pane fade-in"
+      >
+        <!-- Header de Sección -->
+        <div class="section-header text-center pb-0.5 sm:pb-1 mb-1 sm:mb-2">
+          <h2 class="section-title font-bold text-[#E03636] text-[9px] sm:text-[10px] md:text-[10px] lg:text-[12px] xl:text-[14px] 2xl:text-[19px] 3xl:text-[24px] 4xl:text-[35px] 5xl:text-[52px] mb-0">
+            {{ areas[tab.id]?.titulo || tab.label }}
+          </h2>
+          <p class="section-description text-gray-600 text-[6px] sm:text-[7px] md:text-[8px] lg:text-[9px] xl:text-[11px] 2xl:text-[16px] 3xl:text-[19px] 4xl:text-[30px] 5xl:text-[45px] mx-auto">
+            {{ areas[tab.id]?.descripcion || '' }}
+          </p>
+        </div>
+        
+        <!-- Grid de Tarjetas -->
+        <div class="links-grid grid gap-1 sm:gap-1.5 md:gap-2 xl:gap-4 3xl:gap-6 5xl:gap-9 grid-cols-3">
+          <NuxtLink 
+            v-for="link in getLinksForTab(tab.id)" 
+            :key="link.id"
+            :to="link.path" 
+            class="link-card flex items-center bg-white bg-opacity-85 backdrop-blur-[10px] 
+              rounded-sm sm:rounded-md md:rounded-lg lg:rounded-xl shadow-sm hover:shadow-md 
+              p-1 sm:p-1.5 md:p-2
+              hover:-translate-y-0.5 transition-all duration-300
+              text-gray-900 no-underline
+              group"
+            @mouseenter="hoveredCard = link.id"
+            @mouseleave="hoveredCard = null"
+          >
+            <!-- Contenedor del icono con tamaño fijo -->
+            <div 
+              class="icon-container flex-shrink-0 
+                m-2.5 sm:m-3 md:m-3 lg:m-4 xl:m-5 2xl:m-6 3xl:m-8 4xl:m-10 5xl:m-12
+                w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 xl:w-16 xl:h-16 
+                2xl:w-20 2xl:h-20 3xl:w-24 3xl:h-24 4xl:w-28 4xl:h-28 5xl:w-32 5xl:h-32
+                rounded-full transition-all duration-300"
+              :class="{
+                'bg-[#E03636]': hoveredCard === link.id,
+                'scale-110': hoveredCard === link.id
+              }"
+            >
+              <div 
+                class="w-full h-full flex items-center justify-center transition-colors duration-300"
+                :class="hoveredCard === link.id ? 'text-white' : 'text-[#E03636]'"
+              >
+                <!-- Inyectamos el SVG y forzamos su tamaño -->
+                <div class="svg-wrapper w-[97%] h--[97%]" v-html="link.icono"></div>
+              </div>
+            </div>
+            
+            <div class="link-content flex-1 min-w-0">
+              <h3 class="link-title font-semibold text-gray-900
+                text-[7px] sm:text-[8px] md:text-[9px] lg:text-[10px] xl:text-[13px] 
+                2xl:text-[17px] 3xl:text-[22px] 4xl:text-[32px] 5xl:text-[50px] 
+                mb-0 leading-tight truncate">
+                {{ link.titulo }}
+              </h3>
+              <p class="link-description text-gray-600
+                text-[5px] sm:text-[7px] md:text-[8px] lg:text-[9px] xl:text-[12px] 
+                2xl:text-[16px] 3xl:text-[19px] 4xl:text-[30px] 5xl:text-[45px]
+                leading-tight line-clamp-2">
+                {{ link.descripcion }}
+              </p>
+            </div>
+            
+            <div class="link-arrow text-[#E03636] ml-0.5 flex-shrink-0
+              text-[10px] sm:text-[12px] md:text-[13px] lg:text-[15px] xl:text-[18px] 
+              2xl:text-[22px] 3xl:text-[27px] 4xl:text-[35px] 5xl:text-[70px]">
+              ›
+            </div>
+          </NuxtLink>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, computed } from 'vue';
+
+// Estado para controlar qué tarjeta está en hover
+const hoveredCard = ref(null);
+
+const API_BASE_URL = 'http://demoback.senado.gob.bo/api/tabs';
+const activeTabStyle = computed(() => ({
+  background: '#706F6F',
+  color: 'white'
+}));
+
+const { data, pending, error, refresh } = await useFetch(API_BASE_URL, {
+  server: true,
+  lazy: false,
+  cache: 'default',
+  transform: (response) => {
+    if (response?.success && response?.data) return response.data;
+    if (response?.tabs) return response;
+    return { tabs: [], areas: {}, links: {} };
+  }
+});
+
+const activeTab = ref('');
+
+const tabs = computed(() => data.value?.tabs || []);
+const areas = computed(() => data.value?.areas || {});
+const rawLinks = computed(() => data.value?.links || {});
+
+const linksPorTab = computed(() => {
+  const processed = {};
+  if (rawLinks.value) {
+    Object.keys(rawLinks.value).forEach(tabId => {
+      processed[tabId] = (rawLinks.value[tabId] || []).map(item => ({
+        ...item,
+        path: generatePath(tabId, item)
+      }));
+    });
+  }
+  return processed;
+});
+
+const generatePath = (tabId, item) => {
+  // ✅ PRIORIDAD 1: Si el item ya tiene un path, usarlo directamente
+  if (item.path) {
+    console.log('📌 Usando path existente:', item.path);
+    return item.path;
+  }
+  
+  // ✅ PRIORIDAD 2: Si no hay path, generar uno (solo por si acaso)
+  try {
+    const tab = tabs.value.find(t => t.id === tabId);
+    const areaSlug = tab?.label?.toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || tabId;
+    const itemSlug = item.titulo?.toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'item';
+    return `/${areaSlug}/${itemSlug}`;
+  } catch (err) { 
+    return `/${tabId}/item`; 
+  }
+};
+const getLinksForTab = (tabId) => linksPorTab.value[tabId] || [];
+
+if (tabs.value.length > 0 && !activeTab.value) activeTab.value = tabs.value[0].id;
+
+useHead({
+  title: 'Gestión Legislativa - Senado de Bolivia',
+  meta: [{ name: 'description', content: 'Acceda a toda la información sobre legislación...' }]
+});
+</script>
+
+<style scoped>
+/* Animación de fade in */
+@keyframes fadeIn { 
+  from { 
+    opacity: 0; 
+    transform: translateY(5px); 
+  } 
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  } 
+}
+
+.fade-in { 
+  animation: fadeIn 0.2s ease-out; 
+}
+
+/* Spinner personalizado */
+.spinner {
+  border-radius: 50%;
+  border: 2px solid #e2e8f0;
+  border-top-color: #E03636;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Para compatibilidad con navegadores antiguos */
+.tabs-container {
+  isolation: isolate;
+}
+
+/* Soporte para backdrop-filter */
+@supports (backdrop-filter: blur(10px)) {
+  .backdrop-blur-\[10px\] {
+    backdrop-filter: blur(10px);
+  }
+}
+
+/* ESTILOS PARA ICONOS SVG */
+.icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Wrapper para forzar el tamaño del SVG */
+.svg-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.svg-wrapper svg {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  display: block !important;
+}
+
+/* Eliminamos los width/height fijos de los SVG inyectados */
+.svg-wrapper svg[width],
+.svg-wrapper svg[height] {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Clases para el hover - basado en el estado de la tarjeta */
+.bg-\[\#E03636\] {
+  background-color: #E03636 !important;
+}
+
+.scale-110 {
+  transform: scale(1.1) !important;
+}
+
+.text-white {
+  color: white !important;
+}
+
+.text-\[\#E03636\] {
+  color: #E03636 !important;
+}
+
+/* Aseguramos que el hover funcione en toda la tarjeta */
+.link-card {
+  cursor: pointer;
+}
+
+/* Utilidades adicionales */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.min-w-0 {
+  min-width: 0;
+}
+
+/* Bordes redondeados */
+.rounded-le-\[24px\] {
+  border-top-left-radius: 24px;
+}
+
+.rounded-ri-\[24px\] {
+  border-top-right-radius: 24px;
+}
+</style>
