@@ -29,7 +29,7 @@
           <!-- TITULO -->
           <div class="p-6 md:p-8 pb-0">
             <div class="flex flex-wrap gap-2 mb-4">
-              <span class="bg-[#E03636] text-white text-sm px-3 py-1 rounded-full">{{ noticiaData.noticia.categoria || 'Noticia' }}</span>
+              <span class="bg-[#E03636] text-white text-sm px-3 py-1 rounded-full">{{ noticiaData.noticia.category || noticiaData.noticia.categoria || 'Noticia' }}</span>
               <span v-if="noticiaData.noticia.category === 'legislacion'" class="bg-yellow-500 text-white text-sm px-3 py-1 rounded-full font-semibold">★ Importante</span>
             </div>
             <!-- Título con palabras en color rojo -->
@@ -198,7 +198,7 @@
             >
               <!-- Párrafo normal -->
               <div v-if="block.type === 'paragraph'" class="prose prose-lg max-w-none text-gray-700 mb-6">
-                <p>{{ block.content }}</p>
+                <p v-html="block.content"></p>
               </div>
 
               <!-- CITA DESTACADA CON COMILLAS ABSOLUTAS -->
@@ -275,10 +275,10 @@
                   <div class="p-5">
                     <!-- Título con palabras rojas -->
                     <h3 class="text-xl font-bold text-gray-900 mb-3 leading-tight">
-                      <span v-html="formatTitleWithColors(relacionada.titulo)"></span>
+                      <span v-html="formatTitleWithColors(relacionada.title)"></span>
                     </h3>
                     <!-- Resumen -->
-                    <p class="text-gray-600 line-clamp-3">{{ relacionada.descripcion }}</p>
+                    <p class="text-gray-600 line-clamp-3">{{ relacionada.excerpt }}</p>
                   </div>
                 </div>
               </div>
@@ -322,12 +322,17 @@ import { useRoute, useRouter } from 'vue-router'
 const route = useRoute()
 const router = useRouter()
 
+// ============================================
+// CONFIGURACIÓN DE LA API REAL
+// ============================================
+const API_BASE_URL = 'http://demoback.senado.gob.bo/api'
+
 const windowLocation = ref('')
 const currentIndex = ref(0)
 const imagenesCarrusel = ref([])
 const errorMsg = ref(null)
 
-// Noticias relacionadas - siempre visibles (cuando la noticia principal existe)
+// Noticias relacionadas
 const noticiasRelacionadas = ref([])
 const relacionadaCurrentIndex = ref(0)
 const loadingRelacionadas = ref(true)
@@ -336,72 +341,29 @@ const loadingRelacionadas = ref(true)
 const noticiasPorPagina = 2
 const maxRelacionadaIndex = computed(() => Math.max(0, Math.ceil(noticiasRelacionadas.value.length / noticiasPorPagina) - 1))
 
-// Función para cargar noticias relacionadas desde la API
-const cargarNoticiasRelacionadas = async () => {
+// ============================================
+// FUNCIÓN PARA CARGAR NOTICIAS RELACIONADAS (API REAL)
+// ============================================
+const cargarNoticiasRelacionadas = async (noticiaId, categoria, tags) => {
   loadingRelacionadas.value = true
   try {
-    // Aquí vendrá la llamada real a la API
-    // En producción, reemplazar con:
-    // const response = await $fetch('/api/noticias/relacionadas', { 
-    //   params: { 
-    //     slug: route.params.slug,
-    //     limit: 6 
-    //   } 
-    // })
-    // noticiasRelacionadas.value = response.data
+    // Usar el endpoint de contenido relacionado de la API real
+    const response = await fetch(`${API_BASE_URL}/content/${noticiaId}/related?limit=6`)
+    const result = await response.json()
     
-    // Simulación de delay de red
-    await new Promise(resolve => setTimeout(resolve, 500))
-    
-    // Datos de ejemplo - SIEMPRE visibles para todas las noticias
-    const noticiasRelacionadasSimuladas = [
-      {
-        id: 'rel1',
-        titulo: '*Comisión* de Justicia revisa reformas al *código penal*',
-        descripcion: 'La comisión de justicia analiza las modificaciones propuestas al código penal, con el objetivo de actualizar la normativa vigente y adaptarla a las necesidades actuales de la sociedad boliviana.',
-        publishedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-        slug: 'comision-justicia-reforma-penal'
-      },
-      {
-        id: 'rel2',
-        titulo: '*Senado* conmemora el *Día de la Madre Tierra*',
-        descripcion: 'El Senado realizó una sesión especial para conmemorar el Día de la Madre Tierra, reafirmando su compromiso con la protección del medio ambiente y los recursos naturales del país.',
-        publishedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
-        slug: 'senado-conmemora-dia-madre-tierra'
-      },
-      {
-        id: 'rel3',
-        titulo: '*Nuevas* disposiciones para el sector *salud*',
-        descripcion: 'El pleno del Senado aprobó nuevas disposiciones para mejorar el sistema de salud pública, incluyendo la construcción de nuevos centros médicos y la contratación de personal especializado.',
-        publishedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
-        slug: 'nuevas-disposiciones-salud'
-      },
-      {
-        id: 'rel4',
-        titulo: '*Presupuesto* general de la *nación* 2026',
-        descripcion: 'La Cámara de Senadores comenzó el debate del proyecto de Presupuesto General de la Nación para la gestión 2026, priorizando la inversión en infraestructura y desarrollo social.',
-        publishedAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
-        slug: 'presupuesto-general-nacion-2026'
-      },
-      {
-        id: 'rel5',
-        titulo: '*Senado* aprueba *ley* de educación superior',
-        descripcion: 'El pleno del Senado aprobó la nueva Ley de Educación Superior que establece mejoras en la calidad educativa y mayor financiamiento para las universidades públicas.',
-        publishedAt: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000).toISOString(),
-        slug: 'senado-aprueba-ley-educacion-superior'
-      },
-      {
-        id: 'rel6',
-        titulo: '*Comisión* de Desarrollo *Económico* presenta informe',
-        descripcion: 'La Comisión de Desarrollo Económico presentó su informe anual con propuestas para impulsar el crecimiento sostenible y la generación de empleo en el país.',
-        publishedAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(),
-        slug: 'comision-desarrollo-economico-informe'
+    if (result.success && result.data && result.data.length > 0) {
+      noticiasRelacionadas.value = result.data
+    } else {
+      // Fallback: buscar por categoría
+      const fallbackResponse = await fetch(`${API_BASE_URL}/content?category=${categoria}&limit=6`)
+      const fallbackResult = await fallbackResponse.json()
+      if (fallbackResult.success && fallbackResult.data?.contents) {
+        noticiasRelacionadas.value = fallbackResult.data.contents.filter(n => n._id !== noticiaId)
+      } else {
+        noticiasRelacionadas.value = []
       }
-    ]
-    
-    noticiasRelacionadas.value = noticiasRelacionadasSimuladas
+    }
     relacionadaCurrentIndex.value = 0
-    
   } catch (err) {
     console.error('Error cargando noticias relacionadas:', err)
     noticiasRelacionadas.value = []
@@ -410,34 +372,83 @@ const cargarNoticiasRelacionadas = async () => {
   }
 }
 
-// Función para formatear títulos con palabras en color rojo
+// ============================================
+// FUNCIÓN PARA CONVERTIR HTML A BLOQUES
+// ============================================
+const convertirHTMLaBloques = (htmlContent) => {
+  if (!htmlContent) return []
+  
+  const bloques = []
+  
+  // Crear un elemento div temporal para parsear el HTML
+  const tempDiv = document.createElement('div')
+  tempDiv.innerHTML = htmlContent
+  
+  // Procesar cada nodo hijo
+  tempDiv.childNodes.forEach(node => {
+    if (node.nodeType === Node.TEXT_NODE && node.textContent.trim()) {
+      bloques.push({
+        type: 'paragraph',
+        content: node.textContent
+      })
+    } else if (node.nodeType === Node.ELEMENT_NODE) {
+      const element = node
+      const tagName = element.tagName.toLowerCase()
+      
+      if (tagName === 'p') {
+        bloques.push({
+          type: 'paragraph',
+          content: element.innerHTML
+        })
+      } else if (tagName === 'blockquote') {
+        const text = element.textContent || ''
+        bloques.push({
+          type: 'quote',
+          content: text,
+          author: 'Senado de Bolivia',
+          role: 'Cámara de Senadores'
+        })
+      } else if (tagName === 'iframe') {
+        const src = element.src || ''
+        const isYoutube = src.includes('youtube.com') || src.includes('youtu.be')
+        const isVimeo = src.includes('vimeo.com')
+        
+        if (isYoutube || isVimeo) {
+          bloques.push({
+            type: 'video',
+            url: src,
+            title: element.title || 'Video institucional',
+            caption: ''
+          })
+        } else {
+          bloques.push({
+            type: 'paragraph',
+            content: element.outerHTML
+          })
+        }
+      } else {
+        bloques.push({
+          type: 'paragraph',
+          content: element.outerHTML
+        })
+      }
+    }
+  })
+  
+  return bloques
+}
+
+// ============================================
+// FUNCIÓN PARA FORMATEAR TÍTULOS CON COLORES
+// ============================================
 const formatTitleWithColors = (title) => {
   if (!title) return ''
   return title.replace(/\*(.*?)\*/g, '<span class="text-[#E03636]">$1</span>')
 }
 
-// Función para generar títulos con palabras rojas aleatorias para simulación
-const generarTituloConColor = (tituloOriginal) => {
-  const palabras = tituloOriginal.split(' ')
-  if (palabras.length < 3) return tituloOriginal
-  
-  const numColorear = Math.min(Math.floor(Math.random() * 2) + 1, palabras.length)
-  const indicesColorear = new Set()
-  while (indicesColorear.size < numColorear) {
-    indicesColorear.add(Math.floor(Math.random() * palabras.length))
-  }
-  
-  const nuevasPalabras = palabras.map((palabra, idx) => {
-    if (indicesColorear.has(idx)) {
-      return `*${palabra}*`
-    }
-    return palabra
-  })
-  
-  return nuevasPalabras.join(' ')
-}
-
-// Navegación de noticias relacionadas
+// ============================================
+// NAVEGACIÓN DE NOTICIAS RELACIONADAS
+// ============================================
 const anteriorRelacionada = () => {
   if (relacionadaCurrentIndex.value > 0) {
     relacionadaCurrentIndex.value--
@@ -456,101 +467,81 @@ const verNoticiaRelacionada = (noticia) => {
   }
 }
 
+// ============================================
+// OBTENER NOTICIA PRINCIPAL DESDE LA API REAL
+// ============================================
 const { data: noticiaData, pending, error, refresh } = await useAsyncData(
   `noticia-${route.params.slug}`,
   async () => {
-    console.log(`🚀 [SSR] Cargando en: ${process.server ? 'SERVIDOR' : 'CLIENTE'}`)
+    console.log(`🚀 Buscando noticia por slug: ${route.params.slug}`)
     
-    const generarBloques = () => {
-      const textosParagraph = [
-        'La Comisión de Constitución analizó el proyecto de ley en detalle, revisando cada uno de sus artículos y escuchando las observaciones de los diferentes sectores involucrados. Este proceso de análisis duró varias semanas y contó con la participación de expertos en la materia.',
-        'Senadores de diferentes regiones del país expresaron su respaldo a la iniciativa, destacando la importancia de trabajar de manera coordinada por el desarrollo de Bolivia. Las diferentes bancadas políticas lograron acuerdos importantes que permitieron avanzar en la discusión.',
-        'La norma fue trabajada en consenso con todos los sectores involucrados, demostrando el compromiso del Senado con la participación ciudadana y la transparencia. Se realizaron más de 15 reuniones de trabajo con organizaciones sociales y gremiales.',
-        'El presidente del Senado destacó la importancia del diálogo político y la necesidad de construir acuerdos que beneficien a toda la población boliviana. En sus declaraciones, enfatizó que este es un ejemplo de cómo la política puede resolver problemas concretos.',
-        'Organizaciones sociales manifestaron su satisfacción con el resultado, señalando que esta ley responde a las necesidades reales de la ciudadanía. Representantes de diferentes sectores aplaudieron la iniciativa y se comprometieron a coadyuvar en su implementación.',
-        'La votación final está programada para la próxima sesión ordinaria, donde se espera contar con el respaldo necesario para su aprobación definitiva. Los líderes de bancada se mostraron optimistas respecto al resultado de la votación.',
-        'El proyecto ahora pasa a la Cámara de Diputados para su revisión y posterior sanción, completando así el proceso legislativo. Se espera que en las próximas semanas se inicie el tratamiento en la cámara baja.',
-        'Esta iniciativa legislativa forma parte de un paquete de reformas que el Senado viene impulsando para modernizar el marco normativo del país. Se prevé que en los próximos meses se presenten proyectos complementarios.'
-      ]
+    try {
+      // Llamar a la API real
+      const response = await fetch(`${API_BASE_URL}/content/slug/${route.params.slug}`)
       
-      const citas = [
-        { content: 'La transparencia y el diálogo son fundamentales para el fortalecimiento de nuestra democracia. Este proyecto es una prueba de que cuando trabajamos juntos, podemos lograr grandes cosas para el país.', author: 'Diego Esteban Mateo Ávila Navajas', role: 'Presidente del Senado' },
-        { content: 'Este es un paso histórico para el desarrollo legislativo de nuestro país. Nunca antes se había logrado un consenso tan amplio en una iniciativa de esta naturaleza.', author: 'Carmen Soledad Chapetón Tancara', role: 'Primera Vicepresidenta del Senado' },
-        { content: 'El consenso alcanzado demuestra la madurez política de nuestra democracia. Las diferentes fuerzas políticas han antepuesto el interés nacional por encima de cualquier consideración partidaria.', author: 'Khatia Lisbeth Quiroga Fernández', role: 'Segunda Vicepresidenta del Senado' },
-        { content: 'Trabajamos incansablemente para garantizar el bienestar de todos los bolivianos. Esta ley es una muestra de nuestro compromiso con la gente.', author: 'Yasmin Estívariz Villarroel', role: 'Primera Secretaria del Senado' },
-        { content: 'La participación ciudadana es el pilar fundamental de nuestra labor legislativa. Hemos recorrido el país escuchando a la gente y este proyecto refleja sus necesidades.', author: 'Julio Diego Romaña Galindo', role: 'Segundo Secretario del Senado' }
-      ]
+      if (!response.ok) {
+        if (response.status === 404) {
+          return { noticia: null, imagenes: [] }
+        }
+        throw new Error(`Error ${response.status}: ${response.statusText}`)
+      }
       
-      const bloques = []
-      const numParrafos = Math.floor(Math.random() * 3) + 5
-      for (let i = 0; i < numParrafos; i++) {
-        bloques.push({
-          type: 'paragraph',
-          content: textosParagraph[Math.floor(Math.random() * textosParagraph.length)]
+      const result = await response.json()
+      const noticia = result.data
+      
+      console.log(`✅ Noticia encontrada: ${noticia.title}`)
+      
+      // Preparar imágenes para el carrusel
+      const imagenes = []
+      
+      // Agregar imagen destacada si existe
+      if (noticia.featuredImage?.url) {
+        imagenes.push({
+          url: noticia.featuredImage.url,
+          alt: noticia.featuredImage.alt || noticia.title,
+          orientation: 'horizontal'
         })
       }
       
-      const cita = citas[Math.floor(Math.random() * citas.length)]
-      const posicionCita = Math.min(Math.floor(Math.random() * 2) + 2, bloques.length - 1)
-      bloques.splice(posicionCita, 0, {
-        type: 'quote',
-        content: cita.content,
-        author: cita.author,
-        role: cita.role
-      })
-      
-      bloques.push({
-        type: 'video',
-        url: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-        title: 'Sesión plenaria del Senado',
-        caption: 'Registro audiovisual de la sesión donde se debatió esta importante iniciativa legislativa'
-      })
-      
-      return bloques
-    }
-    
-    const noticiasBase = {
-      'senado-aprueba-ley-ambiental': {
-        title: '*Senado* aprueba nueva ley de *protección ambiental*',
-        categoria: 'Legislación',
-        publishedAt: new Date().toISOString(),
-        excerpt: 'El pleno del Senado aprobó por unanimidad la nueva Ley de Protección Ambiental, una normativa histórica que establece medidas para la preservación de los recursos naturales y la lucha contra el cambio climático.'
-      },
-      'senado-rechaza-proyecto-controversial': {
-        title: '*Senado* rechaza *proyecto* de ley controversial',
-        categoria: 'Política',
-        publishedAt: new Date().toISOString(),
-        excerpt: 'Por mayoría absoluta, la Cámara de Senadores decidió rechazar el proyecto de ley que generaba controversia en diversos sectores de la sociedad boliviana.'
+      // Agregar galería si existe
+      if (noticia.gallery && Array.isArray(noticia.gallery)) {
+        noticia.gallery.forEach(img => {
+          imagenes.push({
+            url: img.url,
+            alt: img.alt || noticia.title,
+            orientation: 'horizontal'
+          })
+        })
       }
-    }
-    
-    let noticiaBase = noticiasBase[route.params.slug]
-    
-    if (!noticiaBase) {
-      const slugLimpio = route.params.slug.replace(/-/g, ' ')
-      noticiaBase = {
-        title: generarTituloConColor(slugLimpio.charAt(0).toUpperCase() + slugLimpio.slice(1)),
-        categoria: 'Noticia',
-        publishedAt: new Date().toISOString(),
-        excerpt: `Información completa sobre ${slugLimpio}, una de las noticias más relevantes del acontecer legislativo en Bolivia.`
+      
+      // Si no hay imágenes, usar imágenes placeholder
+      if (imagenes.length === 0) {
+        imagenes.push(
+          { url: 'https://picsum.photos/id/1015/1920/1080', alt: 'Imagen institucional', orientation: 'horizontal' },
+          { url: 'https://picsum.photos/id/104/1080/1920', alt: 'Senado de Bolivia', orientation: 'vertical' },
+          { url: 'https://picsum.photos/id/15/1920/1080', alt: 'Paisaje boliviano', orientation: 'horizontal' }
+        )
       }
+      
+      // Si la noticia tiene bloques, usarlos; si no, crear bloques desde el contenido HTML
+      let blocks = noticia.blocks || []
+      if (blocks.length === 0 && noticia.content) {
+        blocks = convertirHTMLaBloques(noticia.content)
+      }
+      
+      // Enriquecer la noticia
+      const noticiaEnriquecida = {
+        ...noticia,
+        blocks: blocks,
+        categoria: noticia.category
+      }
+      
+      return { noticia: noticiaEnriquecida, imagenes }
+      
+    } catch (err) {
+      console.error(`❌ Error: ${err.message}`)
+      return { noticia: null, imagenes: [], error: err.message }
     }
-    
-    const noticia = {
-      ...noticiaBase,
-      blocks: generarBloques()
-    }
-    
-    const imagenes = [
-      { url: 'https://picsum.photos/id/1015/1920/1080', alt: 'Montaña con lago - Hermoso paisaje natural', orientation: 'horizontal' },
-      { url: 'https://picsum.photos/id/104/1080/1920', alt: 'Caminante en la naturaleza - Persona disfrutando del paisaje', orientation: 'vertical' },
-      { url: 'https://picsum.photos/id/15/1920/1080', alt: 'Bosque con niebla - Ambiente místico y sereno', orientation: 'horizontal' },
-      { url: 'https://picsum.photos/id/169/1080/1920', alt: 'Atardecer - Colores cálidos al final del día', orientation: 'vertical' },
-      { url: 'https://picsum.photos/id/155/1920/1080', alt: 'Carretera en el bosque - Camino entre árboles', orientation: 'horizontal' },
-      { url: 'https://picsum.photos/id/30/1080/1920', alt: 'Hojas de café - Detalle de cultivo', orientation: 'vertical' }
-    ]
-    
-    return { noticia, imagenes }
   },
   {
     lazy: false,
@@ -559,28 +550,13 @@ const { data: noticiaData, pending, error, refresh } = await useAsyncData(
   }
 )
 
-// Cargar noticias relacionadas al montar el componente
-onMounted(() => {
-  windowLocation.value = window.location.href
-  window.addEventListener('keydown', handleKeydown)
-  cargarNoticiasRelacionadas()
-  console.log('✅ [onMounted] Cliente hidratado')
-})
-
-// También recargar relacionadas cuando cambia el slug
-watch(() => route.params.slug, () => {
-  cargarNoticiasRelacionadas()
-})
-
-if (noticiaData.value?.imagenes) {
-  imagenesCarrusel.value = noticiaData.value.imagenes
-}
-
+// ============================================
+// WATCHERS PARA CARGAR RELACIONADAS Y SEO
+// ============================================
 watch(noticiaData, (newData) => {
-  if (newData?.imagenes) {
-    imagenesCarrusel.value = newData.imagenes
-  }
   if (newData?.noticia) {
+    cargarNoticiasRelacionadas(newData.noticia._id, newData.noticia.category, newData.noticia.tags)
+    
     useHead({
       title: `${newData.noticia.title.replace(/\*/g, '')} | Senado Bolivia`,
       meta: [
@@ -592,10 +568,23 @@ watch(noticiaData, (newData) => {
   }
 }, { immediate: true })
 
+if (noticiaData.value?.imagenes) {
+  imagenesCarrusel.value = noticiaData.value.imagenes
+}
+
+watch(noticiaData, (newData) => {
+  if (newData?.imagenes) {
+    imagenesCarrusel.value = newData.imagenes
+  }
+}, { immediate: true })
+
 if (error.value) {
   errorMsg.value = error.value.message
 }
 
+// ============================================
+// CARRUSEL - COMPUTED
+// ============================================
 const imagenActual = computed(() => {
   if (imagenesCarrusel.value.length === 0) return null
   return imagenesCarrusel.value[currentIndex.value]
@@ -631,6 +620,9 @@ const imagenActualWidth = computed(() => {
 const peekLeftWidth = computed(() => peekWidth.value)
 const peekRightWidth = computed(() => peekWidth.value)
 
+// ============================================
+// MÉTODOS DEL CARRUSEL
+// ============================================
 const siguienteImagen = () => {
   if (imagenesCarrusel.value.length <= 1) return
   currentIndex.value = (currentIndex.value + 1) % imagenesCarrusel.value.length
@@ -643,6 +635,9 @@ const anteriorImagen = () => {
     : currentIndex.value - 1
 }
 
+// ============================================
+// UTILIDADES
+// ============================================
 const formatearFecha = (fecha) => {
   if (!fecha) return ''
   return new Date(fecha).toLocaleDateString('es-ES', { 
@@ -658,9 +653,14 @@ const volverAtras = () => {
 
 const recargar = () => {
   refresh()
-  cargarNoticiasRelacionadas()
+  if (noticiaData.value?.noticia) {
+    cargarNoticiasRelacionadas(noticiaData.value.noticia._id, noticiaData.value.noticia.category, noticiaData.value.noticia.tags)
+  }
 }
 
+// ============================================
+// KEYBOARD NAVIGATION
+// ============================================
 const handleKeydown = (e) => {
   if (e.key === 'ArrowLeft') {
     anteriorImagen()
@@ -668,6 +668,15 @@ const handleKeydown = (e) => {
     siguienteImagen()
   }
 }
+
+// ============================================
+// CICLO DE VIDA
+// ============================================
+onMounted(() => {
+  windowLocation.value = window.location.href
+  window.addEventListener('keydown', handleKeydown)
+  console.log('✅ Frontend conectado a la API real en:', API_BASE_URL)
+})
 
 onUnmounted(() => {
   window.removeEventListener('keydown', handleKeydown)
