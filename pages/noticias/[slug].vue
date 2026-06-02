@@ -23,214 +23,287 @@
         <button @click="recargar" class="bg-[#E03636] text-white px-4 py-2 rounded-lg hover:bg-[#C12F2F] transition">Reintentar</button>
       </div>
 
-      <!-- Noticia encontrada -->
-      <article v-else-if="noticiaData?.noticia" class="bg-white rounded-xl shadow-lg overflow-hidden">
-        <!-- TITULO -->
-        <div class="p-6 md:p-8 pb-0">
-          <div class="flex flex-wrap gap-2 mb-4">
-            <span class="bg-[#E03636] text-white text-sm px-3 py-1 rounded-full">{{ noticiaData.noticia.categoria || 'Noticia' }}</span>
-            <span v-if="noticiaData.noticia.category === 'legislacion'" class="bg-yellow-500 text-white text-sm px-3 py-1 rounded-full font-semibold">★ Importante</span>
+      <!-- Noticia encontrada y su contenido -->
+      <template v-else-if="noticiaData?.noticia">
+        <article class="bg-white rounded-xl shadow-lg overflow-hidden">
+          <!-- TITULO -->
+          <div class="p-6 md:p-8 pb-0">
+            <div class="flex flex-wrap gap-2 mb-4">
+              <span class="bg-[#E03636] text-white text-sm px-3 py-1 rounded-full">{{ noticiaData.noticia.categoria || 'Noticia' }}</span>
+              <span v-if="noticiaData.noticia.category === 'legislacion'" class="bg-yellow-500 text-white text-sm px-3 py-1 rounded-full font-semibold">★ Importante</span>
+            </div>
+            <!-- Título con palabras en color rojo -->
+            <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
+              <span v-html="formatTitleWithColors(noticiaData.noticia.title)"></span>
+            </h1>
+            <p class="text-gray-600 text-base md:text-lg mt-4 leading-relaxed">
+              {{ noticiaData.noticia.excerpt }}
+            </p>
           </div>
-          <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
-            {{ noticiaData.noticia.title }}
-          </h1>
-          <p class="text-gray-600 text-base md:text-lg mt-4 leading-relaxed">
-            {{ noticiaData.noticia.excerpt }}
-          </p>
-        </div>
 
-        <!-- CARRUSEL -->
-        <div class="px-6 md:px-8 mt-6 mb-4">
-          <div class="relative">
-            <div class="relative overflow-hidden rounded-2xl bg-gray-900 shadow-2xl" style="height: 500px;">
-              <div class="flex h-full">
-                <div class="flex-shrink-0 transition-all duration-500 ease-out overflow-hidden h-full cursor-pointer"
-                     :style="{ width: `${peekLeftWidth}%` }"
-                     @click="anteriorImagen">
-                  <div class="relative w-full h-full">
-                    <img 
-                      :src="imagenAnterior?.url || imagenActual?.url"
-                      :alt="imagenAnterior?.alt || 'Imagen anterior'"
-                      class="w-full h-full object-cover"
-                    />
-                    <div class="absolute inset-0 bg-black/30"></div>
+          <!-- CARRUSEL -->
+          <div class="px-6 md:px-8 mt-6 mb-4">
+            <div class="relative">
+              <div class="relative overflow-hidden rounded-2xl bg-gray-900 shadow-2xl" style="height: 500px;">
+                <div class="flex h-full">
+                  <div class="flex-shrink-0 transition-all duration-500 ease-out overflow-hidden h-full cursor-pointer"
+                       :style="{ width: `${peekLeftWidth}%` }"
+                       @click="anteriorImagen">
+                    <div class="relative w-full h-full">
+                      <img 
+                        :src="imagenAnterior?.url || imagenActual?.url"
+                        :alt="imagenAnterior?.alt || 'Imagen anterior'"
+                        class="w-full h-full object-cover"
+                      />
+                      <div class="absolute inset-0 bg-black/30"></div>
+                    </div>
+                  </div>
+
+                  <div class="flex-shrink-0 transition-all duration-500 h-full"
+                       :style="{ width: `${imagenActualWidth}%` }">
+                    <div class="relative w-full h-full overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900">
+                      <img 
+                        :src="imagenActual?.url"
+                        :alt="imagenActual?.alt"
+                        class="w-full h-full object-contain"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="flex-shrink-0 transition-all duration-500 overflow-hidden h-full cursor-pointer"
+                       :style="{ width: `${peekRightWidth}%` }"
+                       @click="siguienteImagen">
+                    <div class="relative w-full h-full">
+                      <img 
+                        :src="imagenSiguiente?.url || imagenActual?.url"
+                        :alt="imagenSiguiente?.alt || 'Imagen siguiente'"
+                        class="w-full h-full object-cover"
+                      />
+                      <div class="absolute inset-0 bg-black/30"></div>
+                    </div>
                   </div>
                 </div>
 
-                <div class="flex-shrink-0 transition-all duration-500 h-full"
-                     :style="{ width: `${imagenActualWidth}%` }">
-                  <div class="relative w-full h-full overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900">
-                    <img 
-                      :src="imagenActual?.url"
-                      :alt="imagenActual?.alt"
-                      class="w-full h-full object-contain"
-                    />
-                  </div>
-                </div>
+                <button 
+                  v-if="imagenesCarrusel.length > 1"
+                  @click="anteriorImagen"
+                  class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-[#E03636] text-white rounded-full p-3 transition-all duration-300 backdrop-blur-sm z-10 group"
+                >
+                  <svg class="w-6 h-6 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path>
+                  </svg>
+                </button>
 
-                <div class="flex-shrink-0 transition-all duration-500 overflow-hidden h-full cursor-pointer"
-                     :style="{ width: `${peekRightWidth}%` }"
-                     @click="siguienteImagen">
-                  <div class="relative w-full h-full">
-                    <img 
-                      :src="imagenSiguiente?.url || imagenActual?.url"
-                      :alt="imagenSiguiente?.alt || 'Imagen siguiente'"
-                      class="w-full h-full object-cover"
-                    />
-                    <div class="absolute inset-0 bg-black/30"></div>
-                  </div>
+                <button 
+                  v-if="imagenesCarrusel.length > 1"
+                  @click="siguienteImagen"
+                  class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-[#E03636] text-white rounded-full p-3 transition-all duration-300 backdrop-blur-sm z-10 group"
+                >
+                  <svg class="w-6 h-6 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path>
+                  </svg>
+                </button>
+
+                <div v-if="imagenesCarrusel.length > 1" class="absolute top-4 right-4 bg-black/70 text-white text-sm px-3 py-1.5 rounded-full backdrop-blur-sm font-medium z-10">
+                  {{ String(currentIndex + 1).padStart(2, '0') }} / {{ String(imagenesCarrusel.length).padStart(2, '0') }}
                 </div>
               </div>
 
-              <button 
-                v-if="imagenesCarrusel.length > 1"
-                @click="anteriorImagen"
-                class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-[#E03636] text-white rounded-full p-3 transition-all duration-300 backdrop-blur-sm z-10 group"
+              <div class="text-center mt-3">
+                <p class="text-gray-600 text-sm md:text-base italic">
+                  {{ imagenActual?.alt || 'Sin descripción' }}
+                </p>
+              </div>
+
+              <div v-if="imagenesCarrusel.length > 1" class="flex justify-center gap-2 mt-4 overflow-x-auto pb-2">
+                <button
+                  v-for="(img, idx) in imagenesCarrusel"
+                  :key="idx"
+                  @click="currentIndex = idx"
+                  class="relative flex-shrink-0 transition-all duration-300 rounded-lg overflow-hidden"
+                  :class="currentIndex === idx ? 'ring-2 ring-[#E03636] scale-105' : 'opacity-60 hover:opacity-100'"
+                  style="width: 80px; height: 60px;"
+                >
+                  <img 
+                    :src="img.url" 
+                    :alt="`Miniatura ${idx + 1}`"
+                    class="w-full h-full object-cover"
+                  />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- REDES SOCIALES -->
+          <div class="px-6 md:px-8 mb-6">
+            <div class="flex justify-end items-center gap-3 py-2 border-b border-gray-200">
+              <span class="text-gray-500 text-sm mr-1">Compartir:</span>
+              
+              <a 
+                :href="`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(windowLocation)}`"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="social-icon rounded-lg border border-gray-300 hover:border-[#E03636] transition-all duration-300"
+                aria-label="Compartir en Facebook"
               >
-                <svg class="w-6 h-6 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
                 </svg>
-              </button>
+              </a>
 
-              <button 
-                v-if="imagenesCarrusel.length > 1"
-                @click="siguienteImagen"
-                class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-[#E03636] text-white rounded-full p-3 transition-all duration-300 backdrop-blur-sm z-10 group"
+              <a 
+                :href="`https://twitter.com/intent/tweet?text=${encodeURIComponent(noticiaData.noticia.title)}&url=${encodeURIComponent(windowLocation)}`"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="social-icon rounded-lg border border-gray-300 hover:border-[#E03636] transition-all duration-300"
+                aria-label="Compartir en X"
               >
-                <svg class="w-6 h-6 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                 </svg>
-              </button>
+              </a>
 
-              <div v-if="imagenesCarrusel.length > 1" class="absolute top-4 right-4 bg-black/70 text-white text-sm px-3 py-1.5 rounded-full backdrop-blur-sm font-medium z-10">
-                {{ String(currentIndex + 1).padStart(2, '0') }} / {{ String(imagenesCarrusel.length).padStart(2, '0') }}
-              </div>
-            </div>
-
-            <div class="text-center mt-3">
-              <p class="text-gray-600 text-sm md:text-base italic">
-                {{ imagenActual?.alt || 'Sin descripción' }}
-              </p>
-            </div>
-
-            <div v-if="imagenesCarrusel.length > 1" class="flex justify-center gap-2 mt-4 overflow-x-auto pb-2">
-              <button
-                v-for="(img, idx) in imagenesCarrusel"
-                :key="idx"
-                @click="currentIndex = idx"
-                class="relative flex-shrink-0 transition-all duration-300 rounded-lg overflow-hidden"
-                :class="currentIndex === idx ? 'ring-2 ring-[#E03636] scale-105' : 'opacity-60 hover:opacity-100'"
-                style="width: 80px; height: 60px;"
+              <a 
+                :href="`https://www.instagram.com/?url=${encodeURIComponent(windowLocation)}`"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="social-icon rounded-lg border border-gray-300 hover:border-[#E03636] transition-all duration-300"
+                aria-label="Compartir en Instagram"
               >
-                <img 
-                  :src="img.url" 
-                  :alt="`Miniatura ${idx + 1}`"
-                  class="w-full h-full object-cover"
-                />
-              </button>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069z"/>
+                </svg>
+              </a>
+
+              <a 
+                :href="`https://www.youtube.com/results?search_query=${encodeURIComponent(noticiaData.noticia.title)}`"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="social-icon rounded-lg border border-gray-300 hover:border-[#E03636] transition-all duration-300"
+                aria-label="Buscar en YouTube"
+              >
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                </svg>
+              </a>
             </div>
           </div>
-        </div>
 
-        <!-- REDES SOCIALES -->
-        <div class="px-6 md:px-8 mb-6">
-          <div class="flex justify-end items-center gap-2 py-2 border-b border-gray-200">
-            <span class="text-gray-500 text-sm mr-1">Compartir:</span>
-            
-            <a 
-              :href="`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(windowLocation)}`"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="social-icon rounded-lg border border-gray-300 hover:border-[#E03636] transition-all duration-300"
-              aria-label="Compartir en Facebook"
+          <!-- CONTENIDO VARIABLE DE LA NOTICIA -->
+          <div class="p-6 md:p-8 pt-0">
+            <div 
+              v-for="(block, index) in noticiaData.noticia.blocks" 
+              :key="index"
+              class="block-item"
             >
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-              </svg>
-            </a>
-
-            <a 
-              :href="`https://twitter.com/intent/tweet?text=${encodeURIComponent(noticiaData.noticia.title)}&url=${encodeURIComponent(windowLocation)}`"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="social-icon rounded-lg border border-gray-300 hover:border-[#E03636] transition-all duration-300"
-              aria-label="Compartir en X"
-            >
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-              </svg>
-            </a>
-
-            <a 
-              :href="`https://www.instagram.com/?url=${encodeURIComponent(windowLocation)}`"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="social-icon rounded-lg border border-gray-300 hover:border-[#E03636] transition-all duration-300"
-              aria-label="Compartir en Instagram"
-            >
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069z"/>
-              </svg>
-            </a>
-
-            <a 
-              :href="`https://www.youtube.com/results?search_query=${encodeURIComponent(noticiaData.noticia.title)}`"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="social-icon rounded-lg border border-gray-300 hover:border-[#E03636] transition-all duration-300"
-              aria-label="Buscar en YouTube"
-            >
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-              </svg>
-            </a>
-          </div>
-        </div>
-
-        <!-- CONTENIDO VARIABLE DE LA NOTICIA -->
-        <div class="p-6 md:p-8 pt-0">
-          <div 
-            v-for="(block, index) in noticiaData.noticia.blocks" 
-            :key="index"
-            class="block-item"
-          >
-            <!-- Párrafo normal -->
-            <div v-if="block.type === 'paragraph'" class="prose prose-lg max-w-none text-gray-700 mb-6">
-              <p>{{ block.content }}</p>
-            </div>
-
-            <!-- CITA DESTACADA -->
-            <div v-else-if="block.type === 'quote'" class="quote-block my-8">
-              <div class="quote-badge">
-                <div class="badge-name">{{ block.author }}</div>
-                <div class="badge-role">{{ block.role }}</div>
+              <!-- Párrafo normal -->
+              <div v-if="block.type === 'paragraph'" class="prose prose-lg max-w-none text-gray-700 mb-6">
+                <p>{{ block.content }}</p>
               </div>
-              <div class="quote-container">
-                <div class="quote-content-wrapper">
-                  <span class="quote-mark quote-open">“</span>
-                  <p class="quote-text">{{ block.content }}</p>
-                  <span class="quote-mark quote-close">”</span>
+
+              <!-- CITA DESTACADA CON COMILLAS ABSOLUTAS -->
+              <div v-else-if="block.type === 'quote'" class="quote-block mt-[3vw] mb-[5vw]">
+                <div class="quote-badge">
+                  <div class="badge-name">{{ block.author }}</div>
+                  <div class="badge-role">{{ block.role }}</div>
+                </div>
+                <div class="quote-container">
+                  <div class="quote-content-wrapper">
+                    <span class="quote-mark quote-open">“</span>
+                    <p class="quote-text">{{ block.content }}</p>
+                    <span class="quote-mark quote-close">”</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Video -->
+              <div v-else-if="block.type === 'video'" class="video-block my-8">
+                <div class="relative aspect-video rounded-xl overflow-hidden shadow-lg">
+                  <iframe 
+                    :src="block.url" 
+                    :title="block.title || 'Video'"
+                    class="absolute inset-0 w-full h-full"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                  ></iframe>
+                </div>
+                <p v-if="block.caption" class="text-sm text-gray-500 text-center mt-2">{{ block.caption }}</p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- SECCIÓN NOTICIAS RELACIONADAS - SOLO CUANDO LA NOTICIA PRINCIPAL EXISTE -->
+        <div class="mt-16 bg-slate-200">
+          <h2 class="text-[1.5vw] font-bold text-gray-800 border-l-4 border-[#E03636] pl-4 text-center">            <span class="text-[#E03636]">Articulos Relacionados</span>
+          </h2>
+          <hr class="border-black border-t-2  mx-[5vw]">
+          
+          <!-- Estado de carga para relacionadas -->
+          <div v-if="loadingRelacionadas" class="flex justify-center py-8">
+            <div class="inline-block w-8 h-8 border-4 border-[#E03636] border-t-transparent rounded-full animate-spin"></div>
+          </div>
+
+          <!-- Noticias relacionadas encontradas -->
+          <div v-else-if="noticiasRelacionadas.length > 0" class="relative">
+            <!-- Flecha izquierda -->
+            <button 
+              v-if="noticiasRelacionadas.length > 2"
+              @click="anteriorRelacionada"
+              :disabled="relacionadaCurrentIndex === 0"
+              class="absolute left-0 top-1/2 -translate-y-1/2 z-10 py-2 hover:bg-[#E03636] hover:text-white text-[#E03636] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <svg class="w-[3vw] h-[4vw]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 19l-7-7 7-7"></path>
+              </svg>
+            </button>
+
+            <!-- Contenedor de noticias relacionadas -->
+            <div class="overflow-hidden mx-8">
+              <div 
+                class="flex transition-transform duration-500 ease-in-out gap-6"
+                :style="{ transform: `translateX(-${relacionadaCurrentIndex * (100 / noticiasPorPagina)}%)` }"
+              >
+                <div 
+                  v-for="(relacionada, idx) in noticiasRelacionadas"
+                  :key="idx"
+                  class="flex-shrink-0 w-full md:w-[calc(50%-12px)] transition-all cursor-pointer overflow-hidden"
+                  @click="verNoticiaRelacionada(relacionada)"
+                >
+                  <div class="p-5">
+                    <!-- Título con palabras rojas -->
+                    <h3 class="text-xl font-bold text-gray-900 mb-3 leading-tight">
+                      <span v-html="formatTitleWithColors(relacionada.titulo)"></span>
+                    </h3>
+                    <!-- Resumen -->
+                    <p class="text-gray-600 line-clamp-3">{{ relacionada.descripcion }}</p>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <!-- Video -->
-            <div v-else-if="block.type === 'video'" class="video-block my-8">
-              <div class="relative aspect-video rounded-xl overflow-hidden shadow-lg">
-                <iframe 
-                  :src="block.url" 
-                  :title="block.title || 'Video'"
-                  class="absolute inset-0 w-full h-full"
-                  frameborder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowfullscreen
-                ></iframe>
-              </div>
-              <p v-if="block.caption" class="text-sm text-gray-500 text-center mt-2">{{ block.caption }}</p>
-            </div>
+            <!-- Flecha derecha -->
+            <button 
+              v-if="noticiasRelacionadas.length > 2"
+              @click="siguienteRelacionada"
+              :disabled="relacionadaCurrentIndex >= maxRelacionadaIndex"
+              class="absolute right-0 top-1/2 -translate-y-1/2 z-10 py-2 hover:bg-[#E03636] hover:text-white text-[#E03636] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <svg class="w-[3vw] h-[4vw]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 5l7 7-7 7"></path>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Mensaje cuando no hay noticias relacionadas -->
+          <div v-else class="text-center py-8 bg-gray-50 rounded-xl">
+            <p class="text-gray-500">No hay noticias relacionadas disponibles en este momento.</p>
           </div>
         </div>
-      </article>
+      </template>
 
       <!-- Noticia no encontrada -->
       <div v-else-if="!pending && !noticiaData?.noticia && !error" class="text-center py-12 bg-white rounded-xl">
@@ -253,6 +326,135 @@ const windowLocation = ref('')
 const currentIndex = ref(0)
 const imagenesCarrusel = ref([])
 const errorMsg = ref(null)
+
+// Noticias relacionadas - siempre visibles (cuando la noticia principal existe)
+const noticiasRelacionadas = ref([])
+const relacionadaCurrentIndex = ref(0)
+const loadingRelacionadas = ref(true)
+
+// Configuración de paginación para relacionadas
+const noticiasPorPagina = 2
+const maxRelacionadaIndex = computed(() => Math.max(0, Math.ceil(noticiasRelacionadas.value.length / noticiasPorPagina) - 1))
+
+// Función para cargar noticias relacionadas desde la API
+const cargarNoticiasRelacionadas = async () => {
+  loadingRelacionadas.value = true
+  try {
+    // Aquí vendrá la llamada real a la API
+    // En producción, reemplazar con:
+    // const response = await $fetch('/api/noticias/relacionadas', { 
+    //   params: { 
+    //     slug: route.params.slug,
+    //     limit: 6 
+    //   } 
+    // })
+    // noticiasRelacionadas.value = response.data
+    
+    // Simulación de delay de red
+    await new Promise(resolve => setTimeout(resolve, 500))
+    
+    // Datos de ejemplo - SIEMPRE visibles para todas las noticias
+    const noticiasRelacionadasSimuladas = [
+      {
+        id: 'rel1',
+        titulo: '*Comisión* de Justicia revisa reformas al *código penal*',
+        descripcion: 'La comisión de justicia analiza las modificaciones propuestas al código penal, con el objetivo de actualizar la normativa vigente y adaptarla a las necesidades actuales de la sociedad boliviana.',
+        publishedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+        slug: 'comision-justicia-reforma-penal'
+      },
+      {
+        id: 'rel2',
+        titulo: '*Senado* conmemora el *Día de la Madre Tierra*',
+        descripcion: 'El Senado realizó una sesión especial para conmemorar el Día de la Madre Tierra, reafirmando su compromiso con la protección del medio ambiente y los recursos naturales del país.',
+        publishedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+        slug: 'senado-conmemora-dia-madre-tierra'
+      },
+      {
+        id: 'rel3',
+        titulo: '*Nuevas* disposiciones para el sector *salud*',
+        descripcion: 'El pleno del Senado aprobó nuevas disposiciones para mejorar el sistema de salud pública, incluyendo la construcción de nuevos centros médicos y la contratación de personal especializado.',
+        publishedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+        slug: 'nuevas-disposiciones-salud'
+      },
+      {
+        id: 'rel4',
+        titulo: '*Presupuesto* general de la *nación* 2026',
+        descripcion: 'La Cámara de Senadores comenzó el debate del proyecto de Presupuesto General de la Nación para la gestión 2026, priorizando la inversión en infraestructura y desarrollo social.',
+        publishedAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
+        slug: 'presupuesto-general-nacion-2026'
+      },
+      {
+        id: 'rel5',
+        titulo: '*Senado* aprueba *ley* de educación superior',
+        descripcion: 'El pleno del Senado aprobó la nueva Ley de Educación Superior que establece mejoras en la calidad educativa y mayor financiamiento para las universidades públicas.',
+        publishedAt: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000).toISOString(),
+        slug: 'senado-aprueba-ley-educacion-superior'
+      },
+      {
+        id: 'rel6',
+        titulo: '*Comisión* de Desarrollo *Económico* presenta informe',
+        descripcion: 'La Comisión de Desarrollo Económico presentó su informe anual con propuestas para impulsar el crecimiento sostenible y la generación de empleo en el país.',
+        publishedAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(),
+        slug: 'comision-desarrollo-economico-informe'
+      }
+    ]
+    
+    noticiasRelacionadas.value = noticiasRelacionadasSimuladas
+    relacionadaCurrentIndex.value = 0
+    
+  } catch (err) {
+    console.error('Error cargando noticias relacionadas:', err)
+    noticiasRelacionadas.value = []
+  } finally {
+    loadingRelacionadas.value = false
+  }
+}
+
+// Función para formatear títulos con palabras en color rojo
+const formatTitleWithColors = (title) => {
+  if (!title) return ''
+  return title.replace(/\*(.*?)\*/g, '<span class="text-[#E03636]">$1</span>')
+}
+
+// Función para generar títulos con palabras rojas aleatorias para simulación
+const generarTituloConColor = (tituloOriginal) => {
+  const palabras = tituloOriginal.split(' ')
+  if (palabras.length < 3) return tituloOriginal
+  
+  const numColorear = Math.min(Math.floor(Math.random() * 2) + 1, palabras.length)
+  const indicesColorear = new Set()
+  while (indicesColorear.size < numColorear) {
+    indicesColorear.add(Math.floor(Math.random() * palabras.length))
+  }
+  
+  const nuevasPalabras = palabras.map((palabra, idx) => {
+    if (indicesColorear.has(idx)) {
+      return `*${palabra}*`
+    }
+    return palabra
+  })
+  
+  return nuevasPalabras.join(' ')
+}
+
+// Navegación de noticias relacionadas
+const anteriorRelacionada = () => {
+  if (relacionadaCurrentIndex.value > 0) {
+    relacionadaCurrentIndex.value--
+  }
+}
+
+const siguienteRelacionada = () => {
+  if (relacionadaCurrentIndex.value < maxRelacionadaIndex.value) {
+    relacionadaCurrentIndex.value++
+  }
+}
+
+const verNoticiaRelacionada = (noticia) => {
+  if (noticia && noticia.slug) {
+    router.push(`/noticias/${noticia.slug}`)
+  }
+}
 
 const { data: noticiaData, pending, error, refresh } = await useAsyncData(
   `noticia-${route.params.slug}`,
@@ -309,13 +511,13 @@ const { data: noticiaData, pending, error, refresh } = await useAsyncData(
     
     const noticiasBase = {
       'senado-aprueba-ley-ambiental': {
-        title: 'Senado aprueba nueva ley de protección ambiental',
+        title: '*Senado* aprueba nueva ley de *protección ambiental*',
         categoria: 'Legislación',
         publishedAt: new Date().toISOString(),
         excerpt: 'El pleno del Senado aprobó por unanimidad la nueva Ley de Protección Ambiental, una normativa histórica que establece medidas para la preservación de los recursos naturales y la lucha contra el cambio climático.'
       },
       'senado-rechaza-proyecto-controversial': {
-        title: 'Senado rechaza proyecto de ley controversial',
+        title: '*Senado* rechaza *proyecto* de ley controversial',
         categoria: 'Política',
         publishedAt: new Date().toISOString(),
         excerpt: 'Por mayoría absoluta, la Cámara de Senadores decidió rechazar el proyecto de ley que generaba controversia en diversos sectores de la sociedad boliviana.'
@@ -327,7 +529,7 @@ const { data: noticiaData, pending, error, refresh } = await useAsyncData(
     if (!noticiaBase) {
       const slugLimpio = route.params.slug.replace(/-/g, ' ')
       noticiaBase = {
-        title: slugLimpio.charAt(0).toUpperCase() + slugLimpio.slice(1),
+        title: generarTituloConColor(slugLimpio.charAt(0).toUpperCase() + slugLimpio.slice(1)),
         categoria: 'Noticia',
         publishedAt: new Date().toISOString(),
         excerpt: `Información completa sobre ${slugLimpio}, una de las noticias más relevantes del acontecer legislativo en Bolivia.`
@@ -357,6 +559,19 @@ const { data: noticiaData, pending, error, refresh } = await useAsyncData(
   }
 )
 
+// Cargar noticias relacionadas al montar el componente
+onMounted(() => {
+  windowLocation.value = window.location.href
+  window.addEventListener('keydown', handleKeydown)
+  cargarNoticiasRelacionadas()
+  console.log('✅ [onMounted] Cliente hidratado')
+})
+
+// También recargar relacionadas cuando cambia el slug
+watch(() => route.params.slug, () => {
+  cargarNoticiasRelacionadas()
+})
+
 if (noticiaData.value?.imagenes) {
   imagenesCarrusel.value = noticiaData.value.imagenes
 }
@@ -367,10 +582,10 @@ watch(noticiaData, (newData) => {
   }
   if (newData?.noticia) {
     useHead({
-      title: `${newData.noticia.title} | Senado Bolivia`,
+      title: `${newData.noticia.title.replace(/\*/g, '')} | Senado Bolivia`,
       meta: [
         { name: 'description', content: newData.noticia.excerpt },
-        { property: 'og:title', content: newData.noticia.title },
+        { property: 'og:title', content: newData.noticia.title.replace(/\*/g, '') },
         { property: 'og:image', content: newData.imagenes?.[0]?.url }
       ]
     })
@@ -441,23 +656,9 @@ const volverAtras = () => {
   router.back()
 }
 
-const compartir = () => {
-  if (noticiaData.value?.noticia) {
-    if (navigator.share) {
-      navigator.share({
-        title: noticiaData.value.noticia.title,
-        text: noticiaData.value.noticia.excerpt,
-        url: window.location.href
-      })
-    } else {
-      navigator.clipboard.writeText(window.location.href)
-      alert('¡Enlace copiado al portapapeles!')
-    }
-  }
-}
-
 const recargar = () => {
   refresh()
+  cargarNoticiasRelacionadas()
 }
 
 const handleKeydown = (e) => {
@@ -467,12 +668,6 @@ const handleKeydown = (e) => {
     siguienteImagen()
   }
 }
-
-onMounted(() => {
-  windowLocation.value = window.location.href
-  window.addEventListener('keydown', handleKeydown)
-  console.log('✅ [onMounted] Cliente hidratado')
-})
 
 onUnmounted(() => {
   window.removeEventListener('keydown', handleKeydown)
@@ -564,14 +759,8 @@ h1, h2, h3, .titulo-principal, .title {
   font-weight: 400 !important;
 }
 
-/* Comillas mantienen su estilo */
-.quote-mark {
-  font-family: Georgia, 'Times New Roman', serif !important;
-}
-
-/* ========== ESTILOS DE CITA ========== */
+/* ========== ESTILOS DE CITA CON COMILLAS ABSOLUTAS ========== */
 .quote-block {
-  margin: 2rem 0;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -603,37 +792,49 @@ h1, h2, h3, .titulo-principal, .title {
   background-color: #f5f5f5;
   width: 100%;
   margin-top: 0;
-  padding: 1.5rem 2rem;
+  padding: 2rem 2.5rem;
+  position: relative;
 }
 
 .quote-content-wrapper {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  justify-content: center;
+  position: relative;
 }
 
+/* COMILLAS EN POSICIÓN ABSOLUTA - NO AFECTAN EL FLUJO DEL TEXTO */
 .quote-mark {
-  font-size: 4rem;
-  color: #9ca3af;
+  position: absolute;
+  font-family: 'Times New Roman', Georgia, serif;
+  font-size: 15vw;
+  font-weight: 900;
+  color: #1a1a1a;
+  opacity: 0.12;
   line-height: 1;
-  flex-shrink: 0;
+  z-index: 0;
 }
 
 .quote-open {
-  align-self: flex-start;
+  top: -6vw;
+  left: -2vw;
 }
 
 .quote-close {
-  align-self: flex-end;
+  bottom: -13vw;
+  right: -2vw;
 }
 
 .quote-text {
-  font-size: 1.1rem;
-  line-height: 1.6;
+  font-size: 1.15rem;
+  line-height: 1.7;
   color: #333;
   margin: 0;
   flex: 1;
-  text-align: left;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  max-width: 85%;
 }
 
 /* Video block */
@@ -669,6 +870,15 @@ h1, h2, h3, .titulo-principal, .title {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* Noticias relacionadas */
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .social-icon {
