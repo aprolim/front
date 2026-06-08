@@ -600,10 +600,6 @@ components\ImportantNewsSection.vue
           Legislativa
         </span>
       </h2>
-      <!-- <p class="mx-auto text-gray-600 text-[12px] xs:text-[10px] sm:text-[14px] md:text-[15px] lg:text-[16px] xl:text-[18px] 2xl:text-[28px] 4xl:text-[36px] 5xl:text-[52px] px-4" 
-          style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
-        {{ subtitle }}
-      </p> -->
     </div>
 
     <!-- Header de Tabs con bordes redondeados -->
@@ -694,7 +690,6 @@ components\ImportantNewsSection.vue
                 class="w-full h-full flex items-center justify-center transition-colors duration-300"
                 :class="hoveredCard === link.id ? 'text-white' : 'text-[#E03636]'"
               >
-                <!-- Inyectamos el SVG y forzamos su tamaño -->
                 <div class="svg-wrapper w-[97%] h--[97%]" v-html="link.icono"></div>
               </div>
             </div>
@@ -738,20 +733,52 @@ const activeTabStyle = computed(() => ({
   color: 'white'
 }));
 
+console.log('🔍 [ImportantNewsSection] Iniciando carga de datos...');
+
+// 🔥 CORRECCIÓN: useFetch con manejo de errores y timeout
 const { data, pending, error, refresh } = await useFetch(API_BASE_URL, {
   server: true,
   lazy: false,
   cache: 'default',
+  timeout: 10000, // 10 segundos de timeout
+  onRequest({ request, options }) {
+    console.log('📡 [ImportantNewsSection] Solicitando:', request);
+  },
+  onResponse({ request, response, options }) {
+    console.log('✅ [ImportantNewsSection] Respuesta recibida:', response.status);
+  },
+  onResponseError({ request, response, options }) {
+    console.error('❌ [ImportantNewsSection] Error en respuesta:', response.status, response.statusText);
+    console.error('❌ URL:', request);
+  },
   transform: (response) => {
-    if (response?.success && response?.data) return response.data;
-    if (response?.tabs) return response;
+    console.log('🔄 [ImportantNewsSection] Transformando respuesta...');
+    if (response?.success && response?.data) {
+      console.log('✅ Datos transformados correctamente');
+      return response.data;
+    }
+    if (response?.tabs) {
+      console.log('✅ Datos con formato alternativo');
+      return response;
+    }
+    console.warn('⚠️ Formato de respuesta inesperado');
     return { tabs: [], areas: {}, links: {} };
   }
 });
 
+// Mostrar error detallado
+if (error.value) {
+  console.error('❌ [ImportantNewsSection] Error detectado:', error.value);
+}
+
 const activeTab = ref('');
 
-const tabs = computed(() => data.value?.tabs || []);
+const tabs = computed(() => {
+  const resultado = data.value?.tabs || [];
+  console.log(`📊 [ImportantNewsSection] ${resultado.length} tabs cargados`);
+  return resultado;
+});
+
 const areas = computed(() => data.value?.areas || {});
 const rawLinks = computed(() => data.value?.links || {});
 
@@ -769,13 +796,10 @@ const linksPorTab = computed(() => {
 });
 
 const generatePath = (tabId, item) => {
-  // ✅ PRIORIDAD 1: Si el item ya tiene un path, usarlo directamente
   if (item.path) {
-    console.log('📌 Usando path existente:', item.path);
     return item.path;
   }
   
-  // ✅ PRIORIDAD 2: Si no hay path, generar uno (solo por si acaso)
   try {
     const tab = tabs.value.find(t => t.id === tabId);
     const areaSlug = tab?.label?.toLowerCase()
@@ -786,12 +810,17 @@ const generatePath = (tabId, item) => {
       .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'item';
     return `/${areaSlug}/${itemSlug}`;
   } catch (err) { 
+    console.warn('⚠️ Error generando path:', err);
     return `/${tabId}/item`; 
   }
 };
+
 const getLinksForTab = (tabId) => linksPorTab.value[tabId] || [];
 
-if (tabs.value.length > 0 && !activeTab.value) activeTab.value = tabs.value[0].id;
+if (tabs.value.length > 0 && !activeTab.value) {
+  activeTab.value = tabs.value[0].id;
+  console.log(`📌 [ImportantNewsSection] Tab activo: ${activeTab.value}`);
+}
 
 useHead({
   title: 'Gestión Legislativa - Senado de Bolivia',
@@ -816,7 +845,6 @@ useHead({
   animation: fadeIn 0.2s ease-out; 
 }
 
-/* Spinner personalizado */
 .spinner {
   border-radius: 50%;
   border: 2px solid #e2e8f0;
@@ -828,26 +856,22 @@ useHead({
   to { transform: rotate(360deg); }
 }
 
-/* Para compatibilidad con navegadores antiguos */
 .tabs-container {
   isolation: isolate;
 }
 
-/* Soporte para backdrop-filter */
 @supports (backdrop-filter: blur(10px)) {
   .backdrop-blur-\[10px\] {
     backdrop-filter: blur(10px);
   }
 }
 
-/* ESTILOS PARA ICONOS SVG */
 .icon-container {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-/* Wrapper para forzar el tamaño del SVG */
 .svg-wrapper {
   display: flex;
   align-items: center;
@@ -862,14 +886,12 @@ useHead({
   display: block !important;
 }
 
-/* Eliminamos los width/height fijos de los SVG inyectados */
 .svg-wrapper svg[width],
 .svg-wrapper svg[height] {
   width: 100% !important;
   height: 100% !important;
 }
 
-/* Clases para el hover - basado en el estado de la tarjeta */
 .bg-\[\#E03636\] {
   background-color: #E03636 !important;
 }
@@ -886,12 +908,10 @@ useHead({
   color: #E03636 !important;
 }
 
-/* Aseguramos que el hover funcione en toda la tarjeta */
 .link-card {
   cursor: pointer;
 }
 
-/* Utilidades adicionales */
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -909,7 +929,6 @@ useHead({
   min-width: 0;
 }
 
-/* Bordes redondeados */
 .rounded-le-\[24px\] {
   border-top-left-radius: 24px;
 }

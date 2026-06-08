@@ -1582,7 +1582,7 @@ const fila1 = ref([
     cargoPartido: 'Presidencia',
     partido: 'PDC',
     cargo: 'Presidente del Senado',
-    imagen: '/senadores/g1/DIEGO ESTEBAN MATEO ÁVILA NAVAJAS.png',
+    imagen: '/new/titulares/g2/DIEGO ESTEBAN MATEO ÁVILA NAVAJAS.png',
     textoCompleto: 'Diego Esteban Mateo Ávila Navajas es economista y docente nacido en Tarija, con amplia experiencia en gestión pública y cooperación internacional. Como actual Presidente del Senado (2025–2026), lidera una gestión enfocada en la transparencia, el diálogo político y el desarrollo productivo, buscando fortalecer la institucionalidad legislativa y la estabilidad democrática de Bolivia.'
   },
   {
@@ -1592,7 +1592,7 @@ const fila1 = ref([
     cargoPartido: 'Primera Vicepresidencia',
     partido: 'Unidad',
     cargo: 'Vicepresidente',
-    imagen: '/senadores/g2/CARMEN SOLEDAD CHAPETON TANCARA.png',
+    imagen: '/new/titulares/g1/CARMEN SOLEDAD CHAPETÓN TANCARA.png',
     textoCompleto: 'C. Soledad Chapetón Tancara, nació en El Alto, es Licenciada en Cs. de la Educación de la UMSA. Fue asambleísta Constituyente y la primera mujer Alcaldesa de El Alto. Su gestión destacó por la Construcción de la Terminal Metropolitana, el Jach’a Uta, la  Estación de bomberos, la revolución del pavimento, impulso más de 80 centros infantiles entre otros proyectos y programas. Actualmente es Senadora, con trayectoria en liderazgo y servicio público.'
   },
   {
@@ -1602,7 +1602,7 @@ const fila1 = ref([
     cargoPartido: 'Segunda Vicepresidencia',
     partido: 'Libre',
     cargo: 'Secretario General',
-    imagen: '/senadores/g3/KHATIA LISBETH QUIROGA FERNÁNDEZ.png',
+    imagen: '/new/titulares/g3/KATHIA LISBETH QUIROGA FERNÁNDEZ.png',
     textoCompleto: `Kathia Quiroga Fernández, ingeniera en Sistemas y abogada, es Segunda Vicepresidenta de la Cámara de Senadores para el periodo <strong>2025-2026</strong>. Su gestión impulsa la autonomía mediante un nuevo pacto fiscal, la aprobación urgente de la ley 50/50, reformas al sistema de justicia y un medio ambiente libre de contaminación minera.`
   }
 ])
@@ -1615,7 +1615,7 @@ const fila2 = ref([
     cargoPartido: 'Primera Secretaria',
     partido: 'PDC',
     cargo: 'Directora de Comunicación',
-    imagen: '/senadores/g1/YASMIN ESTIVARIZ VILLARROEL.png',
+    imagen: '/new/titulares/g2/YASMIN ESTIVARIZ VILLARROEL.png',
     textoCompleto: `Yasmin Estívariz Villarroel, licenciada en Psicología del departamento de Oruro, destaca por su labor en favor de niños con discapacidad. Actualmente ejerce el cargo de Primera Secretaria del Senado, gestión <strong>2025-2026</strong>,  donde promueve alianzas estratégicas institucionales para beneficiar a este sector vulnerable.
 Asimismo, impulsa iniciativas legislativas orientadas a la protección del medio ambiente frente a la minería ilegal, desarrollando una gestión comprometida con el progreso de Oruro y el bienestar de su población.`
   },
@@ -1626,7 +1626,7 @@ Asimismo, impulsa iniciativas legislativas orientadas a la protección del medio
     cargoPartido: 'Segunda Secretaria',
     partido: 'Libre',
     cargo: 'Jefe de Protocolo',
-    imagen: '/senadores/g4/JULIO DIEGO ROMAÑA GALINDO.png',
+    imagen: '/new/titulares/g3/JULIO DIEGO ROMAÑA GALINDO.png',
     textoCompleto: `Julio Diego Romaña Galindo es Ingeniero Agrónomo y docente de la Universidad Amazónica de Pando, a sus 33 años fue Vicerrector en la universidad, Senador titular en la gestión <strong>2020-2025</strong> desempeñó funciones como Segundo Secretario y Presidente de la Comisión. Actualmente es el Segundo Secretario de la Cámara de Senadores, su gestión, fiscalización y legislación están enfocada en la incorporación a la red vial fundamental y tramo carreteros buscando transparencia, el dialogo y una democracia participativa.`
   },
   {
@@ -1636,7 +1636,7 @@ Asimismo, impulsa iniciativas legislativas orientadas a la protección del medio
     cargoPartido: 'Tercera Secretaria',
     partido: 'Unidad',
     cargo: 'Coordinadora Legislativa',
-    imagen: '/senadores/g2/ROSA TATIANA AÑEZ CARRASCO.png',
+    imagen: '/new/titulares/g3/ROSA TATIANA AÑEZ CARRASCO.png',
     textoCompleto: 'Rosa Tatiana Añez Carrasco, abogada de profesión con especialidad en Derecho Procesal Penal, destacando en los diferentes cargos desempeñados, docente universitaria, dos veces Diputada uninominal, proyectista de importantes Leyes para su región, en la actualidad enfocada en el ejercicio de la Tercera Secretaria del Senado, buscando fortalecer la democracia.'
   }
 ])
@@ -2751,23 +2751,20 @@ pages\noticias\index.vue
         <button @click="recargar" class="bg-[#E03636] text-white px-4 py-2 rounded-lg hover:bg-[#C12F2F] transition">Reintentar</button>
       </div>
 
-      <!-- Grid de noticias - MISMO ESTILO QUE MORENEWSGRID -->
+      <!-- Grid de noticias -->
       <div v-else-if="todasLasNoticias.length > 0">
-        <!-- Filas con stripe (fondo alternado) -->
         <div 
           v-for="(fila, filaIndex) in noticiasPorFilas" 
           :key="filaIndex"
           :class="['rounded-xl transition-all duration-300', filaIndex % 2 === 1 ? 'bg-gray-100' : '']"
         >
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 p-4">
-            <!-- Tarjeta IDÉNTICA a MoreNewsGrid -->
             <div 
               v-for="noticia in fila" 
               :key="noticia.id"
               class="group bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer"
               @click="verNoticia(noticia)"
             >
-              <!-- Contenedor de imagen -->
               <div class="relative overflow-hidden aspect-[4/5]">
                 <img 
                   :src="noticia.featuredImage?.url || noticia.imagen || '/images/default-news.jpg'" 
@@ -2776,7 +2773,6 @@ pages\noticias\index.vue
                   loading="lazy"
                 />
                 
-                <!-- Div rojo que ocupa el 40% inferior de la imagen -->
                 <div class="absolute bottom-0 left-0 right-0 h-[40%] bg-[rgba(224,54,54,0.85)] backdrop-blur-sm p-4 flex flex-col justify-end">
                   <p class="text-white text-[0.7rem] sm:text-[0.8rem] md:text-[0.9rem] lg:text-[1rem] mb-1 opacity-90">
                     {{ formatearFecha(noticia.publishedAt || noticia.fecha) }}
@@ -2842,9 +2838,11 @@ pages\noticias\index.vue
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onActivated, onDeactivated, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import { useNoticias } from '~/composables/useNoticias'
+
+definePageMeta({ layout: 'alter8', ssr: true })
 
 const router = useRouter()
 
@@ -2858,6 +2856,29 @@ const {
 // Paginación local
 const paginaActual = ref(1)
 const itemsPorPagina = ref(12)
+
+// 🔥 FUNCIÓN PARA FORZAR SCROLL AL INICIO
+const scrollToTop = () => {
+  console.log('📍 [NoticiasPage] Forzando scroll al inicio')
+  
+  // Múltiples intentos para asegurar
+  const doScroll = () => {
+    // Intentar con el contenedor de scroll-snap
+    const container = document.querySelector('.snap-container')
+    if (container) {
+      container.scrollTop = 0
+      container.scrollTo({ top: 0, behavior: 'instant' })
+    }
+    // También scroll normal
+    window.scrollTo(0, 0)
+  }
+  
+  doScroll()
+  setTimeout(doScroll, 50)
+  setTimeout(doScroll, 150)
+  setTimeout(doScroll, 300)
+  setTimeout(doScroll, 500)
+}
 
 // Noticias paginadas
 const noticiasPaginadas = computed(() => {
@@ -2922,21 +2943,34 @@ const volverAtras = () => {
 const cambiarPagina = (pagina) => {
   if (pagina >= 1 && pagina <= totalPaginas.value) {
     paginaActual.value = pagina
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    // Al cambiar de página, forzar scroll al inicio
+    setTimeout(scrollToTop, 100)
   }
 }
 
 // Recargar
 const recargar = async () => {
   await fetchTodasLasNoticias()
+  scrollToTop()
 }
+
+// 🔥 KeepAlive hook - cuando se reactiva la página
+onActivated(() => {
+  console.log('🔄 [NoticiasPage] Reactivada - Forzando scroll al inicio')
+  scrollToTop()
+})
+
+onDeactivated(() => {
+  console.log('💤 [NoticiasPage] Desactivada')
+})
 
 // Cargar noticias al montar
 onMounted(async () => {
+  console.log('🎬 [NoticiasPage] Montada')
   await fetchTodasLasNoticias()
+  await nextTick()
+  scrollToTop()
 })
-
-definePageMeta({ layout: 'alter8' })
 
 useHead({ title: 'Todas las Noticias - Senado Bolivia' })
 </script>

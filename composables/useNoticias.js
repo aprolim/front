@@ -1,4 +1,4 @@
-// composables/useNoticias.js - VERSIÓN CON SSR REAL
+// composables/useNoticias.js - VERSIÓN COMPLETA CORREGIDA
 import { ref, computed } from 'vue'
 
 const isServer = typeof window === 'undefined'
@@ -10,6 +10,8 @@ const transformarNoticia = (item) => {
   if (!item) return null
   
   const textoPlano = item.content?.replace(/<[^>]*>/g, '') || ''
+  
+  const esImportante = item.category === 'importante'
   
   return {
     id: item._id || item.id,
@@ -23,8 +25,8 @@ const transformarNoticia = (item) => {
     publishedAt: item.publishedAt || item.createdAt,
     imagen: item.featuredImage?.url || item.imagen,
     featuredImage: item.featuredImage,
-    categoria: item.category || 'general',
-    importante: item.category === 'legislacion' || item.views > 50 || item.importante,
+    categoria: item.category,
+    importante: esImportante,
     tipo: item.type || 'noticia',
     status: item.status,
     views: item.views || 0,
@@ -33,58 +35,74 @@ const transformarNoticia = (item) => {
   }
 }
 
-// Función que puede ser llamada tanto en SSR como en cliente
-export const fetchNoticias = async () => {
-  console.log(`📡 [useNoticias] ${isServer ? 'SSR - Servidor' : 'CSR - Cliente'} - Cargando noticias...`)
+// Función para cargar SOLO noticias importantes
+export const fetchNoticiasImportantes = async () => {
+  console.log(`📡 [useNoticias] Cargando noticias IMPORTANTES...`)
+  
+  const url = `${API_BASE_URL}/content?status=published&category=importante&limit=100`
+  console.log(`📍 URL importantes: ${url}`)
   
   try {
-    const url = `${API_BASE_URL}/content?status=published&limit=100`
     const response = await fetch(url)
-    
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
-    }
-    
     const data = await response.json()
     
     if (data.success && data.data?.contents) {
-      const todas = data.data.contents
+      const noticias = data.data.contents
         .map(transformarNoticia)
         .filter(Boolean)
       
-      // Noticias importantes (máximo 4)
-      const importantes = todas.filter(n => n.importante === true)
-      const noticiasImportantes = importantes.length >= 4 
-        ? importantes.slice(0, 4) 
-        : [...importantes, ...todas.filter(n => !n.importante)].slice(0, 4)
-      
-      // Últimas noticias (4 más recientes que NO son importantes)
-      const idsImportantes = new Set(noticiasImportantes.map(n => n.id))
-      const ultimasNoticias = todas
-        .filter(n => !idsImportantes.has(n.id))
-        .sort((a, b) => new Date(b.publishedAt || b.fecha) - new Date(a.publishedAt || a.fecha))
-        .slice(0, 4)
-      
-      console.log(`✅ [useNoticias] Cargadas ${todas.length} noticias (${noticiasImportantes.length} importantes, ${ultimasNoticias.length} últimas)`)
-      
-      return {
-        noticiasImportantes,
-        ultimasNoticias,
-        todasLasNoticias: todas,
-        error: null
-      }
+      console.log(`✅ [useNoticias] Cargadas ${noticias.length} noticias IMPORTANTES`)
+      return noticias
     }
-    
-    throw new Error('Formato de respuesta inválido')
-    
+    return []
   } catch (err) {
-    console.error('❌ [useNoticias] Error:', err)
-    return {
-      noticiasImportantes: [],
-      ultimasNoticias: [],
-      todasLasNoticias: [],
-      error: err.message
+    console.error('❌ Error cargando importantes:', err)
+    return []
+  }
+}
+
+// Función para cargar SOLO noticias NO importantes (últimas)
+export const fetchNoticiasUltimas = async () => {
+  console.log(`📡 [useNoticias] Cargando NOTICIAS NO IMPORTANTES...`)
+  
+  // Pedir noticias que NO sean importantes
+  const url = `${API_BASE_URL}/content?status=published&category=noticia&limit=100`
+  console.log(`📍 URL últimas: ${url}`)
+  
+  try {
+    const response = await fetch(url)
+    const data = await response.json()
+    
+    if (data.success && data.data?.contents) {
+      const noticias = data.data.contents
+        .map(transformarNoticia)
+        .filter(Boolean)
+        .sort((a, b) => new Date(b.publishedAt || b.fecha) - new Date(a.publishedAt || a.fecha))
+      
+      console.log(`✅ [useNoticias] Cargadas ${noticias.length} noticias NO IMPORTANTES`)
+      return noticias
     }
+    return []
+  } catch (err) {
+    console.error('❌ Error cargando últimas:', err)
+    return []
+  }
+}
+
+// Función que carga ambas (para mantener compatibilidad)
+export const fetchNoticias = async () => {
+  console.log(`📡 [useNoticias] Cargando todas las noticias (importantes + últimas)...`)
+  
+  const [noticiasImportantes, ultimasNoticias] = await Promise.all([
+    fetchNoticiasImportantes(),
+    fetchNoticiasUltimas()
+  ])
+  
+  return {
+    noticiasImportantes: noticiasImportantes.slice(0, 4),
+    ultimasNoticias: ultimasNoticias.slice(0, 4),
+    todasLasNoticias: [...noticiasImportantes, ...ultimasNoticias],
+    error: null
   }
 }
 
@@ -125,7 +143,7 @@ export const useNoticias = () => {
   }
   
   const fetchNoticiaBySlug = async (slug) => {
-    console.log(`📡 [useNoticias] Buscando noticia: ${slug} en ${isServer ? 'SSR' : 'cliente'}`)
+    console.log(`📡 [useNoticias] Buscando noticia: ${slug}`)
     
     try {
       const response = await fetch(`${API_BASE_URL}/content/slug/${slug}`)

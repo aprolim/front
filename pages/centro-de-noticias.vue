@@ -1,4 +1,4 @@
-<!-- pages/centro-de-noticias.vue - VERSIÓN COMPLETA CON HASH -->
+<!-- pages/centro-de-noticias.vue - VERSIÓN CORREGIDA -->
 <template>
   <div class="min-h-screen text-style">
     <!-- Fondos fijos -->
@@ -35,7 +35,7 @@
             <div class="flex flex-col items-center text-center px-4">
               <div class="w-full">
                 <h2 class="text-[#E03636] text-[2.2vw] lg:text-[2vw] font-bold mb-[1.5vw] leading-tight">
-                  {{ noticiasCarousel[currentIndex].titulo }}
+                  {{ limpiarAsteriscos(noticiasCarousel[currentIndex].titulo) }}
                 </h2>
                 <div class="text-gray-800 text-[1.2vw] lg:text-[1.1vw] leading-relaxed my-[2vw] text-justify">
                   <p>{{ noticiasCarousel[currentIndex].descripcion }}</p>
@@ -64,7 +64,7 @@
                 <img 
                   :key="`img-${currentIndex}`"
                   :src="noticiasCarousel[currentIndex].featuredImage?.url || noticiasCarousel[currentIndex].imagen"
-                  :alt="noticiasCarousel[currentIndex].titulo"
+                  :alt="limpiarAsteriscos(noticiasCarousel[currentIndex].titulo)"
                   class="w-full h-full object-cover"
                   loading="eager"
                   @error="e => e.target.src = '/images/default-news.jpg'"
@@ -94,7 +94,7 @@
       </div>
     </section>
 
-    <!-- SECCIÓN 2 - MÁS NOTICIAS -->
+    <!-- SECCIÓN 2 - MÁS NOTICIAS (pasa la función de limpieza) -->
     <div 
       id="mas-noticias"
       ref="seccion2Ref"
@@ -102,7 +102,7 @@
       :class="{ 'animate-in': isSeccion2Visible }"
       style="height: 100vh; position: relative; background: white; display: flex; flex-direction: column; justify-content: center; align-items: center;"
     >
-      <MoreNewsGrid />
+      <MoreNewsGrid :limpiarAsteriscos="limpiarAsteriscos" />
     </div>
     
     <!-- SECCIÓN 3 - SESIONES -->
@@ -193,6 +193,7 @@
 import { ref, onMounted, onUnmounted, onActivated, onDeactivated, nextTick, computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import MoreNewsGrid from '~/components/MoreNewsGrid.vue'
+import { useNoticias } from '~/composables/useNoticias'
 
 definePageMeta({ layout: 'alter8', ssr: true })
 
@@ -201,64 +202,29 @@ const router = useRouter()
 
 console.log('🚀 [PAGE] centro-de-noticias.vue - INICIALIZANDO')
 
-// ============================================
-// SSR REAL - useAsyncData
-// ============================================
-const API_BASE_URL = 'http://demoback.senado.gob.bo/api'
+// 🔥 USAR EL COMPOSABLE CORREGIDO
+const { 
+  noticiasImportantes, 
+  ultimasNoticias, 
+  todasLasNoticias, 
+  loading, 
+  error, 
+  recargarDatos 
+} = useNoticias()
 
-const { data: noticiasData, pending: loading, error, refresh } = await useAsyncData(
-  'centro-noticias',
-  async () => {
-    console.log('📡 [SSR] Servidor: Cargando noticias desde API...')
-    
-    try {
-      const response = await fetch(`${API_BASE_URL}/content?status=published&limit=100`)
-      const result = await response.json()
-      
-      if (result.success && result.data?.contents) {
-        const noticias = result.data.contents.map(item => {
-          const textoPlano = item.content?.replace(/<[^>]*>/g, '') || ''
-          return {
-            id: item._id || item.id,
-            titulo: item.title || 'Sin título',
-            slug: item.slug,
-            descripcion: item.excerpt || textoPlano.substring(0, 200),
-            descripcion2: textoPlano.length > 200 ? textoPlano.substring(200, 400) : '',
-            fecha: item.publishedAt || item.createdAt,
-            publishedAt: item.publishedAt || item.createdAt,
-            imagen: item.featuredImage?.url,
-            featuredImage: item.featuredImage,
-            importante: item.category === 'legislacion' || item.views > 50
-          }
-        })
-        
-        const importantes = noticias.filter(n => n.importante === true).slice(0, 4)
-        const idsImportantes = new Set(importantes.map(n => n.id))
-        const ultimas = noticias.filter(n => !idsImportantes.has(n.id)).slice(0, 4)
-        
-        console.log(`📡 [SSR] ✅ ${noticias.length} noticias cargadas (${importantes.length} importantes, ${ultimas.length} últimas)`)
-        
-        return { importantes, ultimas, todas: noticias }
-      }
-      
-      return { importantes: [], ultimas: [], todas: [] }
-    } catch (err) {
-      console.error('❌ [SSR] Error:', err)
-      return { importantes: [], ultimas: [], todas: [] }
-    }
-  },
-  {
-    server: true,
-    lazy: false,
-    default: () => ({ importantes: [], ultimas: [], todas: [] })
-  }
-)
+// ============================================
+// FUNCIÓN PARA LIMPIAR ASTERISCOS DE LOS TÍTULOS
+// ============================================
+const limpiarAsteriscos = (texto) => {
+  if (!texto) return ''
+  // Eliminar todos los asteriscos del texto
+  return texto.replace(/\*/g, '')
+}
 
 // Estado local
 const currentIndex = ref(0)
 let carouselInterval = null
 let scrollObserver = null
-let scrollAttempts = 0
 
 // Refs de secciones
 const seccion1Ref = ref(null)
@@ -273,8 +239,7 @@ const isSeccion3Visible = ref(false)
 const isSeccion4Visible = ref(false)
 
 // Computed
-const noticiasCarousel = computed(() => noticiasData.value?.importantes || [])
-const noticiasLocal = computed(() => noticiasData.value?.ultimas || [])
+const noticiasCarousel = computed(() => noticiasImportantes.value || [])
 const loadingImportantes = computed(() => loading.value)
 
 // Funciones
@@ -287,10 +252,6 @@ const verNoticia = (noticia) => {
   if (noticia && noticia.slug) {
     router.push(`/noticias/${noticia.slug}`)
   }
-}
-
-const recargarDatos = () => {
-  refresh()
 }
 
 const startCarousel = () => {
@@ -367,7 +328,6 @@ const initObserver = () => {
   })
 }
 
-// 🔥 FUNCIÓN PARA FORZAR SCROLL AL HASH
 const forceScrollToHash = () => {
   const hash = route.hash
   if (hash && hash !== '') {
@@ -385,33 +345,12 @@ const forceScrollToHash = () => {
       return false
     }
     
-    // Intentar múltiples veces con delays crecientes
     setTimeout(() => scrollToTarget(targetId), 100)
     setTimeout(() => scrollToTarget(targetId), 300)
     setTimeout(() => scrollToTarget(targetId), 500)
     setTimeout(() => scrollToTarget(targetId), 800)
     setTimeout(() => scrollToTarget(targetId), 1200)
   }
-}
-
-// Limpieza profunda
-const performDeepClean = async () => {
-  let cleaned = 0
-  if ('serviceWorker' in navigator) {
-    const registrations = await navigator.serviceWorker.getRegistrations()
-    for (const registration of registrations) {
-      await registration.unregister()
-      cleaned++
-    }
-  }
-  if ('caches' in window) {
-    const cacheNames = await caches.keys()
-    for (const name of cacheNames) {
-      await caches.delete(name)
-      cleaned++
-    }
-  }
-  console.log(`🧹 Limpieza: ${cleaned} elementos`)
 }
 
 // Watch para inicializar carousel
@@ -427,20 +366,15 @@ watch(noticiasCarousel, (nuevas) => {
 // KeepAlive hooks
 onActivated(async () => {
   console.log('🔄 [PAGE] Reactivada')
-  
-  await performDeepClean()
   stopCarousel()
   destroyObserver()
-  
+  await recargarDatos()
   isSeccion1Visible.value = false
   isSeccion2Visible.value = false
   isSeccion3Visible.value = false
   isSeccion4Visible.value = false
-  
   await nextTick()
   initObserver()
-  
-  // 🔥 Si hay hash, forzar scroll a esa sección
   if (route.hash) {
     forceScrollToHash()
   } else {
@@ -462,11 +396,9 @@ onDeactivated(() => {
 // Lifecycle
 onMounted(async () => {
   console.log('🎬 [PAGE] Montada')
-  
+  await recargarDatos()
   await nextTick()
   initObserver()
-  
-  // 🔥 Si hay hash, forzar scroll a esa sección
   if (route.hash) {
     forceScrollToHash()
   } else {
@@ -485,7 +417,7 @@ onUnmounted(() => {
 })
 
 if (error.value) {
-  console.error('❌ [PAGE] Error en SSR:', error.value)
+  console.error('❌ [PAGE] Error:', error.value)
 }
 </script>
 

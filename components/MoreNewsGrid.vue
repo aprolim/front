@@ -38,7 +38,7 @@
               {{ formatearFecha(noticia.publishedAt || noticia.fecha) }}
             </p>
             <h3 class="font-bold text-white group-hover:text-red-200 transition-colors line-clamp-2 text-[0.8rem] sm:text-[0.9rem] md:text-[1rem] lg:text-[1.1rem] leading-tight">
-              {{ noticia.titulo }}
+              {{ limpiarAsteriscos(noticia.titulo) }}
             </h3>
             <div class="mt-2 flex justify-end">
               <span class="text-white text-[0.7rem] sm:text-[0.8rem] md:text-[0.9rem] font-semibold flex items-center gap-1 group-hover:translate-x-1 transition-transform">
@@ -88,6 +88,10 @@ const props = defineProps({
   targetRoute: {
     type: String,
     default: '/noticias'
+  },
+  limpiarAsteriscos: {
+    type: Function,
+    default: (texto) => texto ? texto.replace(/\*/g, '') : ''
   }
 })
 

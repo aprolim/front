@@ -26,17 +26,16 @@
       <!-- Noticia encontrada y su contenido -->
       <template v-else-if="noticiaData?.noticia">
         <article class="bg-white rounded-xl shadow-lg overflow-hidden">
-          <!-- TITULO -->
+          <!-- TITULO - Montserrat Bold -->
           <div class="p-6 md:p-8 pb-0">
             <div class="flex flex-wrap gap-2 mb-4">
               <span class="bg-[#E03636] text-white text-sm px-3 py-1 rounded-full">{{ noticiaData.noticia.category || noticiaData.noticia.categoria || 'Noticia' }}</span>
               <span v-if="noticiaData.noticia.category === 'legislacion'" class="bg-yellow-500 text-white text-sm px-3 py-1 rounded-full font-semibold">★ Importante</span>
             </div>
-            <!-- Título con palabras en color rojo -->
-            <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
+            <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight title-main">
               <span v-html="formatTitleWithColors(noticiaData.noticia.title)"></span>
             </h1>
-            <p class="text-gray-600 text-base md:text-lg mt-4 leading-relaxed">
+            <p class="text-gray-600 text-base md:text-lg mt-4 leading-relaxed excerpt-text">
               {{ noticiaData.noticia.excerpt }}
             </p>
           </div>
@@ -109,8 +108,9 @@
                 </div>
               </div>
 
+              <!-- Texto debajo de las fotos - Montserrat Light, color plomo, 10% más pequeño -->
               <div class="text-center mt-3">
-                <p class="text-gray-600 text-sm md:text-base italic">
+                <p class="carousel-caption">
                   {{ imagenActual?.alt || 'Sin descripción' }}
                 </p>
               </div>
@@ -189,7 +189,9 @@
             </div>
           </div>
 
-          <!-- CONTENIDO VARIABLE DE LA NOTICIA -->
+          <!-- ============================================ -->
+          <!-- CONTENIDO VARIABLE DE LA NOTICIA (CITAS + VIDEOS) -->
+          <!-- ============================================ -->
           <div class="p-6 md:p-8 pt-0">
             <div 
               v-for="(block, index) in noticiaData.noticia.blocks" 
@@ -204,8 +206,8 @@
               <!-- CITA DESTACADA CON COMILLAS ABSOLUTAS -->
               <div v-else-if="block.type === 'quote'" class="quote-block mt-[3vw] mb-[5vw]">
                 <div class="quote-badge">
-                  <div class="badge-name">{{ block.author }}</div>
-                  <div class="badge-role">{{ block.role }}</div>
+                  <div class="badge-name">{{ block.author || 'Senado de Bolivia' }}</div>
+                  <div class="badge-role">{{ block.role || 'Cámara de Senadores' }}</div>
                 </div>
                 <div class="quote-container">
                   <div class="quote-content-wrapper">
@@ -216,7 +218,7 @@
                 </div>
               </div>
 
-              <!-- Video -->
+              <!-- Video (desde CMS) -->
               <div v-else-if="block.type === 'video'" class="video-block my-8">
                 <div class="relative aspect-video rounded-xl overflow-hidden shadow-lg">
                   <iframe 
@@ -228,13 +230,13 @@
                     allowfullscreen
                   ></iframe>
                 </div>
-                <p v-if="block.caption" class="text-sm text-gray-500 text-center mt-2">{{ block.caption }}</p>
+                <p v-if="block.caption" class="video-caption">{{ block.caption }}</p>
               </div>
             </div>
           </div>
         </article>
 
-        <!-- SECCIÓN NOTICIAS RELACIONADAS - SOLO CUANDO LA NOTICIA PRINCIPAL EXISTE -->
+        <!-- SECCIÓN NOTICIAS RELACIONADAS -->
         <div class="mt-16 bg-slate-200">
           <h2 class="text-[1.5vw] font-bold text-gray-800 border-l-4 border-[#E03636] pl-4 text-center">            <span class="text-[#E03636]">Articulos Relacionados</span>
           </h2>
@@ -247,7 +249,6 @@
 
           <!-- Noticias relacionadas encontradas -->
           <div v-else-if="noticiasRelacionadas.length > 0" class="relative">
-            <!-- Flecha izquierda -->
             <button 
               v-if="noticiasRelacionadas.length > 2"
               @click="anteriorRelacionada"
@@ -260,7 +261,6 @@
               </svg>
             </button>
 
-            <!-- Contenedor de noticias relacionadas -->
             <div class="overflow-hidden mx-8">
               <div 
                 class="flex transition-transform duration-500 ease-in-out gap-6"
@@ -284,7 +284,6 @@
               </div>
             </div>
 
-            <!-- Flecha derecha -->
             <button 
               v-if="noticiasRelacionadas.length > 2"
               @click="siguienteRelacionada"
@@ -401,31 +400,36 @@ const convertirHTMLaBloques = (htmlContent) => {
           content: element.innerHTML
         })
       } else if (tagName === 'blockquote') {
+        const author = element.getAttribute('data-author') || 'Senado de Bolivia'
+        const role = element.getAttribute('data-role') || 'Cámara de Senadores'
         const text = element.textContent || ''
+        // Limpiar el footer si existe
+        const cleanText = text.replace(/—.*$/, '').trim()
         bloques.push({
           type: 'quote',
-          content: text,
-          author: 'Senado de Bolivia',
-          role: 'Cámara de Senadores'
+          content: cleanText,
+          author: author,
+          role: role
         })
-      } else if (tagName === 'iframe') {
-        const src = element.src || ''
-        const isYoutube = src.includes('youtube.com') || src.includes('youtu.be')
-        const isVimeo = src.includes('vimeo.com')
-        
-        if (isYoutube || isVimeo) {
+      } else if (tagName === 'div' && element.getAttribute('data-type') === 'video') {
+        const iframe = element.querySelector('iframe')
+        const captionEl = element.querySelector('.video-caption')
+        if (iframe) {
           bloques.push({
             type: 'video',
-            url: src,
-            title: element.title || 'Video institucional',
-            caption: ''
-          })
-        } else {
-          bloques.push({
-            type: 'paragraph',
-            content: element.outerHTML
+            url: iframe.getAttribute('src') || '',
+            title: iframe.getAttribute('title') || '',
+            caption: captionEl?.textContent || ''
           })
         }
+      } else if (tagName === 'iframe') {
+        const src = element.src || ''
+        bloques.push({
+          type: 'video',
+          url: src,
+          title: element.title || 'Video institucional',
+          caption: ''
+        })
       } else {
         bloques.push({
           type: 'paragraph',
@@ -719,7 +723,32 @@ definePageMeta({ layout: 'alter8' })
   font-display: swap;
 }
 
-/* Aplicar Capitolium News a TODO el contenido de esta página */
+/* Montserrat para elementos específicos */
+@font-face {
+  font-family: 'Montserrat';
+  src: url('/fonts/Montserrat-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('/fonts/Montserrat-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('/fonts/Montserrat-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Aplicar Capitolium News a la mayor parte del contenido */
 .text-style,
 .prose,
 .prose p,
@@ -743,32 +772,66 @@ h6,
 span,
 div,
 section,
-.quote-badge .badge-name,
-.quote-badge .badge-role,
-.quote-text,
 button,
 a,
-.quote-container,
-.quote-block,
-.quote-content-wrapper,
 .social-icon,
 .social-icon svg {
   font-family: 'Capitolium News', 'Montserrat', Tahoma, Geneva, Verdana, sans-serif !important;
 }
 
-/* Títulos con negrita */
-h1, h2, h3, .titulo-principal, .title {
+/* ========== TÍTULO PRINCIPAL - Montserrat Bold ========== */
+.title-main,
+.title-main span,
+h1.title-main {
+  font-family: 'Montserrat', 'Capitolium News', sans-serif !important;
   font-weight: 700 !important;
 }
 
-/* ========== CITAS: SOLO el texto de la cita va en Montserrat itálica ========== */
-.quote-text {
-  font-family: 'Montserrat', sans-serif !important;
-  font-style: italic !important;
-  font-weight: 400 !important;
+/* ========== EXTRACTO - Montserrat Light ========== */
+.excerpt-text {
+  font-family: 'Montserrat', 'Capitolium News', sans-serif !important;
+  font-weight: 300 !important;
 }
 
-/* ========== ESTILOS DE CITA CON COMILLAS ABSOLUTAS ========== */
+/* ========== TEXTO DEBAJO DE FOTOS - Montserrat Light, color plomo, 10% más pequeño ========== */
+.carousel-caption {
+  font-family: 'Montserrat', 'Capitolium News', sans-serif !important;
+  font-weight: 300 !important;
+  color: #6b7280 !important;
+  font-size: 0.9rem !important;
+}
+
+/* ========== VIDEO CAPTION - Mismo estilo que carousel-caption ========== */
+.video-caption {
+  font-family: 'Montserrat', 'Capitolium News', sans-serif !important;
+  font-weight: 300 !important;
+  color: #6b7280 !important;
+  font-size: 0.9rem !important;
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+/* ========== CITAS ========== */
+/* Nombre en la cita - Montserrat Bold */
+.quote-badge .badge-name {
+  font-family: 'Montserrat', 'Capitolium News', sans-serif !important;
+  font-weight: 700 !important;
+}
+
+/* Cargo en la cita - Montserrat Light */
+.quote-badge .badge-role {
+  font-family: 'Montserrat', 'Capitolium News', sans-serif !important;
+  font-weight: 300 !important;
+}
+
+/* Texto de la cita - Montserrat Light cursiva */
+.quote-text {
+  font-family: 'Montserrat', 'Capitolium News', sans-serif !important;
+  font-weight: 300 !important;
+  font-style: italic !important;
+}
+
+/* Mantener el resto de los estilos de cita */
 .quote-block {
   display: flex;
   flex-direction: column;
@@ -783,18 +846,6 @@ h1, h2, h3, .titulo-principal, .title {
   text-align: right;
   margin-bottom: 0;
   width: auto;
-}
-
-.badge-name {
-  font-weight: 700;
-  font-size: 0.85rem;
-  letter-spacing: 0.5px;
-}
-
-.badge-role {
-  font-size: 0.65rem;
-  opacity: 0.8;
-  margin-top: 0.15rem;
 }
 
 .quote-container {
@@ -812,7 +863,7 @@ h1, h2, h3, .titulo-principal, .title {
   position: relative;
 }
 
-/* COMILLAS EN POSICIÓN ABSOLUTA - NO AFECTAN EL FLUJO DEL TEXTO */
+/* COMILLAS EN POSICIÓN ABSOLUTA */
 .quote-mark {
   position: absolute;
   font-family: 'Times New Roman', Georgia, serif;
@@ -849,6 +900,9 @@ h1, h2, h3, .titulo-principal, .title {
 /* Video block */
 .video-block iframe {
   transition: transform 0.3s ease;
+  width: 100%;
+  border-radius: 0.75rem;
+  aspect-ratio: 16 / 9;
 }
 
 .video-block:hover iframe {
@@ -907,32 +961,7 @@ h1, h2, h3, .titulo-principal, .title {
   transform: translateY(-2px);
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 article {
   animation: fadeIn 0.6s ease-out;
-}
-
-.overflow-x-auto::-webkit-scrollbar {
-  height: 4px;
-}
-
-.overflow-x-auto::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 10px;
-}
-
-.overflow-x-auto::-webkit-scrollbar-thumb {
-  background: #E03636;
-  border-radius: 10px;
 }
 </style>
