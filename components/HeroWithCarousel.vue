@@ -145,7 +145,7 @@ const props = defineProps({
         description: 'La Constitución Política del Estado establece: <br> <br> <b>Artículo 12.</b><br><br> <b>I. </b>	El Estado se organiza y estructura su poder público a través de los órganos Legislativo, Ejecutivo, Judicial y Electoral. La organización del Estado está fundamentada en la independencia, separación, coordinación y cooperación de estos órganos. <br> <br> <b>Artículo 148.</b> <br><br> <b>I. </b> La Cámara de Senadores estará conformada por un total de 36 miembros.<br> <b>II. </b> En cada departamento se eligen 4 Senadores en circunscripción departamental, por votación universal, directa y secreta.<br> <b>III. </b> La asignación de los escaños de Senadores en cada departamento se hará mediante el sistema proporcional, de acuerdo a la Ley.',
         additionalText: '',
         image: {
-          url: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f',
+          url: '/Mandato Constitucional Senado/6.png',
           alt: 'Edificio del Senado',
           title: 'Edificio del Senado',
           caption: 'Sede de la Cámara de Senadores'
@@ -156,7 +156,7 @@ const props = defineProps({
         description: 'La Constitución Política del Estado establece: <br><br>  <b>Artículo 145.</b><br><br> La Asamblea Legislativa Plurinacional está compuesta por dos cámaras, la Cámara de Diputados y la Cámara de Senadores, y es la única con facultad de aprobar y sancionar leyes que rigen para todo el territorio boliviano.',
         additionalText: '',
         image: {
-          url: 'https://images.unsplash.com/photo-1541872703-74c5e44368f9',
+          url: '/Mandato Constitucional Senado/15.png',
           alt: 'Sesión del Senado',
           title: 'Sesión Plenaria',
           caption: 'Senadores en debate'
@@ -167,7 +167,7 @@ const props = defineProps({
         description: 'El Reglamento General de la Cámara de Senadores establece: <br><br> <b>Artículo 2.</b><br><br>(Marco Constitucional). En el marco de lo establecido por la Constitución Política del Estado, la Cámara de Senadores de la Asamblea Legislativa Plurinacional reside en el Órgano Legislativo y ejerce las atribuciones de legislación, fiscalización y gestión, bajo los principios de coordinación y cooperación, promoviendo la participación activa de la ciudadanía en todo el territorio boliviano.',
         additionalText: '',
         image: {
-          url: 'https://images.unsplash.com/photo-1627556592933-ffe99c1cd9eb',
+          url: '/Mandato Constitucional Senado/27.JPG',
           alt: 'Hemiciclo',
           title: 'Hemiciclo',
           caption: 'Vista del hemiciclo'

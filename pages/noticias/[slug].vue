@@ -29,8 +29,8 @@
           <!-- TITULO - Montserrat Bold -->
           <div class="p-6 md:p-8 pb-0">
             <div class="flex flex-wrap gap-2 mb-4">
-              <span class="bg-[#E03636] text-white text-sm px-3 py-1 rounded-full">{{ noticiaData.noticia.category || noticiaData.noticia.categoria || 'Noticia' }}</span>
-              <span v-if="noticiaData.noticia.category === 'legislacion'" class="bg-yellow-500 text-white text-sm px-3 py-1 rounded-full font-semibold">★ Importante</span>
+              <span class="tag-noticia">{{ noticiaData.noticia.category || noticiaData.noticia.categoria || 'Noticia' }}</span>
+              <span v-if="noticiaData.noticia.category === 'legislacion'" class="tag-importante">★ Importante</span>
             </div>
             <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight title-main">
               <span v-html="formatTitleWithColors(noticiaData.noticia.title)"></span>
@@ -55,6 +55,9 @@
                         class="w-full h-full object-cover"
                       />
                       <div class="absolute inset-0 bg-black/30"></div>
+                      <div class="absolute bottom-2 left-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded truncate">
+                        {{ imagenAnterior?.name || imagenAnterior?.alt || 'Imagen anterior' }}
+                      </div>
                     </div>
                   </div>
 
@@ -66,6 +69,11 @@
                         :alt="imagenActual?.alt"
                         class="w-full h-full object-contain"
                       />
+                      <div class="absolute bottom-4 left-0 right-0 text-center">
+                        <div class="inline-block bg-black/70 text-white text-sm px-4 py-2 rounded-full backdrop-blur-sm">
+                          {{ imagenActual?.name || imagenActual?.alt || 'Imagen sin título' }}
+                        </div>
+                      </div>
                     </div>
                   </div>
 
@@ -79,6 +87,9 @@
                         class="w-full h-full object-cover"
                       />
                       <div class="absolute inset-0 bg-black/30"></div>
+                      <div class="absolute bottom-2 left-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded truncate">
+                        {{ imagenSiguiente?.name || imagenSiguiente?.alt || 'Imagen siguiente' }}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -108,10 +119,10 @@
                 </div>
               </div>
 
-              <!-- Texto debajo de las fotos - Montserrat Light, color plomo, 10% más pequeño -->
+              <!-- Texto debajo de las fotos -->
               <div class="text-center mt-3">
                 <p class="carousel-caption">
-                  {{ imagenActual?.alt || 'Sin descripción' }}
+                  {{ imagenActual?.name || imagenActual?.alt || 'Sin descripción' }}
                 </p>
               </div>
 
@@ -120,7 +131,7 @@
                   v-for="(img, idx) in imagenesCarrusel"
                   :key="idx"
                   @click="currentIndex = idx"
-                  class="relative flex-shrink-0 transition-all duration-300 rounded-lg overflow-hidden"
+                  class="relative flex-shrink-0 transition-all duration-300 rounded-lg overflow-hidden group"
                   :class="currentIndex === idx ? 'ring-2 ring-[#E03636] scale-105' : 'opacity-60 hover:opacity-100'"
                   style="width: 80px; height: 60px;"
                 >
@@ -129,6 +140,9 @@
                     :alt="`Miniatura ${idx + 1}`"
                     class="w-full h-full object-cover"
                   />
+                  <div class="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-[8px] px-1 py-0.5 truncate opacity-0 group-hover:opacity-100 transition-opacity">
+                    {{ img.name || img.alt || `Img ${idx+1}` }}
+                  </div>
                 </button>
               </div>
             </div>
@@ -137,16 +151,16 @@
           <!-- REDES SOCIALES -->
           <div class="px-6 md:px-8 mb-6">
             <div class="flex justify-end items-center gap-3 py-2 border-b border-gray-200">
-              <span class="text-gray-500 text-sm mr-1">Compartir:</span>
+              <span class="compartir-texto">Compartir:</span>
               
               <a 
                 :href="`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(windowLocation)}`"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="social-icon rounded-lg border border-gray-300 hover:border-[#E03636] transition-all duration-300"
+                class="social-icon"
                 aria-label="Compartir en Facebook"
               >
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
                 </svg>
               </a>
@@ -155,23 +169,36 @@
                 :href="`https://twitter.com/intent/tweet?text=${encodeURIComponent(noticiaData.noticia.title)}&url=${encodeURIComponent(windowLocation)}`"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="social-icon rounded-lg border border-gray-300 hover:border-[#E03636] transition-all duration-300"
+                class="social-icon"
                 aria-label="Compartir en X"
               >
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                 </svg>
               </a>
 
               <a 
-                :href="`https://www.instagram.com/?url=${encodeURIComponent(windowLocation)}`"
+                :href="`https://www.instagram.com/`"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="social-icon rounded-lg border border-gray-300 hover:border-[#E03636] transition-all duration-300"
-                aria-label="Compartir en Instagram"
+                class="social-icon"
+                aria-label="Instagram"
               >
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069z"/>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <defs>
+                    <linearGradient id="instaGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" style="stop-color:#fdf497"/>
+                      <stop offset="20%" style="stop-color:#fdf497"/>
+                      <stop offset="40%" style="stop-color:#fd5949"/>
+                      <stop offset="60%" style="stop-color:#d6249f"/>
+                      <stop offset="80%" style="stop-color:#285AEB"/>
+                      <stop offset="100%" style="stop-color:#285AEB"/>
+                    </linearGradient>
+                  </defs>
+                  <rect x="2" y="2" width="20" height="20" rx="4" ry="4" fill="url(#instaGradient)"/>
+                  <circle cx="12" cy="12" r="4" fill="white"/>
+                  <circle cx="18.5" cy="5.5" r="1.5" fill="white"/>
+                  <path d="M17.5 2h-11A4.5 4.5 0 0 0 2 6.5v11A4.5 4.5 0 0 0 6.5 22h11a4.5 4.5 0 0 0 4.5-4.5v-11A4.5 4.5 0 0 0 17.5 2zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" fill="white" fill-opacity="0.3"/>
                 </svg>
               </a>
 
@@ -179,31 +206,27 @@
                 :href="`https://www.youtube.com/results?search_query=${encodeURIComponent(noticiaData.noticia.title)}`"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="social-icon rounded-lg border border-gray-300 hover:border-[#E03636] transition-all duration-300"
+                class="social-icon"
                 aria-label="Buscar en YouTube"
               >
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
                 </svg>
               </a>
             </div>
           </div>
 
-          <!-- ============================================ -->
-          <!-- CONTENIDO VARIABLE DE LA NOTICIA (CITAS + VIDEOS) -->
-          <!-- ============================================ -->
+          <!-- CONTENIDO VARIABLE DE LA NOTICIA -->
           <div class="p-6 md:p-8 pt-0">
             <div 
               v-for="(block, index) in noticiaData.noticia.blocks" 
               :key="index"
               class="block-item"
             >
-              <!-- Párrafo normal -->
               <div v-if="block.type === 'paragraph'" class="prose prose-lg max-w-none text-gray-700 mb-6">
                 <p v-html="block.content"></p>
               </div>
 
-              <!-- CITA DESTACADA CON COMILLAS ABSOLUTAS -->
               <div v-else-if="block.type === 'quote'" class="quote-block mt-[3vw] mb-[5vw]">
                 <div class="quote-badge">
                   <div class="badge-name">{{ block.author || 'Senado de Bolivia' }}</div>
@@ -218,7 +241,6 @@
                 </div>
               </div>
 
-              <!-- Video (desde CMS) -->
               <div v-else-if="block.type === 'video'" class="video-block my-8">
                 <div class="relative aspect-video rounded-xl overflow-hidden shadow-lg">
                   <iframe 
@@ -238,16 +260,15 @@
 
         <!-- SECCIÓN NOTICIAS RELACIONADAS -->
         <div class="mt-16 bg-slate-200">
-          <h2 class="text-[1.5vw] font-bold text-gray-800 border-l-4 border-[#E03636] pl-4 text-center">            <span class="text-[#E03636]">Articulos Relacionados</span>
+          <h2 class="text-[1.5vw] font-bold text-gray-800 border-l-4 border-[#E03636] pl-4 text-center">            
+            <span class="text-[#E03636]">Articulos Relacionados</span>
           </h2>
-          <hr class="border-black border-t-2  mx-[5vw]">
+          <hr class="border-black border-t-2 mx-[5vw]">
           
-          <!-- Estado de carga para relacionadas -->
           <div v-if="loadingRelacionadas" class="flex justify-center py-8">
             <div class="inline-block w-8 h-8 border-4 border-[#E03636] border-t-transparent rounded-full animate-spin"></div>
           </div>
 
-          <!-- Noticias relacionadas encontradas -->
           <div v-else-if="noticiasRelacionadas.length > 0" class="relative">
             <button 
               v-if="noticiasRelacionadas.length > 2"
@@ -273,11 +294,9 @@
                   @click="verNoticiaRelacionada(relacionada)"
                 >
                   <div class="p-5">
-                    <!-- Título con palabras rojas -->
                     <h3 class="text-xl font-bold text-gray-900 mb-3 leading-tight">
                       <span v-html="formatTitleWithColors(relacionada.title)"></span>
                     </h3>
-                    <!-- Resumen -->
                     <p class="text-gray-600 line-clamp-3">{{ relacionada.excerpt }}</p>
                   </div>
                 </div>
@@ -297,14 +316,12 @@
             </button>
           </div>
 
-          <!-- Mensaje cuando no hay noticias relacionadas -->
           <div v-else class="text-center py-8 bg-gray-50 rounded-xl">
             <p class="text-gray-500">No hay noticias relacionadas disponibles en este momento.</p>
           </div>
         </div>
       </template>
 
-      <!-- Noticia no encontrada -->
       <div v-else-if="!pending && !noticiaData?.noticia && !error" class="text-center py-12 bg-white rounded-xl">
         <h1 class="text-2xl font-bold text-gray-800 mb-4">Noticia no encontrada</h1>
         <p class="text-gray-500 mb-6">Lo sentimos, la noticia que buscas no existe o ha sido removida.</p>
@@ -321,9 +338,6 @@ import { useRoute, useRouter } from 'vue-router'
 const route = useRoute()
 const router = useRouter()
 
-// ============================================
-// CONFIGURACIÓN DE LA API REAL
-// ============================================
 const API_BASE_URL = 'http://demoback.senado.gob.bo/api'
 
 const windowLocation = ref('')
@@ -331,29 +345,22 @@ const currentIndex = ref(0)
 const imagenesCarrusel = ref([])
 const errorMsg = ref(null)
 
-// Noticias relacionadas
 const noticiasRelacionadas = ref([])
 const relacionadaCurrentIndex = ref(0)
 const loadingRelacionadas = ref(true)
 
-// Configuración de paginación para relacionadas
 const noticiasPorPagina = 2
 const maxRelacionadaIndex = computed(() => Math.max(0, Math.ceil(noticiasRelacionadas.value.length / noticiasPorPagina) - 1))
 
-// ============================================
-// FUNCIÓN PARA CARGAR NOTICIAS RELACIONADAS (API REAL)
-// ============================================
 const cargarNoticiasRelacionadas = async (noticiaId, categoria, tags) => {
   loadingRelacionadas.value = true
   try {
-    // Usar el endpoint de contenido relacionado de la API real
     const response = await fetch(`${API_BASE_URL}/content/${noticiaId}/related?limit=6`)
     const result = await response.json()
     
     if (result.success && result.data && result.data.length > 0) {
       noticiasRelacionadas.value = result.data
     } else {
-      // Fallback: buscar por categoría
       const fallbackResponse = await fetch(`${API_BASE_URL}/content?category=${categoria}&limit=6`)
       const fallbackResult = await fallbackResponse.json()
       if (fallbackResult.success && fallbackResult.data?.contents) {
@@ -371,19 +378,13 @@ const cargarNoticiasRelacionadas = async (noticiaId, categoria, tags) => {
   }
 }
 
-// ============================================
-// FUNCIÓN PARA CONVERTIR HTML A BLOQUES
-// ============================================
 const convertirHTMLaBloques = (htmlContent) => {
   if (!htmlContent) return []
   
   const bloques = []
-  
-  // Crear un elemento div temporal para parsear el HTML
   const tempDiv = document.createElement('div')
   tempDiv.innerHTML = htmlContent
   
-  // Procesar cada nodo hijo
   tempDiv.childNodes.forEach(node => {
     if (node.nodeType === Node.TEXT_NODE && node.textContent.trim()) {
       bloques.push({
@@ -403,7 +404,6 @@ const convertirHTMLaBloques = (htmlContent) => {
         const author = element.getAttribute('data-author') || 'Senado de Bolivia'
         const role = element.getAttribute('data-role') || 'Cámara de Senadores'
         const text = element.textContent || ''
-        // Limpiar el footer si existe
         const cleanText = text.replace(/—.*$/, '').trim()
         bloques.push({
           type: 'quote',
@@ -442,17 +442,11 @@ const convertirHTMLaBloques = (htmlContent) => {
   return bloques
 }
 
-// ============================================
-// FUNCIÓN PARA FORMATEAR TÍTULOS CON COLORES
-// ============================================
 const formatTitleWithColors = (title) => {
   if (!title) return ''
   return title.replace(/\*(.*?)\*/g, '<span class="text-[#E03636]">$1</span>')
 }
 
-// ============================================
-// NAVEGACIÓN DE NOTICIAS RELACIONADAS
-// ============================================
 const anteriorRelacionada = () => {
   if (relacionadaCurrentIndex.value > 0) {
     relacionadaCurrentIndex.value--
@@ -471,16 +465,12 @@ const verNoticiaRelacionada = (noticia) => {
   }
 }
 
-// ============================================
-// OBTENER NOTICIA PRINCIPAL DESDE LA API REAL
-// ============================================
 const { data: noticiaData, pending, error, refresh } = await useAsyncData(
   `noticia-${route.params.slug}`,
   async () => {
     console.log(`🚀 Buscando noticia por slug: ${route.params.slug}`)
     
     try {
-      // Llamar a la API real
       const response = await fetch(`${API_BASE_URL}/content/slug/${route.params.slug}`)
       
       if (!response.ok) {
@@ -495,45 +485,41 @@ const { data: noticiaData, pending, error, refresh } = await useAsyncData(
       
       console.log(`✅ Noticia encontrada: ${noticia.title}`)
       
-      // Preparar imágenes para el carrusel
       const imagenes = []
       
-      // Agregar imagen destacada si existe
       if (noticia.featuredImage?.url) {
         imagenes.push({
           url: noticia.featuredImage.url,
           alt: noticia.featuredImage.alt || noticia.title,
+          name: noticia.featuredImage.name || noticia.featuredImage.title || 'Imagen destacada',
           orientation: 'horizontal'
         })
       }
       
-      // Agregar galería si existe
       if (noticia.gallery && Array.isArray(noticia.gallery)) {
-        noticia.gallery.forEach(img => {
+        noticia.gallery.forEach((img, idx) => {
           imagenes.push({
             url: img.url,
             alt: img.alt || noticia.title,
+            name: img.name || img.title || `Imagen ${idx + 1} de la galería`,
             orientation: 'horizontal'
           })
         })
       }
       
-      // Si no hay imágenes, usar imágenes placeholder
       if (imagenes.length === 0) {
         imagenes.push(
-          { url: 'https://picsum.photos/id/1015/1920/1080', alt: 'Imagen institucional', orientation: 'horizontal' },
-          { url: 'https://picsum.photos/id/104/1080/1920', alt: 'Senado de Bolivia', orientation: 'vertical' },
-          { url: 'https://picsum.photos/id/15/1920/1080', alt: 'Paisaje boliviano', orientation: 'horizontal' }
+          { url: 'https://picsum.photos/id/1015/1920/1080', alt: 'Paisaje montañoso', name: 'Vista panorámica del Senado', orientation: 'horizontal' },
+          { url: 'https://picsum.photos/id/104/1080/1920', alt: 'Edificio institucional', name: 'Fachada principal del Senado', orientation: 'vertical' },
+          { url: 'https://picsum.photos/id/15/1920/1080', alt: 'Naturaleza boliviana', name: 'Sala de sesiones', orientation: 'horizontal' }
         )
       }
       
-      // Si la noticia tiene bloques, usarlos; si no, crear bloques desde el contenido HTML
       let blocks = noticia.blocks || []
       if (blocks.length === 0 && noticia.content) {
         blocks = convertirHTMLaBloques(noticia.content)
       }
       
-      // Enriquecer la noticia
       const noticiaEnriquecida = {
         ...noticia,
         blocks: blocks,
@@ -554,9 +540,6 @@ const { data: noticiaData, pending, error, refresh } = await useAsyncData(
   }
 )
 
-// ============================================
-// WATCHERS PARA CARGAR RELACIONADAS Y SEO
-// ============================================
 watch(noticiaData, (newData) => {
   if (newData?.noticia) {
     cargarNoticiasRelacionadas(newData.noticia._id, newData.noticia.category, newData.noticia.tags)
@@ -586,9 +569,6 @@ if (error.value) {
   errorMsg.value = error.value.message
 }
 
-// ============================================
-// CARRUSEL - COMPUTED
-// ============================================
 const imagenActual = computed(() => {
   if (imagenesCarrusel.value.length === 0) return null
   return imagenesCarrusel.value[currentIndex.value]
@@ -624,9 +604,6 @@ const imagenActualWidth = computed(() => {
 const peekLeftWidth = computed(() => peekWidth.value)
 const peekRightWidth = computed(() => peekWidth.value)
 
-// ============================================
-// MÉTODOS DEL CARRUSEL
-// ============================================
 const siguienteImagen = () => {
   if (imagenesCarrusel.value.length <= 1) return
   currentIndex.value = (currentIndex.value + 1) % imagenesCarrusel.value.length
@@ -637,18 +614,6 @@ const anteriorImagen = () => {
   currentIndex.value = currentIndex.value === 0 
     ? imagenesCarrusel.value.length - 1 
     : currentIndex.value - 1
-}
-
-// ============================================
-// UTILIDADES
-// ============================================
-const formatearFecha = (fecha) => {
-  if (!fecha) return ''
-  return new Date(fecha).toLocaleDateString('es-ES', { 
-    day: 'numeric', 
-    month: 'long', 
-    year: 'numeric' 
-  })
 }
 
 const volverAtras = () => {
@@ -662,9 +627,6 @@ const recargar = () => {
   }
 }
 
-// ============================================
-// KEYBOARD NAVIGATION
-// ============================================
 const handleKeydown = (e) => {
   if (e.key === 'ArrowLeft') {
     anteriorImagen()
@@ -673,9 +635,6 @@ const handleKeydown = (e) => {
   }
 }
 
-// ============================================
-// CICLO DE VIDA
-// ============================================
 onMounted(() => {
   windowLocation.value = window.location.href
   window.addEventListener('keydown', handleKeydown)
@@ -690,7 +649,7 @@ definePageMeta({ layout: 'alter8' })
 </script>
 
 <style scoped>
-/* ========== CAPITOLIUM NEWS - SOLO PARA ESTA PÁGINA ========== */
+/* ========== FONTS ========== */
 @font-face {
   font-family: 'Capitolium News';
   src: url('/fonts/Capitolium News W01 2 Regular/Capitolium News W01 2 Regular.woff2') format('woff2');
@@ -723,7 +682,6 @@ definePageMeta({ layout: 'alter8' })
   font-display: swap;
 }
 
-/* Montserrat para elementos específicos */
 @font-face {
   font-family: 'Montserrat';
   src: url('/fonts/Montserrat-Regular.otf') format('opentype');
@@ -748,19 +706,8 @@ definePageMeta({ layout: 'alter8' })
   font-display: swap;
 }
 
-/* Aplicar Capitolium News a la mayor parte del contenido */
-.text-style,
 .prose,
 .prose p,
-.prose h1,
-.prose h2,
-.prose h3,
-.prose h4,
-.prose h5,
-.prose h6,
-.prose li,
-.prose ul,
-.prose ol,
 article,
 p,
 h1,
@@ -769,69 +716,83 @@ h3,
 h4,
 h5,
 h6,
-span,
 div,
-section,
-button,
-a,
-.social-icon,
-.social-icon svg {
-  font-family: 'Capitolium News', 'Montserrat', Tahoma, Geneva, Verdana, sans-serif !important;
+section {
+  font-family: 'Capitolium News', 'Montserrat', sans-serif !important;
 }
 
-/* ========== TÍTULO PRINCIPAL - Montserrat Bold ========== */
+/* TAGS */
+.tag-noticia,
+.tag-importante {
+  font-family: 'Montserrat', sans-serif !important;
+  font-weight: 600 !important;
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+}
+
+.tag-noticia {
+  background-color: #E03636;
+  color: white;
+}
+
+.tag-importante {
+  background-color: #eab308;
+  color: white;
+}
+
+/* COMPARTIR */
+.compartir-texto {
+  font-family: 'Montserrat', sans-serif !important;
+  font-weight: 500 !important;
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+/* TÍTULOS */
 .title-main,
 .title-main span,
 h1.title-main {
-  font-family: 'Montserrat', 'Capitolium News', sans-serif !important;
+  font-family: 'Montserrat', sans-serif !important;
   font-weight: 700 !important;
 }
 
-/* ========== EXTRACTO - Montserrat Light ========== */
 .excerpt-text {
-  font-family: 'Montserrat', 'Capitolium News', sans-serif !important;
+  font-family: 'Montserrat', sans-serif !important;
   font-weight: 300 !important;
 }
 
-/* ========== TEXTO DEBAJO DE FOTOS - Montserrat Light, color plomo, 10% más pequeño ========== */
-.carousel-caption {
-  font-family: 'Montserrat', 'Capitolium News', sans-serif !important;
-  font-weight: 300 !important;
-  color: #6b7280 !important;
-  font-size: 0.9rem !important;
-}
-
-/* ========== VIDEO CAPTION - Mismo estilo que carousel-caption ========== */
+.carousel-caption,
 .video-caption {
-  font-family: 'Montserrat', 'Capitolium News', sans-serif !important;
+  font-family: 'Montserrat', sans-serif !important;
   font-weight: 300 !important;
   color: #6b7280 !important;
   font-size: 0.9rem !important;
+}
+
+.video-caption {
   text-align: center;
   margin-top: 0.5rem;
 }
 
-/* ========== CITAS ========== */
-/* Nombre en la cita - Montserrat Bold */
+/* CITAS */
 .quote-badge .badge-name {
-  font-family: 'Montserrat', 'Capitolium News', sans-serif !important;
+  font-family: 'Montserrat', sans-serif !important;
   font-weight: 700 !important;
 }
 
-/* Cargo en la cita - Montserrat Light */
 .quote-badge .badge-role {
-  font-family: 'Montserrat', 'Capitolium News', sans-serif !important;
+  font-family: 'Montserrat', sans-serif !important;
   font-weight: 300 !important;
 }
 
-/* Texto de la cita - Montserrat Light cursiva */
 .quote-text {
-  font-family: 'Montserrat', 'Capitolium News', sans-serif !important;
+  font-family: 'Montserrat', sans-serif !important;
   font-weight: 300 !important;
   font-style: italic !important;
 }
 
-/* Mantener el resto de los estilos de cita */
 .quote-block {
   display: flex;
   flex-direction: column;
@@ -863,7 +824,6 @@ h1.title-main {
   position: relative;
 }
 
-/* COMILLAS EN POSICIÓN ABSOLUTA */
 .quote-mark {
   position: absolute;
   font-family: 'Times New Roman', Georgia, serif;
@@ -897,7 +857,7 @@ h1.title-main {
   max-width: 85%;
 }
 
-/* Video block */
+/* VIDEOS */
 .video-block iframe {
   transition: transform 0.3s ease;
   width: 100%;
@@ -909,7 +869,31 @@ h1.title-main {
   transform: scale(1.01);
 }
 
-/* Animación de entrada */
+/* ICONOS SOCIALES - INSTAGRAM CON GRADIENTE */
+.social-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  transition: all 0.3s ease;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  background-color: white;
+}
+
+.social-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.social-icon:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* ANIMACIONES */
 .block-item {
   animation: fadeInUp 0.5s ease-out forwards;
   opacity: 0;
@@ -935,33 +919,11 @@ h1.title-main {
   }
 }
 
-/* Noticias relacionadas */
 .line-clamp-3 {
   display: -webkit-box;
   -webkit-line-clamp: 3;
   line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
-}
-
-.social-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  color: #1f2937;
-  background-color: transparent;
-  transition: all 0.3s ease;
-}
-
-.social-icon:hover {
-  color: #E03636;
-  border-color: #E03636;
-  transform: translateY(-2px);
-}
-
-article {
-  animation: fadeIn 0.6s ease-out;
 }
 </style>

@@ -157,19 +157,19 @@ import { ref, computed } from 'vue'
 // DATOS DE LAS IMÁGENES CON TEXTO ESPECÍFICO
 const imageData = ref([
   {
-    url: '/resena historica/img1.png',
-    titulo: 'Fundación del Poder Legislativo',
-    descripcion: `El 9 de febrero de 1825 por decreto del Mariscal Antonio José de Sucre se convoca a la primera Asamblea Nacional con el objetivo de dirimir el destino de las provincias de la futura República de Bolivia, por lo cual se establece la fundación del Poder Legislativo un 10 de julio del 1825. El día 6 de agosto de 1825, se aprobó la independencia de la República de Bolívar por amplia mayoría, en consecuencia, en la sesión del 13 de agosto de 1825, Bolivia es declarada como una República representativa, la cual contaría con tres poderes: Ejecutivo, Judicial y Legislativo.`
+    url: '/Reseña Histórica del Senado/17.png',
+    titulo: 'Palacio Legislativo',
+    descripcion: `Palacio Legislativo Restaurado, año 1940 (Fuente: Colección Fotográfica de la Vicepresidencia del Estado Plurinacional de Bolivia).`
   },
   {
-    url: '/resena historica/img2.png',
-    titulo: 'Primera Asamblea Constituyente',
-    descripcion: `La primera Asamblea Constituyente de Bolivia se instaló el 10 de julio de 1825 en la ciudad de Chuquisaca, actual Sucre. Este hito marcó el inicio de la vida republicana y la construcción del Estado boliviano. Los representantes de las provincias del Alto Perú deliberaron sobre el futuro de la nación, decidiendo finalmente la independencia absoluta de las Provincias Unidas del Río de la Plata y del Perú.`
+    url: '/Reseña Histórica del Senado/63.png',
+    titulo: 'Antiguo Hemiciclo',
+    descripcion: `Hemiciclo antiguo de la Honorable Cámara de Senadores. (Fuente: Colección Fotográfica del Honorable Senado del Estado Plurinacional de Bolivia).`
   },
   {
-    url: '/resena historica/img3.png',
-    titulo: 'Creación del Senado Boliviano',
-    descripcion: `El Senado de Bolivia fue establecido mediante la primera Constitución Política del país, promulgada el 19 de noviembre de 1826 por el Mariscal Antonio José de Sucre. La Cámara de Senadores se conformó como cámara revisora y representante de los departamentos, consolidando el sistema bicameral que perdura hasta nuestros días como pilar fundamental del Poder Legislativo.`
+    url: '/Reseña Histórica del Senado/118.JPG',
+    titulo: 'Nuevo Hemicilo',
+    descripcion: `Nuevo Hemiciclo de la Honorable Cámara de Senadores. (Fuente: Colección Fotográfica del Honorable Senado del Estado Plurinacional de Bolivia).`
   }
 ])
 
