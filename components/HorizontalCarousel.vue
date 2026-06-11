@@ -2,28 +2,23 @@
   <div class="relative w-full h-full flex flex-col items-center justify-center px-[4vw]">
     <div class="h-[4.4vw]"></div>
     
-    <!-- Título (opcional) -->
     <h2 v-if="title" class="text-[2.5vw] font-bold text-center mb-8 text-[#E03636] uppercase tracking-wide">
       {{ title }}
     </h2>
 
-    <!-- Contenedor del carrusel -->
     <div class="relative w-full mx-auto px-12 pb-[1.3vw]">
       
-      <!-- Flecha izquierda -->
       <button 
         @click="prevSlide"
         class="absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-white/80 hover:bg-white text-[#E03636] rounded-full w-10 h-10 flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-110 border-2 border-[#E03636]/30"
         :disabled="!hasImages"
         :class="{ 'opacity-50 cursor-not-allowed': !hasImages }"
-        aria-label="Imagen anterior"
       >
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
         </svg>
       </button>
 
-      <!-- Contenedor de imágenes -->
       <div class="overflow-hidden">
         <div 
           v-if="hasImages"
@@ -37,98 +32,109 @@
           >
             <div 
               v-for="(image, imgIndex) in group" 
-              :key="imgIndex"
-              class="relative group overflow-hidden rounded-xl shadow-2xl border-4 border-white aspect-square"
+              :key="image.id"
+              class="relative group overflow-hidden rounded-xl shadow-2xl border-4 border-white aspect-square cursor-pointer"
+              @click="openImageModal(image, groupIndex * 4 + imgIndex)"
             >
+              <!-- 🔥 TODAS LAS IMÁGENES AHORA USAN .webp -->
               <img 
-                :src="image.url" 
-                :alt="image.alt || `Imagen ${groupIndex * 4 + imgIndex + 1}`"
+                :src="`/G-Institucional/${image.id}.webp`"
+                :alt="image.description"
                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                loading="lazy"
+                @error="handleImageError"
               />
-              <div v-if="image.title" class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
-                <p class="text-white p-4 font-medium">{{ image.title }}</p>
+              
+              <div class="absolute bottom-0 left-0 right-0 bg-[#E03636]/80 backdrop-blur-sm py-1.5 px-1">
+                <p class="text-white text-[0.65rem] md:text-xs font-medium line-clamp-2 text-center">
+                  {{ image.description }}
+                </p>
               </div>
+
+              <div class="absolute inset-0 border-2 border-white rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+              <div class="absolute inset-[3px] border border-black/30 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
             </div>
           </div>
         </div>
         
-        <!-- Mensaje si no hay imágenes -->
         <div v-else class="flex items-center justify-center h-64 bg-gray-100 rounded-xl border-4 border-white shadow-2xl">
           <p class="text-gray-500 text-lg">No hay imágenes disponibles</p>
         </div>
       </div>
 
-      <!-- Flecha derecha -->
       <button 
         @click="nextSlide"
         class="absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-white/80 hover:bg-white text-[#E03636] rounded-full w-10 h-10 flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-110 border-2 border-[#E03636]/30"
         :disabled="!hasImages"
         :class="{ 'opacity-50 cursor-not-allowed': !hasImages }"
-        aria-label="Imagen siguiente"
       >
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
         </svg>
       </button>
     </div>
-    <NuxtLink to="en-construccion">
+
+    <NuxtLink to="/museo/galeria">
       <button 
-        class="text-[1.2vw] bg-[#E03636] hover:bg-[#E03636]/80 text-white font-bold py-[.5em] px-8 rounded-[.5vw] transition-all duration-300 transform hover:scale-105 uppercase tracking-wider shadow-lg"
+        class="text-[1.2vw] bg-[#E03636] hover:bg-[#E03636]/80 text-white font-bold py-[.5em] px-8 rounded-[.5vw] transition-all duration-300 transform hover:scale-105 uppercase tracking-wider shadow-lg mt-6"
       >
         Ver más
       </button>
     </NuxtLink>
+
+    <!-- Modal de imagen ampliada -->
+    <Teleport to="body">
+      <div v-if="showImageModal" class="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center" @click.self="closeImageViewer">
+        <div class="relative w-full h-full flex flex-col items-center justify-center p-4">
+          <button 
+            @click="closeImageViewer"
+            class="absolute top-4 right-4 text-white hover:text-[#E03636] transition-colors text-3xl z-10"
+          >
+            ✕
+          </button>
+
+          <button 
+            @click="prevImageModal"
+            class="absolute left-4 top-1/2 -translate-y-1/2 text-white/60 hover:text-white transition-colors text-5xl z-10"
+          >
+            ‹
+          </button>
+
+          <div class="relative max-w-[90vw] max-h-[70vh] flex items-center justify-center">
+            <img 
+              :src="`/G-Institucional/${currentImage?.id}.webp`"
+              :alt="currentImage?.description"
+              class="max-w-full max-h-[70vh] object-contain rounded-lg"
+            />
+          </div>
+
+          <div class="mt-6 text-center max-w-2xl px-4">
+            <p class="text-white text-base md:text-xl font-medium">{{ currentImage?.description }}</p>
+          </div>
+
+          <button 
+            @click="nextImageModal"
+            class="absolute right-4 top-1/2 -translate-y-1/2 text-white/60 hover:text-white transition-colors text-5xl z-10"
+          >
+            ›
+          </button>
+
+          <p class="text-white/50 text-sm mt-6">
+            {{ currentImageIndex + 1 }} / {{ allImagesFlat.length }}
+          </p>
+        </div>
+      </div>
+    </Teleport>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 
 const props = defineProps({
   images: {
     type: Array,
-    default: () => [
-      {
-        url: '/horizontal carousel/c1.png',
-        alt: 'Edificio del Senado',
-        title: 'Edificio del Senado Nacional'
-      },
-      {
-        url: '/horizontal carousel/c2.png',
-        alt: 'Sesión del Senado',
-        title: 'Sesión Plenaria'
-      },
-      {
-        url: '/horizontal carousel/c3.png',
-        alt: 'Hemiciclo',
-        title: 'Hemiciclo del Senado'
-      },
-      {
-        url: '/horizontal carousel/c4.png',
-        alt: 'Bandera de Bolivia',
-        title: 'Bandera Nacional'
-      },
-      {
-        url: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-        alt: 'Edificio del Senado',
-        title: 'Edificio del Senado Nacional'
-      },
-      {
-        url: 'https://images.unsplash.com/photo-1541872703-74c5e44368f9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-        alt: 'Sesión del Senado',
-        title: 'Sesión Plenaria'
-      },
-      {
-        url: 'https://images.unsplash.com/photo-1627556592933-ffe99c1cd9eb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-        alt: 'Hemiciclo',
-        title: 'Hemiciclo del Senado'
-      },
-      {
-        url: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-        alt: 'Bandera de Bolivia',
-        title: 'Bandera Nacional'
-      }
-    ]
+    default: () => []
   },
   title: {
     type: String,
@@ -136,17 +142,68 @@ const props = defineProps({
   }
 })
 
-const hasImages = computed(() => props.images && props.images.length > 0)
+// ============================================
+// DESCRIPCIONES PARA LAS 128 IMÁGENES
+// ============================================
 
-// Agrupar imágenes en grupos de 4
+const descriptions = [
+  "Vista panorámica del Palacio del Senado",
+  "Sesión Plenaria - Cámara de Senadores",
+  "Reunión de la Directiva Camaral",
+  "Comisión de Constitución trabajando",
+  "Presidente del Senado en sesión",
+  "Vicepresidenta del Senado",
+  "Secretaría General del Senado",
+  "Pleno de la Asamblea Legislativa",
+  "Senadores durante el debate",
+  "Firma de proyecto de ley",
+  "Audiencia pública en el Senado",
+  "Comisión de Desarrollo Económico",
+  "Juramentación de nuevos senadores",
+  "Reunión de bancadas",
+  "Comisión de Educación y Salud",
+  "Senadores por Bolivia",
+  "Palacio Legislativo - Vista nocturna",
+  "Sala de sesiones del Senado",
+  "Comisión de Autonomías",
+  "Conferencia de prensa del Presidente",
+  "Visita de delegación internacional",
+  "Ceremonia de investidura",
+  "Comisión de Justicia Plural",
+  "Senadores en comisión técnica",
+  "Reunión con organizaciones sociales",
+  "Instalación de nueva legislatura",
+  "Homenaje a héroes de la patria",
+  "Comisión de Seguridad del Estado",
+  "Senadores por departamento",
+  "Firma de convenios interinstitucionales"
+]
+
+// Generar las 128 imágenes
+const generateDefaultImages = () => {
+  const images = []
+  for (let i = 1; i <= 128; i++) {
+    const descIndex = (i - 1) % descriptions.length
+    images.push({
+      id: i,
+      description: descriptions[descIndex]
+    })
+  }
+  return images
+}
+
+const allImages = ref(props.images.length > 0 ? props.images : generateDefaultImages())
+const allImagesFlat = computed(() => allImages.value)
+
 const imageGroups = computed(() => {
   const groups = []
-  for (let i = 0; i < props.images.length; i += 4) {
-    groups.push(props.images.slice(i, i + 4))
+  for (let i = 0; i < allImages.value.length; i += 4) {
+    groups.push(allImages.value.slice(i, i + 4))
   }
   return groups
 })
 
+const hasImages = computed(() => allImages.value.length > 0)
 const currentIndex = ref(0)
 
 const nextSlide = () => {
@@ -164,6 +221,68 @@ const prevSlide = () => {
     currentIndex.value = imageGroups.value.length - 1
   }
 }
+
+// Manejo de error de carga (fallback)
+const handleImageError = (event) => {
+  const img = event.target
+  // Si la imagen .webp falla, mostrar placeholder
+  img.src = '/images/placeholder.jpg'
+}
+
+// ============================================
+// MODAL
+// ============================================
+const showImageModal = ref(false)
+const currentImage = ref(null)
+const currentImageIndex = ref(0)
+
+const openImageModal = (image, index) => {
+  currentImage.value = image
+  currentImageIndex.value = index
+  showImageModal.value = true
+  document.body.style.overflow = 'hidden'
+}
+
+const closeImageViewer = () => {
+  showImageModal.value = false
+  currentImage.value = null
+  document.body.style.overflow = ''
+}
+
+const nextImageModal = () => {
+  if (currentImageIndex.value < allImagesFlat.value.length - 1) {
+    currentImageIndex.value++
+    currentImage.value = allImagesFlat.value[currentImageIndex.value]
+  }
+}
+
+const prevImageModal = () => {
+  if (currentImageIndex.value > 0) {
+    currentImageIndex.value--
+    currentImage.value = allImagesFlat.value[currentImageIndex.value]
+  }
+}
+
+const handleKeydown = (e) => {
+  if (!showImageModal.value) return
+  if (e.key === 'ArrowLeft') {
+    prevImageModal()
+  } else if (e.key === 'ArrowRight') {
+    nextImageModal()
+  } else if (e.key === 'Escape') {
+    closeImageViewer()
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('keydown', handleKeydown)
+  console.log('📸 Carrusel cargado con imágenes .webp')
+})
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleKeydown)
+  document.body.style.overflow = ''
+})
 </script>
 
 <style scoped>
@@ -184,8 +303,28 @@ const prevSlide = () => {
   transform: scale(1.1);
 }
 
-/* Hace que las imágenes sean cuadradas */
 .aspect-square {
   aspect-ratio: 1 / 1;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.fixed {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 </style>

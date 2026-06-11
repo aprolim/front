@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-gray-50 py-12">
     <div class="container mx-auto px-4 max-w-6xl">
-      <button 
+      <!-- <button 
         @click="volverAtras"
         class="inline-flex items-center gap-2 text-[#E03636] hover:text-[#C12F2F] transition-colors mb-6 group"
       >
@@ -9,7 +9,7 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
         </svg>
         Volver
-      </button>
+      </button> -->
 
       <!-- Estado de carga -->
       <div v-if="pending && !noticiaData?.noticia" class="flex justify-center items-center py-20">
@@ -45,6 +45,7 @@
             <div class="relative">
               <div class="relative overflow-hidden rounded-2xl bg-gray-900 shadow-2xl" style="height: 500px;">
                 <div class="flex h-full">
+                  <!-- Imagen izquierda (peek) - SIN TEXTO -->
                   <div class="flex-shrink-0 transition-all duration-500 ease-out overflow-hidden h-full cursor-pointer"
                        :style="{ width: `${peekLeftWidth}%` }"
                        @click="anteriorImagen">
@@ -55,12 +56,10 @@
                         class="w-full h-full object-cover"
                       />
                       <div class="absolute inset-0 bg-black/30"></div>
-                      <div class="absolute bottom-2 left-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded truncate">
-                        {{ imagenAnterior?.name || imagenAnterior?.alt || 'Imagen anterior' }}
-                      </div>
                     </div>
                   </div>
 
+                  <!-- Imagen central - CON TEXTO DEBAJO (SIN PILL) -->
                   <div class="flex-shrink-0 transition-all duration-500 h-full"
                        :style="{ width: `${imagenActualWidth}%` }">
                     <div class="relative w-full h-full overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900">
@@ -69,14 +68,10 @@
                         :alt="imagenActual?.alt"
                         class="w-full h-full object-contain"
                       />
-                      <div class="absolute bottom-4 left-0 right-0 text-center">
-                        <div class="inline-block bg-black/70 text-white text-sm px-4 py-2 rounded-full backdrop-blur-sm">
-                          {{ imagenActual?.name || imagenActual?.alt || 'Imagen sin título' }}
-                        </div>
-                      </div>
                     </div>
                   </div>
 
+                  <!-- Imagen derecha (peek) - SIN TEXTO -->
                   <div class="flex-shrink-0 transition-all duration-500 overflow-hidden h-full cursor-pointer"
                        :style="{ width: `${peekRightWidth}%` }"
                        @click="siguienteImagen">
@@ -87,13 +82,11 @@
                         class="w-full h-full object-cover"
                       />
                       <div class="absolute inset-0 bg-black/30"></div>
-                      <div class="absolute bottom-2 left-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded truncate">
-                        {{ imagenSiguiente?.name || imagenSiguiente?.alt || 'Imagen siguiente' }}
-                      </div>
                     </div>
                   </div>
                 </div>
 
+                <!-- Botones de navegación -->
                 <button 
                   v-if="imagenesCarrusel.length > 1"
                   @click="anteriorImagen"
@@ -114,24 +107,26 @@
                   </svg>
                 </button>
 
+                <!-- Contador de imágenes -->
                 <div v-if="imagenesCarrusel.length > 1" class="absolute top-4 right-4 bg-black/70 text-white text-sm px-3 py-1.5 rounded-full backdrop-blur-sm font-medium z-10">
                   {{ String(currentIndex + 1).padStart(2, '0') }} / {{ String(imagenesCarrusel.length).padStart(2, '0') }}
                 </div>
               </div>
 
-              <!-- Texto debajo de las fotos -->
+              <!-- TEXTO DEBAJO DE LA IMAGEN - SIN PILL, SOLO TEXTO PLANO -->
               <div class="text-center mt-3">
                 <p class="carousel-caption">
-                  {{ imagenActual?.name || imagenActual?.alt || 'Sin descripción' }}
+                  {{ imagenActual?.caption || imagenActual?.alt || 'Sin descripción' }}
                 </p>
               </div>
 
+              <!-- Miniaturas -->
               <div v-if="imagenesCarrusel.length > 1" class="flex justify-center gap-2 mt-4 overflow-x-auto pb-2">
                 <button
                   v-for="(img, idx) in imagenesCarrusel"
                   :key="idx"
                   @click="currentIndex = idx"
-                  class="relative flex-shrink-0 transition-all duration-300 rounded-lg overflow-hidden group"
+                  class="relative flex-shrink-0 transition-all duration-300 rounded-lg overflow-hidden"
                   :class="currentIndex === idx ? 'ring-2 ring-[#E03636] scale-105' : 'opacity-60 hover:opacity-100'"
                   style="width: 80px; height: 60px;"
                 >
@@ -140,19 +135,17 @@
                     :alt="`Miniatura ${idx + 1}`"
                     class="w-full h-full object-cover"
                   />
-                  <div class="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-[8px] px-1 py-0.5 truncate opacity-0 group-hover:opacity-100 transition-opacity">
-                    {{ img.name || img.alt || `Img ${idx+1}` }}
-                  </div>
                 </button>
               </div>
             </div>
           </div>
 
-          <!-- REDES SOCIALES -->
+          <!-- REDES SOCIALES - TODAS EN NEGRO -->
           <div class="px-6 md:px-8 mb-6">
             <div class="flex justify-end items-center gap-3 py-2 border-b border-gray-200">
               <span class="compartir-texto">Compartir:</span>
               
+              <!-- Facebook -->
               <a 
                 :href="`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(windowLocation)}`"
                 target="_blank"
@@ -160,11 +153,12 @@
                 class="social-icon"
                 aria-label="Compartir en Facebook"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#000000">
                   <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
                 </svg>
               </a>
 
+              <!-- X (Twitter) -->
               <a 
                 :href="`https://twitter.com/intent/tweet?text=${encodeURIComponent(noticiaData.noticia.title)}&url=${encodeURIComponent(windowLocation)}`"
                 target="_blank"
@@ -172,11 +166,12 @@
                 class="social-icon"
                 aria-label="Compartir en X"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#000000">
                   <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                 </svg>
               </a>
 
+              <!-- Instagram - MÁXIMO DETALLE (ícono clásico de cámara) -->
               <a 
                 :href="`https://www.instagram.com/`"
                 target="_blank"
@@ -184,24 +179,13 @@
                 class="social-icon"
                 aria-label="Instagram"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                  <defs>
-                    <linearGradient id="instaGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" style="stop-color:#fdf497"/>
-                      <stop offset="20%" style="stop-color:#fdf497"/>
-                      <stop offset="40%" style="stop-color:#fd5949"/>
-                      <stop offset="60%" style="stop-color:#d6249f"/>
-                      <stop offset="80%" style="stop-color:#285AEB"/>
-                      <stop offset="100%" style="stop-color:#285AEB"/>
-                    </linearGradient>
-                  </defs>
-                  <rect x="2" y="2" width="20" height="20" rx="4" ry="4" fill="url(#instaGradient)"/>
-                  <circle cx="12" cy="12" r="4" fill="white"/>
-                  <circle cx="18.5" cy="5.5" r="1.5" fill="white"/>
-                  <path d="M17.5 2h-11A4.5 4.5 0 0 0 2 6.5v11A4.5 4.5 0 0 0 6.5 22h11a4.5 4.5 0 0 0 4.5-4.5v-11A4.5 4.5 0 0 0 17.5 2zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" fill="white" fill-opacity="0.3"/>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#000000">
+                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 7c-2.761 0-5 2.239-5 5s2.239 5 5 5 5-2.239 5-5-2.239-5-5-5z"/>
+                  <circle cx="17.5" cy="6.5" r="1.5"/>
                 </svg>
               </a>
 
+              <!-- YouTube -->
               <a 
                 :href="`https://www.youtube.com/results?search_query=${encodeURIComponent(noticiaData.noticia.title)}`"
                 target="_blank"
@@ -209,7 +193,7 @@
                 class="social-icon"
                 aria-label="Buscar en YouTube"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#000000">
                   <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
                 </svg>
               </a>
@@ -223,7 +207,7 @@
               :key="index"
               class="block-item"
             >
-              <div v-if="block.type === 'paragraph'" class="prose prose-lg max-w-none text-gray-700 mb-6">
+              <div v-if="block.type === 'paragraph'" class="prose prose-lg max-w-none text-gray-700 mb-6 text-justify">
                 <p v-html="block.content"></p>
               </div>
 
@@ -487,31 +471,34 @@ const { data: noticiaData, pending, error, refresh } = await useAsyncData(
       
       const imagenes = []
       
+      // Imagen destacada - usar caption
       if (noticia.featuredImage?.url) {
         imagenes.push({
           url: noticia.featuredImage.url,
           alt: noticia.featuredImage.alt || noticia.title,
-          name: noticia.featuredImage.name || noticia.featuredImage.title || 'Imagen destacada',
+          caption: noticia.featuredImage.caption || noticia.featuredImage.name || noticia.title,
           orientation: 'horizontal'
         })
       }
       
+      // Galería - usar caption
       if (noticia.gallery && Array.isArray(noticia.gallery)) {
         noticia.gallery.forEach((img, idx) => {
           imagenes.push({
             url: img.url,
             alt: img.alt || noticia.title,
-            name: img.name || img.title || `Imagen ${idx + 1} de la galería`,
+            caption: img.caption || img.name || `Imagen ${idx + 1}`,
             orientation: 'horizontal'
           })
         })
       }
       
+      // Imágenes de respaldo
       if (imagenes.length === 0) {
         imagenes.push(
-          { url: 'https://picsum.photos/id/1015/1920/1080', alt: 'Paisaje montañoso', name: 'Vista panorámica del Senado', orientation: 'horizontal' },
-          { url: 'https://picsum.photos/id/104/1080/1920', alt: 'Edificio institucional', name: 'Fachada principal del Senado', orientation: 'vertical' },
-          { url: 'https://picsum.photos/id/15/1920/1080', alt: 'Naturaleza boliviana', name: 'Sala de sesiones', orientation: 'horizontal' }
+          { url: 'https://picsum.photos/id/1015/1920/1080', alt: 'Paisaje montañoso', caption: 'Vista panorámica del Senado', orientation: 'horizontal' },
+          { url: 'https://picsum.photos/id/104/1080/1920', alt: 'Edificio institucional', caption: 'Fachada principal del Senado', orientation: 'vertical' },
+          { url: 'https://picsum.photos/id/15/1920/1080', alt: 'Naturaleza boliviana', caption: 'Sala de sesiones', orientation: 'horizontal' }
         )
       }
       
@@ -869,13 +856,13 @@ h1.title-main {
   transform: scale(1.01);
 }
 
-/* ICONOS SOCIALES - INSTAGRAM CON GRADIENTE */
+/* ICONOS SOCIALES - TODOS EN NEGRO */
 .social-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 38px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
   transition: all 0.3s ease;
   border: 1px solid #e5e7eb;
   border-radius: 0.5rem;
@@ -891,6 +878,7 @@ h1.title-main {
 .social-icon:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-color: #000000;
 }
 
 /* ANIMACIONES */

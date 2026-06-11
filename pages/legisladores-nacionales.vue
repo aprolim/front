@@ -330,7 +330,7 @@
                     </div>
                   </div>
                   <div v-for="(suplente, index) in suplentes" :key="'suplente-'+index" class="text-center">
-                    <div class="w-[12vh] h-[12vh] mx-auto rounded-full overflow-hidden mb-2 transition-all duration-300 hover:scale-[3.3]">
+                    <div v-if="suplente.nombre" class="w-[12vh] h-[12vh] mx-auto rounded-full overflow-hidden mb-2 transition-all duration-300 hover:scale-[3.3]">
                       <img 
                         :src="suplente.imagen" 
                         :alt="suplente.nombre" 

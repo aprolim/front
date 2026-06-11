@@ -1,4 +1,3 @@
-<!-- pages/centro-de-noticias.vue - VERSIÓN CORREGIDA -->
 <template>
   <div class="min-h-screen text-style">
     <!-- Fondos fijos -->
@@ -94,7 +93,7 @@
       </div>
     </section>
 
-    <!-- SECCIÓN 2 - MÁS NOTICIAS (pasa la función de limpieza) -->
+    <!-- SECCIÓN 2 - MÁS NOTICIAS -->
     <div 
       id="mas-noticias"
       ref="seccion2Ref"
@@ -105,7 +104,9 @@
       <MoreNewsGrid :limpiarAsteriscos="limpiarAsteriscos" />
     </div>
     
-    <!-- SECCIÓN 3 - SESIONES -->
+    <!-- ============================================ -->
+    <!-- SECCIÓN 3 - SESIONES (MODIFICADA) -->
+    <!-- ============================================ -->
     <div 
       id="sesiones"
       ref="seccion3Ref"
@@ -124,24 +125,28 @@
       </div>
 
       <div class="flex-1 flex flex-col justify-center">
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-[2vw] mx-auto px-[6vw] w-full">
-          <div class="flex flex-col items-center">
+        <!-- Estado de carga -->
+        <div v-if="loadingSesiones" class="flex justify-center items-center py-12">
+          <div class="inline-block w-12 h-12 border-4 border-[#E03636] border-t-transparent rounded-full animate-spin"></div>
+          <p class="ml-3 text-gray-600">Cargando videos...</p>
+        </div>
+        
+        <!-- Grid de videos -->
+        <div v-else class="grid grid-cols-1 sm:grid-cols-3 gap-[2vw] mx-auto px-[6vw] w-full">
+          <div v-for="video in sesionesVideos" :key="video.position" class="flex flex-col items-center">
             <div class="w-full aspect-video rounded-[1vw] overflow-hidden border-[.6vw] border-white shadow-lg">
-              <iframe class="w-full h-full" src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0&rel=0" frameborder="0" allowfullscreen></iframe>
+              <iframe 
+                class="w-full h-full" 
+                :src="`https://www.youtube.com/embed/${video.youtubeId}?autoplay=0&rel=0&modestbranding=1`" 
+                :title="video.title"
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+              ></iframe>
             </div>
-            <p class="text-[1.8vw] text-center font-semibold mt-3 text-[#E03636]">Sesión en vivo</p>
-          </div>
-          <div class="flex flex-col items-center">
-            <div class="w-full aspect-video rounded-[1vw] overflow-hidden border-[.6vw] border-white shadow-lg">
-              <iframe class="w-full h-full" src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0&rel=0" frameborder="0" allowfullscreen></iframe>
-            </div>
-            <p class="text-[1.8vw] text-center font-semibold mt-3 text-[#E03636]">90 Sesión Ordinaria</p>
-          </div>
-          <div class="flex flex-col items-center">
-            <div class="w-full aspect-video rounded-[1vw] overflow-hidden border-[.6vw] border-white shadow-lg">
-              <iframe class="w-full h-full" src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0&rel=0" frameborder="0" allowfullscreen></iframe>
-            </div>
-            <p class="text-[1.8vw] text-center font-semibold mt-3 text-[#E03636]">88 Sesión Ordinaria</p>
+            <p class="text-[1.6vw] text-center font-semibold mt-3 text-[#E03636] line-clamp-2">
+              {{ video.title }}
+            </p>
           </div>
         </div>
       </div>
@@ -194,6 +199,7 @@ import { ref, onMounted, onUnmounted, onActivated, onDeactivated, nextTick, comp
 import { useRouter, useRoute } from 'vue-router'
 import MoreNewsGrid from '~/components/MoreNewsGrid.vue'
 import { useNoticias } from '~/composables/useNoticias'
+import { useSesiones } from '~/composables/useSesiones'
 
 definePageMeta({ layout: 'alter8', ssr: true })
 
@@ -202,7 +208,7 @@ const router = useRouter()
 
 console.log('🚀 [PAGE] centro-de-noticias.vue - INICIALIZANDO')
 
-// 🔥 USAR EL COMPOSABLE CORREGIDO
+// 🔥 USAR LOS COMPOSABLES
 const { 
   noticiasImportantes, 
   ultimasNoticias, 
@@ -212,12 +218,14 @@ const {
   recargarDatos 
 } = useNoticias()
 
+// 🔥 SESIONES - NUEVO COMPOSABLE
+const { videos: sesionesVideos, loading: loadingSesiones, fetchVideos: fetchSesionesVideos } = useSesiones()
+
 // ============================================
 // FUNCIÓN PARA LIMPIAR ASTERISCOS DE LOS TÍTULOS
 // ============================================
 const limpiarAsteriscos = (texto) => {
   if (!texto) return ''
-  // Eliminar todos los asteriscos del texto
   return texto.replace(/\*/g, '')
 }
 
@@ -369,6 +377,7 @@ onActivated(async () => {
   stopCarousel()
   destroyObserver()
   await recargarDatos()
+  await fetchSesionesVideos()  // 🔥 Cargar videos de sesiones
   isSeccion1Visible.value = false
   isSeccion2Visible.value = false
   isSeccion3Visible.value = false
@@ -397,6 +406,7 @@ onDeactivated(() => {
 onMounted(async () => {
   console.log('🎬 [PAGE] Montada')
   await recargarDatos()
+  await fetchSesionesVideos()  // 🔥 Cargar videos de sesiones
   await nextTick()
   initObserver()
   if (route.hash) {

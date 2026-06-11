@@ -1,4 +1,3 @@
-<!-- pages/la-institucion.vue - VERSIÓN COMPLETA CON CENTRADO VERTICAL -->
 <template>
   <div class="min-h-screen text-style">
     <!-- Fondo fijo GLOBAL - PARA Senate Directors Y Reseña Histórica -->
@@ -22,7 +21,7 @@
       />
     </section>
 
-    <!-- Sección Directiva Camaral - CON ID -->
+    <!-- Sección Directiva Camaral -->
     <div
       id="directiva-camaral"
       ref="senateDirectorsRef" 
@@ -33,7 +32,7 @@
       <SenateDirectors />
     </div>
     
-    <!-- Sección Reseña Histórica - CON ID CORREGIDO (sin ñ) -->
+    <!-- Sección Reseña Histórica -->
     <div 
       id="resena-historica"
       ref="historicalReviewRef" 
@@ -44,13 +43,13 @@
       <HistoricalReview />
     </div>
     
-    <!-- Sección Museo - CON ID -->
+    <!-- Sección Museo -->
     <div 
       id="museo"
       ref="museumRef" 
       class="h-screen w-full scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out delay-400 z-10"
       :class="{ 'animate-in': isMuseumVisible }"
-      style="background-color: #eeeeee; background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed;"
+      style="background-color: #eeeeee; background-size: cover; background-position: center; background-repeat: no-repeat;"
     >
       <HorizontalCarousel />
     </div>
@@ -196,7 +195,7 @@ onMounted(async () => {
     const id = route.hash.replace('#', '')
     setTimeout(() => {
       scrollToSection(id)
-    }, 500) // Pequeño delay para asegurar que todo está renderizado
+    }, 500)
   }
 });
 
@@ -225,11 +224,10 @@ definePageMeta({
   font-family: 'Montserrat', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* ===== SNAP SCROLL CON PADDING PARA HEADER ===== */
+/* ===== SNAP SCROLL ===== */
 html, body {
   scroll-behavior: smooth;
   scroll-snap-type: y mandatory;
-  /* scroll-padding-top: 80px; */
 }
 
 /* Cada sección con snap */
@@ -239,38 +237,28 @@ section, .scroll-section {
   transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.3, 1.2);
 }
 
-/* El footer también hace snap */
 footer {
   scroll-snap-align: start;
   scroll-snap-stop: always;
   transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.3, 1.2);
 }
 
-/* ===== CENTRADO VERTICAL DE TODAS LAS SECCIONES ===== */
+/* ===== CENTRADO VERTICAL ===== */
 .scroll-section {
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Centrado vertical */
-  align-items: center; /* Centrado horizontal opcional */
+  justify-content: center;
+  align-items: center;
   min-height: 100vh;
   width: 100%;
 }
 
-/* Para mantener el ancho original de los componentes hijos */
 .scroll-section > div {
   width: 100%;
   max-width: 100%;
 }
 
-/* Ajuste específico para el contenido interno - evita que se estire innecesariamente */
-.scroll-section :deep(.container),
-.scroll-section :deep(.max-w-7xl),
-.scroll-section :deep(.mx-auto) {
-  margin-left: auto;
-  margin-right: auto;
-}
-
-/* ===== FONDO FIJO PARA SENATE DIRECTORS ===== */
+/* ===== FONDO FIJO ===== */
 .global-fixed-background {
   position: fixed;
   top: 0;
@@ -312,90 +300,6 @@ footer {
   visibility: visible;
 }
 
-/* ===== FONDO FIJO PARA RESEÑA HISTÓRICA ===== */
-.historical-fixed-background {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-image: url('/la-institucion/Recurso 1.png');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-color: #f1f1f3;
-  z-index: 0;
-  pointer-events: none;
-  will-change: transform;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.5s ease, visibility 0.5s ease;
-}
-
-.historical-fixed-background::after {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: radial-gradient(
-    circle at 50% 30%,
-    transparent 0%,
-    rgba(0, 0, 0, 0.25) 80%,
-    rgba(0, 0, 0, 0.35) 100%
-  );
-  pointer-events: none;
-  z-index: 1;
-}
-
-.historical-fixed-background.show-fixed {
-  opacity: 1;
-  visibility: visible;
-}
-
-/* ===== FONDO FIJO PARA MUSEO ===== */
-.museum-fixed-background {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-image: url('/fondo-museo.png');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-color: #eeeeee;
-  z-index: 0;
-  pointer-events: none;
-  will-change: transform;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.5s ease, visibility 0.5s ease;
-}
-
-.museum-fixed-background::after {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: radial-gradient(
-    circle at 50% 30%,
-    transparent 0%,
-    rgba(0, 0, 0, 0.25) 80%,
-    rgba(0, 0, 0, 0.35) 100%
-  );
-  pointer-events: none;
-  z-index: 1;
-}
-
-.museum-fixed-background.show-fixed {
-  opacity: 1;
-  visibility: visible;
-}
-
 /* Todas las secciones */
 .scroll-section {
   position: relative;
@@ -403,37 +307,22 @@ footer {
   z-index: 5;
 }
 
-/* Transparencias para cada sección */
-[ref="senateDirectorsRef"] {
-  background: transparent !important;
-}
-
-[ref="historicalReviewRef"] {
-  background: transparent !important;
-}
-
+/* Transparencias */
+[ref="senateDirectorsRef"],
+[ref="historicalReviewRef"],
 [ref="museumRef"] {
   background: transparent !important;
 }
 
-.news-container {
-  width: 85%;
-  margin: 0 auto;
-  background: transparent !important;
-  position: relative;
-  z-index: 10;
-}
-
-/* ===== RESPONSIVE: Ajustes para móviles ===== */
+/* Responsive */
 @media (max-width: 768px) {
   .scroll-section {
-    justify-content: flex-start; /* En móvil, mejor al inicio para evitar espacios extra */
+    justify-content: flex-start;
     padding-top: 4rem;
     padding-bottom: 2rem;
   }
 }
 
-/* ===== Ajuste para pantallas muy altas ===== */
 @media (min-height: 900px) {
   .scroll-section {
     justify-content: center;
@@ -442,7 +331,7 @@ footer {
 </style>
 
 <style>
-/* ===== ESTILOS GLOBALES (sin scoped) ===== */
+/* ===== ESTILOS GLOBALES ===== */
 .scroll-section {
   will-change: transform, opacity;
   backface-visibility: hidden;
@@ -468,7 +357,6 @@ footer {
   }
 }
 
-/* Scrollbar elegante */
 ::-webkit-scrollbar {
   width: 10px;
   background: transparent;
@@ -493,7 +381,6 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Asegurar que el footer sea visible */
 footer {
   display: block !important;
   position: relative !important;
@@ -504,18 +391,8 @@ footer {
   background-repeat: no-repeat !important;
 }
 
-/* Evitar que el centrado afecte al hero section */
 section:first-of-type {
   display: block !important;
-}
-
-/* Asegurar que los componentes internos mantengan su comportamiento */
-.senate-directors-container,
-.historical-review-container,
-.horizontal-carousel-container {
-  width: 100%;
-  position: relative;
-  z-index: 2;
 }
 
 @media (prefers-reduced-motion: reduce) {
