@@ -7,11 +7,20 @@
         <p class="text-gray-600 text-lg max-w-2xl mx-auto">
           Conoce la historia y el patrimonio del Senado de Bolivia
         </p>
-        <p class="text-gray-500 text-sm mt-2">{{ totalImages }} imágenes | Página {{ currentPage }} de {{ totalPages }}</p>
+        <p class="text-gray-500 text-sm mt-2">
+          {{ totalImages }} imágenes | Página {{ currentPage }} de {{ totalPages }}
+          <span v-if="!useApi" class="ml-2 text-xs text-gray-400">(datos locales)</span>
+        </p>
+      </div>
+
+      <!-- Loading -->
+      <div v-if="loading" class="flex justify-center items-center py-20">
+        <div class="inline-block w-12 h-12 border-4 border-[#E03636] border-t-transparent rounded-full animate-spin"></div>
+        <p class="ml-3 text-gray-600">Cargando galería...</p>
       </div>
 
       <!-- Grid de imágenes -->
-      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 md:gap-6">
+      <div v-else class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 md:gap-6">
         <div 
           v-for="img in paginatedImages" 
           :key="img.id"
@@ -19,7 +28,6 @@
           @click="openImageModal(img)"
         >
           <div class="relative overflow-hidden rounded-xl shadow-lg bg-gray-200" style="aspect-ratio: 4/3">
-            <!-- 🔥 TODAS LAS IMÁGENES AHORA USAN .webp -->
             <img 
               :src="`/G-Institucional/${img.id}.webp`"
               :alt="img.description"
@@ -127,12 +135,14 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
+import { useGaleria } from '~/composables/useGaleria'
 
 definePageMeta({
   layout: 'alter8'
 })
 
 const router = useRouter()
+const { images: allImages, loading, fetchImages, USE_API } = useGaleria()
 
 // Forzar scroll al inicio
 if (process.client) {
@@ -143,60 +153,10 @@ if (process.client) {
 }
 
 // ============================================
-// DESCRIPCIONES PARA LAS 128 IMÁGENES
-// ============================================
-
-const descriptions = [
-  "Vista panorámica del Palacio del Senado",
-  "Sesión Plenaria - Cámara de Senadores",
-  "Reunión de la Directiva Camaral",
-  "Comisión de Constitución trabajando",
-  "Presidente del Senado en sesión",
-  "Vicepresidenta del Senado",
-  "Secretaría General del Senado",
-  "Pleno de la Asamblea Legislativa",
-  "Senadores durante el debate",
-  "Firma de proyecto de ley",
-  "Audiencia pública en el Senado",
-  "Comisión de Desarrollo Económico",
-  "Juramentación de nuevos senadores",
-  "Reunión de bancadas",
-  "Comisión de Educación y Salud",
-  "Senadores por Bolivia",
-  "Palacio Legislativo - Vista nocturna",
-  "Sala de sesiones del Senado",
-  "Comisión de Autonomías",
-  "Conferencia de prensa del Presidente",
-  "Visita de delegación internacional",
-  "Ceremonia de investidura",
-  "Comisión de Justicia Plural",
-  "Senadores en comisión técnica",
-  "Reunión con organizaciones sociales",
-  "Instalación de nueva legislatura",
-  "Homenaje a héroes de la patria",
-  "Comisión de Seguridad del Estado",
-  "Senadores por departamento",
-  "Firma de convenios interinstitucionales"
-]
-
-// Generar las 128 imágenes
-const generateImages = () => {
-  const images = []
-  for (let i = 1; i <= 128; i++) {
-    const descIndex = (i - 1) % descriptions.length
-    images.push({
-      id: i,
-      description: descriptions[descIndex]
-    })
-  }
-  return images
-}
-
-// ============================================
 // ESTADO
 // ============================================
-const allImages = ref(generateImages())
 const totalImages = computed(() => allImages.value.length)
+const useApi = computed(() => USE_API)
 
 const itemsPerPage = 20
 const currentPage = ref(1)
@@ -279,9 +239,10 @@ const handleKeydown = (e) => {
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
   window.addEventListener('keydown', handleKeydown)
-  console.log(`📸 Galería cargada: ${totalImages.value} imágenes en .webp`)
+  await fetchImages()
+  console.log(`📸 Galería cargada: ${totalImages.value} imágenes | Usando API: ${USE_API}`)
   nextTick(() => {
     window.scrollTo(0, 0)
   })
