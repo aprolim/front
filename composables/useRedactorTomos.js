@@ -143,7 +143,17 @@ export const useRedactorTomos = () => {
       pdfUrl: "/pdfs/redactor/REDACTOR_TOMO_XII_2023-2024.pdf",
       portada: "/images/portadas/2023-2024/default.jpg",
       disponible: true
-    }
+    },
+        {
+      id: 14,
+      tomo: "II",
+      periodo: "2025-2026",
+      año: 2026,
+      titulo: "Gaceta Legislativa - Tomo II",
+      pdfUrl: "/pdfs/redactor/REDACTOR_TOMO_II_2025-2026.pdf",
+      portada: "/images/portadas/2025-2026/default.jpg",
+      disponible: true
+    },
   ]
 
   const tomosFaltantes = [

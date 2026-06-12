@@ -56,7 +56,7 @@
               </NuxtLink>
               <div class="absolute right-0 mt-3 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible translate-y-[-1rem] group-hover/menu:opacity-100 group-hover/menu:visible group-hover/menu:translate-y-0 transition-all duration-700 ease-in-out z-50">
                 <div class="py-2">
-                  <NuxtLink to="/gestion-legislativa#sesiones-pleno" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Sesiónes del pleno</NuxtLink>
+                  <NuxtLink to="/gestion-legislativa#sesiones-pleno" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Sesiones del pleno</NuxtLink>
                   <NuxtLink to="/gestion-legislativa#area-de-legislacion" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Gestión legislativa</NuxtLink>
                   <NuxtLink to="/gestion-legislativa#gaceta-legislativa" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Gaceta legislativa</NuxtLink>
                 </div>
@@ -74,21 +74,29 @@
               <div class="absolute right-0 mt-3 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible translate-y-[-1rem] group-hover/menu:opacity-100 group-hover/menu:visible group-hover/menu:translate-y-0 transition-all duration-700 ease-in-out z-50">
                 <div class="py-2">
                   <NuxtLink to="/legisladores-nacionales#directiva-camaral" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Directiva Camaral</NuxtLink>
-                  <NuxtLink to="/legisladores-nacionales#comisiones-y-comites" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Comisiones y comites</NuxtLink>
+                  <NuxtLink to="/legisladores-nacionales#comisiones-y-comites" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Comisiones y comités</NuxtLink>
                   <NuxtLink to="/legisladores-nacionales#brigadas-parlamentarias" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Brigadas parlamentarias</NuxtLink>
-                  <NuxtLink to="/legisladores-nacionales#bancadas-politicas" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Bancadas politicas</NuxtLink>
+                  <NuxtLink to="/legisladores-nacionales#bancadas-politicas" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Bancadas políticas</NuxtLink>
                 </div>
               </div>
             </div>
             
             <!-- MENÚ 4: Centro de Noticias -->
-            <div class="">
+            <div class="relative group/menu">
               <NuxtLink 
-                to="/centro-de-noticias" 
+                to="/centro-de-noticias#noticias-importantes" 
                 class="inline-block px-[1vw] py-2 text-white font-medium hover:bg-[#C12F2F] rounded-lg transition-colors cursor-pointer"
               >
                 Centro de Noticias
               </NuxtLink>
+              <div class="absolute right-0 mt-3 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible translate-y-[-1rem] group-hover/menu:opacity-100 group-hover/menu:visible group-hover/menu:translate-y-0 transition-all duration-700 ease-in-out z-50">
+                <div class="py-2">
+                  <NuxtLink to="/centro-de-noticias#noticias-importantes" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Noticias Importantes</NuxtLink>
+                  <NuxtLink to="/centro-de-noticias#mas-noticias" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Más Noticias</NuxtLink>
+                  <NuxtLink to="/centro-de-noticias#sesiones" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Sesiones</NuxtLink>
+                  <NuxtLink to="/centro-de-noticias#produccion-audiovisual" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Producción Audiovisual</NuxtLink>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -123,6 +131,7 @@
       >
         <div class="p-4 overflow-y-auto h-full">
           <div class="space-y-2">
+            <!-- La institución -->
             <div class="mb-2">
               <button @click="toggleMobileMenu('institution')" class="w-full flex items-center justify-between p-3 text-white hover:bg-white/10 rounded-lg transition-colors">
                 <span class="font-medium">La institución</span>
@@ -131,13 +140,14 @@
                 </svg>
               </button>
               <div v-show="mobileMenuState.institution" class="ml-4 mt-1 space-y-1 border-l-2 border-white/30 pl-3">
-                <a href="/la-institucion" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📜 Mandato constitucional</a>
-                <a href="/la-institucion#directiva-camaral" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📚 Directiva camaral</a>
-                <a href="/la-institucion#resena-historica" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">🔄 Reseña histórica</a>
-                <a href="/la-institucion#museo" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">🖼️ Galería de imágenes</a>
+                <NuxtLink to="/la-institucion#mandato" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📜 Mandato constitucional</NuxtLink>
+                <NuxtLink to="/la-institucion#directiva-camaral" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📚 Directiva camaral</NuxtLink>
+                <NuxtLink to="/la-institucion#resena-historica" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">🔄 Reseña histórica</NuxtLink>
+                <NuxtLink to="/la-institucion#museo" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">🖼️ Galería de imágenes</NuxtLink>
               </div>
             </div>
             
+            <!-- Legisladores -->
             <div class="mb-2">
               <button @click="toggleMobileMenu('legislators')" class="w-full flex items-center justify-between p-3 text-white hover:bg-white/10 rounded-lg transition-colors">
                 <span class="font-medium">Legisladores</span>
@@ -146,12 +156,14 @@
                 </svg>
               </button>
               <div v-show="mobileMenuState.legislators" class="ml-4 mt-1 space-y-1 border-l-2 border-white/30 pl-3">
-                <NuxtLink to="/legisladores-nacionales" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👨‍⚖️ Senadores</NuxtLink>
-                <NuxtLink to="/" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👩‍⚖️ Diputados</NuxtLink>
-                <NuxtLink to="/" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📋 Comisiones</NuxtLink>
+                <NuxtLink to="/legisladores-nacionales#directiva-camaral" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👨‍⚖️ Directiva Camaral</NuxtLink>
+                <NuxtLink to="/legisladores-nacionales#comisiones-y-comites" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📋 Comisiones</NuxtLink>
+                <NuxtLink to="/legisladores-nacionales#brigadas-parlamentarias" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👥 Brigadas</NuxtLink>
+                <NuxtLink to="/legisladores-nacionales#bancadas-politicas" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">🏛️ Bancadas</NuxtLink>
               </div>
             </div>
             
+            <!-- Gestión Legislativa -->
             <div class="mb-2">
               <button @click="toggleMobileMenu('legislative')" class="w-full flex items-center justify-between p-3 text-white hover:bg-white/10 rounded-lg transition-colors">
                 <span class="font-medium">Gestión Legislativa</span>
@@ -160,43 +172,27 @@
                 </svg>
               </button>
               <div v-show="mobileMenuState.legislative" class="ml-4 mt-1 space-y-1 border-l-2 border-white/30 pl-3">
-                <NuxtLink to="/gestion-legislativa" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👨‍⚖️ Sesión del pleno</NuxtLink>
-                <NuxtLink to="/gestion-legislativa#area-de-legislacion" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👩‍⚖️ Proyectos de leyes</NuxtLink>
-                <NuxtLink to="/gestion-legislativa#gaceta-legislativa" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📋 Gaceta Legislativa</NuxtLink>
+                <NuxtLink to="/gestion-legislativa#sesiones-pleno" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">🏛️ Sesiones del pleno</NuxtLink>
+                <NuxtLink to="/gestion-legislativa#area-de-legislacion" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📝 Gestión legislativa</NuxtLink>
+                <NuxtLink to="/gestion-legislativa#gaceta-legislativa" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📰 Gaceta Legislativa</NuxtLink>
               </div>
             </div>
             
+            <!-- Centro de Noticias -->
             <div class="mb-2">
-              <button @click="toggleMobileMenu('culture')" class="w-full flex items-center justify-between p-3 text-white hover:bg-white/10 rounded-lg transition-colors">
-                <span class="font-medium">Cultura</span>
-                <svg class="w-5 h-5 transition-transform duration-200" :class="{ 'rotate-180': mobileMenuState.culture }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <button @click="toggleMobileMenu('news')" class="w-full flex items-center justify-between p-3 text-white hover:bg-white/10 rounded-lg transition-colors">
+                <span class="font-medium">Centro de Noticias</span>
+                <svg class="w-5 h-5 transition-transform duration-200" :class="{ 'rotate-180': mobileMenuState.news }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                 </svg>
               </button>
-              <div v-show="mobileMenuState.culture" class="ml-4 mt-1 space-y-1 border-l-2 border-white/30 pl-3">
-                <NuxtLink to="/" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👨‍⚖️ Patrimonio histórico</NuxtLink>
-                <NuxtLink to="/" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👩‍⚖️ Eventos culturales</NuxtLink>
-                <NuxtLink to="/" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📋 Biblioteca</NuxtLink>
+              <div v-show="mobileMenuState.news" class="ml-4 mt-1 space-y-1 border-l-2 border-white/30 pl-3">
+                <NuxtLink to="/centro-de-noticias#noticias-importantes" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📰 Noticias Importantes</NuxtLink>
+                <NuxtLink to="/centro-de-noticias#mas-noticias" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📰 Más Noticias</NuxtLink>
+                <NuxtLink to="/centro-de-noticias#sesiones" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">🎥 Sesiones</NuxtLink>
+                <NuxtLink to="/centro-de-noticias#produccion-audiovisual" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">🎬 Producción Audiovisual</NuxtLink>
               </div>
             </div>
-            
-            <div class="mb-2">
-              <button @click="toggleMobileMenu('participation')" class="w-full flex items-center justify-between p-3 text-white hover:bg-white/10 rounded-lg transition-colors">
-                <span class="font-medium">Participación</span>
-                <svg class="w-5 h-5 transition-transform duration-200" :class="{ 'rotate-180': mobileMenuState.participation }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                </svg>
-              </button>
-              <div v-show="mobileMenuState.participation" class="ml-4 mt-1 space-y-1 border-l-2 border-white/30 pl-3">
-                <NuxtLink to="/" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👨‍⚖️ Audiencias públicas</NuxtLink>
-                <NuxtLink to="/" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👩‍⚖️ Rendición de cuentas</NuxtLink>
-                <NuxtLink to="/" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📋 Transparencia</NuxtLink>
-              </div>
-            </div>
-            
-            <NuxtLink to="/centro-de-noticias" class="block p-3 text-white hover:bg-white/10 rounded-lg mt-4" @click="sidebarOpen = false">
-              📰 Noticias
-            </NuxtLink>
           </div>
         </div>
       </aside>
@@ -266,16 +262,14 @@ import GlobalModals from '@/components/GlobalModals.vue'
 const route = useRoute()
 const router = useRouter()
 
-console.log('🏗️ [LAYOUT] alter8.vue - INICIALIZANDO LAYOUT')
-console.log('📍 [LAYOUT] Ruta actual:', route.path)
+console.log('🏗️ [LAYOUT] alter8.vue - INICIALIZANDO')
 
 const sidebarOpen = ref(false)
 const mobileMenuState = reactive({
   institution: false,
   legislators: false,
   legislative: false,
-  culture: false,
-  participation: false
+  news: false
 })
 
 const goToHome = () => {
@@ -344,15 +338,6 @@ onBeforeUnmount(() => {
   scroll-snap-align: start;
 }
 
-.snap-container::after {
-  content: '';
-  display: block;
-  height: 1px;
-  width: 100%;
-  opacity: 0;
-  scroll-snap-align: start;
-}
-
 header {
   position: fixed;
   top: 0;
@@ -385,34 +370,6 @@ header {
 
 .sub-footer {
   background-color: rgba(198, 18, 16, 0.6);
-}
-
-aside::-webkit-scrollbar {
-  width: 4px;
-}
-
-aside::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
-}
-
-aside::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 2px;
-}
-
-aside::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.3);
-}
-
-@keyframes bounceIn {
-  0% { opacity: 0; transform: scale(0.3); }
-  50% { opacity: 1; transform: scale(1.05); }
-  70% { transform: scale(0.9); }
-  100% { transform: scale(1); }
-}
-
-.animate-bounce-in {
-  animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 .social-icon-wrapper {
@@ -451,14 +408,5 @@ main {
 ::selection {
   background-color: #E03636;
   color: white;
-}
-
-::-moz-selection {
-  background-color: #E03636;
-  color: white;
-}
-
-html {
-  scroll-behavior: smooth;
 }
 </style>

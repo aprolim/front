@@ -1,18 +1,34 @@
 <template>
-  <div class="min-h-screen bg-gray-100 pt-[4.8vw] pb-[1.8vw]">
-    <div class="container mx-auto px-4">
-      <!-- Header -->
-      <div class="text-center mb-8">
-        <h1 class="text-4xl md:text-5xl font-bold text-[#E03636] mb-4">Galería Institucional</h1>
-        <p class="text-gray-600 text-lg max-w-2xl mx-auto">
-          Conoce la historia y el patrimonio del Senado de Bolivia
-        </p>
-        <p class="text-gray-500 text-sm mt-2">
-          {{ totalImages }} imágenes | Página {{ currentPage }} de {{ totalPages }}
-          <span v-if="!useApi" class="ml-2 text-xs text-gray-400">(datos locales)</span>
-        </p>
+  <div class="min-h-screen bg-gray-100">
+    <!-- ============================================ -->
+    <!-- TÍTULO CON ESTILO SENADO -->
+    <!-- ============================================ -->
+    <div class="relative w-full pt-[4.4vw]" ref="topSection">
+      <div class="relative w-full">
+        <!-- Líneas animadas estilo Senado -->
+        <div class="absolute top-0 left-0 h-[2px] bg-[#E4D294] animate-slide-right" style="width: 100%;"></div>
+        <div class="absolute bottom-0 right-0 h-[2px] bg-[#E4D294] animate-slide-left" style="width: 100%;"></div>
+        <div class="absolute top-0 right-0 w-[2px] bg-[#E4D294] animate-slide-down" style="height: 100%;"></div>
+        <div class="absolute bottom-0 left-0 w-[2px] bg-[#E4D294] animate-slide-up" style="height: 100%;"></div>
+        
+        <div class="bg-[#E03636] py-[0.8vw] text-center">
+          <h1 class="text-[3vw] text-white font-semibold">
+            Galería Institucional
+          </h1>
+        </div>
       </div>
+      
+      <p class="text-gray-600 text-lg text-center max-w-2xl mx-auto mt-6 px-4">
+        Conoce la historia y el patrimonio del Senado de Bolivia
+      </p>
+      <p class="text-gray-500 text-sm text-center mt-2 px-4">
+        {{ totalImages }} imágenes | Página {{ currentPage }} de {{ totalPages }}
+        <span v-if="!useApi" class="ml-2 text-xs text-gray-400">(datos locales)</span>
+      </p>
+    </div>
 
+    <!-- Contenido principal -->
+    <div class="container mx-auto px-4 py-8">
       <!-- Loading -->
       <div v-if="loading" class="flex justify-center items-center py-20">
         <div class="inline-block w-12 h-12 border-4 border-[#E03636] border-t-transparent rounded-full animate-spin"></div>
@@ -84,57 +100,57 @@
       <p class="text-center text-gray-500 text-sm mt-4">
         Página {{ currentPage }} de {{ totalPages }}
       </p>
-
-      <!-- Modal de imagen ampliada -->
-      <Teleport to="body">
-        <div v-if="showImageModal" class="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center" @click.self="closeImageViewer">
-          <div class="relative w-full h-full flex flex-col items-center justify-center p-4">
-            <button 
-              @click="closeImageViewer"
-              class="absolute top-4 right-4 text-white hover:text-[#E03636] transition-colors text-3xl z-10"
-            >
-              ✕
-            </button>
-
-            <button 
-              @click="prevImage"
-              class="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 text-white/60 hover:text-white transition-colors text-3xl md:text-5xl z-10"
-            >
-              ‹
-            </button>
-
-            <div class="relative max-w-[90vw] max-h-[70vh] flex items-center justify-center">
-              <img 
-                :src="`/G-Institucional/${currentImage?.id}.webp`"
-                :alt="currentImage?.description"
-                class="max-w-full max-h-[70vh] object-contain rounded-lg"
-              />
-            </div>
-
-            <div class="mt-6 text-center max-w-2xl px-4">
-              <p class="text-white text-base md:text-xl font-medium">{{ currentImage?.description }}</p>
-            </div>
-
-            <button 
-              @click="nextImage"
-              class="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 text-white/60 hover:text-white transition-colors text-3xl md:text-5xl z-10"
-            >
-              ›
-            </button>
-
-            <p class="text-white/50 text-sm mt-4">
-              {{ currentImageIndex + 1 }} / {{ totalImages }}
-            </p>
-          </div>
-        </div>
-      </Teleport>
     </div>
+
+    <!-- Modal de imagen ampliada -->
+    <Teleport to="body">
+      <div v-if="showImageModal" class="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center" @click.self="closeImageViewer">
+        <div class="relative w-full h-full flex flex-col items-center justify-center p-4">
+          <button 
+            @click="closeImageViewer"
+            class="absolute top-4 right-4 text-white hover:text-[#E03636] transition-colors text-3xl z-10"
+          >
+            ✕
+          </button>
+
+          <button 
+            @click="prevImage"
+            class="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 text-white/60 hover:text-white transition-colors text-3xl md:text-5xl z-10"
+          >
+            ‹
+          </button>
+
+          <div class="relative max-w-[90vw] max-h-[70vh] flex items-center justify-center">
+            <img 
+              :src="`/G-Institucional/${currentImage?.id}.webp`"
+              :alt="currentImage?.description"
+              class="max-w-full max-h-[70vh] object-contain rounded-lg"
+            />
+          </div>
+
+          <div class="mt-6 text-center max-w-2xl px-4">
+            <p class="text-white text-base md:text-xl font-medium">{{ currentImage?.description }}</p>
+          </div>
+
+          <button 
+            @click="nextImage"
+            class="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 text-white/60 hover:text-white transition-colors text-3xl md:text-5xl z-10"
+          >
+            ›
+          </button>
+
+          <p class="text-white/50 text-sm mt-4">
+            {{ currentImageIndex + 1 }} / {{ totalImages }}
+          </p>
+        </div>
+      </div>
+    </Teleport>
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useGaleria } from '~/composables/useGaleria'
 
 definePageMeta({
@@ -142,14 +158,29 @@ definePageMeta({
 })
 
 const router = useRouter()
+const route = useRoute()
 const { images: allImages, loading, fetchImages, USE_API } = useGaleria()
 
-// Forzar scroll al inicio
-if (process.client) {
-  window.scrollTo(0, 0)
-  router.afterEach(() => {
+// Referencia a la sección superior
+const topSection = ref(null)
+
+// ============================================
+// 🔥 FUNCIÓN PARA FORZAR SCROLL AL INICIO
+// ============================================
+const forceScrollToTop = () => {
+  if (process.client) {
+    // Múltiples métodos para asegurar
     window.scrollTo(0, 0)
-  })
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+    document.documentElement.scrollTop = 0
+    document.body.scrollTop = 0
+    document.body.scrollIntoView({ block: 'start', behavior: 'instant' })
+    
+    // Si existe la referencia, hacer scroll a ella
+    if (topSection.value) {
+      topSection.value.scrollIntoView({ block: 'start', behavior: 'instant' })
+    }
+  }
 }
 
 // ============================================
@@ -187,7 +218,7 @@ const visiblePages = computed(() => {
 const goToPage = (page) => {
   if (page < 1 || page > totalPages.value) return
   currentPage.value = page
-  window.scrollTo({ top: 0, behavior: 'smooth' })
+  forceScrollToTop()
 }
 
 // Manejo de error de carga
@@ -239,14 +270,43 @@ const handleKeydown = (e) => {
   }
 }
 
+// ============================================
+// CICLO DE VIDA - FORZAR SCROLL AL INICIO
+// ============================================
 onMounted(async () => {
   window.addEventListener('keydown', handleKeydown)
+  
+  // 🔥 FORZAR SCROLL INMEDIATAMENTE
+  forceScrollToTop()
+  
+  // Cargar datos
   await fetchImages()
   console.log(`📸 Galería cargada: ${totalImages.value} imágenes | Usando API: ${USE_API}`)
+  
+  // 🔥 FORZAR SCROLL NUEVAMENTE DESPUÉS DE CARGAR
   nextTick(() => {
-    window.scrollTo(0, 0)
+    forceScrollToTop()
   })
+  
+  // 🔥 FORZAR SCROLL CON DELAY (por si hay renderizado asíncrono)
+  setTimeout(() => {
+    forceScrollToTop()
+  }, 50)
+  
+  setTimeout(() => {
+    forceScrollToTop()
+  }, 200)
 })
+
+// 🔥 Escuchar cambios de ruta para forzar scroll
+if (process.client) {
+  // Cada vez que se complete la navegación
+  router.afterEach((to) => {
+    if (to.path === '/museo/galeria') {
+      forceScrollToTop()
+    }
+  })
+}
 
 onUnmounted(() => {
   window.removeEventListener('keydown', handleKeydown)
@@ -278,5 +338,48 @@ onUnmounted(() => {
 
 .gallery-item:hover {
   transform: translateY(-3px);
+}
+
+/* ============================================ */
+/* ANIMACIONES DE BORDES ESTILO SENADO */
+/* ============================================ */
+@keyframes slide-right {
+  0% { width: 0%; left: 0; }
+  50% { width: 100%; left: 0; }
+  100% { width: 0%; left: 100%; }
+}
+
+@keyframes slide-left {
+  0% { width: 0%; right: 0; }
+  50% { width: 100%; right: 0; }
+  100% { width: 0%; right: 100%; }
+}
+
+@keyframes slide-down {
+  0% { height: 0%; top: 0; }
+  50% { height: 100%; top: 0; }
+  100% { height: 0%; top: 100%; }
+}
+
+@keyframes slide-up {
+  0% { height: 0%; bottom: 0; }
+  50% { height: 100%; bottom: 0; }
+  100% { height: 0%; bottom: 100%; }
+}
+
+.animate-slide-right {
+  animation: slide-right 4s ease-in-out infinite;
+}
+
+.animate-slide-left {
+  animation: slide-left 4s ease-in-out infinite;
+}
+
+.animate-slide-down {
+  animation: slide-down 4s ease-in-out infinite;
+}
+
+.animate-slide-up {
+  animation: slide-up 4s ease-in-out infinite;
 }
 </style>

@@ -104,9 +104,7 @@
       <MoreNewsGrid :limpiarAsteriscos="limpiarAsteriscos" />
     </div>
     
-    <!-- ============================================ -->
-    <!-- SECCIÓN 3 - SESIONES (MODIFICADA) -->
-    <!-- ============================================ -->
+    <!-- SECCIÓN 3 - SESIONES -->
     <div 
       id="sesiones"
       ref="seccion3Ref"
@@ -114,7 +112,7 @@
       :class="{ 'animate-in': isSeccion3Visible }"
       style="height: 100vh; position: relative; background: transparent; display: flex; flex-direction: column; justify-content: center"
     >
-      <div class="relative w-full text-center pt-[4.1vw] flex-shrink-0">
+      <div class="relative w-full text-center pt-[4.4vw] flex-shrink-0">
         <div class="relative inline-block w-full">
           <div class="absolute top-0 left-0 h-[.1vw] bg-[#E4D294] animate-slide-right" style="width: 100%;"></div>
           <div class="absolute bottom-0 right-0 h-[.1vw] bg-[#E4D294] animate-slide-left" style="width: 100%;"></div>
@@ -125,13 +123,11 @@
       </div>
 
       <div class="flex-1 flex flex-col justify-center">
-        <!-- Estado de carga -->
         <div v-if="loadingSesiones" class="flex justify-center items-center py-12">
           <div class="inline-block w-12 h-12 border-4 border-[#E03636] border-t-transparent rounded-full animate-spin"></div>
           <p class="ml-3 text-gray-600">Cargando videos...</p>
         </div>
         
-        <!-- Grid de videos -->
         <div v-else class="grid grid-cols-1 sm:grid-cols-3 gap-[2vw] mx-auto px-[6vw] w-full">
           <div v-for="video in sesionesVideos" :key="video.position" class="flex flex-col items-center">
             <div class="w-full aspect-video rounded-[1vw] overflow-hidden border-[.6vw] border-white shadow-lg">
@@ -151,7 +147,6 @@
         </div>
       </div>
     </div>
-
     <!-- SECCIÓN 4 - PRODUCCIÓN AUDIOVISUAL -->
     <div 
       id="produccion-audiovisual"
@@ -160,7 +155,7 @@
       :class="{ 'animate-in': isSeccion4Visible }"
       style="height: 100vh; position: relative; background: white; display: flex; flex-direction: column; justify-content: center"
     >
-      <div class="relative w-full text-center pt-[4.1vw] pb-[1vw] flex-shrink-0">
+      <div class="relative w-full text-center pt-[4.4vw] pb-[1vw] flex-shrink-0">
         <div class="relative inline-block w-full">
           <div class="absolute top-0 left-0 h-[2px] bg-[#E4D294] animate-slide-right" style="width: 100%;"></div>
           <div class="absolute bottom-0 right-0 h-[2px] bg-[#E4D294] animate-slide-left" style="width: 100%;"></div>
@@ -182,10 +177,12 @@
           target="_blank"
         >
           <div class="relative overflow-hidden">
+            <!-- CAMBIA ESTA RUTA SEGÚN EL NOMBRE REAL DEL ARCHIVO -->
             <img 
-              src="/images/curul/Recurso 1.jpg" 
+              src="/images/curul/Recurso-1.jpg" 
               alt="Producción Audiovisual - Desde el Curul" 
               class="w-full h-auto object-cover transition-all duration-700 ease-out" 
+              @error="e => { console.error('Error loading image:', e.target.src); e.target.src = '/images/placeholder.jpg'; }"
             />
           </div>
         </NuxtLink>
@@ -208,7 +205,6 @@ const router = useRouter()
 
 console.log('🚀 [PAGE] centro-de-noticias.vue - INICIALIZANDO')
 
-// 🔥 USAR LOS COMPOSABLES
 const { 
   noticiasImportantes, 
   ultimasNoticias, 
@@ -218,39 +214,30 @@ const {
   recargarDatos 
 } = useNoticias()
 
-// 🔥 SESIONES - NUEVO COMPOSABLE
 const { videos: sesionesVideos, loading: loadingSesiones, fetchVideos: fetchSesionesVideos } = useSesiones()
 
-// ============================================
-// FUNCIÓN PARA LIMPIAR ASTERISCOS DE LOS TÍTULOS
-// ============================================
 const limpiarAsteriscos = (texto) => {
   if (!texto) return ''
   return texto.replace(/\*/g, '')
 }
 
-// Estado local
 const currentIndex = ref(0)
 let carouselInterval = null
 let scrollObserver = null
 
-// Refs de secciones
 const seccion1Ref = ref(null)
 const seccion2Ref = ref(null)
 const seccion3Ref = ref(null)
 const seccion4Ref = ref(null)
 
-// Visibilidad de secciones
 const isSeccion1Visible = ref(false)
 const isSeccion2Visible = ref(false)
 const isSeccion3Visible = ref(false)
 const isSeccion4Visible = ref(false)
 
-// Computed
 const noticiasCarousel = computed(() => noticiasImportantes.value || [])
 const loadingImportantes = computed(() => loading.value)
 
-// Funciones
 const formatearFecha = (fecha) => {
   if (!fecha) return ''
   return new Date(fecha).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })
@@ -336,32 +323,39 @@ const initObserver = () => {
   })
 }
 
-const forceScrollToHash = () => {
-  const hash = route.hash
-  if (hash && hash !== '') {
-    const targetId = hash.replace('#', '')
-    console.log(`📍 [PAGE] Forzando scroll a: ${targetId}`)
+// ============================================
+// MAPA DE SECCIONES PARA SCROLL DEL MENÚ
+// ============================================
+const sectionsMap = {
+  'noticias-importantes': seccion1Ref,
+  'mas-noticias': seccion2Ref,
+  'sesiones': seccion3Ref,
+  'produccion-audiovisual': seccion4Ref
+}
+
+const scrollToSection = (id) => {
+  const sectionRef = sectionsMap[id]
+  if (sectionRef?.value) {
+    const container = document.querySelector('.snap-container')
+    if (container) container.style.scrollSnapType = 'none'
     
-    const scrollToTarget = (id) => {
-      const element = document.getElementById(id)
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'start' })
-        console.log(`✅ [PAGE] Scroll completado a: ${id}`)
-        return true
-      }
-      console.warn(`⚠️ [PAGE] Elemento no encontrado: ${id}`)
-      return false
-    }
+    sectionRef.value.scrollIntoView({ behavior: 'smooth', block: 'start' })
     
-    setTimeout(() => scrollToTarget(targetId), 100)
-    setTimeout(() => scrollToTarget(targetId), 300)
-    setTimeout(() => scrollToTarget(targetId), 500)
-    setTimeout(() => scrollToTarget(targetId), 800)
-    setTimeout(() => scrollToTarget(targetId), 1200)
+    setTimeout(() => {
+      if (container) container.style.scrollSnapType = 'y mandatory'
+    }, 800)
   }
 }
 
-// Watch para inicializar carousel
+// Watch para cambios en el hash (navegación desde el menú)
+watch(() => route.hash, (newHash) => {
+  if (newHash && newHash !== '') {
+    const id = newHash.replace('#', '')
+    console.log(`📍 [PAGE] Navegando a sección: ${id}`)
+    setTimeout(() => scrollToSection(id), 100)
+  }
+})
+
 watch(noticiasCarousel, (nuevas) => {
   if (nuevas.length > 0) {
     console.log(`📊 [PAGE] ${nuevas.length} noticias importantes disponibles`)
@@ -371,13 +365,12 @@ watch(noticiasCarousel, (nuevas) => {
   }
 }, { immediate: true })
 
-// KeepAlive hooks
 onActivated(async () => {
   console.log('🔄 [PAGE] Reactivada')
   stopCarousel()
   destroyObserver()
   await recargarDatos()
-  await fetchSesionesVideos()  // 🔥 Cargar videos de sesiones
+  await fetchSesionesVideos()
   isSeccion1Visible.value = false
   isSeccion2Visible.value = false
   isSeccion3Visible.value = false
@@ -385,7 +378,8 @@ onActivated(async () => {
   await nextTick()
   initObserver()
   if (route.hash) {
-    forceScrollToHash()
+    const id = route.hash.replace('#', '')
+    setTimeout(() => scrollToSection(id), 200)
   } else {
     setTimeout(() => {
       if (!isSeccion1Visible.value) {
@@ -402,15 +396,15 @@ onDeactivated(() => {
   destroyObserver()
 })
 
-// Lifecycle
 onMounted(async () => {
   console.log('🎬 [PAGE] Montada')
   await recargarDatos()
-  await fetchSesionesVideos()  // 🔥 Cargar videos de sesiones
+  await fetchSesionesVideos()
   await nextTick()
   initObserver()
   if (route.hash) {
-    forceScrollToHash()
+    const id = route.hash.replace('#', '')
+    setTimeout(() => scrollToSection(id), 500)
   } else {
     setTimeout(() => {
       if (!isSeccion1Visible.value) {
