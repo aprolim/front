@@ -169,7 +169,7 @@
                     :src="miembro.foto" 
                     :alt="miembro.nombre" 
                     loading="lazy" 
-                    class="w-[7vw] h-[7vw] rounded-full object-cover transition-all duration-700 hover:scale-[3.2] hover:z-50"
+                    class="w-[7vw] h-[7vw] rounded-full object-cover transition-all duration-700 hover:scale-[2] hover:z-50"
                   />
                   <div class="text-white text-center text-[1.vw]">
                     <p class="font-bold drop-shadow-md">{{ miembro.cargo }}</p>
@@ -190,7 +190,7 @@
                     :src="miembro.foto" 
                     :alt="miembro.nombre" 
                     loading="lazy" 
-                    class="w-[7vw] h-[7vw] rounded-full object-cover transition-all duration-700 hover:scale-[3.2] hover:z-50"
+                    class="w-[7vw] h-[7vw] rounded-full object-cover transition-all duration-700 hover:scale-[2] hover:z-50"
                   />
                   <div class="text-white text-center text-[1vw]">
                     <p class="font-bold drop-shadow-md">{{ miembro.cargo }}</p>
