@@ -414,7 +414,7 @@
                 <div v-if="partidoSeleccionado?.id === 'pdc'" class="group pt-2 rounded-lg aspect-[3000/800] w-100 m-auto">
                   <div class="grid grid-cols-6 mb-[.5vw]">
                     <div v-for="(persona, index) in miembrosMostrar.slice(0,6)" :key="persona.nombre" class="text-center">
-                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[3] hover:relative hover:z-40">
+                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40">
                         <img 
                           :src="persona.imagen" 
                           :alt="persona.nombre" 
@@ -429,7 +429,7 @@
                   </div>
                   <div class="grid grid-cols-5 mb-[.5vw]">
                     <div v-for="(persona, index) in miembrosMostrar.slice(6,11)" :key="persona.nombre" class="text-center">
-                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[3] hover:relative hover:z-40">
+                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40">
                         <img 
                           :src="persona.imagen" 
                           :alt="persona.nombre" 
@@ -444,7 +444,7 @@
                   </div>
                   <div class="grid grid-cols-5">
                     <div v-for="(persona, index) in miembrosMostrar.slice(11,16)" :key="persona.nombre" class="text-center">
-                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[3] hover:relative hover:z-40 hover:translate-y-[-2vw]">
+                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40 hover:translate-y-[-2vw]">
                         <img 
                           :src="persona.imagen" 
                           :alt="persona.nombre" 
@@ -462,7 +462,7 @@
                 <div v-else-if="partidoSeleccionado?.id === 'libre'" class="group pt-2 rounded-lg aspect-[3000/800] w-100 m-auto">
                   <div class="grid grid-cols-4 mb-[.5vw]">
                     <div v-for="(persona, index) in miembrosMostrar.slice(0,4)" :key="persona.nombre" class="text-center">
-                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[3] hover:relative hover:z-40">
+                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40">
                         <img 
                           :src="persona.imagen" 
                           :alt="persona.nombre" 
@@ -477,7 +477,7 @@
                   </div>
                   <div class="grid grid-cols-4 mb-[.5vw]">
                     <div v-for="(persona, index) in miembrosMostrar.slice(4,8)" :key="persona.nombre" class="text-center">
-                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[3] hover:relative hover:z-40">
+                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40">
                         <img 
                           :src="persona.imagen" 
                           :alt="persona.nombre" 
@@ -492,7 +492,7 @@
                   </div>
                   <div class="grid grid-cols-4">
                     <div v-for="(persona, index) in miembrosMostrar.slice(8,12)" :key="persona.nombre" class="text-center">
-                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[3] hover:relative hover:z-40 hover:translate-y-[-2vw]">
+                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40 hover:translate-y-[-2vw]">
                         <img 
                           :src="persona.imagen" 
                           :alt="persona.nombre" 
@@ -510,7 +510,7 @@
                 <div v-else-if="partidoSeleccionado?.id === 'alianza'" class="group pt-2 rounded-lg aspect-[3000/800] w-100 m-auto">
                   <div class="grid grid-cols-3 mb-[.5vw]">
                     <div v-for="(persona, index) in miembrosMostrar.slice(0,3)" :key="persona.nombre" class="text-center">
-                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[3] hover:relative hover:z-40">
+                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40">
                         <img 
                           :src="persona.imagen" 
                           :alt="persona.nombre" 
@@ -525,7 +525,7 @@
                   </div>
                   <div class="grid grid-cols-3 mb-[.5vw]">
                     <div v-for="(persona, index) in miembrosMostrar.slice(3,6)" :key="persona.nombre" class="text-center">
-                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[3] hover:relative hover:z-40">
+                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40">
                         <img 
                           :src="persona.imagen" 
                           :alt="persona.nombre" 
@@ -540,7 +540,7 @@
                   </div>
                   <div class="grid grid-cols-3">
                     <div v-if="miembrosMostrar[6]" class="text-center">
-                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[3] hover:relative hover:z-40 hover:translate-y-[-2vw]">
+                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40 hover:translate-y-[-2vw]">
                         <img 
                           :src="miembrosMostrar[6].imagen" 
                           :alt="miembrosMostrar[6].nombre" 
@@ -560,7 +560,7 @@
                 <div v-else-if="partidoSeleccionado?.id === 'sumate'" class="group pt-2 rounded-lg aspect-[3000/800] w-100 m-auto">
                   <div class="flex justify-center">
                     <div v-if="miembrosMostrar[0]" class="text-center">
-                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[3] hover:relative hover:z-40">
+                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40">
                         <img 
                           :src="miembrosMostrar[0].imagen" 
                           :alt="miembrosMostrar[0].nombre" 
