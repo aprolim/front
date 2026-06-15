@@ -25,8 +25,6 @@
               <span class="inline-flex items-center justify-center text-white text-[.8em] mx-[.8em]">⚪</span>
             </span>
           </p>
-
-         
         </div>
 
         <!-- Elementos decorativos en las esquinas - MÁS PEQUEÑOS -->
@@ -147,8 +145,8 @@ const props = defineProps({
         image: {
           url: '/Mandato Constitucional Senado/6.png',
           alt: 'Edificio del Senado',
-          title: 'Edificio del Senado',
-          caption: 'Sede de la Cámara de Senadores'
+          title: 'Palacio Legislativo',
+          caption: 'Día del recibimiento del presidente Enrique Peñaranda (Fuente: Colección Fotográfica Julio Cordero Castillo)'
         }
       },
       {
@@ -158,8 +156,8 @@ const props = defineProps({
         image: {
           url: '/Mandato Constitucional Senado/15.png',
           alt: 'Sesión del Senado',
-          title: 'Sesión Plenaria',
-          caption: 'Senadores en debate'
+          title: 'Edificio del Palacio Legislativo',
+          caption: 'Construido por el centenario de la Republica, Obra del arquitecto Antonio Camponovo (Fuente: Colección Fotográfica de la Vicepresidencia del Estado Plurinacional de Bolivia)'
         }
       },
       {
@@ -169,8 +167,8 @@ const props = defineProps({
         image: {
           url: '/Mandato Constitucional Senado/27.JPG',
           alt: 'Hemiciclo',
-          title: 'Hemiciclo',
-          caption: 'Vista del hemiciclo'
+          title: 'Escaleras Palacio Legislativo Plurinacional',
+          caption: 'Escaleras del Palacio Legislativo Plurinacional junto al busto del: Dr. José Mariano Serrano – Presidente de la Asamblea Nacional Deliberativa que juró la independencia política de Bolivia. (Fuente: Colección Fotográfica del Honorable Senado del Estado Plurinacional de Bolivia)'
         }
       }
     ]
