@@ -2620,7 +2620,7 @@ const senadores = ref([
     foto: '/new/titulares/g3/KATHIA LISBETH QUIROGA FERNÁNDEZ.png'
   },
   {
-    nombre: 'Rosa Tatiana añez Carrasco',
+    nombre: 'Rosa Tatiana Añez Carrasco',
     cargo: 'Tercera Secretaría',
     funcion: 'La Tercera Secretaria vigila y evalúa los sistemas de apoyo técnico y administrativo, informando periódicamente a la Directiva. Apoya a la Presidencia en la elaboración del presupuesto anual y controla su ejecución. Además, coordina las relaciones con medios de comunicación, la seguridad de la Cámara y la Unidad de Ceremonial Legislativo.',
     foto: '/new/titulares/g3/ROSA TATIANA AÑEZ CARRASCO.png'

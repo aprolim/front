@@ -217,15 +217,13 @@
             <div class="container mx-auto px-4">
               <div class="grid grid-cols-12 gap-6 items-center">
                 <div class="col-span-3 flex items-center justify-start space-x-3">
-                  <img src="/footer-img/Recurso 8.png" alt="Senado Bolivia" class="h-6 2xl:h-9 4xl:h-16 5xl:h-24 w-auto">
-                  <div><a href="https://diputados.gob.bo/" target="_blank">https://diputados.gob.bo/</a></div>
+                  
                 </div>
                 <div class="col-span-6 text-center">
                   <p>Calle Comercio esquina Colón - Telf.: (591) 2158701 - www.senado.gob.bo - La Paz - Bolivia</p>
                 </div>
                 <div class="col-span-3 flex items-center justify-end space-x-3">
-                  <img src="/footer-img/Recurso 7.png" alt="Escudo Senado" class="h-9 2xl:h-24 5xl:h-32 w-auto">
-                  <div class="text-right"><a href="https://www.vicepresidencia.gob.bo/" target="_blank">https://www.vicepresidencia.gob.bo/</a></div>
+                  
                 </div>
               </div>
             </div>

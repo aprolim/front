@@ -5,8 +5,7 @@ export default defineNuxtConfig({
   
   modules: [
     '@pinia/nuxt',
-    '@nuxtjs/tailwindcss',
-    '@nuxt/image'
+    '@nuxtjs/tailwindcss'
   ],
   
   plugins: [
@@ -14,46 +13,6 @@ export default defineNuxtConfig({
     { src: '~/plugins/clean-console.client.ts', mode: 'client' },
     { src: '~/plugins/sw-register.client.ts', mode: 'client' }
   ],
-  
-  image: {
-    provider: 'ipx',
-    ipx: {
-      baseURL: '/_ipx/'
-    },
-    domains: ['demoap.senado.gob.bo', 'localhost'],
-    quality: 80,
-    screens: {
-      xs: 320,
-      sm: 640,
-      md: 768,
-      lg: 1024,
-      xl: 1280,
-      xxl: 1536
-    },
-    presets: {
-      avatar: {
-        modifiers: {
-          width: 150,
-          height: 150,
-          fit: 'cover'
-        }
-      },
-      thumbnail: {
-        modifiers: {
-          width: 300,
-          height: 200,
-          fit: 'cover'
-        }
-      },
-      profile: {
-        modifiers: {
-          width: 200,
-          height: 200,
-          fit: 'cover'
-        }
-      }
-    }
-  },
   
   app: {
     baseURL: '/',

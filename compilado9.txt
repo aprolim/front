@@ -418,7 +418,7 @@ layouts\alter8.vue
               </NuxtLink>
               <div class="absolute right-0 mt-3 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible translate-y-[-1rem] group-hover/menu:opacity-100 group-hover/menu:visible group-hover/menu:translate-y-0 transition-all duration-700 ease-in-out z-50">
                 <div class="py-2">
-                  <NuxtLink to="/gestion-legislativa#sesiones-pleno" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Sesiónes del pleno</NuxtLink>
+                  <NuxtLink to="/gestion-legislativa#sesiones-pleno" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Sesiones del pleno</NuxtLink>
                   <NuxtLink to="/gestion-legislativa#area-de-legislacion" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Gestión legislativa</NuxtLink>
                   <NuxtLink to="/gestion-legislativa#gaceta-legislativa" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Gaceta legislativa</NuxtLink>
                 </div>
@@ -436,21 +436,29 @@ layouts\alter8.vue
               <div class="absolute right-0 mt-3 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible translate-y-[-1rem] group-hover/menu:opacity-100 group-hover/menu:visible group-hover/menu:translate-y-0 transition-all duration-700 ease-in-out z-50">
                 <div class="py-2">
                   <NuxtLink to="/legisladores-nacionales#directiva-camaral" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Directiva Camaral</NuxtLink>
-                  <NuxtLink to="/legisladores-nacionales#comisiones-y-comites" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Comisiones y comites</NuxtLink>
+                  <NuxtLink to="/legisladores-nacionales#comisiones-y-comites" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Comisiones y comités</NuxtLink>
                   <NuxtLink to="/legisladores-nacionales#brigadas-parlamentarias" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Brigadas parlamentarias</NuxtLink>
-                  <NuxtLink to="/legisladores-nacionales#bancadas-politicas" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Bancadas politicas</NuxtLink>
+                  <NuxtLink to="/legisladores-nacionales#bancadas-politicas" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Bancadas políticas</NuxtLink>
                 </div>
               </div>
             </div>
             
             <!-- MENÚ 4: Centro de Noticias -->
-            <div class="">
+            <div class="relative group/menu">
               <NuxtLink 
-                to="/centro-de-noticias" 
+                to="/centro-de-noticias#noticias-importantes" 
                 class="inline-block px-[1vw] py-2 text-white font-medium hover:bg-[#C12F2F] rounded-lg transition-colors cursor-pointer"
               >
                 Centro de Noticias
               </NuxtLink>
+              <div class="absolute right-0 mt-3 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible translate-y-[-1rem] group-hover/menu:opacity-100 group-hover/menu:visible group-hover/menu:translate-y-0 transition-all duration-700 ease-in-out z-50">
+                <div class="py-2">
+                  <NuxtLink to="/centro-de-noticias#noticias-importantes" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Noticias Importantes</NuxtLink>
+                  <NuxtLink to="/centro-de-noticias#mas-noticias" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Más Noticias</NuxtLink>
+                  <NuxtLink to="/centro-de-noticias#sesiones" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Sesiones</NuxtLink>
+                  <NuxtLink to="/centro-de-noticias#produccion-audiovisual" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Producción Audiovisual</NuxtLink>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -485,6 +493,7 @@ layouts\alter8.vue
       >
         <div class="p-4 overflow-y-auto h-full">
           <div class="space-y-2">
+            <!-- La institución -->
             <div class="mb-2">
               <button @click="toggleMobileMenu('institution')" class="w-full flex items-center justify-between p-3 text-white hover:bg-white/10 rounded-lg transition-colors">
                 <span class="font-medium">La institución</span>
@@ -493,13 +502,14 @@ layouts\alter8.vue
                 </svg>
               </button>
               <div v-show="mobileMenuState.institution" class="ml-4 mt-1 space-y-1 border-l-2 border-white/30 pl-3">
-                <a href="/la-institucion" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📜 Mandato constitucional</a>
-                <a href="/la-institucion#directiva-camaral" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📚 Directiva camaral</a>
-                <a href="/la-institucion#resena-historica" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">🔄 Reseña histórica</a>
-                <a href="/la-institucion#museo" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">🖼️ Galería de imágenes</a>
+                <NuxtLink to="/la-institucion#mandato" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📜 Mandato constitucional</NuxtLink>
+                <NuxtLink to="/la-institucion#directiva-camaral" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📚 Directiva camaral</NuxtLink>
+                <NuxtLink to="/la-institucion#resena-historica" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">🔄 Reseña histórica</NuxtLink>
+                <NuxtLink to="/la-institucion#museo" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">🖼️ Galería de imágenes</NuxtLink>
               </div>
             </div>
             
+            <!-- Legisladores -->
             <div class="mb-2">
               <button @click="toggleMobileMenu('legislators')" class="w-full flex items-center justify-between p-3 text-white hover:bg-white/10 rounded-lg transition-colors">
                 <span class="font-medium">Legisladores</span>
@@ -508,12 +518,14 @@ layouts\alter8.vue
                 </svg>
               </button>
               <div v-show="mobileMenuState.legislators" class="ml-4 mt-1 space-y-1 border-l-2 border-white/30 pl-3">
-                <NuxtLink to="/legisladores-nacionales" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👨‍⚖️ Senadores</NuxtLink>
-                <NuxtLink to="/" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👩‍⚖️ Diputados</NuxtLink>
-                <NuxtLink to="/" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📋 Comisiones</NuxtLink>
+                <NuxtLink to="/legisladores-nacionales#directiva-camaral" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👨‍⚖️ Directiva Camaral</NuxtLink>
+                <NuxtLink to="/legisladores-nacionales#comisiones-y-comites" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📋 Comisiones</NuxtLink>
+                <NuxtLink to="/legisladores-nacionales#brigadas-parlamentarias" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👥 Brigadas</NuxtLink>
+                <NuxtLink to="/legisladores-nacionales#bancadas-politicas" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">🏛️ Bancadas</NuxtLink>
               </div>
             </div>
             
+            <!-- Gestión Legislativa -->
             <div class="mb-2">
               <button @click="toggleMobileMenu('legislative')" class="w-full flex items-center justify-between p-3 text-white hover:bg-white/10 rounded-lg transition-colors">
                 <span class="font-medium">Gestión Legislativa</span>
@@ -522,43 +534,27 @@ layouts\alter8.vue
                 </svg>
               </button>
               <div v-show="mobileMenuState.legislative" class="ml-4 mt-1 space-y-1 border-l-2 border-white/30 pl-3">
-                <NuxtLink to="/gestion-legislativa" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👨‍⚖️ Sesión del pleno</NuxtLink>
-                <NuxtLink to="/gestion-legislativa#area-de-legislacion" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👩‍⚖️ Proyectos de leyes</NuxtLink>
-                <NuxtLink to="/gestion-legislativa#gaceta-legislativa" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📋 Gaceta Legislativa</NuxtLink>
+                <NuxtLink to="/gestion-legislativa#sesiones-pleno" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">🏛️ Sesiones del pleno</NuxtLink>
+                <NuxtLink to="/gestion-legislativa#area-de-legislacion" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📝 Gestión legislativa</NuxtLink>
+                <NuxtLink to="/gestion-legislativa#gaceta-legislativa" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📰 Gaceta Legislativa</NuxtLink>
               </div>
             </div>
             
+            <!-- Centro de Noticias -->
             <div class="mb-2">
-              <button @click="toggleMobileMenu('culture')" class="w-full flex items-center justify-between p-3 text-white hover:bg-white/10 rounded-lg transition-colors">
-                <span class="font-medium">Cultura</span>
-                <svg class="w-5 h-5 transition-transform duration-200" :class="{ 'rotate-180': mobileMenuState.culture }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <button @click="toggleMobileMenu('news')" class="w-full flex items-center justify-between p-3 text-white hover:bg-white/10 rounded-lg transition-colors">
+                <span class="font-medium">Centro de Noticias</span>
+                <svg class="w-5 h-5 transition-transform duration-200" :class="{ 'rotate-180': mobileMenuState.news }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                 </svg>
               </button>
-              <div v-show="mobileMenuState.culture" class="ml-4 mt-1 space-y-1 border-l-2 border-white/30 pl-3">
-                <NuxtLink to="/" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👨‍⚖️ Patrimonio histórico</NuxtLink>
-                <NuxtLink to="/" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👩‍⚖️ Eventos culturales</NuxtLink>
-                <NuxtLink to="/" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📋 Biblioteca</NuxtLink>
+              <div v-show="mobileMenuState.news" class="ml-4 mt-1 space-y-1 border-l-2 border-white/30 pl-3">
+                <NuxtLink to="/centro-de-noticias#noticias-importantes" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📰 Noticias Importantes</NuxtLink>
+                <NuxtLink to="/centro-de-noticias#mas-noticias" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📰 Más Noticias</NuxtLink>
+                <NuxtLink to="/centro-de-noticias#sesiones" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">🎥 Sesiones</NuxtLink>
+                <NuxtLink to="/centro-de-noticias#produccion-audiovisual" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">🎬 Producción Audiovisual</NuxtLink>
               </div>
             </div>
-            
-            <div class="mb-2">
-              <button @click="toggleMobileMenu('participation')" class="w-full flex items-center justify-between p-3 text-white hover:bg-white/10 rounded-lg transition-colors">
-                <span class="font-medium">Participación</span>
-                <svg class="w-5 h-5 transition-transform duration-200" :class="{ 'rotate-180': mobileMenuState.participation }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                </svg>
-              </button>
-              <div v-show="mobileMenuState.participation" class="ml-4 mt-1 space-y-1 border-l-2 border-white/30 pl-3">
-                <NuxtLink to="/" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👨‍⚖️ Audiencias públicas</NuxtLink>
-                <NuxtLink to="/" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">👩‍⚖️ Rendición de cuentas</NuxtLink>
-                <NuxtLink to="/" class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-lg" @click="sidebarOpen = false">📋 Transparencia</NuxtLink>
-              </div>
-            </div>
-            
-            <NuxtLink to="/centro-de-noticias" class="block p-3 text-white hover:bg-white/10 rounded-lg mt-4" @click="sidebarOpen = false">
-              📰 Noticias
-            </NuxtLink>
           </div>
         </div>
       </aside>
@@ -583,15 +579,13 @@ layouts\alter8.vue
             <div class="container mx-auto px-4">
               <div class="grid grid-cols-12 gap-6 items-center">
                 <div class="col-span-3 flex items-center justify-start space-x-3">
-                  <img src="/footer-img/Recurso 8.png" alt="Senado Bolivia" class="h-6 2xl:h-9 4xl:h-16 5xl:h-24 w-auto">
-                  <div><a href="https://diputados.gob.bo/" target="_blank">https://diputados.gob.bo/</a></div>
+                  
                 </div>
                 <div class="col-span-6 text-center">
                   <p>Calle Comercio esquina Colón - Telf.: (591) 2158701 - www.senado.gob.bo - La Paz - Bolivia</p>
                 </div>
                 <div class="col-span-3 flex items-center justify-end space-x-3">
-                  <img src="/footer-img/Recurso 7.png" alt="Escudo Senado" class="h-9 2xl:h-24 5xl:h-32 w-auto">
-                  <div class="text-right"><a href="https://www.vicepresidencia.gob.bo/" target="_blank">https://www.vicepresidencia.gob.bo/</a></div>
+                  
                 </div>
               </div>
             </div>
@@ -628,16 +622,14 @@ import GlobalModals from '@/components/GlobalModals.vue'
 const route = useRoute()
 const router = useRouter()
 
-console.log('🏗️ [LAYOUT] alter8.vue - INICIALIZANDO LAYOUT')
-console.log('📍 [LAYOUT] Ruta actual:', route.path)
+console.log('🏗️ [LAYOUT] alter8.vue - INICIALIZANDO')
 
 const sidebarOpen = ref(false)
 const mobileMenuState = reactive({
   institution: false,
   legislators: false,
   legislative: false,
-  culture: false,
-  participation: false
+  news: false
 })
 
 const goToHome = () => {
@@ -706,15 +698,6 @@ onBeforeUnmount(() => {
   scroll-snap-align: start;
 }
 
-.snap-container::after {
-  content: '';
-  display: block;
-  height: 1px;
-  width: 100%;
-  opacity: 0;
-  scroll-snap-align: start;
-}
-
 header {
   position: fixed;
   top: 0;
@@ -747,34 +730,6 @@ header {
 
 .sub-footer {
   background-color: rgba(198, 18, 16, 0.6);
-}
-
-aside::-webkit-scrollbar {
-  width: 4px;
-}
-
-aside::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
-}
-
-aside::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 2px;
-}
-
-aside::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.3);
-}
-
-@keyframes bounceIn {
-  0% { opacity: 0; transform: scale(0.3); }
-  50% { opacity: 1; transform: scale(1.05); }
-  70% { transform: scale(0.9); }
-  100% { transform: scale(1); }
-}
-
-.animate-bounce-in {
-  animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 .social-icon-wrapper {
@@ -813,15 +768,6 @@ main {
 ::selection {
   background-color: #E03636;
   color: white;
-}
-
-::-moz-selection {
-  background-color: #E03636;
-  color: white;
-}
-
-html {
-  scroll-behavior: smooth;
 }
 </style> 
 ================================= 
@@ -1086,9 +1032,7 @@ pages\centro-de-noticias.vue
       <MoreNewsGrid :limpiarAsteriscos="limpiarAsteriscos" />
     </div>
     
-    <!-- ============================================ -->
-    <!-- SECCIÓN 3 - SESIONES (MODIFICADA) -->
-    <!-- ============================================ -->
+    <!-- SECCIÓN 3 - SESIONES -->
     <div 
       id="sesiones"
       ref="seccion3Ref"
@@ -1107,13 +1051,11 @@ pages\centro-de-noticias.vue
       </div>
 
       <div class="flex-1 flex flex-col justify-center">
-        <!-- Estado de carga -->
         <div v-if="loadingSesiones" class="flex justify-center items-center py-12">
           <div class="inline-block w-12 h-12 border-4 border-[#E03636] border-t-transparent rounded-full animate-spin"></div>
           <p class="ml-3 text-gray-600">Cargando videos...</p>
         </div>
         
-        <!-- Grid de videos -->
         <div v-else class="grid grid-cols-1 sm:grid-cols-3 gap-[2vw] mx-auto px-[6vw] w-full">
           <div v-for="video in sesionesVideos" :key="video.position" class="flex flex-col items-center">
             <div class="w-full aspect-video rounded-[1vw] overflow-hidden border-[.6vw] border-white shadow-lg">
@@ -1133,7 +1075,6 @@ pages\centro-de-noticias.vue
         </div>
       </div>
     </div>
-
     <!-- SECCIÓN 4 - PRODUCCIÓN AUDIOVISUAL -->
     <div 
       id="produccion-audiovisual"
@@ -1164,10 +1105,12 @@ pages\centro-de-noticias.vue
           target="_blank"
         >
           <div class="relative overflow-hidden">
+            <!-- CAMBIA ESTA RUTA SEGÚN EL NOMBRE REAL DEL ARCHIVO -->
             <img 
-              src="/images/curul/Recurso 1.jpg" 
+              src="/images/curul/Recurso-1.jpg" 
               alt="Producción Audiovisual - Desde el Curul" 
               class="w-full h-auto object-cover transition-all duration-700 ease-out" 
+              @error="e => { console.error('Error loading image:', e.target.src); e.target.src = '/images/placeholder.jpg'; }"
             />
           </div>
         </NuxtLink>
@@ -1190,7 +1133,6 @@ const router = useRouter()
 
 console.log('🚀 [PAGE] centro-de-noticias.vue - INICIALIZANDO')
 
-// 🔥 USAR LOS COMPOSABLES
 const { 
   noticiasImportantes, 
   ultimasNoticias, 
@@ -1200,39 +1142,30 @@ const {
   recargarDatos 
 } = useNoticias()
 
-// 🔥 SESIONES - NUEVO COMPOSABLE
 const { videos: sesionesVideos, loading: loadingSesiones, fetchVideos: fetchSesionesVideos } = useSesiones()
 
-// ============================================
-// FUNCIÓN PARA LIMPIAR ASTERISCOS DE LOS TÍTULOS
-// ============================================
 const limpiarAsteriscos = (texto) => {
   if (!texto) return ''
   return texto.replace(/\*/g, '')
 }
 
-// Estado local
 const currentIndex = ref(0)
 let carouselInterval = null
 let scrollObserver = null
 
-// Refs de secciones
 const seccion1Ref = ref(null)
 const seccion2Ref = ref(null)
 const seccion3Ref = ref(null)
 const seccion4Ref = ref(null)
 
-// Visibilidad de secciones
 const isSeccion1Visible = ref(false)
 const isSeccion2Visible = ref(false)
 const isSeccion3Visible = ref(false)
 const isSeccion4Visible = ref(false)
 
-// Computed
 const noticiasCarousel = computed(() => noticiasImportantes.value || [])
 const loadingImportantes = computed(() => loading.value)
 
-// Funciones
 const formatearFecha = (fecha) => {
   if (!fecha) return ''
   return new Date(fecha).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })
@@ -1318,32 +1251,39 @@ const initObserver = () => {
   })
 }
 
-const forceScrollToHash = () => {
-  const hash = route.hash
-  if (hash && hash !== '') {
-    const targetId = hash.replace('#', '')
-    console.log(`📍 [PAGE] Forzando scroll a: ${targetId}`)
+// ============================================
+// MAPA DE SECCIONES PARA SCROLL DEL MENÚ
+// ============================================
+const sectionsMap = {
+  'noticias-importantes': seccion1Ref,
+  'mas-noticias': seccion2Ref,
+  'sesiones': seccion3Ref,
+  'produccion-audiovisual': seccion4Ref
+}
+
+const scrollToSection = (id) => {
+  const sectionRef = sectionsMap[id]
+  if (sectionRef?.value) {
+    const container = document.querySelector('.snap-container')
+    if (container) container.style.scrollSnapType = 'none'
     
-    const scrollToTarget = (id) => {
-      const element = document.getElementById(id)
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'start' })
-        console.log(`✅ [PAGE] Scroll completado a: ${id}`)
-        return true
-      }
-      console.warn(`⚠️ [PAGE] Elemento no encontrado: ${id}`)
-      return false
-    }
+    sectionRef.value.scrollIntoView({ behavior: 'smooth', block: 'start' })
     
-    setTimeout(() => scrollToTarget(targetId), 100)
-    setTimeout(() => scrollToTarget(targetId), 300)
-    setTimeout(() => scrollToTarget(targetId), 500)
-    setTimeout(() => scrollToTarget(targetId), 800)
-    setTimeout(() => scrollToTarget(targetId), 1200)
+    setTimeout(() => {
+      if (container) container.style.scrollSnapType = 'y mandatory'
+    }, 800)
   }
 }
 
-// Watch para inicializar carousel
+// Watch para cambios en el hash (navegación desde el menú)
+watch(() => route.hash, (newHash) => {
+  if (newHash && newHash !== '') {
+    const id = newHash.replace('#', '')
+    console.log(`📍 [PAGE] Navegando a sección: ${id}`)
+    setTimeout(() => scrollToSection(id), 100)
+  }
+})
+
 watch(noticiasCarousel, (nuevas) => {
   if (nuevas.length > 0) {
     console.log(`📊 [PAGE] ${nuevas.length} noticias importantes disponibles`)
@@ -1353,13 +1293,12 @@ watch(noticiasCarousel, (nuevas) => {
   }
 }, { immediate: true })
 
-// KeepAlive hooks
 onActivated(async () => {
   console.log('🔄 [PAGE] Reactivada')
   stopCarousel()
   destroyObserver()
   await recargarDatos()
-  await fetchSesionesVideos()  // 🔥 Cargar videos de sesiones
+  await fetchSesionesVideos()
   isSeccion1Visible.value = false
   isSeccion2Visible.value = false
   isSeccion3Visible.value = false
@@ -1367,7 +1306,8 @@ onActivated(async () => {
   await nextTick()
   initObserver()
   if (route.hash) {
-    forceScrollToHash()
+    const id = route.hash.replace('#', '')
+    setTimeout(() => scrollToSection(id), 200)
   } else {
     setTimeout(() => {
       if (!isSeccion1Visible.value) {
@@ -1384,15 +1324,15 @@ onDeactivated(() => {
   destroyObserver()
 })
 
-// Lifecycle
 onMounted(async () => {
   console.log('🎬 [PAGE] Montada')
   await recargarDatos()
-  await fetchSesionesVideos()  // 🔥 Cargar videos de sesiones
+  await fetchSesionesVideos()
   await nextTick()
   initObserver()
   if (route.hash) {
-    forceScrollToHash()
+    const id = route.hash.replace('#', '')
+    setTimeout(() => scrollToSection(id), 500)
   } else {
     setTimeout(() => {
       if (!isSeccion1Visible.value) {
@@ -2572,6 +2512,441 @@ footer {
   display: block !important;
   position: relative !important;
   z-index: 100 !important;
+  background-image: url('/footer-main.png') !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-section,
+  .scroll-section.animate-in,
+  .scroll-section.animate-in > * {
+    transition: none !important;
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+</style> 
+================================= 
+pages\index2.vue 
+================================= 
+ 
+<!-- pages/index.vue - VERSIÓN CON SNAP MEJORADO Y FONDO DEL MUSEO -->
+<template>
+  <div class="min-h-screen text-style">
+    <!-- Fondo fijo GLOBAL - SOLO para Important News -->
+    <div class="global-fixed-background" :class="{ 'show-fixed': isImportantNewsVisible }"></div>
+    
+    <!-- Hero Section -->
+    <section 
+      class="relative h-screen flex items-center overflow-hidden transition-all duration-500 snap-section"
+      :class="{ 'min-h-[40vh] md:min-h-[45vh] pt-20': scrolled }"
+      ref="heroSection"
+      @mouseleave="resumeCarousel"
+    >
+      <HeroCarousel
+        :scrolled="scrolled"
+        :current-media-index="currentMediaIndex"
+        :filtered-hero-media="filteredHeroMedia"
+      />
+      <HeroContent :scrolled="scrolled" />
+      <ScrollProgress
+        :scrolled="scrolled"
+        :scroll-progress="scrollProgress"
+      />
+    </section>
+
+    <!-- Transición entre secciones -->
+    <div class="relative h-6 -mt-8 overflow-hidden z-20 snap-section">
+      <div class="absolute inset-0 bg-gradient-to-b from-transparent via-white/20 to-white"></div>
+      <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#E03636]/30 to-transparent"></div>
+    </div>
+
+    <!-- Sección Important News -->
+    <div 
+      ref="importantNewsRef" 
+      class="scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out z-10 snap-section"
+      :class="{ 'show': showSection, 'animate-in': isImportantNewsVisible }"
+      style="min-height: 100vh; position: relative; background: transparent;"
+    >
+      <!-- Contenedor del contenido -->
+      <div class="relative z-20 flex items-center justify-center min-h-screen">
+        <div class="news-container">
+          <ImportantNewsSection />
+        </div>
+      </div>
+    </div>
+    
+    <!-- Más noticias -->
+    <div 
+      ref="moreNewsRef" 
+      class="h-screen scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out delay-200 z-10 snap-section"
+      :class="{ 'animate-in': isMoreNewsVisible }"
+      style="position: relative; background: white;"
+    >
+      <MoreNewsGrid />
+    </div>
+    
+    <!-- Parte de los senadores -->
+    <div 
+      ref="senateRef" 
+      class="h-screen w-full scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out delay-300 z-10 snap-section"
+      :class="{ 'animate-in': isSenateVisible }"
+      style="position: relative; background: #f5f5f5;"
+    >
+      <SenateChamber
+        :show-footer="false"
+        class="h-screen"
+      >
+        <template #header>
+          <div class="custom-header">
+            <h2 class="text-3xl md:text-4xl font-bold text-white">
+              Distribución del senado
+            </h2>
+            <h5 class="text-white">Selecciona un senador para ver detalles</h5>
+          </div>
+        </template>
+      </SenateChamber>
+    </div>
+    
+    <!-- Museo - CON SU PROPIO FONDO (AGREGADO DIRECTAMENTE) -->
+    <div 
+      ref="museumRef" 
+      class="h-screen w-full scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out delay-400 z-10 snap-section"
+      :class="{ 'animate-in': isMuseumVisible }"
+      style="background-image: url('/fondo1.png'); background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed;"
+    >
+      <MuseumSectionMinimal
+        :dark-mode="darkMode"
+        @collection-selected="handleCollectionSelect"
+        @exhibition-selected="handleExhibitionSelect"
+        @program-registration="handleProgramRegistration"
+        @virtual-tour-started="handleVirtualTour"
+        @donation-clicked="handleDonationClick"
+      />
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted, onUnmounted, nextTick } from 'vue'
+import { useCarousel } from '@/composables/useCarousel'
+import { useScrollEffects } from '@/composables/useScrollEffects'
+import SenateChamber from '@/components/SenateChamber.vue'
+import MuseumSectionMinimal from '@/components/MuseumSectionMinimal.vue'
+import HeroCarousel from '@/components/HeroSection/HeroCarousel.vue'
+import HeroContent from '@/components/HeroSection/HeroContent.vue'
+import ScrollProgress from '@/components/UI/ScrollProgress.vue'
+import ImportantNewsSection from '@/components/ImportantNewsSection.vue'
+import MoreNewsGrid from '@/components/MoreNewsGrid.vue'
+
+const heroMedia = ref([
+  {
+    type: 'video',
+    url: 'https://senado.gob.bo//assets/intro2025-C9lburAD.mp4',
+    alt: 'Video institucional del Senado de Bolivia'
+  },
+  {
+    type: 'image',
+    url: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
+    alt: 'Edificio del Senado Nacional de Bolivia'
+  },
+  {
+    type: 'image',
+    url: 'https://pxcdn.reduno.com.bo/reduno/112025/1762461432445.webp?cw=800&ch=450&extw=jpg',
+    alt: 'Edificio del Congreso Nacional de Bolivia'
+  },
+  {
+    type: 'image', 
+    url: 'https://apisi.senado.gob.bo/images/a001535c-1750-49a8-b277-37b32b038c45_1759275539.jpeg',
+    alt: 'Asamblea Legislativa Plurinacional de Bolivia'
+  }
+])
+
+const {
+  currentMediaIndex,
+  filteredHeroMedia,
+  startCarousel,
+  goToMedia,
+  pauseCarousel,
+  resumeCarousel
+} = useCarousel(heroMedia.value)
+
+const { scrolled, scrollProgress, initScrollListener, removeScrollListener } = useScrollEffects()
+
+const darkMode = ref(false)
+const heroSection = ref(null)
+const showSection = ref(true)
+
+const importantNewsRef = ref(null)
+const moreNewsRef = ref(null)
+const senateRef = ref(null)
+const museumRef = ref(null)
+
+const isImportantNewsVisible = ref(false)
+const isMoreNewsVisible = ref(false)
+const isSenateVisible = ref(false)
+const isMuseumVisible = ref(false)
+
+const handleCollectionSelect = (collection) => {
+  console.log('Colección seleccionada:', collection)
+}
+
+const handleExhibitionSelect = (exhibition) => {
+  console.log('Exhibición seleccionada:', exhibition)
+}
+
+const handleProgramRegistration = (program) => {
+  console.log('Registro a programa:', program)
+}
+
+const handleVirtualTour = () => {
+  console.log('Tour virtual iniciado')
+}
+
+const handleDonationClick = () => {
+  console.log('Donación solicitada')
+}
+
+let scrollObserver = null
+
+const initScrollObserver = () => {
+  scrollObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          if (entry.target === importantNewsRef.value) {
+            isImportantNewsVisible.value = true;
+          } else if (entry.target === moreNewsRef.value) {
+            isMoreNewsVisible.value = true;
+          } else if (entry.target === senateRef.value) {
+            isSenateVisible.value = true;
+          } else if (entry.target === museumRef.value) {
+            isMuseumVisible.value = true;
+          }
+          
+          entry.target.classList.add('animate-in');
+          scrollObserver.unobserve(entry.target);
+        }
+      });
+    },
+    {
+      threshold: 0.15,
+      rootMargin: '0px 0px -30px 0px'
+    }
+  );
+  
+  const sections = [
+    importantNewsRef.value,
+    moreNewsRef.value,
+    senateRef.value,
+    museumRef.value
+  ];
+  
+  sections.forEach(section => {
+    if (section) {
+      scrollObserver.observe(section);
+    }
+  });
+};
+
+onMounted(async () => {
+  startCarousel();
+  initScrollListener();
+  await nextTick();
+  showSection.value = true;
+  initScrollObserver();
+});
+
+onUnmounted(() => {
+  removeScrollListener();
+  if (scrollObserver) {
+    scrollObserver.disconnect();
+  }
+});
+
+definePageMeta({
+  layout: 'alter8'
+});
+</script>
+
+<style scoped>
+.text-style {
+  font-family: 'Montserrat', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ===== SNAP SCROLL MÁS NOTORIO ===== */
+html, body {
+  scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
+  scroll-padding-top: 0;
+}
+
+/* Cada sección con snap - MÁS AGL UTILIZANDO SCROLL-SNAP-STOP */
+section, .scroll-section {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  transition: transform 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.1);
+}
+
+/* El footer también hace snap */
+footer {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  transition: transform 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.1);
+}
+
+/* ===== FONDO FIJO - SOLO PARA IMPORTANT NEWS ===== */
+.global-fixed-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: url('/Recurso_2.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: #f1f1f3;
+  z-index: 0;
+  pointer-events: none;
+  will-change: transform;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+/* Overlay elegante */
+.global-fixed-background::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(
+    circle at 50% 30%,
+    transparent 0%,
+    rgba(0, 0, 0, 0.25) 80%,
+    rgba(0, 0, 0, 0.35) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Mostrar solo cuando estamos en Important News */
+.global-fixed-background.show-fixed {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Todas las secciones */
+.scroll-section {
+  position: relative;
+  width: 100%;
+  z-index: 5;
+}
+
+/* Important News debe ser transparente */
+[ref="importantNewsRef"] {
+  background: transparent !important;
+}
+
+/* Las otras secciones tienen fondos sólidos */
+[ref="moreNewsRef"] {
+  background: white !important;
+}
+
+[ref="senateRef"] {
+  background: #f5f5f5 !important;
+}
+
+/* Museo - SIN FONDO AQUÍ PORQUE YA LO TIENE EN EL STYLE INLINE */
+[ref="museumRef"] {
+  background: transparent !important; /* El fondo viene del style inline */
+}
+
+.news-container {
+  width: 90%;
+  margin: 0 auto;
+  max-width: 1400px;
+  background: transparent !important;
+  position: relative;
+  z-index: 10;
+}
+
+@media (max-width: 768px) {
+  .news-container {
+    width: 95%;
+  }
+}
+
+@media (max-width: 480px) {
+  .news-container {
+    width: 98%;
+  }
+}
+</style>
+
+<style>
+.scroll-section {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+.scroll-section.animate-in {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+.scroll-section.animate-in > * {
+  animation: fadeInUpChild 0.6s ease-out forwards;
+}
+
+@keyframes fadeInUpChild {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Scrollbar elegante */
+::-webkit-scrollbar {
+  width: 10px;
+  background: transparent;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(224, 54, 54, 0.4);
+  border-radius: 10px;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(224, 54, 54, 0.7);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Asegurar que el footer sea visible */
+footer {
+  display: block !important;
+  position: relative !important;
+  z-index: 100 !important;
+  min-height: 250px;
   background-image: url('/footer-main.png') !important;
   background-size: cover !important;
   background-position: center !important;

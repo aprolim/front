@@ -1,0 +1,206 @@
+<template>
+  <div class="relative z-10 mx-auto min-h-screen flex flex-col w-full">
+    <!-- FRANJA ROJA DE ANCHO COMPLETO (superior) - CON MARGEN PARA HEADER -->
+    <div class="relative w-screen left-1/2 right-1/2 -mx-[50vw] mt-[4.4vw]">
+      <!-- <div class="relative bg-gradient-to-r from-red-700/70 via-red-800/70 to-red-900/70 py-2 sm:py-3 md:py-4 shadow-2xl overflow-hidden group full-width-franja"> -->
+      <div class="relative bg-[#E03636] py-[0.8vw] shadow-2xl overflow-hidden group full-width-franja">
+        
+        <!-- Patrón de fondo sutil (más pequeño) -->
+        <div class="absolute inset-0 opacity-5">
+          <div class="absolute top-0 left-0 w-16 h-16 border-t-2 border-l-2 border-yellow-300 rounded-tl-lg"></div>
+          <div class="absolute bottom-0 right-0 w-16 h-16 border-b-2 border-r-2 border-yellow-300 rounded-br-lg"></div>
+        </div>
+
+        <!-- Líneas decorativas animadas (más delgadas) -->
+        <div class="absolute top-0 left-0 right-0 h-[.2vw] bg-gradient-to-r from-transparent via-yellow-400 to-transparent animate-pulse"></div>
+        <div class="absolute bottom-0 left-0 right-0 h-[.2vw] bg-gradient-to-r from-transparent via-yellow-400 to-transparent animate-pulse"></div>
+
+        <!-- Contenido principal centrado -->
+        <div class="container mx-auto px-4 relative z-10 text-center">
+          <!-- Texto principal - MÁS PEQUEÑO -->
+          <p class="font-bold text-white text-[2vw]">
+            <span class="bg-clip-text text-transparent bg-gradient-to-r from-white via-yellow-100 to-yellow-200">
+              <span class="inline-flex items-center justify-center text-white text-[.8em] mx-[.8em]">⚪</span> 
+              PRIMERA LEGISLATURA DEL TRICENTENARIO
+              <span class="inline-flex items-center justify-center text-white text-[.8em] mx-[.8em]">⚪</span>
+            </span>
+          </p>
+        </div>
+
+        <!-- Elementos decorativos en las esquinas - MÁS PEQUEÑOS -->
+        <div class="absolute top-2 left-2 w-2 h-2 border border-yellow-300/50 rounded-full animate-ping"></div>
+        <div class="absolute top-2 right-2 w-2 h-2 border border-yellow-300/50 rounded-full animate-ping" style="animation-delay: 0.5s;"></div>
+        <div class="absolute bottom-2 left-2 w-2 h-2 border border-yellow-300/50 rounded-full animate-ping" style="animation-delay: 1s;"></div>
+        <div class="absolute bottom-2 right-2 w-2 h-2 border border-yellow-300/50 rounded-full animate-ping" style="animation-delay: 1.5s;"></div>
+      </div>
+    </div>
+
+    <!-- DOS COLUMNAS: Texto (izquierda) + Carrusel (derecha) - CON ALINEACIÓN VERTICAL CENTRADA -->
+    <div class="mx-auto px-[5vw] flex-1 w-full flex items-center">
+      <div class="grid grid-cols-2 gap-[3vw] w-full items-center">
+        
+        <!-- COLUMNA IZQUIERDA: Texto y controles -->
+        <div class="flex flex-col h-full relative text-[1.4vw]" style="min-height: 37.1vw;">
+          <!-- CONTENIDO PRINCIPAL - OCUPA TODO EL ESPACIO DISPONIBLE -->
+          <div class="flex-1 flex flex-col justify-center">
+            <!-- Texto - TAMAÑOS REDUCIDOS -->
+            <div class="space-y-3">
+              <h1 class="font-extrabold text-[#E03636] text-[1.6em] text-center">
+                {{ slides[currentSlide].title }}
+                <br>
+              </h1>
+              <p class="text-gray-700 leading-relaxed text-[.75em] text-justify" v-html="slides[currentSlide].description">
+              </p>
+              <div v-if="slides[currentSlide].additionalText" class="text-gray-600 text-[clamp(0.8rem,1.2vw,1rem)]">
+                {{ slides[currentSlide].additionalText }}
+              </div>
+            </div>
+          </div>
+
+          <!-- CONTROLES DEL CAROUSEL - SIEMPRE AL FONDO -->
+          <div class="flex justify-center z-50 py-[0.0em]">
+            <div class="flex justify-center space-x-[1.5em] bg-transparent py-[.6em] px-5 rounded-full">
+              <button 
+                v-for="(_, index) in slides" 
+                :key="index"
+                @click="currentSlide = index"
+                class="transition-all duration-300 rounded-full"
+                :class="[
+                  currentSlide === index 
+                    ? 'bg-[#E03636] ring-[.45em] ring-white outline outline-[.17em] outline-[#E03636] outline-offset-[.17em]' 
+                    : 'bg-[#E03636] hover:bg-[#E03636]/50'
+                ]"
+                :style="{ width: '.8em', height: '.8em' }"
+                :aria-label="`Ir a imagen ${index + 1}`"
+              ></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- COLUMNA DERECHA: Carrusel de imágenes -->
+        <div class="relative w-full overflow-hidden rounded-lg shadow-xl" style="height: 36vw;">
+          <!-- Imágenes del carrusel -->
+          <div 
+            v-for="(slide, index) in slides" 
+            :key="index"
+            class="absolute inset-0 transition-all duration-700 ease-in-out"
+            :class="[
+              currentSlide === index 
+                ? 'opacity-100 translate-x-0' 
+                : 'opacity-0 translate-x-full'
+            ]"
+          >
+            <img 
+              :src="slide.image.url" 
+              :alt="slide.image.alt"
+              class="w-full h-full object-cover"
+              loading="lazy"
+            />
+            <!-- Overlay gradiente más sutil -->
+            <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+            
+            <!-- Título de la imagen - MÁS PEQUEÑO -->
+            <div v-if="slide.image.title" class="absolute bottom-0 left-0 right-0 p-3 text-white">
+              <h3 class="font-bold text-[1.4vw]">{{ slide.image.title }}</h3>
+              <p v-if="slide.image.caption" class="text-white/80 text-[1.15vw]">{{ slide.image.caption }}</p>
+            </div>
+          </div>
+
+          <!-- Flechas de navegación - MÁS PEQUEÑAS (COMENTADAS) -->
+          <!-- <button 
+            @click="prevSlide"
+            class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white rounded-full w-8 h-8 flex items-center justify-center transition-all duration-300 z-10 text-lg"
+            aria-label="Imagen anterior"
+          >
+            ←
+          </button>
+          <button 
+            @click="nextSlide"
+            class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white rounded-full w-8 h-8 flex items-center justify-center transition-all duration-300 z-10 text-lg"
+            aria-label="Siguiente imagen"
+          >
+            →
+          </button> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref } from 'vue'
+
+const props = defineProps({
+  bannerTextSize: {
+    type: String,
+    default: '1.5vw' /* REDUCIDO de 2vw a 1.5vw */
+  },
+  slides: {
+    type: Array,
+    default: () => [
+      {
+        title: 'Mandato Constitucional Senado',
+        description: 'La Constitución Política del Estado establece: <br> <br> <b>Artículo 12.</b><br><br> <b>I. </b>	El Estado se organiza y estructura su poder público a través de los órganos Legislativo, Ejecutivo, Judicial y Electoral. La organización del Estado está fundamentada en la independencia, separación, coordinación y cooperación de estos órganos. <br> <br> <b>Artículo 148.</b> <br><br> <b>I. </b> La Cámara de Senadores estará conformada por un total de 36 miembros.<br> <b>II. </b> En cada departamento se eligen 4 Senadores en circunscripción departamental, por votación universal, directa y secreta.<br> <b>III. </b> La asignación de los escaños de Senadores en cada departamento se hará mediante el sistema proporcional, de acuerdo a la Ley.',
+        additionalText: '',
+        image: {
+          url: '/Mandato Constitucional Senado/6.png',
+          alt: 'Edificio del Senado',
+          title: 'Palacio Legislativo',
+          caption: 'Día del recibimiento del presidente Enrique Peñaranda (Fuente: Colección Fotográfica Julio Cordero Castillo)'
+        }
+      },
+      {
+        title: 'La Asamblea Legislativa Plurinacional',
+        description: 'La Constitución Política del Estado establece: <br><br>  <b>Artículo 145.</b><br><br> La Asamblea Legislativa Plurinacional está compuesta por dos cámaras, la Cámara de Diputados y la Cámara de Senadores, y es la única con facultad de aprobar y sancionar leyes que rigen para todo el territorio boliviano.',
+        additionalText: '',
+        image: {
+          url: '/Mandato Constitucional Senado/15.png',
+          alt: 'Sesión del Senado',
+          title: 'Edificio del Palacio Legislativo',
+          caption: 'Construido por el centenario de la Republica, Obra del arquitecto Antonio Camponovo (Fuente: Colección Fotográfica de la Vicepresidencia del Estado Plurinacional de Bolivia)'
+        }
+      },
+      {
+        title: 'El Rol del Senado en la Asamblea Legislativa Plurinacional',
+        description: 'El Reglamento General de la Cámara de Senadores establece: <br><br> <b>Artículo 2.</b><br><br>(Marco Constitucional). En el marco de lo establecido por la Constitución Política del Estado, la Cámara de Senadores de la Asamblea Legislativa Plurinacional reside en el Órgano Legislativo y ejerce las atribuciones de legislación, fiscalización y gestión, bajo los principios de coordinación y cooperación, promoviendo la participación activa de la ciudadanía en todo el territorio boliviano.',
+        additionalText: '',
+        image: {
+          url: '/Mandato Constitucional Senado/27.JPG',
+          alt: 'Hemiciclo',
+          title: 'Escaleras Palacio Legislativo Plurinacional',
+          caption: 'Escaleras del Palacio Legislativo Plurinacional junto al busto del: Dr. José Mariano Serrano – Presidente de la Asamblea Nacional Deliberativa que juró la independencia política de Bolivia. (Fuente: Colección Fotográfica del Honorable Senado del Estado Plurinacional de Bolivia)'
+        }
+      }
+    ]
+  }
+})
+
+const currentSlide = ref(0)
+
+const nextSlide = () => {
+  currentSlide.value = (currentSlide.value + 1) % props.slides.length
+}
+
+const prevSlide = () => {
+  currentSlide.value = (currentSlide.value - 1 + props.slides.length) % props.slides.length
+}
+</script>
+
+<style scoped>
+@keyframes gentleGlow {
+  0%, 100% { box-shadow: 0 0 15px rgba(224, 54, 54, 0.2); }
+  50% { box-shadow: 0 0 25px rgba(224, 54, 54, 0.4); }
+}
+
+.full-width-franja {
+  animation: gentleGlow 3s ease-in-out infinite;
+}
+
+.w-screen { width: 100vw; }
+.left-1\/2 { left: 50%; }
+.right-1\/2 { right: 50%; }
+.-mx-\[50vw\] { margin-left: -50vw; margin-right: -50vw; }
+.translate-x-0 { transform: translateX(0); }
+.translate-x-full { transform: translateX(100%); }
+button:focus-visible { outline: 2px solid #E03636; outline-offset: 2px; }
+</style>
