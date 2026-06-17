@@ -102,7 +102,7 @@
       :class="{ 'animate-in': isSeccion2Visible }"
       style="height: 100vh; position: relative; background: white; display: flex; flex-direction: column; justify-content: center; align-items: center;"
     >
-      <MoreNewsGrid :limpiarAsteriscos="limpiarAsteriscos" />
+      <MoreNewsGrid :limpiarAsteriscos="limpiarAsteriscos" targetRoute="/noticias"/>
     </div>
     
     <!-- SECCIÓN 3 - SESIONES -->

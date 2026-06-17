@@ -316,11 +316,104 @@
 import { ref, computed, onMounted, onUnmounted, watch, nextTick, onActivated } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-// ============================================
-// 🔥 SEO - useHead para cada noticia
-// ============================================
 const route = useRoute()
 const router = useRouter()
+
+const API_BASE_URL = 'http://demoback.senado.gob.bo/api'
+
+const windowLocation = ref('')
+const currentIndex = ref(0)
+const imagenesCarrusel = ref([])
+const errorMsg = ref(null)
+
+const noticiasRelacionadas = ref([])
+const relacionadaCurrentIndex = ref(0)
+const loadingRelacionadas = ref(true)
+
+const noticiasPorPagina = 2
+const maxRelacionadaIndex = computed(() => Math.max(0, Math.ceil(noticiasRelacionadas.value.length / noticiasPorPagina) - 1))
+
+// ============================================
+// 🔥 PRIMERO: useAsyncData - OBTENER LOS DATOS
+// ============================================
+const { data: noticiaData, pending, error, refresh } = await useAsyncData(
+  `noticia-${route.params.slug}`,
+  async () => {
+    console.log(`🚀 Buscando noticia por slug: ${route.params.slug}`)
+    
+    try {
+      const response = await fetch(`${API_BASE_URL}/content/slug/${route.params.slug}`)
+      
+      if (!response.ok) {
+        if (response.status === 404) {
+          return { noticia: null, imagenes: [] }
+        }
+        throw new Error(`Error ${response.status}: ${response.statusText}`)
+      }
+      
+      const result = await response.json()
+      const noticia = result.data
+      
+      console.log(`✅ Noticia encontrada: ${noticia.title}`)
+      
+      const imagenes = []
+      
+      if (noticia.featuredImage?.url) {
+        imagenes.push({
+          url: noticia.featuredImage.url,
+          alt: noticia.featuredImage.alt || noticia.title,
+          caption: noticia.featuredImage.caption || noticia.featuredImage.name || noticia.title,
+          orientation: 'horizontal'
+        })
+      }
+      
+      if (noticia.gallery && Array.isArray(noticia.gallery)) {
+        noticia.gallery.forEach((img, idx) => {
+          imagenes.push({
+            url: img.url,
+            alt: img.alt || noticia.title,
+            caption: img.caption || img.name || `Imagen ${idx + 1}`,
+            orientation: 'horizontal'
+          })
+        })
+      }
+      
+      if (imagenes.length === 0) {
+        imagenes.push(
+          { url: 'https://picsum.photos/id/1015/1920/1080', alt: 'Paisaje montañoso', caption: 'Vista panorámica del Senado', orientation: 'horizontal' },
+          { url: 'https://picsum.photos/id/104/1080/1920', alt: 'Edificio institucional', caption: 'Fachada principal del Senado', orientation: 'vertical' },
+          { url: 'https://picsum.photos/id/15/1920/1080', alt: 'Naturaleza boliviana', caption: 'Sala de sesiones', orientation: 'horizontal' }
+        )
+      }
+      
+      let blocks = noticia.blocks || []
+      if (blocks.length === 0 && noticia.content) {
+        blocks = convertirHTMLaBloques(noticia.content)
+      }
+      
+      const noticiaEnriquecida = {
+        ...noticia,
+        blocks: blocks,
+        categoria: noticia.category
+      }
+      
+      return { noticia: noticiaEnriquecida, imagenes }
+      
+    } catch (err) {
+      console.error(`❌ Error: ${err.message}`)
+      return { noticia: null, imagenes: [], error: err.message }
+    }
+  },
+  {
+    lazy: false,
+    server: true,
+    default: () => ({ noticia: null, imagenes: [] })
+  }
+)
+
+// ============================================
+// 🔥 SEGUNDO: Computed que DEPENDEN de noticiaData
+// ============================================
 
 // Verificar si la noticia tiene contenido válido
 const noticiaValida = computed(() => {
@@ -354,7 +447,9 @@ const seoData = computed(() => {
   }
 })
 
-// 🔥 useHead para SEO
+// ============================================
+// 🔥 TERCERO: useHead - SEO (depende de seoData)
+// ============================================
 useHead({
   title: () => seoData.value.title,
   meta: [
@@ -395,36 +490,8 @@ useHead({
 })
 
 // ============================================
-// RESTO DEL CÓDIGO
+// 🔥 CUARTO: RESTO DE FUNCIONES
 // ============================================
-const API_BASE_URL = 'http://demoback.senado.gob.bo/api'
-
-const windowLocation = ref('')
-const currentIndex = ref(0)
-const imagenesCarrusel = ref([])
-const errorMsg = ref(null)
-
-const noticiasRelacionadas = ref([])
-const relacionadaCurrentIndex = ref(0)
-const loadingRelacionadas = ref(true)
-
-const noticiasPorPagina = 2
-const maxRelacionadaIndex = computed(() => Math.max(0, Math.ceil(noticiasRelacionadas.value.length / noticiasPorPagina) - 1))
-
-// ============================================
-// 🔥 FORZAR SCROLL AL INICIO DE LA PÁGINA
-// ============================================
-const forceScrollToTop = () => {
-  if (process.client) {
-    window.scrollTo(0, 0)
-    const container = document.querySelector('.snap-container')
-    if (container) container.scrollTo(0, 0)
-    document.body.scrollTop = 0
-    document.documentElement.scrollTop = 0
-    const mainContent = document.querySelector('main')
-    if (mainContent) mainContent.scrollTop = 0
-  }
-}
 
 const cargarNoticiasRelacionadas = async (noticiaId, categoria, tags) => {
   loadingRelacionadas.value = true
@@ -535,81 +602,24 @@ const verNoticiaRelacionada = (noticia) => {
   }
 }
 
-const { data: noticiaData, pending, error, refresh } = await useAsyncData(
-  `noticia-${route.params.slug}`,
-  async () => {
-    console.log(`🚀 Buscando noticia por slug: ${route.params.slug}`)
-    
-    try {
-      const response = await fetch(`${API_BASE_URL}/content/slug/${route.params.slug}`)
-      
-      if (!response.ok) {
-        if (response.status === 404) {
-          return { noticia: null, imagenes: [] }
-        }
-        throw new Error(`Error ${response.status}: ${response.statusText}`)
-      }
-      
-      const result = await response.json()
-      const noticia = result.data
-      
-      console.log(`✅ Noticia encontrada: ${noticia.title}`)
-      
-      const imagenes = []
-      
-      if (noticia.featuredImage?.url) {
-        imagenes.push({
-          url: noticia.featuredImage.url,
-          alt: noticia.featuredImage.alt || noticia.title,
-          caption: noticia.featuredImage.caption || noticia.featuredImage.name || noticia.title,
-          orientation: 'horizontal'
-        })
-      }
-      
-      if (noticia.gallery && Array.isArray(noticia.gallery)) {
-        noticia.gallery.forEach((img, idx) => {
-          imagenes.push({
-            url: img.url,
-            alt: img.alt || noticia.title,
-            caption: img.caption || img.name || `Imagen ${idx + 1}`,
-            orientation: 'horizontal'
-          })
-        })
-      }
-      
-      if (imagenes.length === 0) {
-        imagenes.push(
-          { url: 'https://picsum.photos/id/1015/1920/1080', alt: 'Paisaje montañoso', caption: 'Vista panorámica del Senado', orientation: 'horizontal' },
-          { url: 'https://picsum.photos/id/104/1080/1920', alt: 'Edificio institucional', caption: 'Fachada principal del Senado', orientation: 'vertical' },
-          { url: 'https://picsum.photos/id/15/1920/1080', alt: 'Naturaleza boliviana', caption: 'Sala de sesiones', orientation: 'horizontal' }
-        )
-      }
-      
-      let blocks = noticia.blocks || []
-      if (blocks.length === 0 && noticia.content) {
-        blocks = convertirHTMLaBloques(noticia.content)
-      }
-      
-      const noticiaEnriquecida = {
-        ...noticia,
-        blocks: blocks,
-        categoria: noticia.category
-      }
-      
-      return { noticia: noticiaEnriquecida, imagenes }
-      
-    } catch (err) {
-      console.error(`❌ Error: ${err.message}`)
-      return { noticia: null, imagenes: [], error: err.message }
-    }
-  },
-  {
-    lazy: false,
-    server: true,
-    default: () => ({ noticia: null, imagenes: [] })
-  }
-)
+// ============================================
+// 🔥 QUINTO: WATCHERS Y LIFECYCLE
+// ============================================
 
+// Forzar scroll al inicio
+const forceScrollToTop = () => {
+  if (process.client) {
+    window.scrollTo(0, 0)
+    const container = document.querySelector('.snap-container')
+    if (container) container.scrollTo(0, 0)
+    document.body.scrollTop = 0
+    document.documentElement.scrollTop = 0
+    const mainContent = document.querySelector('main')
+    if (mainContent) mainContent.scrollTop = 0
+  }
+}
+
+// Watchers
 watch(noticiaData, (newData) => {
   if (newData?.noticia) {
     cargarNoticiasRelacionadas(newData.noticia._id, newData.noticia.category, newData.noticia.tags)
@@ -694,7 +704,7 @@ const handleKeydown = (e) => {
 }
 
 // ============================================
-// LIFECYCLE
+// 🔥 SEXTO: LIFECYCLE
 // ============================================
 onMounted(() => {
   windowLocation.value = window.location.href
