@@ -1,7 +1,7 @@
 <template>
   <div class="w-full">
     <!-- ENCABEZADO -->
-    <div class="text-center mb-10 pt-[5.2vw]">
+    <div class="text-center mb-2 pt-[5.8vw]">
       <h2 class="text-3xl md:text-4xl font-bold text-gray-800">
         Más <span class="text-[#E03636]">Noticias</span>
       </h2>
