@@ -63,8 +63,6 @@ const props = defineProps({
   --white: #ffffff;
 }
 
-/* Reset y base */
-
 .museum-section {
   font-family: 'Montserrat', Tahoma, Geneva, Verdana, sans-serif;
   position: relative;
@@ -76,18 +74,16 @@ const props = defineProps({
   color: #575756;
 }
 
-/* Sección con imagen de fondo */
 .background-image-section {
-  /* background-image: url('./Recurso2.png'); */
-  /* background-size: cover;
+  background-image: url('/Recurso2.png');
+  background-size: cover;
   background-position: center;
-  background-repeat: no-repeat; */
+  background-repeat: no-repeat;
   min-height: 600px;
   position: relative;
   width: 100%;
 }
 
-/* FRANJA ROJA COMPLETA para el título */
 .title-red-stripe {
   background-color: #E03636;
   display: flex;
@@ -97,61 +93,50 @@ const props = defineProps({
   color: white;
 }
 
-/* Contenedor para centrar el texto dentro de la franja */
 .title-container {
   width: 100%;
   padding: 0 2em;
 }
 
-/* Título blanco dentro de la franja roja */
 .section-title {
   font-size: 2.5em;
   font-weight: 700;
   margin: 0;
   text-align: center;
-  /* text-transform: uppercase; */
-  /* letter-spacing: 1px; */
 }
 
-/* Wrapper principal - empieza después de la franja roja */
 .content-wrapper {
   position: relative;
   z-index: 2;
   width: 100%;
   display: grid;
-  grid-template-columns: 38% 62%; /* Col 1: 40%, Col 2: 60% */
+  grid-template-columns: 38% 62%;
   gap: 0;
-  min-height: 520px; /* Altura total menos la franja */
+  min-height: 520px;
 }
 
-/* Columna 1: Vacía (más angosta) */
 .empty-column {
-  /* Solo ocupa espacio */
-  /* background-image: url('./Recurso3.png'); */
-  background-size: cover; /* Cubre todo el contenedor */
-  background-position: center; /* Centra la imagen */
-  background-repeat: no-repeat; /* No repetir */
-  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   display: block;
   width: 100%;
 }
 
-/* Columna 2: Con contenido - EMPUJADA A LA DERECHA */
 .content-column {
   display: flex;
   width: 100%;
   padding-left: 0;
 }
 
-/* Contenido TRANSPARENTE - más a la derecha */
 .transparent-content {
-  background: transparent; /* Sin fondo */
-  backdrop-filter: none; /* Sin blur */
+  background: transparent;
+  backdrop-filter: none;
   -webkit-backdrop-filter: none;
   padding: 2em 0;
   width: 100%;
-  margin-left: auto; /* Empuja a la derecha*/
-  margin-right: auto;/* Más espacio del borde derecho*/
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .museum-description {
@@ -160,11 +145,9 @@ const props = defineProps({
   color: var(--white);
   margin-bottom: 2.5em;
   font-weight: 400;
-  /* text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); */
   color: #575756;
 }
 
-/* Botón rojo con letras blancas */
 .continue-button {
   display: inline-flex;
   align-items: center;
@@ -178,7 +161,6 @@ const props = defineProps({
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
-  /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); */
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -198,5 +180,4 @@ const props = defineProps({
 .continue-button:hover .button-arrow {
   transform: translateX(5px);
 }
-
 </style>

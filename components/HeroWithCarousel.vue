@@ -1,23 +1,15 @@
 <template>
   <div class="relative z-10 mx-auto min-h-screen flex flex-col w-full">
-    <!-- FRANJA ROJA DE ANCHO COMPLETO (superior) - CON MARGEN PARA HEADER -->
+    <!-- FRANJA ROJA -->
     <div class="relative w-screen left-1/2 right-1/2 -mx-[50vw] mt-[4.4vw]">
-      <!-- <div class="relative bg-gradient-to-r from-red-700/70 via-red-800/70 to-red-900/70 py-2 sm:py-3 md:py-4 shadow-2xl overflow-hidden group full-width-franja"> -->
       <div class="relative bg-[#E03636] py-[0.8vw] shadow-2xl overflow-hidden group full-width-franja">
-        
-        <!-- Patrón de fondo sutil (más pequeño) -->
         <div class="absolute inset-0 opacity-5">
           <div class="absolute top-0 left-0 w-16 h-16 border-t-2 border-l-2 border-yellow-300 rounded-tl-lg"></div>
           <div class="absolute bottom-0 right-0 w-16 h-16 border-b-2 border-r-2 border-yellow-300 rounded-br-lg"></div>
         </div>
-
-        <!-- Líneas decorativas animadas (más delgadas) -->
         <div class="absolute top-0 left-0 right-0 h-[.2vw] bg-gradient-to-r from-transparent via-yellow-400 to-transparent animate-pulse"></div>
         <div class="absolute bottom-0 left-0 right-0 h-[.2vw] bg-gradient-to-r from-transparent via-yellow-400 to-transparent animate-pulse"></div>
-
-        <!-- Contenido principal centrado -->
         <div class="container mx-auto px-4 relative z-10 text-center">
-          <!-- Texto principal - MÁS PEQUEÑO -->
           <p class="font-bold text-white text-[2vw]">
             <span class="bg-clip-text text-transparent bg-gradient-to-r from-white via-yellow-100 to-yellow-200">
               <span class="inline-flex items-center justify-center text-white text-[.8em] mx-[.8em]">⚪</span> 
@@ -26,8 +18,6 @@
             </span>
           </p>
         </div>
-
-        <!-- Elementos decorativos en las esquinas - MÁS PEQUEÑOS -->
         <div class="absolute top-2 left-2 w-2 h-2 border border-yellow-300/50 rounded-full animate-ping"></div>
         <div class="absolute top-2 right-2 w-2 h-2 border border-yellow-300/50 rounded-full animate-ping" style="animation-delay: 0.5s;"></div>
         <div class="absolute bottom-2 left-2 w-2 h-2 border border-yellow-300/50 rounded-full animate-ping" style="animation-delay: 1s;"></div>
@@ -35,15 +25,13 @@
       </div>
     </div>
 
-    <!-- DOS COLUMNAS: Texto (izquierda) + Carrusel (derecha) - CON ALINEACIÓN VERTICAL CENTRADA -->
+    <!-- DOS COLUMNAS -->
     <div class="mx-auto px-[5vw] flex-1 w-full flex items-center">
       <div class="grid grid-cols-2 gap-[3vw] w-full items-center">
         
-        <!-- COLUMNA IZQUIERDA: Texto y controles -->
+        <!-- COLUMNA IZQUIERDA -->
         <div class="flex flex-col h-full relative text-[1.4vw]" style="min-height: 37.1vw;">
-          <!-- CONTENIDO PRINCIPAL - OCUPA TODO EL ESPACIO DISPONIBLE -->
           <div class="flex-1 flex flex-col justify-center">
-            <!-- Texto - TAMAÑOS REDUCIDOS -->
             <div class="space-y-3">
               <h1 class="font-extrabold text-[#E03636] text-[1.6em] text-center">
                 {{ slides[currentSlide].title }}
@@ -57,7 +45,6 @@
             </div>
           </div>
 
-          <!-- CONTROLES DEL CAROUSEL - SIEMPRE AL FONDO -->
           <div class="flex justify-center z-50 py-[0.0em]">
             <div class="flex justify-center space-x-[1.5em] bg-transparent py-[.6em] px-5 rounded-full">
               <button 
@@ -79,7 +66,6 @@
 
         <!-- COLUMNA DERECHA: Carrusel de imágenes -->
         <div class="relative w-full overflow-hidden rounded-lg shadow-xl" style="height: 36vw;">
-          <!-- Imágenes del carrusel -->
           <div 
             v-for="(slide, index) in slides" 
             :key="index"
@@ -90,37 +76,23 @@
                 : 'opacity-0 translate-x-full'
             ]"
           >
-            <img 
+            <!-- ✅ Usando ReliableImage con reintentos automáticos -->
+            <ReliableImage 
               :src="slide.image.url" 
               :alt="slide.image.alt"
-              class="w-full h-full object-cover"
-              loading="lazy"
+              image-class="w-full h-full object-cover"
+              :max-retries="5"
+              :retry-delay="500"
+              loading-strategy="eager"
+              fallback-src="/images/placeholder.jpg"
             />
-            <!-- Overlay gradiente más sutil -->
             <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
             
-            <!-- Título de la imagen - MÁS PEQUEÑO -->
             <div v-if="slide.image.title" class="absolute bottom-0 left-0 right-0 p-3 text-white">
               <h3 class="font-bold text-[1.4vw]">{{ slide.image.title }}</h3>
-              <p v-if="slide.image.caption" class="text-white/80 text-[1.15vw]">{{ slide.image.caption }}</p>
+              <!-- <p v-if="slide.image.caption" class="text-white/80 text-[1.15vw]">{{ slide.image.caption }}</p> -->
             </div>
           </div>
-
-          <!-- Flechas de navegación - MÁS PEQUEÑAS (COMENTADAS) -->
-          <!-- <button 
-            @click="prevSlide"
-            class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white rounded-full w-8 h-8 flex items-center justify-center transition-all duration-300 z-10 text-lg"
-            aria-label="Imagen anterior"
-          >
-            ←
-          </button>
-          <button 
-            @click="nextSlide"
-            class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white rounded-full w-8 h-8 flex items-center justify-center transition-all duration-300 z-10 text-lg"
-            aria-label="Siguiente imagen"
-          >
-            →
-          </button> -->
         </div>
       </div>
     </div>
@@ -129,11 +101,12 @@
 
 <script setup>
 import { ref } from 'vue'
+import ReliableImage from '@/components/ReliableImage.vue'
 
 const props = defineProps({
   bannerTextSize: {
     type: String,
-    default: '1.5vw' /* REDUCIDO de 2vw a 1.5vw */
+    default: '1.5vw'
   },
   slides: {
     type: Array,
@@ -167,7 +140,7 @@ const props = defineProps({
         image: {
           url: '/Mandato Constitucional Senado/27.JPG',
           alt: 'Hemiciclo',
-          title: 'Escaleras Palacio Legislativo Plurinacional',
+          title: 'Escaleras del Palacio Legislativo Plurinacional',
           caption: 'Escaleras del Palacio Legislativo Plurinacional junto al busto del: Dr. José Mariano Serrano – Presidente de la Asamblea Nacional Deliberativa que juró la independencia política de Bolivia. (Fuente: Colección Fotográfica del Honorable Senado del Estado Plurinacional de Bolivia)'
         }
       }

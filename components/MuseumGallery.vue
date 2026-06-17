@@ -19,12 +19,14 @@
         @click="openImageModal(img, idx)"
       >
         <div class="relative overflow-hidden rounded-xl aspect-[4/3] bg-gray-100">
-          <img 
+          <!-- ✅ IMAGEN CON REINTENTOS AUTOMÁTICOS -->
+          <SafeImage 
             :src="img.url" 
             :alt="img.title"
-            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-            loading="lazy"
-            @error="e => e.target.src = '/images/placeholder.jpg'"
+            image-class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            :max-retries="8"
+            :persistent="true"
+            loading-strategy="lazy"
           />
           <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             <div class="absolute bottom-0 left-0 right-0 p-4">
@@ -65,12 +67,14 @@
               @click="openImageModal(img, (currentPage - 1) * itemsPerPage + idx)"
             >
               <div class="relative overflow-hidden rounded-lg aspect-[4/3] bg-gray-800">
-                <img 
+                <!-- ✅ IMAGEN CON REINTENTOS AUTOMÁTICOS -->
+                <SafeImage 
                   :src="img.url" 
                   :alt="img.title"
-                  class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  loading="lazy"
-                  @error="e => e.target.src = '/images/placeholder.jpg'"
+                  image-class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  :max-retries="8"
+                  :persistent="true"
+                  loading-strategy="lazy"
                 />
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <div class="absolute bottom-0 left-0 right-0 p-2 md:p-3">
@@ -92,7 +96,6 @@
               ‹
             </button>
             
-            <!-- Bolitas de página -->
             <div class="flex gap-2 flex-wrap justify-center">
               <button
                 v-for="page in visiblePages"
@@ -152,11 +155,14 @@
 
           <!-- Imagen ampliada -->
           <div class="relative max-w-[90vw] max-h-[70vh] flex items-center justify-center">
-            <img 
+            <!-- ✅ IMAGEN CON REINTENTOS AUTOMÁTICOS -->
+            <SafeImage 
               :src="currentImage?.url" 
               :alt="currentImage?.title"
-              class="max-w-full max-h-[70vh] object-contain rounded-lg shadow-2xl"
-              @error="e => e.target.src = '/images/placeholder.jpg'"
+              image-class="max-w-full max-h-[70vh] object-contain rounded-lg shadow-2xl"
+              :max-retries="8"
+              :persistent="true"
+              loading-strategy="eager"
             />
           </div>
 
@@ -202,6 +208,7 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
+import SafeImage from '@/components/SafeImage.vue'
 
 // ============================================
 // GENERAR LAS 128 IMÁGENES CON SUS DESCRIPCIONES
@@ -209,7 +216,6 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 const generateImages = () => {
   const images = []
   
-  // Descripciones variadas para las imágenes
   const descriptions = [
     "Vista panorámica del Palacio del Senado",
     "Sesión Plenaria - Cámara de Senadores",
@@ -320,7 +326,6 @@ const generateImages = () => {
   ]
   
   for (let i = 1; i <= 128; i++) {
-    // Usar descripción cíclica
     const descIndex = (i - 1) % descriptions.length
     images.push({
       id: i,
@@ -339,21 +344,18 @@ const totalImages = computed(() => allImages.value.length)
 // ============================================
 // PAGINACIÓN
 // ============================================
-const itemsPerPage = 20 // 5 filas × 4 columnas = 20 imágenes por página
+const itemsPerPage = 20
 const currentPage = ref(1)
 const totalPages = computed(() => Math.ceil(totalImages.value / itemsPerPage))
 
-// Imágenes visibles en la página actual
 const paginatedImages = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage
   const end = start + itemsPerPage
   return allImages.value.slice(start, end)
 })
 
-// Imágenes destacadas (primeras 4)
 const featuredImages = computed(() => allImages.value.slice(0, 4))
 
-// Páginas visibles para las bolitas (máximo 10 bolitas a la vez)
 const visiblePages = computed(() => {
   const maxVisible = 10
   const half = Math.floor(maxVisible / 2)
@@ -371,10 +373,8 @@ const visiblePages = computed(() => {
   return pages
 })
 
-// Funciones de paginación
 const goToPage = (page) => {
   currentPage.value = page
-  // Scroll al top del modal
   const modalContainer = document.querySelector('.fixed.inset-0.z-50 > .container')
   if (modalContainer) {
     modalContainer.scrollTop = 0
@@ -382,15 +382,11 @@ const goToPage = (page) => {
 }
 
 const prevPage = () => {
-  if (currentPage.value > 1) {
-    currentPage.value--
-  }
+  if (currentPage.value > 1) currentPage.value--
 }
 
 const nextPage = () => {
-  if (currentPage.value < totalPages.value) {
-    currentPage.value++
-  }
+  if (currentPage.value < totalPages.value) currentPage.value++
 }
 
 // ============================================
@@ -405,20 +401,17 @@ const currentImage = ref(null)
 // FUNCIONES DE MODALES
 // ============================================
 
-// Abrir galería completa
 const openGallery = () => {
-  currentPage.value = 1 // Resetear a primera página
+  currentPage.value = 1
   showFullGallery.value = true
   document.body.style.overflow = 'hidden'
 }
 
-// Cerrar galería completa
 const closeFullGallery = () => {
   showFullGallery.value = false
   document.body.style.overflow = ''
 }
 
-// Abrir modal de imagen ampliada
 const openImageModal = (image, index) => {
   currentImage.value = image
   currentIndex.value = index
@@ -426,14 +419,12 @@ const openImageModal = (image, index) => {
   document.body.style.overflow = 'hidden'
 }
 
-// Cerrar visor de imagen
 const closeImageViewer = () => {
   showImageModal.value = false
   currentImage.value = null
   document.body.style.overflow = ''
 }
 
-// Siguiente imagen
 const nextImage = () => {
   if (currentIndex.value < totalImages.value - 1) {
     currentIndex.value++
@@ -441,7 +432,6 @@ const nextImage = () => {
   }
 }
 
-// Imagen anterior
 const prevImage = () => {
   if (currentIndex.value > 0) {
     currentIndex.value--
@@ -449,34 +439,23 @@ const prevImage = () => {
   }
 }
 
-// Ir a imagen específica
 const goToImage = (index) => {
   currentIndex.value = index
   currentImage.value = allImages.value[index]
 }
 
-// ============================================
-// TECLADO
-// ============================================
 const handleKeydown = (e) => {
   if (!showImageModal.value && !showFullGallery.value) return
   
   if (showImageModal.value) {
-    if (e.key === 'ArrowLeft') {
-      prevImage()
-    } else if (e.key === 'ArrowRight') {
-      nextImage()
-    } else if (e.key === 'Escape') {
-      closeImageViewer()
-    }
+    if (e.key === 'ArrowLeft') prevImage()
+    else if (e.key === 'ArrowRight') nextImage()
+    else if (e.key === 'Escape') closeImageViewer()
   } else if (showFullGallery.value && e.key === 'Escape') {
     closeFullGallery()
   }
 }
 
-// ============================================
-// CICLO DE VIDA
-// ============================================
 onMounted(() => {
   window.addEventListener('keydown', handleKeydown)
   console.log(`📸 Galería cargada: ${totalImages.value} imágenes disponibles`)
@@ -497,21 +476,15 @@ onUnmounted(() => {
   overflow: hidden;
 }
 
-/* Animaciones */
 .fixed {
   animation: fadeIn 0.3s ease-out;
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-/* Efecto hover en miniaturas */
 .gallery-thumb {
   transition: transform 0.3s ease;
 }
@@ -520,7 +493,6 @@ onUnmounted(() => {
   transform: translateY(-4px);
 }
 
-/* Scrollbar personalizado para el modal */
 .fixed.inset-0.z-50 .container {
   scrollbar-width: thin;
   scrollbar-color: #E03636 #333;
@@ -540,12 +512,10 @@ onUnmounted(() => {
   border-radius: 3px;
 }
 
-/* Bolitas activas */
 .bg-\[\#E03636\] {
   background-color: #E03636;
 }
 
-/* Grid responsivo */
 @media (max-width: 640px) {
   .grid {
     gap: 0.75rem;

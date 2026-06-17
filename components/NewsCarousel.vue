@@ -1,4 +1,3 @@
-<!-- components/NewsCarousel.vue -->
 <template>
   <div class="news-carousel">
     <div v-if="loading" class="loader-wrapper">
@@ -26,10 +25,14 @@
       
       <div class="image-column">
         <div class="image-wrapper">
-          <img 
-            :key="currentIndex"
-            :src="noticias[currentIndex].featuredImage?.url || noticias[currentIndex].imagen"
+          <!-- ✅ IMAGEN CON REINTENTOS AUTOMÁTICOS -->
+          <SafeImage 
+            :src="noticias[currentIndex].featuredImage?.url || noticias[currentIndex].imagen || '/images/default-news.jpg'"
             :alt="noticias[currentIndex].titulo"
+            image-class="w-full h-full object-cover"
+            :max-retries="8"
+            :persistent="true"
+            loading-strategy="eager"
           />
         </div>
         <button @click="verNoticia(noticias[currentIndex])" class="btn-view">
@@ -47,6 +50,7 @@
 import { ref, onMounted, onUnmounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useNoticias } from '~/composables/useNoticias'
+import SafeImage from '@/components/SafeImage.vue'
 
 const router = useRouter()
 const { noticiasImportantes } = useNoticias()
@@ -97,7 +101,6 @@ watch(noticiasImportantes, (nuevas) => {
   }
 }, { immediate: true })
 
-// Reset cuando cambia la key
 watch(() => props.resetKey, () => {
   stopCarousel()
   currentIndex.value = 0
@@ -201,7 +204,7 @@ onUnmounted(() => {
   background-color: #f3f4f6;
 }
 
-.image-wrapper img {
+.image-wrapper :deep(img) {
   width: 100%;
   height: 100%;
   object-fit: cover;

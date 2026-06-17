@@ -41,7 +41,6 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted } from 'vue'
 
-// Definición de props con tipos explícitos
 interface Props {
   src: string
   alt?: string
@@ -60,14 +59,14 @@ const props = withDefaults(defineProps<Props>(), {
   fallbackSrc: '/images/placeholder.jpg',
   loadingStrategy: 'lazy',
   aspectRatio: 'auto',
-  imageClass: 'w-full h-full object-cover',
+  // ✅ ELIMINADO: imageClass por defecto - ahora el usuario debe pasar la clase
+  imageClass: '', // <-- VACÍO, no force nada
   imageStyle: () => ({}),
   showSkeleton: true,
   maxRetries: 3,
   retryDelay: 500
 })
 
-// Refs con tipos explícitos
 const imgRef = ref<HTMLImageElement | null>(null)
 const currentSrc = ref<string>(props.src)
 const isLoading = ref<boolean>(true)
@@ -75,7 +74,6 @@ const hasError = ref<boolean>(false)
 const retryCount = ref<number>(0)
 const isMounted = ref<boolean>(false)
 
-// Computed con tipos explícitos
 const wrapperStyle = computed<Record<string, any>>(() => {
   if (props.aspectRatio && props.aspectRatio !== 'auto') {
     return { aspectRatio: props.aspectRatio }
@@ -87,7 +85,6 @@ const showPlaceholder = computed<boolean>(() => {
   return hasError.value && !isLoading.value && !!props.fallbackSrc
 })
 
-// Métodos con tipos explícitos
 const onLoad = (): void => {
   isLoading.value = false
   hasError.value = false
@@ -98,12 +95,10 @@ const onError = (): void => {
   retryCount.value++
   
   if (retryCount.value < props.maxRetries) {
-    // Reintentar con query param para evitar caché
     const separator = currentSrc.value.includes('?') ? '&' : '?'
     const timestamp = Date.now()
     currentSrc.value = `${props.src}${separator}retry=${retryCount.value}&t=${timestamp}`
     
-    // Esperar y reintentar
     setTimeout((): void => {
       if (imgRef.value) {
         imgRef.value.src = currentSrc.value
@@ -128,7 +123,6 @@ const retry = (): void => {
   }
 }
 
-// Resetear estado cuando cambia la src
 watch(
   () => props.src,
   (newSrc: string): void => {
@@ -141,7 +135,6 @@ watch(
   }
 )
 
-// Lifecycle
 onMounted((): void => {
   isMounted.value = true
 })
@@ -152,6 +145,8 @@ onMounted((): void => {
   position: relative;
   overflow: hidden;
   background: #f3f4f6;
+  width: 100%;
+  height: 100%;
 }
 
 .image-skeleton {

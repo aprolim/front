@@ -5,7 +5,7 @@
     <div class="global-fixed-background seccion3-fondo" :class="{ 'show-fixed': isSeccion3Visible }"></div>
     <div class="global-fixed-background seccion4-fondo" :class="{ 'show-fixed': isSeccion4Visible }"></div>
     
-    <!-- ==================== SECCIÓN 1 ==================== -->
+    <!-- ==================== SECCIÓN 1 - DIRECTIVA CAMARAL ==================== -->
     <section 
       id="directiva-camaral"
       class="relative h-screen overflow-y-auto transition-all duration-500"
@@ -28,6 +28,7 @@
           <div class="w-[60%] p-[0.8vw] rounded-2xl shadow-left-column" 
               :style="{ backgroundColor: 'rgba(190, 0, 0, 0.60)' }">
             
+            <!-- FILA 1 -->
             <div class="grid grid-cols-3 gap-[.6vh] mb-[1.8vh]">
               <div v-for="persona in fila1" :key="persona.id" 
                 class="text-center cursor-pointer group"
@@ -42,11 +43,13 @@
                 <div class="relative w-[16vh] h-[16vh] mx-auto">
                   <div class="w-full h-full rounded-full overflow-hidden border-4 circle-shadow transition-all duration-300 group-hover:scale-[1.3] group-hover:relative group-hover:z-50" 
                       style="border-color: #E4D294;">
-                    <img 
+                    <SafeImage 
                       :src="persona.imagen" 
-                      :alt="persona.nombre" 
-                      loading="lazy" 
-                      class="w-full h-full object-cover"
+                      :alt="persona.nombre"
+                      image-class="w-full h-full object-cover"
+                      :max-retries="8"
+                      :persistent="true"
+                      loading-strategy="lazy"
                     />
                   </div>
                 </div>
@@ -57,6 +60,7 @@
               </div>
             </div>
 
+            <!-- FILA 2 -->
             <div class="grid grid-cols-3 gap-[.6vh]">
               <div v-for="persona in fila2" :key="persona.id" 
                 class="text-center cursor-pointer group"
@@ -71,11 +75,13 @@
                 <div class="relative w-[16vh] h-[16vh] mx-auto">
                   <div class="w-full h-full rounded-full overflow-hidden border-4 circle-shadow transition-all duration-300 group-hover:scale-[1.3] group-hover:relative group-hover:z-50" 
                       style="border-color: #E4D294;">
-                    <img 
+                    <SafeImage 
                       :src="persona.imagen" 
-                      :alt="persona.nombre" 
-                      loading="lazy" 
-                      class="w-full h-full object-cover"
+                      :alt="persona.nombre"
+                      image-class="w-full h-full object-cover"
+                      :max-retries="8"
+                      :persistent="true"
+                      loading-strategy="lazy"
                     />
                   </div>
                 </div>
@@ -87,15 +93,18 @@
             </div>
           </div>
           
+          <!-- PANEL DERECHO - SENADOR SELECCIONADO -->
           <div class="w-[40%] flex flex-col items-center justify-center px-[3.0vh] py-[1.0vh] rounded-2xl shadow-right-column"
               :style="{ backgroundColor: 'rgba(0, 0, 0, 0.0)' }">
             <div class="w-[29vh] h-[29vh] rounded-full overflow-hidden mb-[.9vh] transition-all duration-300 circle-shadow-large border-[.4vh]" 
                 style="border-color: #E4D294;">
-              <img 
+              <SafeImage 
                 :src="selectedImage.img" 
-                :alt="selectedImage.nombre" 
-                loading="lazy" 
-                class="w-full h-full object-cover"
+                :alt="selectedImage.nombre"
+                image-class="w-full h-full object-cover"
+                :max-retries="8"
+                :persistent="true"
+                loading-strategy="eager"
               />
             </div>
             <h3 class="text-[2.9vh] font-bold text-white drop-shadow-lg text-center">
@@ -119,7 +128,6 @@
         :scroll-progress="scrollProgress"
       />
     </section>
-
     <!-- ==================== SECCIÓN 2 - COMISIONES Y COMITES ==================== -->
     <div 
       id="comisiones-y-comites"
@@ -135,7 +143,6 @@
           </h2>
         </div>
 
-        <!-- Contenedor padre con flex y items-center para alinear verticalmente - AHORA OCUPA TODO EL ALTO -->
         <div class="flex flex-col md:flex-row gap-6 flex-1 items-center">
           
           <!-- COLUMNA IZQUIERDA: Lista de comisiones -->
@@ -145,33 +152,40 @@
               :key="comision.id"
               @click="seleccionarComision(comision)"
               :class="[
-                'w-full py-[.1vw] px-4 rounded-lg font-semibold transition-all duration-300 text-left',
+                'w-full py-[0.3vw] px-4 rounded-lg font-semibold transition-all duration-300 text-left',
                 comisionSeleccionada?.id === comision.id 
                   ? 'bg-[#E03636] text-white' 
                   : 'bg-white text-[#E03636] border border-[#E03636] hover:bg-[#E03636] hover:text-white'
               ]"
-              class="text-[1.05vw]"
+              class="text-[0.9vw]"
             >
               {{ comision.nombre }}
             </button>
           </div>
 
           <!-- COLUMNA DERECHA: Detalle de la comisión -->
-          <div class="w-full md:w-[60%] bg-gray-400/90 rounded-lg text-[1vw]">
+          <div class="w-full md:w-[60%] bg-gray-400/90 rounded-lg text-[0.98vw]">
             <div v-if="comisionSeleccionada">
-              <h3 class="text-[1.6vw] font-bold text-white drop-shadow-md text-center">
+              <h3 class="text-[1.56vw] font-bold text-white drop-shadow-md text-center">
                 {{ comisionSeleccionada.nombre }}
               </h3>
 
+              <!-- GRUPO 1 -->
               <div class="grid grid-cols-1 md:grid-cols-2 gap-0">
-                <div v-for="(miembro, idx) in comisionSeleccionada.miembrosGrupo1" :key="'g1-'+idx" class="flex items-center gap-0 p-[1vw] rounded-lg pl-[2vw]">
-                  <img 
-                    :src="miembro.foto" 
-                    :alt="miembro.nombre" 
-                    loading="lazy" 
-                    class="w-[7vw] h-[7vw] rounded-full object-cover transition-all duration-700 hover:scale-[2] hover:z-50"
-                  />
-                  <div class="text-white text-center text-[1.vw]">
+                <div v-for="(miembro, idx) in comisionSeleccionada.miembrosGrupo1" :key="'g1-'+idx" 
+                     class="flex items-center gap-0 p-[0.8vw] rounded-lg pl-[1.8vw] overflow-visible">
+                  <!-- ✅ CONTENEDOR QUE CRECE MANTENIENDO CIRCULAR -->
+                  <div class="w-[6.8vw] h-[6.8vw] flex-shrink-0 rounded-full overflow-visible transition-all duration-700 hover:scale-[2.5] hover:z-50">
+                    <SafeImage 
+                      :src="miembro.foto" 
+                      :alt="miembro.nombre"
+                      image-class="w-full h-full rounded-full object-cover"
+                      :max-retries="8"
+                      :persistent="true"
+                      loading-strategy="lazy"
+                    />
+                  </div>
+                  <div class="text-white text-center text-[0.98vw] flex-1">
                     <p class="font-bold drop-shadow-md">{{ miembro.cargo }}</p>
                     <p class="drop-shadow-md">{{ miembro.nombre }}</p>
                     <p class="drop-shadow-md">{{ miembro.apellido }}</p>
@@ -180,19 +194,26 @@
                 </div>
               </div>
 
-              <div class="py-[.4vw] bg-[#E03636]">
-                <h4 class="font-semibold text-white text-[.95em] text-center">{{ comisionSeleccionada.tituloLinea1 }}</h4>
+              <div class="py-[0.39vw] bg-[#E03636]">
+                <h4 class="font-semibold text-white text-[0.93vw] text-center">{{ comisionSeleccionada.tituloLinea1 }}</h4>
               </div>
 
+              <!-- GRUPO 2 -->
               <div class="grid grid-cols-1 md:grid-cols-2 gap-0">
-                <div v-for="(miembro, idx) in comisionSeleccionada.miembrosGrupo2" :key="'g2-'+idx" class="flex items-center gap-0 p-[1vw] rounded-lg pl-[2vw]">
-                  <img 
-                    :src="miembro.foto" 
-                    :alt="miembro.nombre" 
-                    loading="lazy" 
-                    class="w-[7vw] h-[7vw] rounded-full object-cover transition-all duration-700 hover:scale-[2] hover:z-50"
-                  />
-                  <div class="text-white text-center text-[1vw]">
+                <div v-for="(miembro, idx) in comisionSeleccionada.miembrosGrupo2" :key="'g2-'+idx" 
+                     class="flex items-center gap-0 p-[0.8vw] rounded-lg pl-[1.8vw] overflow-visible">
+                  <!-- ✅ CONTENEDOR QUE CRECE MANTENIENDO CIRCULAR -->
+                  <div class="w-[6.8vw] h-[6.8vw] flex-shrink-0 rounded-full overflow-visible transition-all duration-700 hover:scale-[2.5] hover:z-50">
+                    <SafeImage 
+                      :src="miembro.foto" 
+                      :alt="miembro.nombre"
+                      image-class="w-full h-full rounded-full object-cover"
+                      :max-retries="8"
+                      :persistent="true"
+                      loading-strategy="lazy"
+                    />
+                  </div>
+                  <div class="text-white text-center text-[0.98vw] flex-1">
                     <p class="font-bold drop-shadow-md">{{ miembro.cargo }}</p>
                     <p class="drop-shadow-md">{{ miembro.nombre }}</p>
                     <p class="drop-shadow-md">{{ miembro.apellido }}</p>
@@ -201,19 +222,26 @@
                 </div>
               </div>
 
-              <div class="py-[.4vw] bg-[#E03636]">
-                <h4 class="text-[.95em] font-semibold text-white text-center">{{ comisionSeleccionada.tituloLinea2 }}</h4>
+              <div class="py-[0.39vw] bg-[#E03636]">
+                <h4 class="text-[0.93vw] font-semibold text-white text-center">{{ comisionSeleccionada.tituloLinea2 }}</h4>
               </div>
 
+              <!-- GRUPO 3 -->
               <div class="grid grid-cols-1 md:grid-cols-2 gap-0">
-                <div v-for="(miembro, idx) in comisionSeleccionada.miembrosGrupo3" :key="'g3-'+idx" class="flex items-center gap-0 p-[1vw] rounded-lg pl-[2vw]">
-                  <img 
-                    :src="miembro.foto" 
-                    :alt="miembro.nombre" 
-                    loading="lazy" 
-                    class="w-[7vw] h-[7vw] rounded-full object-cover transition-all duration-700 hover:scale-[2] hover:z-50"
-                  />
-                  <div class="text-white text-center text-[1vw]">
+                <div v-for="(miembro, idx) in comisionSeleccionada.miembrosGrupo3" :key="'g3-'+idx" 
+                     class="flex items-center gap-0 p-[0.8vw] rounded-lg pl-[1.8vw] overflow-visible">
+                  <!-- ✅ CONTENEDOR QUE CRECE MANTENIENDO CIRCULAR -->
+                  <div class="w-[6.8vw] h-[6.8vw] flex-shrink-0 rounded-full overflow-visible transition-all duration-700 hover:scale-[2.5] hover:z-50">
+                    <SafeImage 
+                      :src="miembro.foto" 
+                      :alt="miembro.nombre"
+                      image-class="w-full h-full rounded-full object-cover"
+                      :max-retries="8"
+                      :persistent="true"
+                      loading-strategy="lazy"
+                    />
+                  </div>
+                  <div class="text-white text-center text-[0.98vw] flex-1">
                     <p class="font-bold drop-shadow-md">{{ miembro.cargo }}</p>
                     <p class="drop-shadow-md">{{ miembro.nombre }}</p>
                     <p class="drop-shadow-md">{{ miembro.apellido }}</p>
@@ -230,7 +258,7 @@
         </div>
       </div>
     </div>
-    
+
     <!-- ==================== SECCIÓN 3 - BRIGADAS PARLAMENTARIAS ==================== -->
     <div 
       id="brigadas-parlamentarias"
@@ -251,14 +279,13 @@
       </div>
       
       <div class="mx-auto px-4 z-10 relative w-full flex-1 flex flex-col justify-center">
-        
-        <!-- SKELETON LOADER mientras cargan los departamentos -->
+        <!-- SKELETON LOADER -->
         <div v-if="!departamentosLoaded" class="flex flex-col items-center justify-center" style="min-height: 60vh;">
           <div class="animate-spin rounded-full h-16 w-16 border-4 border-[#E03636] border-t-transparent mb-4"></div>
           <p class="text-white text-lg">Cargando brigadas parlamentarias...</p>
         </div>
         
-        <!-- CONTENIDO REAL - Solo cuando los datos están cargados -->
+        <!-- CONTENIDO REAL -->
         <template v-else>
           <div v-if="!departamentoSeleccionado" class="flex flex-col items-center justify-center">
             <div class="grid grid-cols-5 gap-8 mb-8">
@@ -304,17 +331,18 @@
                   <div class="text-center">
                     <div class="text-[1.5vh] mt-[4vw] inline-block px-1 py-2 rounded-full text-white font-semibold w-[12vw]" 
                         :style="{ backgroundColor: 'rgba(224, 54, 54, 0.8)' }">
-                      <!-- {{ departamentoSeleccionado?.nombre }} -->
                         TITULARES
                     </div>
                   </div>
                   <div v-for="(titular, index) in titulares" :key="'titular-'+index" class="text-center">
                     <div class="w-[12vh] h-[12vh] mx-auto rounded-full overflow-hidden mb-2 transition-all duration-300 hover:scale-[2.6]">
-                      <img 
+                      <SafeImage 
                         :src="titular.imagen" 
-                        :alt="titular.nombre" 
-                        loading="lazy" 
-                        class="w-full h-full object-cover"
+                        :alt="titular.nombre"
+                        image-class="w-full h-full object-cover"
+                        :max-retries="8"
+                        :persistent="true"
+                        loading-strategy="lazy"
                       />
                     </div>
                     <p class="text-[1.4vh] text-white font-semibold">{{ titular.nombre }}</p>
@@ -327,17 +355,18 @@
                   <div class="text-center">
                     <div class="text-[1.5vh] mt-[5vw] inline-block px-6 py-2 rounded-full text-white font-semibold w-[12vw]" 
                         :style="{ backgroundColor: 'rgba(224, 54, 54, 0.8)' }">
-                      <!-- {{ departamentoSeleccionado?.nombre }} -->
                         SUPLENTES
                     </div>
                   </div>
                   <div v-for="(suplente, index) in suplentes" :key="'suplente-'+index" class="text-center">
                     <div v-if="suplente.nombre" class="w-[12vh] h-[12vh] mx-auto rounded-full overflow-hidden mb-2 transition-all duration-300 hover:scale-[2.6]">
-                      <img 
+                      <SafeImage 
                         :src="suplente.imagen" 
-                        :alt="suplente.nombre" 
-                        loading="lazy" 
-                        class="w-full h-full object-cover"
+                        :alt="suplente.nombre"
+                        image-class="w-full h-full object-cover"
+                        :max-retries="8"
+                        :persistent="true"
+                        loading-strategy="lazy"
                       />
                     </div>
                     <p class="text-white font-semibold text-[1.4vh]">{{ suplente.nombre }}</p>
@@ -413,141 +442,163 @@
 
             <transition name="fade-scale" mode="out-in">
               <div :key="mostrarSuplentes ? 'suplentes' : 'titulares'" class="-mt-1 bg-[rgba(190,0,0,0.6)] ">
+                
+                <!-- PDC -->
                 <div v-if="partidoSeleccionado?.id === 'pdc'" class="group pt-2 rounded-lg aspect-[3000/800] w-100 m-auto">
                   <div class="grid grid-cols-6 mb-[.5vw]">
                     <div v-for="(persona, index) in miembrosMostrar.slice(0,6)" :key="persona.nombre" class="text-center">
                       <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40">
-                        <img 
+                        <SafeImage 
                           :src="persona.imagen" 
-                          :alt="persona.nombre" 
-                          loading="lazy" 
-                          class="w-full h-full object-cover"
+                          :alt="persona.nombre"
+                          image-class="w-full h-full object-cover"
+                          :max-retries="8"
+                          :persistent="true"
+                          loading-strategy="lazy"
                         />
                       </div>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre}}</p>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido}}</p>
+                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre }}</p>
+                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido }}</p>
                       <p class="text-gray-200 text-[1.4vh] drop-shadow-lg">{{ persona.departamento }}</p>
                     </div>
                   </div>
                   <div class="grid grid-cols-5 mb-[.5vw]">
                     <div v-for="(persona, index) in miembrosMostrar.slice(6,11)" :key="persona.nombre" class="text-center">
                       <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40">
-                        <img 
+                        <SafeImage 
                           :src="persona.imagen" 
-                          :alt="persona.nombre" 
-                          loading="lazy" 
-                          class="w-full h-full object-cover"
+                          :alt="persona.nombre"
+                          image-class="w-full h-full object-cover"
+                          :max-retries="8"
+                          :persistent="true"
+                          loading-strategy="lazy"
                         />
                       </div>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre}}</p>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido}}</p>
+                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre }}</p>
+                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido }}</p>
                       <p class="text-gray-200 text-[1.4vh] drop-shadow-lg">{{ persona.departamento }}</p>
                     </div>
                   </div>
                   <div class="grid grid-cols-5">
                     <div v-for="(persona, index) in miembrosMostrar.slice(11,16)" :key="persona.nombre" class="text-center">
                       <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40 hover:translate-y-[-2vw]">
-                        <img 
+                        <SafeImage 
                           :src="persona.imagen" 
-                          :alt="persona.nombre" 
-                          loading="lazy" 
-                          class="w-full h-full object-cover"
+                          :alt="persona.nombre"
+                          image-class="w-full h-full object-cover"
+                          :max-retries="8"
+                          :persistent="true"
+                          loading-strategy="lazy"
                         />
                       </div>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre}}</p>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido}}</p>
+                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre }}</p>
+                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido }}</p>
                       <p class="text-gray-200 text-[1.4vh] drop-shadow-lg">{{ persona.departamento }}</p>
                     </div>
                   </div>
                 </div>
 
+                <!-- LIBRE -->
                 <div v-else-if="partidoSeleccionado?.id === 'libre'" class="group pt-2 rounded-lg aspect-[3000/800] w-100 m-auto">
                   <div class="grid grid-cols-4 mb-[.5vw]">
                     <div v-for="(persona, index) in miembrosMostrar.slice(0,4)" :key="persona.nombre" class="text-center">
                       <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40">
-                        <img 
+                        <SafeImage 
                           :src="persona.imagen" 
-                          :alt="persona.nombre" 
-                          loading="lazy" 
-                          class="w-full h-full object-cover"
+                          :alt="persona.nombre"
+                          image-class="w-full h-full object-cover"
+                          :max-retries="8"
+                          :persistent="true"
+                          loading-strategy="lazy"
                         />
                       </div>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre}}</p>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido}}</p>
+                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre }}</p>
+                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido }}</p>
                       <p class="text-gray-200 text-[1.4vh] drop-shadow-lg">{{ persona.departamento }}</p>
                     </div>
                   </div>
                   <div class="grid grid-cols-4 mb-[.5vw]">
                     <div v-for="(persona, index) in miembrosMostrar.slice(4,8)" :key="persona.nombre" class="text-center">
                       <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40">
-                        <img 
+                        <SafeImage 
                           :src="persona.imagen" 
-                          :alt="persona.nombre" 
-                          loading="lazy" 
-                          class="w-full h-full object-cover"
+                          :alt="persona.nombre"
+                          image-class="w-full h-full object-cover"
+                          :max-retries="8"
+                          :persistent="true"
+                          loading-strategy="lazy"
                         />
                       </div>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre}}</p>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido}}</p>
+                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre }}</p>
+                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido }}</p>
                       <p class="text-gray-200 text-[1.4vh] drop-shadow-lg">{{ persona.departamento }}</p>
                     </div>
                   </div>
                   <div class="grid grid-cols-4">
                     <div v-for="(persona, index) in miembrosMostrar.slice(8,12)" :key="persona.nombre" class="text-center">
                       <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40 hover:translate-y-[-2vw]">
-                        <img 
+                        <SafeImage 
                           :src="persona.imagen" 
-                          :alt="persona.nombre" 
-                          loading="lazy" 
-                          class="w-full h-full object-cover"
+                          :alt="persona.nombre"
+                          image-class="w-full h-full object-cover"
+                          :max-retries="8"
+                          :persistent="true"
+                          loading-strategy="lazy"
                         />
                       </div>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre}}</p>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido}}</p>
+                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre }}</p>
+                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido }}</p>
                       <p class="text-gray-200 text-[1.4vh] drop-shadow-lg">{{ persona.departamento }}</p>
                     </div>
                   </div>
                 </div>
 
+                <!-- ALIANZA -->
                 <div v-else-if="partidoSeleccionado?.id === 'alianza'" class="group pt-2 rounded-lg aspect-[3000/800] w-100 m-auto">
                   <div class="grid grid-cols-3 mb-[.5vw]">
                     <div v-for="(persona, index) in miembrosMostrar.slice(0,3)" :key="persona.nombre" class="text-center">
                       <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40">
-                        <img 
+                        <SafeImage 
                           :src="persona.imagen" 
-                          :alt="persona.nombre" 
-                          loading="lazy" 
-                          class="w-full h-full object-cover"
+                          :alt="persona.nombre"
+                          image-class="w-full h-full object-cover"
+                          :max-retries="8"
+                          :persistent="true"
+                          loading-strategy="lazy"
                         />
                       </div>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre}}</p>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido}}</p>
+                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre }}</p>
+                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido }}</p>
                       <p class="text-gray-200 text-[1.4vh] drop-shadow-lg">{{ persona.departamento }}</p>
                     </div>
                   </div>
                   <div class="grid grid-cols-3 mb-[.5vw]">
                     <div v-for="(persona, index) in miembrosMostrar.slice(3,6)" :key="persona.nombre" class="text-center">
                       <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40">
-                        <img 
+                        <SafeImage 
                           :src="persona.imagen" 
-                          :alt="persona.nombre" 
-                          loading="lazy" 
-                          class="w-full h-full object-cover"
+                          :alt="persona.nombre"
+                          image-class="w-full h-full object-cover"
+                          :max-retries="8"
+                          :persistent="true"
+                          loading-strategy="lazy"
                         />
                       </div>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre}}</p>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido}}</p>
+                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre }}</p>
+                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido }}</p>
                       <p class="text-gray-200 text-[1.4vh] drop-shadow-lg">{{ persona.departamento }}</p>
                     </div>
                   </div>
                   <div class="grid grid-cols-3">
                     <div v-if="miembrosMostrar[6]" class="text-center">
                       <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40 hover:translate-y-[-2vw]">
-                        <img 
+                        <SafeImage 
                           :src="miembrosMostrar[6].imagen" 
-                          :alt="miembrosMostrar[6].nombre" 
-                          loading="lazy" 
-                          class="w-full h-full object-cover"
+                          :alt="miembrosMostrar[6].nombre"
+                          image-class="w-full h-full object-cover"
+                          :max-retries="8"
+                          :persistent="true"
+                          loading-strategy="lazy"
                         />
                       </div>
                       <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ miembrosMostrar[6].nombre }}</p>
@@ -559,15 +610,18 @@
                   </div>
                 </div>
 
+                <!-- SUMATE -->
                 <div v-else-if="partidoSeleccionado?.id === 'sumate'" class="group pt-2 rounded-lg aspect-[3000/800] w-100 m-auto">
                   <div class="flex justify-center">
                     <div v-if="miembrosMostrar[0]" class="text-center">
                       <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40">
-                        <img 
+                        <SafeImage 
                           :src="miembrosMostrar[0].imagen" 
-                          :alt="miembrosMostrar[0].nombre" 
-                          loading="lazy" 
-                          class="w-full h-full object-cover"
+                          :alt="miembrosMostrar[0].nombre"
+                          image-class="w-full h-full object-cover"
+                          :max-retries="8"
+                          :persistent="true"
+                          loading-strategy="lazy"
                         />
                       </div>
                       <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ miembrosMostrar[0].nombre }}</p>
@@ -584,7 +638,6 @@
     </div>
   </div>
 </template>
-
 <script setup>
 import { ref, onMounted, onUnmounted, nextTick, watch, computed } from 'vue'
 import { useRoute } from 'vue-router'
@@ -592,6 +645,7 @@ import { useDepartamentosStore } from '@/stores/departamentosStore'
 import { useScrollEffects } from '@/composables/useScrollEffects'
 import ScrollProgress from '@/components/UI/ScrollProgress.vue'
 import { partidosData } from '~/data/partidos'
+import SafeImage from '@/components/SafeImage.vue'
 
 // ==================== STORE ====================
 const departamentosStore = useDepartamentosStore()
@@ -631,7 +685,7 @@ const fila1 = ref([
     partido: 'Unidad',
     cargo: 'Vicepresidente',
     imagen: '/new/titulares/g1/CARMEN SOLEDAD CHAPETÓN TANCARA.png',
-    textoCompleto: 'C. Soledad Chapetón Tancara, nació en El Alto, es Licenciada en Cs. de la Educación de la UMSA. Fue asambleísta Constituyente y la primera mujer Alcaldesa de El Alto. Su gestión destacó por la Construcción de la Terminal Metropolitana, el Jach’a Uta, la  Estación de bomberos, la revolución del pavimento, impulso más de 80 centros infantiles entre otros proyectos y programas. Actualmente es Senadora, con trayectoria en liderazgo y servicio público.'
+    textoCompleto: 'C. Soledad Chapetón Tancara, nació en El Alto, es Licenciada en Cs. de la Educación de la UMSA. Fue asambleísta Constituyente y la primera mujer Alcaldesa de El Alto. Su gestión destacó por la Construcción de la Terminal Metropolitana, el Jach\'a Uta, la Estación de bomberos, la revolución del pavimento, impulso más de 80 centros infantiles entre otros proyectos y programas. Actualmente es Senadora, con trayectoria en liderazgo y servicio público.'
   },
   {
     id: 3,
@@ -654,8 +708,7 @@ const fila2 = ref([
     partido: 'PDC',
     cargo: 'Directora de Comunicación',
     imagen: '/new/titulares/g2/YASMIN ESTIVARIZ VILLARROEL.png',
-    textoCompleto: `Yasmin Estívariz Villarroel, licenciada en Psicología del departamento de Oruro, destaca por su labor en favor de niños con discapacidad. Actualmente ejerce el cargo de Primera Secretaria del Senado, gestión <strong>2025-2026</strong>,  donde promueve alianzas estratégicas institucionales para beneficiar a este sector vulnerable.
-Asimismo, impulsa iniciativas legislativas orientadas a la protección del medio ambiente frente a la minería ilegal, desarrollando una gestión comprometida con el progreso de Oruro y el bienestar de su población.`
+    textoCompleto: `Yasmin Estívariz Villarroel, licenciada en Psicología del departamento de Oruro, destaca por su labor en favor de niños con discapacidad. Actualmente ejerce el cargo de Primera Secretaria del Senado, gestión <strong>2025-2026</strong>, donde promueve alianzas estratégicas institucionales para beneficiar a este sector vulnerable. Asimismo, impulsa iniciativas legislativas orientadas a la protección del medio ambiente frente a la minería ilegal, desarrollando una gestión comprometida con el progreso de Oruro y el bienestar de su población.`
   },
   {
     id: 5,
@@ -687,7 +740,7 @@ const selectedImage = ref({
   cargo: fila1.value[0].cargo
 })
 
-// ==================== DATOS SECCIÓN 2 ====================
+// ==================== DATOS SECCIÓN 2 - COMISIONES ====================
 const comisionesList = ref([
   { id: 1, nombre: 'Comisión de Constitución, Derechos Humanos, Legislación y Sistema Electoral' },
   { id: 2, nombre: 'Comisión de Justicia Plural, Ministerio Público y Defensa Legal del Estado' },
@@ -873,7 +926,7 @@ const seleccionarComision = (comision) => {
 }
 seleccionarComision(comisionesList.value[0])
 
-// ==================== DATOS SECCIÓN 3 ====================
+// ==================== DATOS SECCIÓN 3 - DEPARTAMENTOS ====================
 const departamentoSeleccionado = ref(null)
 
 const titularesPorDepartamento = {
@@ -909,7 +962,7 @@ const seleccionarDepartamento = (dep) => {
   suplentes.value = suplentesPorDepartamento[dep.nombre] || []
 }
 
-// ==================== DATOS SECCIÓN 4 ====================
+// ==================== DATOS SECCIÓN 4 - PARTIDOS ====================
 const partidoSeleccionado = ref(null)
 const mostrarSuplentes = ref(false)
 const partidos = ref(partidosData)
@@ -953,22 +1006,22 @@ const senadoresData = [
   { tnombre: 'Eliana Rina', tapellido:'Acosta Quispe', snombre: 'Sichard Hans', sapellido:'Soraide Castedo', partido: 'alianza', departamento:'Pando', imagen:'new/titulares/g3/ELIANA RINA ACOSTA QUISPE.png', imagensu:'new/suplentes/g3/SICHARD HANS SORAIDE CASTEDO.png', pos:307 },
 ]
 
-const sorted = senadoresData.sort((a, b) => a.pos - b.pos);
+const sorted = senadoresData.sort((a, b) => a.pos - b.pos)
 for (let i = 0; i < sorted.length; i++) {
-  const item = sorted[i];
-  const depto = item.departamento.toUpperCase();
+  const item = sorted[i]
+  const depto = item.departamento.toUpperCase()
   titularesPorDepartamento[depto].push({ 
     nombre: item.tnombre, 
     partido: item.partido, 
     imagen: item.imagen,
     apellido: item.tapellido 
-  });
+  })
   suplentesPorDepartamento[depto].push({ 
     nombre: item.snombre, 
     partido: item.partido, 
     imagen: item.imagensu,
     apellido: item.sapellido 
-  });
+  })
 }
 
 const miembrosPorPartido = {
@@ -983,11 +1036,11 @@ const partidoMap = {
   libre: miembrosPorPartido.libre,
   alianza: miembrosPorPartido.alianza,
   sumate: miembrosPorPartido.sumate
-};
+}
 
 for (let i = 0; i < senadoresData.length; i++) {
-  const s = senadoresData[i];
-  const target = partidoMap[s.partido];
+  const s = senadoresData[i]
+  const target = partidoMap[s.partido]
   if (target) {
     target.titulares.push({
       nombre: s.tnombre,
@@ -995,7 +1048,7 @@ for (let i = 0; i < senadoresData.length; i++) {
       partido: s.partido,
       departamento: s.departamento,
       imagen: s.imagen
-    });
+    })
     if (s.snombre) {
       target.suplentes.push({
         nombre: s.snombre,
@@ -1003,7 +1056,7 @@ for (let i = 0; i < senadoresData.length; i++) {
         partido: s.partido,
         departamento: s.departamento,
         imagen: s.imagensu
-      });
+      })
     }
   }
 }
@@ -1046,84 +1099,57 @@ const initScrollObserver = () => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           if (entry.target === seccion1Ref.value) {
-            isSeccion1Visible.value = true;
-            isSeccion2Visible.value = false;
-            isSeccion3Visible.value = false;
-            isSeccion4Visible.value = false;
+            isSeccion1Visible.value = true
+            isSeccion2Visible.value = false
+            isSeccion3Visible.value = false
+            isSeccion4Visible.value = false
           } else if (entry.target === seccion2Ref.value) {
-            isSeccion1Visible.value = false;
-            isSeccion2Visible.value = true;
-            isSeccion3Visible.value = false;
-            isSeccion4Visible.value = false;
+            isSeccion1Visible.value = false
+            isSeccion2Visible.value = true
+            isSeccion3Visible.value = false
+            isSeccion4Visible.value = false
           } else if (entry.target === seccion3Ref.value) {
-            isSeccion1Visible.value = false;
-            isSeccion2Visible.value = false;
-            isSeccion3Visible.value = true;
-            isSeccion4Visible.value = false;
+            isSeccion1Visible.value = false
+            isSeccion2Visible.value = false
+            isSeccion3Visible.value = true
+            isSeccion4Visible.value = false
           } else if (entry.target === seccion4Ref.value) {
-            isSeccion1Visible.value = false;
-            isSeccion2Visible.value = false;
-            isSeccion3Visible.value = false;
-            isSeccion4Visible.value = true;
+            isSeccion1Visible.value = false
+            isSeccion2Visible.value = false
+            isSeccion3Visible.value = false
+            isSeccion4Visible.value = true
           }
-          entry.target.classList.add('animate-in');
+          entry.target.classList.add('animate-in')
         }
-      });
+      })
     },
     { threshold: 0.3, rootMargin: '0px 0px 0px 0px' }
-  );
+  )
   
-  [seccion1Ref.value, seccion2Ref.value, seccion3Ref.value, seccion4Ref.value].forEach(section => {
-    if (section) scrollObserver.observe(section);
-  });
-};
-
-// ==================== PRECARGA ====================
-const preloadImagenesCriticas = () => {
-  const imagenesCriticas = [
-    '/senadores/g1/DIEGO ESTEBAN MATEO ÁVILA NAVAJAS.png',
-    '/senadores/g2/CARMEN SOLEDAD CHAPETON TANCARA.png',
-    '/senadores/g3/KHATIA LISBETH QUIROGA FERNÁNDEZ.png',
-    '/senadores/g1/YASMIN ESTIVARIZ VILLARROEL.png',
-    '/senadores/g4/JULIO DIEGO ROMAÑA GALINDO.png',
-    '/senadores/g2/ROSA TATIANA AÑEZ CARRASCO.png'
-  ]
-  
-  imagenesCriticas.forEach(src => {
-    const img = new Image()
-    img.src = src
+  ;[seccion1Ref.value, seccion2Ref.value, seccion3Ref.value, seccion4Ref.value].forEach(section => {
+    if (section) scrollObserver.observe(section)
   })
 }
 
 // ==================== LIFECYCLE ====================
 onMounted(async () => {
-  initScrollListener();
-  
-  // Precargar departamentos en segundo plano
+  initScrollListener()
   departamentosStore.preload()
-  
-  await nextTick();
-  initScrollObserver();
+  await nextTick()
+  initScrollObserver()
   
   setTimeout(() => {
     if (seccion1Ref.value) {
-      isSeccion1Visible.value = true;
-      seccion1Ref.value.classList.add('animate-in');
+      isSeccion1Visible.value = true
+      seccion1Ref.value.classList.add('animate-in')
     }
-  }, 100);
+  }, 100)
   
   if (route.hash) {
     const id = route.hash.replace('#', '')
     setTimeout(() => scrollToSection(id), 500)
   }
-  
-  // Precarga de imágenes críticas
-  if (process.client) {
-    setTimeout(() => {
-      preloadImagenesCriticas()
-    }, 500)
-  }
-});
+})
 
 watch(() => route.hash, (newHash) => {
   if (newHash) {
@@ -1133,26 +1159,12 @@ watch(() => route.hash, (newHash) => {
 })
 
 onUnmounted(() => {
-  removeScrollListener();
-  if (scrollObserver) scrollObserver.disconnect();
-});
+  removeScrollListener()
+  if (scrollObserver) scrollObserver.disconnect()
+})
 
-definePageMeta({ layout: 'alter8' });
+definePageMeta({ layout: 'alter8' })
 </script>
-
-<style scoped>
-/* Tus estilos existentes se mantienen igual */
-.text-style {
-  font-family: 'Montserrat', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-/* ... resto de tus estilos ... */
-</style>
-
-<style>
-/* Tus estilos globales se mantienen igual */
-/* ... */
-</style>
 
 <style scoped>
 .text-style {
@@ -1273,6 +1285,8 @@ section, .scroll-section {
 @media (min-width: 1024px) {
   .container { max-width: 1280px; }
 }
+
+/* ESTILOS GLOBALES - NO SCOPED */
 </style>
 
 <style>

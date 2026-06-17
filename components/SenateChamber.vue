@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full senate-chamber"> <!-- SOLO CAMBIO: h-screen por h-full -->
+  <div class="h-full senate-chamber">
     <!-- Header -->
     <header v-if="showHeader" class="chamber-header text-center">
       <slot name="header">
@@ -10,9 +10,9 @@
       </slot>
     </header>
 
-    <main class="h-full"> <!-- SOLO CAMBIO: h-screen por h-full -->
+    <main class="h-full">
       <!-- Contenedor con imagen de fondo -->
-      <div class="h-full background-container" :style="{ backgroundImage: `url('${backgroundImage}')` }"> <!-- SOLO CAMBIO: h-screen por h-full -->
+      <div class="h-full background-container" :style="{ backgroundImage: `url('${backgroundImage}')` }">
         <!-- Contenedor principal CON GRID DE 3 COLUMNAS REALES -->
         <div :class="senateChamberStyles.senator" class="columns-container">
           <!-- COLUMNA IZQUIERDA: Panel de Controles -->
@@ -31,38 +31,13 @@
                   >
                     <div class="grid grid-cols-[20px_1fr_20px] 2xl:grid-cols-[40px_1fr_40px] 3xl:grid-cols-[50px_1fr_50px] 4xl:grid-cols-[70px_1fr_70px] 5xl:grid-cols-[90px_1fr_90px] items-center w-full">
                       <div class="flex justify-center w-full">
-                        <!-- CÍRCULO CON EFECTO CONCÉNTRICO: Color → Blanco → Color -->
+                        <!-- CÍRCULO CON EFECTO CONCÉNTRICO -->
                         <div class="legend-color-vertical w-full">
                           <svg viewBox="0 0 40 40" class="w-full">
-                            <!-- Círculo exterior (color del partido) -->
-                            <circle 
-                              cx="20" 
-                              cy="20" 
-                              r="18" 
-                              :fill="party.color"
-                            />
-                            <!-- Círculo medio (blanco) -->
-                            <circle 
-                              cx="20" 
-                              cy="20" 
-                              r="12" 
-                              fill="white"
-                            />
-                            <!-- Círculo interior (color del partido) -->
-                            <circle 
-                              cx="20" 
-                              cy="20" 
-                              r="10" 
-                              :fill="party.color"
-                            />
-                            <!-- Pequeño brillo (opcional para dar efecto 3D) -->
-                            <circle 
-                              cx="16" 
-                              cy="16" 
-                              r="3" 
-                              fill="rgba(255,255,255,0.5)"
-                              opacity="0.7"
-                            />
+                            <circle cx="20" cy="20" r="18" :fill="party.color"/>
+                            <circle cx="20" cy="20" r="12" fill="white"/>
+                            <circle cx="20" cy="20" r="10" :fill="party.color"/>
+                            <circle cx="16" cy="16" r="3" fill="rgba(255,255,255,0.5)" opacity="0.7"/>
                           </svg>
                         </div>
                       </div>
@@ -188,12 +163,14 @@
               <div v-if="selectedSenator" :key="selectedSenator.id" class="senator-details">
                 <div class="senator-photo-container">
                   <div class="senator-photo-circle" :class="senateChamberStyles.senatorPhoto">
-                    <!-- FOTO 100% FUNCIONAL - RANDOMUSER.ME -->
-                    <img
+                    <!-- ✅ FOTO CON REINTENTOS AUTOMÁTICOS -->
+                    <SafeImage
                       :src="selectedSenator.photoUrl" 
                       :alt="selectedSenator.name"
-                      class="senator-photo-img"
-                      @error="handleImageError"
+                      image-class="senator-photo-img w-full h-full object-cover"
+                      :max-retries="8"
+                      :persistent="true"
+                      loading-strategy="eager"
                     />
                   </div>
                 </div>
@@ -212,9 +189,6 @@
                   <div class="pill-red font-extrabold px-[1.5vw]">
                     {{ selectedSenator.partyShort }}
                   </div>
-                  <!-- <div class="pill-red font-extrabold">
-                    Curul {{ selectedSenator.seatNumber }}
-                  </div> -->
                 </div>
 
                 <div class="bancada-row">
@@ -228,32 +202,6 @@
                     {{ selectedSenator.cargo }}
                   </div>
                 </div>
-
-                <!-- Redes sociales - ICONOS REALES (comentado) -->
-                <!-- <div class="social-media-section">
-                  <div class="social-icons">
-                    <a :href="selectedSenator.twitter || 'https://twitter.com'" target="_blank" class="social-icon">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                      </svg>
-                    </a>
-                    <a :href="selectedSenator.instagram || 'https://instagram.com'" target="_blank" class="social-icon">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zM5.838 12a6.162 6.162 0 1112.324 0 6.162 6.162 0 01-12.324 0zM12 16a4 4 0 110-8 4 4 0 010 8zm4.965-10.405a1.44 1.44 0 112.881.001 1.44 1.44 0 01-2.881-.001z"/>
-                      </svg>
-                    </a>
-                    <a :href="selectedSenator.youtube || 'https://youtube.com'" target="_blank" class="social-icon">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                      </svg>
-                    </a>
-                    <a :href="selectedSenator.linkedin || 'https://linkedin.com'" target="_blank" class="social-icon">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                      </svg>
-                    </a>
-                  </div>
-                </div> -->
               </div>
 
               <div v-else class="empty-state">
@@ -261,7 +209,6 @@
                 <h2 class="font-bold">Selecciona un Senador</h2>
                 <p class="font-bold">Haz click en cualquier círculo del hemiciclo para ver información detallada</p>
                 <div class="empty-tips">
-                  <!-- CÍRCULOS CON EFECTO CONCÉNTRICO: Color → Blanco → Color -->
                   <p class="party-indicator">
                     <span class="color-dot">
                       <svg width="28" height="28" viewBox="0 0 28 28">
@@ -330,11 +277,12 @@
 </template>
 
 <script setup>
-import { ref, computed, reactive, onMounted, watch, onUnmounted } from 'vue'
+import { ref, reactive, computed, onMounted, onUnmounted, watch } from 'vue'
 import { senateChamberStyles } from './data/senateChamberData'
+import SafeImage from '@/components/SafeImage.vue'
 
 // ============================================
-// POSICIONES SVG - EXACTAMENTE IGUALES AL ORIGINAL
+// POSICIONES SVG
 // ============================================
 const seatPositions = {
   upperLeft: [
@@ -384,19 +332,14 @@ const seatPositions = {
 }
 
 // ============================================
-// DATOS CON FOTOS 100% FUNCIONALES - RANDOMUSER.ME
-// TODAS LAS URLs CARGAN CORRECTAMENTE
+// DATOS DE SENADORES
 // ============================================
-
 const props = defineProps({
   senators: {
     type: Array,
     required: false,
     default: () => [
       // ============ PDC - GOBIERNO (16 senadores) ============
-      // Color: #016167 (verde petróleo)
-      
-      // CURVA SUPERIOR IZQUIERDA - asientos 1-7 (7 senadores)
       { 
         id: 1, seatNumber: 1, curve: 'upper', side: 'left', 
         name: "Diego Esteban Mateo Ávila Navajas", 
@@ -488,8 +431,6 @@ const props = defineProps({
         comite:"",
         cargo:"Presidente de Comisión"
       },
-      
-      // CURVA INFERIOR IZQUIERDA - asientos 15-23 (9 senadores)
       { 
         id: 8, seatNumber: 15, curve: 'lower', side: 'left', 
         name: "Yasmín Estivariz Villarroel", 
@@ -607,11 +548,7 @@ const props = defineProps({
         comite:"",
         cargo:"Presidente de Comisión"
       },
-      
       // ============ UNIDAD - ALIADOS (7 senadores) ============
-      // Color: #FFB848 (amarillo/ámbar)
-      
-      // CURVA SUPERIOR DERECHA - asientos 8-10 (3 senadores)
       { 
         id: 17, seatNumber: 8, curve: 'upper', side: 'right', 
         name: "Carmen Soledad Chapeton Tancara", 
@@ -651,8 +588,6 @@ const props = defineProps({
         comite:"Comité de Planificación, Presupuesto, Inversión Pública y Contraloría General del Estado",
         cargo:"Secretaria de Comite"
       },
-      
-      // CURVA INFERIOR DERECHA - asientos 26-29 (4 senadores)
       { 
         id: 20, seatNumber: 14, curve: 'lower', side: 'right', 
         name: "Rosa Tatiana Áñez Carrasco", 
@@ -705,10 +640,7 @@ const props = defineProps({
         comite:"",
         cargo:"Presidente de Comisión"
       },
-      
       // ============ APB SÚMATE - ALIADOS (1 senador) ============
-      // Color: #511966 (púrpura)
-      // ASIENTO 11
       { 
         id: 24, seatNumber: 36, curve: 'upper', side: 'right', 
         name: "Claudia Mallón Vargas", 
@@ -722,11 +654,7 @@ const props = defineProps({
         comite:"Comité de Vivienda, Regimen Laboral, Seguridad Industrial y Seguridad Social",
         cargo:"Secretaria de Comite"
       },
-      
       // ============ LIBRE - OPOSICIÓN (12 senadores) ============
-      // Color: #FF0000 (rojo)
-      
-      // CURVA SUPERIOR DERECHA - asientos 12-14 (3 senadores)
       { 
         id: 25, seatNumber: 29, curve: 'upper', side: 'right', 
         name: "José Manuel Ormachea Mendieta", 
@@ -766,8 +694,6 @@ const props = defineProps({
         comite:"",
         cargo:"Presidente de Comisión"
       },
-      
-      // CURVA INFERIOR DERECHA - asientos 30-36 (7 senadores)
       { 
         id: 28, seatNumber: 30, curve: 'lower', side: 'right', 
         name: "Kathia Lizbeth Quiroga Fernández", 
@@ -859,9 +785,6 @@ const props = defineProps({
         comite:"Comité de Autonomías Departamentales",
         cargo:"Secretario de Comite"
       },
-      
-      // ============ LIBRE - 2 SENADORES ADICIONALES ============
-      // ASIENTOS 24 y 25 (CURVA INFERIOR IZQUIERDA)
       { 
         id: 35, seatNumber: 28, curve: 'lower', side: 'left', 
         name: "Carol Carlo Durán", 
@@ -1008,7 +931,6 @@ const formatInitials = (name) => {
 
 // ========== MANEJADOR DE ERRORES DE IMAGEN ==========
 const handleImageError = (e) => {
-  // Si la imagen falla (nunca debería pasar con randomuser.me), mostramos placeholder
   e.target.style.display = 'none'
   const parent = e.target.parentElement
   const fallback = document.createElement('div')
@@ -1043,7 +965,7 @@ const resetView = () => {
   emit('view-reset')
 }
 
-// ========== TOOLTIP HANDLERS CORREGIDOS ==========
+// ========== TOOLTIP HANDLERS ==========
 let hoverTimeout = null
 let mouseMoveTimeout = null
 let lastHoveredSeatId = null
@@ -1077,7 +999,6 @@ const onMouseMove = (event) => {
 }
 
 const updateHoverTooltip = (event) => {
-  // Verificaciones de seguridad
   if (!hoveredSeat.value || !svgElement.value || hoveredSeat.value.id !== lastHoveredSeatId) {
     return
   }
@@ -1087,7 +1008,6 @@ const updateHoverTooltip = (event) => {
   
   requestAnimationFrame(() => {
     try {
-      // Verificar nuevamente dentro del requestAnimationFrame
       if (!hoveredSeat.value || !svgElement.value) {
         isUpdatingTooltip = false
         return
@@ -1102,7 +1022,6 @@ const updateHoverTooltip = (event) => {
       const seat = hoveredSeat.value
       const svg = svgElement.value
       
-      // Verificar que el seat tiene coordenadas
       if (typeof seat.x !== 'number' || typeof seat.y !== 'number') {
         isUpdatingTooltip = false
         return
@@ -1110,7 +1029,6 @@ const updateHoverTooltip = (event) => {
       
       const rect = container.getBoundingClientRect()
       
-      // Verificar que el SVG tiene viewBox
       if (!svg.viewBox || !svg.viewBox.baseVal) {
         isUpdatingTooltip = false
         return
@@ -1119,7 +1037,6 @@ const updateHoverTooltip = (event) => {
       const viewBox = svg.viewBox.baseVal
       const svgRect = svg.getBoundingClientRect()
       
-      // Evitar división por cero
       if (viewBox.width === 0 || viewBox.height === 0) {
         isUpdatingTooltip = false
         return
@@ -1150,7 +1067,6 @@ const updateHoverTooltip = (event) => {
 }
 
 const positionTooltipFromSeat = () => {
-  // Crear un evento sintético para updateHoverTooltip
   const syntheticEvent = {
     clientX: 0,
     clientY: 0
@@ -1175,19 +1091,19 @@ watch(() => props.senators, () => {
 </script>
 
 <style scoped>
-/* ========== ESTILOS - IGUAL AL ORIGINAL ========== */
+/* ========== ESTILOS ========== */
 .senate-chamber {
   font-family: 'Montserrat';
   background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-  display: flex; /* AÑADIDO: para estructura de columna */
-  flex-direction: column; /* AÑADIDO: para que header, main, footer se apilen */
+  display: flex;
+  flex-direction: column;
 }
 
 .chamber-header {
   height: auto;
   background: #575756;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  flex-shrink: 0; /* AÑADIDO: evita que el header se encoja */
+  flex-shrink: 0;
 }
 
 .default-header h2 {
@@ -1203,8 +1119,8 @@ watch(() => props.senators, () => {
 }
 
 .main-content {
-  flex: 1 1 auto; /* AÑADIDO: toma el espacio disponible */
-  min-height: 0; /* AÑADIDO: importante para flexbox */
+  flex: 1 1 auto;
+  min-height: 0;
 }
 
 .background-container {
@@ -1214,10 +1130,10 @@ watch(() => props.senators, () => {
   overflow: hidden;
   margin-bottom: 1rem;
   position: relative;
-  height: 100%; /* CAMBIADO: h-screen por h-full, pero ya hereda de main-content */
-  display: flex; /* AÑADIDO: para centrar verticalmente */
-  align-items: center; /* AÑADIDO: centra verticalmente el contenido */
-  justify-content: center; /* AÑADIDO: centra horizontalmente (opcional) */
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .columns-container {
@@ -1225,7 +1141,6 @@ watch(() => props.senators, () => {
   position: relative;
   z-index: 1;
   width: 100%;
-  /* ELIMINADO: min-height: 70vh */
 }
 
 .column {
@@ -1435,10 +1350,6 @@ watch(() => props.senators, () => {
 }
 
 .info-row-second {
-  /* display: grid;
-  grid-template-columns: 1fr 1fr; */
-  /* gap: 1em;
-  width: 100%; */
   margin-bottom: 1em;
 }
 
@@ -1630,8 +1541,6 @@ watch(() => props.senators, () => {
 }
 
 .empty-tips p { margin: 0.4rem 0; font-size: 0.85em; width: 100%; }
-
-/* Estilos para los indicadores de colores en empty-tips */
 .empty-tips p {
   display: flex;
   align-items: center;
@@ -1673,7 +1582,7 @@ watch(() => props.senators, () => {
   text-align: center;
   margin-top: 1rem;
   border-radius: 8px;
-  flex-shrink: 0; /* AÑADIDO: evita que el footer se encoja */
+  flex-shrink: 0;
 }
 
 .footer-content { display: flex; flex-direction: column; align-items: center; gap: 0.75rem; }

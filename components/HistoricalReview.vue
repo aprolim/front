@@ -18,7 +18,11 @@
                   @click="prevImage"
                   class="absolute left-0 top-0 w-[35%] h-[45%] rounded-[.8vw] overflow-hidden shadow-2xl border-3 border-[#E4D294]/50 z-10 cursor-pointer hover:scale-105 transition-all duration-500"
                 >
-                  <img :src="imageData[prevIndex].url" class="w-full h-full object-cover" />
+                  <img 
+                    :src="imageData[prevIndex].url" 
+                    :alt="imageData[prevIndex].titulo"
+                    class="w-full h-full object-cover"
+                  />
                   <div class="absolute inset-0 bg-gray-500/60"></div>
                   <div class="absolute bottom-0 left-0 right-0 h-1/4 bg-[#E03636]/90 text-white p-2 flex items-center justify-center">
                     <p class="text-[0.8vw] text-center line-clamp-2">{{ truncateText(imageData[prevIndex].descripcion, 60) }}</p>
@@ -29,7 +33,26 @@
                 <div 
                   class="absolute left-[20%] top-[15%] w-[60%] h-[80%] rounded-[.8vw] overflow-hidden shadow-2xl border-4 border-[#E4D294]/70 z-30 cursor-pointer"
                 >
-                  <img :src="imageData[currentIndex].url" class="w-full h-full object-cover" />
+                  <!-- 🔥 USAMOS v-show para mantener la imagen en DOM -->
+                  <img 
+                    v-show="currentIndex === 0"
+                    :src="imageData[0].url" 
+                    :alt="imageData[0].titulo"
+                    class="w-full h-full object-cover"
+                  />
+                  <img 
+                    v-show="currentIndex === 1"
+                    :src="imageData[1].url" 
+                    :alt="imageData[1].titulo"
+                    class="w-full h-full object-cover"
+                  />
+                  <img 
+                    v-show="currentIndex === 2"
+                    :src="imageData[2].url" 
+                    :alt="imageData[2].titulo"
+                    class="w-full h-full object-cover"
+                  />
+                  
                   <div 
                     class="absolute bottom-0 left-0 right-0 bg-[#E03636]/90 text-white transition-all duration-500 overflow-hidden"
                     :class="showFullText ? 'h-full' : 'h-1/4'"
@@ -60,7 +83,11 @@
                   @click="nextImage"
                   class="absolute right-0 top-0 w-[35%] h-[45%] rounded-[.8vw] overflow-hidden shadow-2xl border-3 border-[#E4D294]/50 z-10 cursor-pointer hover:scale-105 transition-all duration-500"
                 >
-                  <img :src="imageData[nextIndex].url" class="w-full h-full object-cover" />
+                  <img 
+                    :src="imageData[nextIndex].url" 
+                    :alt="imageData[nextIndex].titulo"
+                    class="w-full h-full object-cover"
+                  />
                   <div class="absolute inset-0 bg-gray-500/60"></div>
                   <div class="absolute bottom-0 left-0 right-0 h-1/4 bg-[#E03636]/90 text-white p-2 flex items-center justify-center">
                     <p class="text-[0.8vw] text-center line-clamp-2">{{ truncateText(imageData[nextIndex].descripcion, 60) }}</p>
@@ -140,11 +167,6 @@
               Luego de varias interrupciones del orden democrático en el país, el día: 10 de octubre del 1982 se posesiona al congreso electo en las elecciones realizadas en 1980, desde entonces, la Asamblea legislativa y el Senado trabajan de manera continua en favor de la legislación, fiscalización y gestión de la nación. 
             </p>
           </div>
-          <!-- <NuxtLink to="/en-construccion">
-            <button class="text-[.8em] mt-[.5em] bg-[#E03636] hover:bg-[#E03636]/80 text-white font-bold py-[.5em] px-8 rounded-lg transition-all duration-300 transform hover:scale-105 uppercase tracking-wider shadow-lg">
-              Ver más
-            </button>
-          </NuxtLink> -->
         </div>
       </div>
     </div>
@@ -152,7 +174,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 
 // DATOS DE LAS IMÁGENES CON TEXTO ESPECÍFICO
 const imageData = ref([
@@ -208,8 +230,23 @@ const toggleFullText = () => {
   showFullText.value = !showFullText.value
 }
 
+// ============================================
+// 🔥 PRECARGA DE IMÁGENES
+// ============================================
+const preloadImage = (url) => {
+  return new Promise((resolve) => {
+    const img = new Image()
+    img.onload = resolve
+    img.onerror = resolve
+    img.src = url
+  })
+}
+
 const animateTransition = async (newIdx, dir) => {
   if (isAnimating.value) return
+  
+  // 🔥 PRECARGAR la imagen que va a entrar ANTES de la animación
+  await preloadImage(imageData.value[newIdx].url)
   
   isAnimating.value = true
   direction.value = dir
@@ -241,6 +278,16 @@ const goToImage = (index) => {
   const dir = index > currentIndex.value ? 'next' : 'prev'
   animateTransition(index, dir)
 }
+
+// ============================================
+// 🔥 PRECARGAR TODAS LAS IMÁGENES AL INICIO
+// ============================================
+onMounted(() => {
+  imageData.value.forEach(data => {
+    const img = new Image()
+    img.src = data.url
+  })
+})
 </script>
 
 <style scoped>

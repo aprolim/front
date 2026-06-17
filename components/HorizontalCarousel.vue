@@ -27,9 +27,15 @@
             <div v-for="(image, imgIndex) in group" :key="image.id"
               class="relative group overflow-hidden rounded-xl shadow-2xl border-4 border-white aspect-square cursor-pointer"
               @click="openImageModal(image, groupIndex * 4 + imgIndex)">
-              <img :src="`/G-Institucional/${image.id}.webp`" :alt="image.description"
-                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                loading="lazy" @error="handleImageError" />
+              <!-- ✅ IMAGEN CON REINTENTOS AUTOMÁTICOS -->
+              <SafeImage 
+                :src="`/G-Institucional/${image.id}.webp`"
+                :alt="image.description"
+                image-class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                :max-retries="8"
+                :persistent="true"
+                loading-strategy="eager"
+              />
               <div class="absolute bottom-0 left-0 right-0 bg-[#E03636]/80 backdrop-blur-sm py-1.5 px-1">
                 <p class="text-white text-[0.65rem] md:text-xs font-medium line-clamp-2 text-center">
                   {{ image.description }}
@@ -67,7 +73,15 @@
           <button @click="closeImageViewer" class="absolute top-4 right-4 text-white hover:text-[#E03636] transition-colors text-3xl z-10">✕</button>
           <button @click="prevImageModal" class="absolute left-4 top-1/2 -translate-y-1/2 text-white/60 hover:text-white transition-colors text-5xl z-10">‹</button>
           <div class="relative max-w-[90vw] max-h-[70vh]">
-            <img :src="`/G-Institucional/${currentImage?.id}.webp`" :alt="currentImage?.description" class="max-w-full max-h-[70vh] object-contain rounded-lg" />
+            <!-- ✅ IMAGEN DEL MODAL CON REINTENTOS -->
+            <SafeImage 
+              :src="`/G-Institucional/${currentImage?.id}.webp`"
+              :alt="currentImage?.description"
+              image-class="max-w-full max-h-[70vh] object-contain rounded-lg"
+              :max-retries="8"
+              :persistent="true"
+              loading-strategy="eager"
+            />
           </div>
           <div class="mt-6 text-center max-w-2xl px-4">
             <p class="text-white text-base md:text-xl font-medium">{{ currentImage?.description }}</p>
@@ -82,7 +96,9 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { useGaleria } from '~/composables/useGaleria'
+import SafeImage from '@/components/SafeImage.vue'
 
 const props = defineProps({
   title: { type: String, default: 'Galería Institucional' }
@@ -110,10 +126,6 @@ const nextSlide = () => {
 const prevSlide = () => {
   if (currentIndex.value > 0) currentIndex.value--
   else currentIndex.value = imageGroups.value.length - 1
-}
-
-const handleImageError = (event) => {
-  event.target.src = '/images/placeholder.jpg'
 }
 
 // Modal

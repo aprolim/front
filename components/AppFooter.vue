@@ -1,4 +1,3 @@
-<!-- components/AppFooter.vue - VERSIÓN CORREGIDA -->
 <template>
   <footer class="back-image w-full footer-section">
     <div class="mx-auto">
@@ -6,7 +5,15 @@
         <!-- Escudo superior -->
         <div class="flex items-center justify-center gap-3 py-8">
           <div class="flex items-center justify-center w-16 h-16 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 xl:w-36 xl:h-36 2xl:w-40 2xl:h-40 3xl:w-48 3xl:h-48 4xl:w-64 4xl:h-64 5xl:w-96 5xl:h-96">
-            <img src="/2R.png" alt="Escudo Senado Nacional" class="w-full h-full object-cover" />
+            <!-- ✅ IMAGEN CON REINTENTOS AUTOMÁTICOS -->
+            <SafeImage 
+              src="/2R.png" 
+              alt="Escudo Senado Nacional"
+              image-class="w-full h-full object-cover"
+              :max-retries="8"
+              :persistent="true"
+              loading-strategy="eager"
+            />
           </div>
         </div>
         
@@ -16,7 +23,15 @@
             <div class="grid grid-cols-12 gap-6 items-center">
               <!-- Columna izquierda -->
               <div class="col-span-3 flex items-center justify-start space-x-3">
-                <img src="/footer-img/Recurso 8.png" alt="Senado Bolivia" class="h-[2em] w-auto">
+                <!-- ✅ IMAGEN CON REINTENTOS AUTOMÁTICOS -->
+                <SafeImage 
+                  src="/footer-img/Recurso 8.png" 
+                  alt="Senado Bolivia"
+                  image-class="h-[2em] w-auto object-contain"
+                  :max-retries="8"
+                  :persistent="true"
+                  loading-strategy="lazy"
+                />
                 <div>
                   <a href="https://diputados.gob.bo/" target="_blank" class="text-white hover:underline">https://diputados.gob.bo/</a>
                 </div>
@@ -29,7 +44,15 @@
               
               <!-- Columna derecha -->
               <div class="col-span-3 flex items-center justify-end space-x-3">
-                <img src="/footer-img/Recurso 7.png" alt="Escudo Senado" class="h-[2.5em] w-auto">
+                <!-- ✅ IMAGEN CON REINTENTOS AUTOMÁTICOS -->
+                <SafeImage 
+                  src="/footer-img/Recurso 7.png" 
+                  alt="Escudo Senado"
+                  image-class="h-[2.5em] w-auto object-contain"
+                  :max-retries="8"
+                  :persistent="true"
+                  loading-strategy="lazy"
+                />
                 <div class="text-right">
                   <a href="https://www.vicepresidencia.gob.bo/" target="_blank" class="text-white hover:underline">https://www.vicepresidencia.gob.bo/</a>
                 </div>
@@ -43,7 +66,7 @@
 </template>
 
 <script setup>
-// Este componente no necesita lógica por ahora
+import SafeImage from '@/components/SafeImage.vue'
 </script>
 
 <style scoped>

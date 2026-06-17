@@ -1,4 +1,3 @@
-<!-- components/OptimizedGalleryImage.vue -->
 <template>
   <AppImage
     :src="src"

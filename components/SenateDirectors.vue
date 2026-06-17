@@ -1,26 +1,26 @@
 <template>
-  <div class="relative z-10 mx-auto min-h-screen flex flex-col w-full text-[1.5vw]">
+  <div class="relative z-10 mx-auto min-h-screen flex flex-col w-full text-[1.47vw]">
     <!-- Espaciador superior -->
     <div class="h-[4.4vw]"></div>
     
     <!-- Título -->
     <h2 class="font-bold text-white leading-tight text-center bg-[#575756]
-              text-[1.4em]
+              text-[1.37em]
               p-1">
       Directiva Camaral
-      <small class="font-normal block text-[.4em] mt-0 leading-none text-[#ccc]">
+      <small class="font-normal block text-[.39em] mt-0 leading-none text-[#ccc]">
         Selecciona un senador para ver detalles
       </small>
     </h2>
 
     <!-- Tres columnas -->
-    <div class="mx-auto px-[2.5vw] flex-1 text-[1.60vw] w-full flex items-center">
-      <div class="flex justify-center gap-[1.25em] w-full">
+    <div class="mx-auto px-[2.45vw] flex-1 text-[1.57vw] w-full flex items-center">
+      <div class="flex justify-center gap-[1.22em] w-full">
         
         <!-- COLUMNA IZQUIERDA -->
-        <div class="w-[30%] bg-transparent rounded-2xl shadow-xl border border-white/20 p-[1.25em] origin-right text-[#000] flex items-center">
-          <div class="flex flex-col text-[.7em] text-justify w-full">
-            <p class="text-center text-[1.2em] text-[#E03636]">Rol Institucional de la Directiva</p>
+        <div class="w-[30%] bg-transparent rounded-2xl shadow-xl border border-white/20 p-[1.22em] origin-right text-[#000] flex items-center">
+          <div class="flex flex-col text-[.68em] text-justify w-full">
+            <p class="text-center text-[1.17em] text-[#E03636]">Rol Institucional de la Directiva</p>
             <br>
             <div class="font-extralight">
               La Directiva de la Cámara de Senadores de Bolivia es el órgano colegiado responsable de la conducción política del ente legislativo. Conformada por una presidencia, dos vicepresidencias y tres secretarías, su estructura garantiza la pluralidad al integrar tanto al bloque de mayoría como al de minoría.
@@ -33,40 +33,46 @@
         </div>
 
         <!-- COLUMNA CENTRAL -->
-        <div class="w-[40%] bg-[#E03636]/80 rounded-2xl shadow-2xl border border-white/20 p-[.5em] flex items-center">
+        <div class="w-[40%] bg-[#E03636]/80 rounded-2xl shadow-2xl border border-white/20 p-[.49em] flex items-center">
           <div class="grid grid-cols-2 gap-y-4 w-full">
             <div 
               v-for="(senador, index) in senadores" 
               :key="index"
               @click="selectedSenador = senador"
               class="flex flex-col items-center cursor-pointer transition-all duration-300 hover:scale-105 py-2"
-              :class="{ 'rounded-[.45em] scale-105 border border-[#E4D294] bg-[#E03636]/20': selectedSenador?.nombre === senador.nombre }"
+              :class="{ 'rounded-[.44em] scale-105 border border-[#E4D294] bg-[#E03636]/20': selectedSenador?.nombre === senador.nombre }"
               >
-              <div class="w-[5em] h-[5em] rounded-full overflow-hidden border-[.20em] border-[#E4D294] shadow-lg">
-                <img 
+              <div class="w-[4.9em] h-[4.9em] rounded-full overflow-hidden border-[.19em] border-[#E4D294] shadow-lg">
+                <SafeImage 
                   :src="senador.foto" 
                   :alt="senador.nombre"
-                  class="w-full h-full object-cover"
+                  image-class="w-full h-full object-cover"
+                  :max-retries="8"
+                  :persistent="true"
+                  loading-strategy="eager"
                 />
               </div>
-              <p class="text-white text-[0.7em] text-center font-medium mt-1">{{ senador.cargo }}</p>
+              <p class="text-white text-[0.68em] text-center font-medium mt-1">{{ senador.cargo }}</p>
             </div>
           </div>
         </div>
 
         <!-- COLUMNA DERECHA -->
-        <div class="w-[30%] bg-transparent rounded-2xl shadow-xl border border-white/20 p-4 origin-left text-[#000] text-[1.4vw] flex items-center">
+        <div class="w-[30%] bg-transparent rounded-2xl shadow-xl border border-white/20 p-4 origin-left text-[#000] text-[1.37vw] flex items-center">
           <div v-if="selectedSenador" class="w-full flex flex-col items-center justify-center">
-            <div class="w-[12em] h-[12em] rounded-full overflow-hidden border-[.25em] border-[#E4D294] shadow-2xl mb-[.50em]">
-              <img 
+            <div class="w-[11.7em] h-[11.7em] rounded-full overflow-hidden border-[.24em] border-[#E4D294] shadow-2xl mb-[.49em]">
+              <SafeImage 
                 :src="selectedSenador.foto" 
                 :alt="selectedSenador.nombre"
-                class="w-full h-full object-cover"
+                image-class="w-full h-full object-cover"
+                :max-retries="8"
+                :persistent="true"
+                loading-strategy="eager"
               />
             </div>
             <p class="text-[#E03636] text-center mt-2 font-extrabold uppercase">{{ selectedSenador.cargo }}</p>
-            <h3 class="text-[#E03636] font-light text-[.9em] text-center">{{ selectedSenador.nombre }}</h3>
-            <p class="text-justify mt-4 text-[.7em]">{{ selectedSenador.funcion }}</p>
+            <h3 class="text-[#E03636] font-light text-[.88em] text-center">{{ selectedSenador.nombre }}</h3>
+            <p class="text-justify mt-4 text-[.68em]">{{ selectedSenador.funcion }}</p>
           </div>
           <div v-else class="w-full flex items-center justify-center">
             <p class="text-center">Selecciona un senador para ver sus detalles</p>
@@ -79,6 +85,7 @@
 
 <script setup>
 import { ref } from 'vue'
+import SafeImage from '@/components/SafeImage.vue'
 
 const senadores = ref([
   {

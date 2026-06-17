@@ -26,11 +26,14 @@
         @click="verNoticia(noticia)"
       >
         <div class="relative overflow-hidden aspect-[4/5]">
-          <img 
-            :src="noticia.featuredImage?.url || noticia.imagen" 
-            :alt="noticia.titulo"
-            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-            loading="lazy"
+          <!-- ✅ IMAGEN CON REINTENTOS AUTOMÁTICOS -->
+          <SafeImage 
+            :src="noticia.featuredImage?.url || noticia.imagen || '/images/default-news.jpg'"
+            :alt="limpiarAsteriscos(noticia.titulo)"
+            image-class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            :max-retries="8"
+            :persistent="true"
+            loading-strategy="lazy"
           />
           
           <div class="absolute bottom-0 left-0 right-0 h-[40%] bg-[rgba(224,54,54,0.85)] backdrop-blur-sm p-4 flex flex-col justify-end">
@@ -63,7 +66,7 @@
       </button>
     </div>
 
-    <!-- 🔥 BOTÓN VER TODAS LAS NOTICIAS - Usa targetRoute de props -->
+    <!-- BOTÓN VER TODAS LAS NOTICIAS -->
     <div v-if="noticiasLocal.length > 0" class="text-center mt-10 mb-8">
       <button 
         @click="irATodasLasNoticias"
@@ -82,12 +85,12 @@
 import { ref, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useNoticias } from '~/composables/useNoticias'
+import SafeImage from '@/components/SafeImage.vue'
 
-// 🔥 Recibir targetRoute como prop
 const props = defineProps({
   targetRoute: {
     type: String,
-    default: '/noticias'
+    default: '/centro-de-noticias#noticias-importantes'
   },
   limpiarAsteriscos: {
     type: Function,
@@ -114,7 +117,6 @@ const verNoticia = (noticia) => {
   }
 }
 
-// 🔥 Usar el targetRoute recibido
 const irATodasLasNoticias = () => {
   console.log(`🔗 [MoreNewsGrid] Navegando a: ${props.targetRoute}`)
   router.push(props.targetRoute)

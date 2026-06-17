@@ -60,13 +60,14 @@
             
             <div class="flex flex-col items-center justify-center px-4">
               <div class="rounded-xl overflow-hidden shadow-lg w-[80%] mx-auto aspect-square">
-                <img 
-                  :key="`img-${currentIndex}`"
-                  :src="noticiasCarousel[currentIndex].featuredImage?.url || noticiasCarousel[currentIndex].imagen"
+                <!-- ✅ SOLO CAMBIO: <img> → <SafeImage> -->
+                <SafeImage 
+                  :src="noticiasCarousel[currentIndex].featuredImage?.url || noticiasCarousel[currentIndex].imagen || '/images/default-news.jpg'"
                   :alt="limpiarAsteriscos(noticiasCarousel[currentIndex].titulo)"
-                  class="w-full h-full object-cover"
-                  loading="eager"
-                  @error="e => e.target.src = '/images/default-news.jpg'"
+                  image-class="w-full h-full object-cover"
+                  :max-retries="8"
+                  :persistent="true"
+                  loading-strategy="eager"
                 />
               </div>
               <div class="flex justify-center mt-8">
@@ -147,6 +148,7 @@
         </div>
       </div>
     </div>
+    
     <!-- SECCIÓN 4 - PRODUCCIÓN AUDIOVISUAL -->
     <div 
       id="produccion-audiovisual"
@@ -177,12 +179,14 @@
           target="_blank"
         >
           <div class="relative overflow-hidden">
-            <!-- CAMBIA ESTA RUTA SEGÚN EL NOMBRE REAL DEL ARCHIVO -->
-            <img 
-              src="/images/curul/Recurso-1.jpg" 
-              alt="Producción Audiovisual - Desde el Curul" 
-              class="w-full h-auto object-cover transition-all duration-700 ease-out" 
-              @error="e => { console.error('Error loading image:', e.target.src); e.target.src = '/images/placeholder.jpg'; }"
+            <!-- ✅ SOLO CAMBIO: <img> → <SafeImage> -->
+            <SafeImage 
+              src="/images/curul/Recurso-1.jpg"
+              alt="Producción Audiovisual - Desde el Curul"
+              image-class="w-full h-auto object-cover transition-all duration-700 ease-out"
+              :max-retries="8"
+              :persistent="true"
+              loading-strategy="eager"
             />
           </div>
         </NuxtLink>
@@ -197,6 +201,8 @@ import { useRouter, useRoute } from 'vue-router'
 import MoreNewsGrid from '~/components/MoreNewsGrid.vue'
 import { useNoticias } from '~/composables/useNoticias'
 import { useSesiones } from '~/composables/useSesiones'
+// ✅ AGREGAR IMPORT
+import SafeImage from '@/components/SafeImage.vue'
 
 definePageMeta({ layout: 'alter8', ssr: true })
 

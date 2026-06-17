@@ -1,15 +1,6 @@
 <template>
   <div class="min-h-screen bg-gray-50 py-12">
     <div class="container mx-auto px-4 max-w-6xl">
-      <!-- <button 
-        @click="volverAtras"
-        class="inline-flex items-center gap-2 text-[#E03636] hover:text-[#C12F2F] transition-colors mb-6 group"
-      >
-        <svg class="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-        </svg>
-        Volver
-      </button> -->
 
       <!-- Estado de carga -->
       <div v-if="pending && !noticiaData?.noticia" class="flex justify-center items-center py-20">
@@ -23,10 +14,17 @@
         <button @click="recargar" class="bg-[#E03636] text-white px-4 py-2 rounded-lg hover:bg-[#C12F2F] transition">Reintentar</button>
       </div>
 
+      <!-- Estado de contenido vacío -->
+      <div v-else-if="noticiaData?.noticia && !noticiaValida" class="text-center py-12 bg-white rounded-xl">
+        <p class="text-red-600 mb-4">⚠️ El contenido de esta noticia no está disponible</p>
+        <p class="text-gray-500 mb-6">Puede que la noticia haya sido eliminada o esté incompleta.</p>
+        <button @click="volverAtras" class="bg-[#E03636] text-white px-6 py-2 rounded-lg hover:bg-[#C12F2F] transition">Volver</button>
+      </div>
+
       <!-- Noticia encontrada y su contenido -->
-      <template v-else-if="noticiaData?.noticia">
+      <template v-else-if="noticiaData?.noticia && noticiaValida">
         <article class="bg-white rounded-xl shadow-lg overflow-hidden">
-          <!-- TITULO - Montserrat Bold -->
+          <!-- TITULO -->
           <div class="p-6 md:p-8 pb-0">
             <div class="flex flex-wrap gap-2 mb-4">
               <span class="tag-noticia">{{ noticiaData.noticia.category || noticiaData.noticia.categoria || 'Noticia' }}</span>
@@ -45,7 +43,7 @@
             <div class="relative">
               <div class="relative overflow-hidden rounded-2xl bg-gray-900 shadow-2xl" style="height: 500px;">
                 <div class="flex h-full">
-                  <!-- Imagen izquierda (peek) - SIN TEXTO -->
+                  <!-- Imagen izquierda (peek) -->
                   <div class="flex-shrink-0 transition-all duration-500 ease-out overflow-hidden h-full cursor-pointer"
                        :style="{ width: `${peekLeftWidth}%` }"
                        @click="anteriorImagen">
@@ -59,7 +57,7 @@
                     </div>
                   </div>
 
-                  <!-- Imagen central - CON TEXTO DEBAJO (SIN PILL) -->
+                  <!-- Imagen central -->
                   <div class="flex-shrink-0 transition-all duration-500 h-full"
                        :style="{ width: `${imagenActualWidth}%` }">
                     <div class="relative w-full h-full overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900">
@@ -71,7 +69,7 @@
                     </div>
                   </div>
 
-                  <!-- Imagen derecha (peek) - SIN TEXTO -->
+                  <!-- Imagen derecha (peek) -->
                   <div class="flex-shrink-0 transition-all duration-500 overflow-hidden h-full cursor-pointer"
                        :style="{ width: `${peekRightWidth}%` }"
                        @click="siguienteImagen">
@@ -113,7 +111,7 @@
                 </div>
               </div>
 
-              <!-- TEXTO DEBAJO DE LA IMAGEN - SIN PILL, SOLO TEXTO PLANO -->
+              <!-- TEXTO DEBAJO DE LA IMAGEN -->
               <div class="text-center mt-3">
                 <p class="carousel-caption">
                   {{ imagenActual?.caption || imagenActual?.alt || 'Sin descripción' }}
@@ -140,12 +138,11 @@
             </div>
           </div>
 
-          <!-- REDES SOCIALES - TODAS EN NEGRO -->
+          <!-- REDES SOCIALES -->
           <div class="px-6 md:px-8 mb-6">
             <div class="flex justify-end items-center gap-3 py-2 border-b border-gray-200">
               <span class="compartir-texto">Compartir:</span>
               
-              <!-- Facebook -->
               <a 
                 :href="`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(windowLocation)}`"
                 target="_blank"
@@ -158,7 +155,6 @@
                 </svg>
               </a>
 
-              <!-- X (Twitter) -->
               <a 
                 :href="`https://twitter.com/intent/tweet?text=${encodeURIComponent(noticiaData.noticia.title)}&url=${encodeURIComponent(windowLocation)}`"
                 target="_blank"
@@ -171,7 +167,6 @@
                 </svg>
               </a>
 
-              <!-- Instagram - MÁXIMO DETALLE (ícono clásico de cámara) -->
               <a 
                 :href="`https://www.instagram.com/`"
                 target="_blank"
@@ -185,7 +180,6 @@
                 </svg>
               </a>
 
-              <!-- YouTube -->
               <a 
                 :href="`https://www.youtube.com/results?search_query=${encodeURIComponent(noticiaData.noticia.title)}`"
                 target="_blank"
@@ -245,7 +239,7 @@
         <!-- SECCIÓN NOTICIAS RELACIONADAS -->
         <div class="mt-16 bg-slate-200">
           <h2 class="text-[1.5vw] font-bold text-gray-800 border-l-4 border-[#E03636] pl-4 text-center">            
-            <span class="text-[#E03636]">Articulos Relacionados</span>
+            <span class="text-[#E03636]">Artículos Relacionados</span>
           </h2>
           <hr class="border-black border-t-2 mx-[5vw]">
           
@@ -306,22 +300,103 @@
         </div>
       </template>
 
+      <!-- Noticia no encontrada -->
       <div v-else-if="!pending && !noticiaData?.noticia && !error" class="text-center py-12 bg-white rounded-xl">
         <h1 class="text-2xl font-bold text-gray-800 mb-4">Noticia no encontrada</h1>
         <p class="text-gray-500 mb-6">Lo sentimos, la noticia que buscas no existe o ha sido removida.</p>
-        <button @click="volverAtras" class="inline-block bg-[#E03636] text-white px-6 py-3 rounded-lg hover:bg-[#C12F2F] transition">Volver atrás</button>
+        <NuxtLink to="/centro-de-noticias" class="inline-block bg-[#E03636] text-white px-6 py-3 rounded-lg hover:bg-[#C12F2F] transition">
+          Ver todas las noticias
+        </NuxtLink>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch, nextTick, onActivated } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
+// ============================================
+// 🔥 SEO - useHead para cada noticia
+// ============================================
 const route = useRoute()
 const router = useRouter()
 
+// Verificar si la noticia tiene contenido válido
+const noticiaValida = computed(() => {
+  const noticia = noticiaData.value?.noticia
+  if (!noticia) return false
+  const tieneTitulo = noticia.title && noticia.title.trim().length > 0
+  const tieneContenido = noticia.blocks?.length > 0 || noticia.content?.length > 0
+  return tieneTitulo && tieneContenido
+})
+
+// SEO dinámico basado en la noticia
+const seoData = computed(() => {
+  const noticia = noticiaData.value?.noticia
+  if (!noticia) {
+    return {
+      title: 'Noticia | Senado de Bolivia',
+      description: 'Noticias del Senado de Bolivia',
+      image: '/images/default-news.jpg'
+    }
+  }
+  
+  const tituloLimpio = noticia.title?.replace(/\*/g, '') || 'Noticia'
+  const descripcion = noticia.excerpt || noticia.description || noticia.content?.substring(0, 160) || 'Noticias del Senado de Bolivia'
+  const imagen = noticia.featuredImage?.url || noticia.gallery?.[0]?.url || '/images/default-news.jpg'
+  
+  return {
+    title: `${tituloLimpio} | Senado de Bolivia`,
+    description: descripcion.substring(0, 160),
+    image: imagen,
+    url: `https://senado.gob.bo/noticias/${route.params.slug}`
+  }
+})
+
+// 🔥 useHead para SEO
+useHead({
+  title: () => seoData.value.title,
+  meta: [
+    { name: 'description', content: () => seoData.value.description },
+    { property: 'og:title', content: () => seoData.value.title },
+    { property: 'og:description', content: () => seoData.value.description },
+    { property: 'og:image', content: () => seoData.value.image },
+    { property: 'og:url', content: () => seoData.value.url },
+    { property: 'og:type', content: 'article' },
+    { property: 'og:site_name', content: 'Senado de Bolivia' },
+    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:title', content: () => seoData.value.title },
+    { name: 'twitter:description', content: () => seoData.value.description },
+    { name: 'twitter:image', content: () => seoData.value.image }
+  ],
+  link: [
+    { rel: 'canonical', href: () => `https://senado.gob.bo/noticias/${route.params.slug}` }
+  ],
+  script: [
+    {
+      type: 'application/ld+json',
+      children: () => JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'NewsArticle',
+        'headline': seoData.value.title,
+        'description': seoData.value.description,
+        'image': seoData.value.image,
+        'url': seoData.value.url,
+        'publisher': {
+          '@type': 'Organization',
+          'name': 'Senado de Bolivia'
+        },
+        'datePublished': noticiaData.value?.noticia?.publishedAt || new Date().toISOString(),
+        'dateModified': noticiaData.value?.noticia?.updatedAt || new Date().toISOString()
+      })
+    }
+  ]
+})
+
+// ============================================
+// RESTO DEL CÓDIGO
+// ============================================
 const API_BASE_URL = 'http://demoback.senado.gob.bo/api'
 
 const windowLocation = ref('')
@@ -335,6 +410,21 @@ const loadingRelacionadas = ref(true)
 
 const noticiasPorPagina = 2
 const maxRelacionadaIndex = computed(() => Math.max(0, Math.ceil(noticiasRelacionadas.value.length / noticiasPorPagina) - 1))
+
+// ============================================
+// 🔥 FORZAR SCROLL AL INICIO DE LA PÁGINA
+// ============================================
+const forceScrollToTop = () => {
+  if (process.client) {
+    window.scrollTo(0, 0)
+    const container = document.querySelector('.snap-container')
+    if (container) container.scrollTo(0, 0)
+    document.body.scrollTop = 0
+    document.documentElement.scrollTop = 0
+    const mainContent = document.querySelector('main')
+    if (mainContent) mainContent.scrollTop = 0
+  }
+}
 
 const cargarNoticiasRelacionadas = async (noticiaId, categoria, tags) => {
   loadingRelacionadas.value = true
@@ -432,15 +522,11 @@ const formatTitleWithColors = (title) => {
 }
 
 const anteriorRelacionada = () => {
-  if (relacionadaCurrentIndex.value > 0) {
-    relacionadaCurrentIndex.value--
-  }
+  if (relacionadaCurrentIndex.value > 0) relacionadaCurrentIndex.value--
 }
 
 const siguienteRelacionada = () => {
-  if (relacionadaCurrentIndex.value < maxRelacionadaIndex.value) {
-    relacionadaCurrentIndex.value++
-  }
+  if (relacionadaCurrentIndex.value < maxRelacionadaIndex.value) relacionadaCurrentIndex.value++
 }
 
 const verNoticiaRelacionada = (noticia) => {
@@ -471,7 +557,6 @@ const { data: noticiaData, pending, error, refresh } = await useAsyncData(
       
       const imagenes = []
       
-      // Imagen destacada - usar caption
       if (noticia.featuredImage?.url) {
         imagenes.push({
           url: noticia.featuredImage.url,
@@ -481,7 +566,6 @@ const { data: noticiaData, pending, error, refresh } = await useAsyncData(
         })
       }
       
-      // Galería - usar caption
       if (noticia.gallery && Array.isArray(noticia.gallery)) {
         noticia.gallery.forEach((img, idx) => {
           imagenes.push({
@@ -493,7 +577,6 @@ const { data: noticiaData, pending, error, refresh } = await useAsyncData(
         })
       }
       
-      // Imágenes de respaldo
       if (imagenes.length === 0) {
         imagenes.push(
           { url: 'https://picsum.photos/id/1015/1920/1080', alt: 'Paisaje montañoso', caption: 'Vista panorámica del Senado', orientation: 'horizontal' },
@@ -530,15 +613,6 @@ const { data: noticiaData, pending, error, refresh } = await useAsyncData(
 watch(noticiaData, (newData) => {
   if (newData?.noticia) {
     cargarNoticiasRelacionadas(newData.noticia._id, newData.noticia.category, newData.noticia.tags)
-    
-    useHead({
-      title: `${newData.noticia.title.replace(/\*/g, '')} | Senado Bolivia`,
-      meta: [
-        { name: 'description', content: newData.noticia.excerpt },
-        { property: 'og:title', content: newData.noticia.title.replace(/\*/g, '') },
-        { property: 'og:image', content: newData.imagenes?.[0]?.url }
-      ]
-    })
   }
 }, { immediate: true })
 
@@ -615,17 +689,35 @@ const recargar = () => {
 }
 
 const handleKeydown = (e) => {
-  if (e.key === 'ArrowLeft') {
-    anteriorImagen()
-  } else if (e.key === 'ArrowRight') {
-    siguienteImagen()
-  }
+  if (e.key === 'ArrowLeft') anteriorImagen()
+  else if (e.key === 'ArrowRight') siguienteImagen()
 }
 
+// ============================================
+// LIFECYCLE
+// ============================================
 onMounted(() => {
   windowLocation.value = window.location.href
   window.addEventListener('keydown', handleKeydown)
   console.log('✅ Frontend conectado a la API real en:', API_BASE_URL)
+  
+  forceScrollToTop()
+  setTimeout(forceScrollToTop, 100)
+  setTimeout(forceScrollToTop, 300)
+  setTimeout(forceScrollToTop, 500)
+  setTimeout(forceScrollToTop, 1000)
+})
+
+onActivated(() => {
+  forceScrollToTop()
+})
+
+watch(() => route.params.slug, () => {
+  forceScrollToTop()
+}, { immediate: true })
+
+watch(() => route.fullPath, () => {
+  forceScrollToTop()
 })
 
 onUnmounted(() => {
@@ -708,7 +800,6 @@ section {
   font-family: 'Capitolium News', 'Montserrat', sans-serif !important;
 }
 
-/* TAGS */
 .tag-noticia,
 .tag-importante {
   font-family: 'Montserrat', sans-serif !important;
@@ -729,7 +820,6 @@ section {
   color: white;
 }
 
-/* COMPARTIR */
 .compartir-texto {
   font-family: 'Montserrat', sans-serif !important;
   font-weight: 500 !important;
@@ -737,7 +827,6 @@ section {
   font-size: 0.875rem;
 }
 
-/* TÍTULOS */
 .title-main,
 .title-main span,
 h1.title-main {
@@ -763,7 +852,6 @@ h1.title-main {
   margin-top: 0.5rem;
 }
 
-/* CITAS */
 .quote-badge .badge-name {
   font-family: 'Montserrat', sans-serif !important;
   font-weight: 700 !important;
@@ -844,7 +932,6 @@ h1.title-main {
   max-width: 85%;
 }
 
-/* VIDEOS */
 .video-block iframe {
   transition: transform 0.3s ease;
   width: 100%;
@@ -856,7 +943,6 @@ h1.title-main {
   transform: scale(1.01);
 }
 
-/* ICONOS SOCIALES - TODOS EN NEGRO */
 .social-icon {
   display: inline-flex;
   align-items: center;
@@ -881,7 +967,6 @@ h1.title-main {
   border-color: #000000;
 }
 
-/* ANIMACIONES */
 .block-item {
   animation: fadeInUp 0.5s ease-out forwards;
   opacity: 0;
