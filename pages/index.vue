@@ -1,4 +1,3 @@
-<!-- pages/index.vue - VERSIÓN CON FONDO FIJO EN AMBAS SECCIONES - SIN LÍNEA ROJA -->
 <template>
   <div class="min-h-screen text-style">
     <!-- Fondo fijo GLOBAL - SOLO para Important News -->
@@ -7,19 +6,25 @@
     <!-- Fondo fijo para More News -->
     <div class="morenews-fixed-background" :class="{ 'show-fixed': isMoreNewsVisible }"></div>
     
-    <!-- Hero Section -->
+    <!-- Hero Section con video persistente -->
     <section 
       class="relative h-screen flex items-center overflow-hidden transition-all duration-500 snap-section"
       :class="{ 'min-h-[40vh] md:min-h-[45vh] pt-20': scrolled }"
       ref="heroSection"
       @mouseleave="resumeCarousel"
     >
-      <HeroCarousel
-        ref="heroCarouselRef"
-        :scrolled="scrolled"
-        :current-media-index="currentMediaIndex"
-        :filtered-hero-media="filteredHeroMedia"
-      />
+      <!-- Video persistente de fondo -->
+      <div class="absolute inset-0 z-0">
+        <PersistentVideo
+          :src="heroVideoSrc"
+          autoplay
+          muted
+          loop
+          playsinline
+        />
+        <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent z-10"></div>
+      </div>
+      
       <HeroContent :scrolled="scrolled" />
       <ScrollProgress
         :scrolled="scrolled"
@@ -50,7 +55,7 @@
       style="position: relative;"
     >
       <!-- Contenedor del contenido con fondo transparente -->
-      <div style="position: relative; z-index: 2; background: transparent; height: 100%;">
+      <div style="position: relative; z-index: 2; background: transparent; height: 100%;" class="pt-3">
         <MoreNewsGrid targetRoute="/centro-de-noticias#noticias-importantes"/>
       </div>
     </div>
@@ -69,8 +74,6 @@
       >
         <template #header>
           <div class="px-1 xs:px-2 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16 3xl:px-20 4xl:px-24 5xl:px-32 text-center sm:text-left">
-            
-            <!-- Título solo con clases Tailwind -->
             <h2 class="font-bold text-white leading-tight
                       text-[11px] xs:text-[14px] sm:text-[18px] md:text-[22px] 
                       lg:text-[26px] xl:text-[30px] 2xl:text-[39px] 
@@ -79,26 +82,13 @@
                       ">
               Distribución del senado
             </h2>
-            
-            <!-- Subtítulo solo con clases Tailwind -->
-            <!-- <h5 class="text-white/80
-                      text-[7px] xs:text-[9px] sm:text-[16px] md:text-[18px] 
-                      lg:text-[20px] xl:text-[22px] 2xl:text-[24px] 
-                      3xl:text-[28px] 4xl:text-[32px] 5xl:text-[36px]
-                      max-w-[250px] xs:max-w-[300px] sm:max-w-[400px] 
-                      md:max-w-[500px] lg:max-w-[600px] xl:max-w-[700px] 
-                      2xl:max-w-[800px] 3xl:max-w-[900px] 4xl:max-w-[1000px] 5xl:max-w-[1200px] 
-                      mx-auto sm:mx-0">
-              Selecciona un senador para ver detalles
-            </h5> -->
-            
           </div>
         </template>
       </SenateChamber>
     </div>
     
     <!-- Museo - CON SU PROPIO FONDO -->
-    <!-- <div 
+    <div 
       ref="museumRef" 
       class="h-screen w-full scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out delay-400 z-10 snap-section"
       :class="{ 'animate-in': isMuseumVisible }"
@@ -113,7 +103,7 @@
         @virtual-tour-started="handleVirtualTour"
         @donation-clicked="handleDonationClick"
       />
-    </div> -->
+    </div>
   </div>
 </template>
 
@@ -121,18 +111,32 @@
 import { ref, onMounted, onUnmounted, nextTick } from 'vue'
 import { useCarousel } from '@/composables/useCarousel'
 import { useScrollEffects } from '@/composables/useScrollEffects'
+import { usePriorityImages } from '@/composables/usePriorityImages'
 import SenateChamber from '@/components/SenateChamber.vue'
 import MuseumSectionMinimal from '@/components/MuseumSectionMinimal.vue'
-import HeroCarousel from '@/components/HeroSection/HeroCarousel.vue'
 import HeroContent from '@/components/HeroSection/HeroContent.vue'
 import ScrollProgress from '@/components/UI/ScrollProgress.vue'
 import ImportantNewsSection from '@/components/ImportantNewsSection.vue'
 import MoreNewsGrid from '@/components/MoreNewsGrid.vue'
+import PersistentVideo from '@/components/PersistentVideo.vue'
+
 defineOptions({
   name: 'IndexPage'
 })
 
-// Media del hero
+// ============================================
+// VIDEO DEL HERO
+// ============================================
+const heroVideoSrc = '/video/video web.mp4'
+
+// ============================================
+// PRECARGA DE IMÁGENES PRIORITARIAS
+// ============================================
+const { preloadPriorityImages, preloadImagesInViewport } = usePriorityImages()
+
+// ============================================
+// CAROUSEL (para compatibilidad con HeroContent)
+// ============================================
 const heroMedia = ref([
   {
     type: 'video',
@@ -156,7 +160,6 @@ const heroMedia = ref([
   }
 ])
 
-// Carousel
 const {
   currentMediaIndex,
   filteredHeroMedia,
@@ -166,10 +169,14 @@ const {
   resumeCarousel
 } = useCarousel(heroMedia.value)
 
-// Scroll effects
+// ============================================
+// SCROLL EFFECTS
+// ============================================
 const { scrolled, scrollProgress, initScrollListener, removeScrollListener } = useScrollEffects()
 
-// Refs
+// ============================================
+// REFS
+// ============================================
 const darkMode = ref(false)
 const heroSection = ref(null)
 const heroCarouselRef = ref(null)
@@ -180,13 +187,17 @@ const moreNewsRef = ref(null)
 const senateRef = ref(null)
 const museumRef = ref(null)
 
-// Visibility states
+// ============================================
+// VISIBILITY STATES
+// ============================================
 const isImportantNewsVisible = ref(false)
 const isMoreNewsVisible = ref(false)
 const isSenateVisible = ref(false)
 const isMuseumVisible = ref(false)
 
-// Event handlers
+// ============================================
+// EVENT HANDLERS
+// ============================================
 const handleCollectionSelect = (collection) => {
   console.log('Colección seleccionada:', collection)
 }
@@ -207,21 +218,28 @@ const handleDonationClick = () => {
   console.log('Donación solicitada')
 }
 
-// Forzar reproducción del video
+// ============================================
+// FORZAR REPRODUCCIÓN DEL VIDEO
+// ============================================
 const forceVideoPlayback = () => {
-  if (heroCarouselRef.value && heroCarouselRef.value.forceVideoPlay) {
-    heroCarouselRef.value.forceVideoPlay()
-  } else if (heroCarouselRef.value && heroCarouselRef.value.playActiveVideo) {
-    heroCarouselRef.value.playActiveVideo()
+  // El video ahora es manejado por PersistentVideo
+  // Buscar el video en el DOM y reproducirlo si está pausado
+  const video = document.querySelector('video')
+  if (video && video.paused) {
+    video.play().catch(() => {})
   }
 }
 
-// Manejar interacción del usuario para activar video
+// ============================================
+// MANEJAR INTERACCIÓN DEL USUARIO
+// ============================================
 const handleUserInteraction = () => {
   forceVideoPlayback()
 }
 
-// Scroll observer
+// ============================================
+// SCROLL OBSERVER
+// ============================================
 let scrollObserver = null
 
 const initScrollObserver = () => {
@@ -230,121 +248,137 @@ const initScrollObserver = () => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           if (entry.target === importantNewsRef.value) {
-            isImportantNewsVisible.value = true;
+            isImportantNewsVisible.value = true
           } else if (entry.target === moreNewsRef.value) {
-            isMoreNewsVisible.value = true;
+            isMoreNewsVisible.value = true
           } else if (entry.target === senateRef.value) {
-            isSenateVisible.value = true;
+            isSenateVisible.value = true
           } else if (entry.target === museumRef.value) {
-            isMuseumVisible.value = true;
+            isMuseumVisible.value = true
           }
           
-          entry.target.classList.add('animate-in');
-          scrollObserver.unobserve(entry.target);
+          entry.target.classList.add('animate-in')
+          scrollObserver.unobserve(entry.target)
         }
-      });
+      })
     },
     {
       threshold: 0.15,
       rootMargin: '0px 0px -30px 0px'
     }
-  );
+  )
   
   const sections = [
     importantNewsRef.value,
     moreNewsRef.value,
     senateRef.value,
     museumRef.value
-  ];
+  ]
   
   sections.forEach(section => {
     if (section) {
-      scrollObserver.observe(section);
+      scrollObserver.observe(section)
     }
-  });
-};
+  })
+}
 
-// Lifecycle
+// ============================================
+// PRECARGA DE IMÁGENES EN SECCIONES VISIBLES
+// ============================================
+let imageObserver = null
+
+const initImagePreload = () => {
+  // Observar cambios en el DOM para precargar imágenes cuando aparecen
+  const observer = new MutationObserver(() => {
+    // Precargar imágenes en el viewport actual
+    const containers = document.querySelectorAll('.scroll-section')
+    containers.forEach(container => {
+      if (container.getBoundingClientRect().top < window.innerHeight) {
+        preloadImagesInViewport(container)
+      }
+    })
+  })
+  
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
+  })
+  
+  return observer
+}
+
+// ============================================
+// LIFECYCLE
+// ============================================
 onMounted(async () => {
-  // Iniciar carrusel
-  startCarousel();
+  console.log('🎬 IndexPage montada')
   
-  // Inicializar scroll
-  initScrollListener();
+  // 1. Precargar imágenes prioritarias
+  preloadPriorityImages()
   
-  await nextTick();
-  showSection.value = true;
-  initScrollObserver();
+  // 2. Iniciar carrusel (para compatibilidad)
+  startCarousel()
   
-  // Forzar scroll al inicio
-  setTimeout(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'auto'
-    })
-  }, 10)
+  // 3. Inicializar scroll
+  initScrollListener()
   
-  setTimeout(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'auto'
-    })
-  }, 100)
+  await nextTick()
+  showSection.value = true
   
-  setTimeout(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'auto'
-    })
-  }, 300)
+  // 4. Inicializar observers
+  initScrollObserver()
+  imageObserver = initImagePreload()
   
-  // Forzar reproducción del video múltiples veces
-  setTimeout(() => {
-    forceVideoPlayback()
-  }, 200)
+  // 5. Forzar scroll al inicio
+  const doScroll = () => {
+    window.scrollTo({ top: 0, behavior: 'auto' })
+    const container = document.querySelector('.snap-container')
+    if (container) container.scrollTo({ top: 0, behavior: 'auto' })
+  }
   
-  setTimeout(() => {
-    forceVideoPlayback()
-  }, 500)
+  setTimeout(doScroll, 10)
+  setTimeout(doScroll, 100)
+  setTimeout(doScroll, 300)
   
-  setTimeout(() => {
-    forceVideoPlayback()
-  }, 1000)
+  // 6. Forzar reproducción del video
+  setTimeout(forceVideoPlayback, 200)
+  setTimeout(forceVideoPlayback, 500)
+  setTimeout(forceVideoPlayback, 1000)
+  setTimeout(forceVideoPlayback, 2000)
   
-  setTimeout(() => {
-    forceVideoPlayback()
-  }, 2000)
-  
-  // Event listeners para interacción del usuario
+  // 7. Event listeners para interacción del usuario
   document.addEventListener('click', handleUserInteraction)
   document.addEventListener('touchstart', handleUserInteraction)
   document.addEventListener('scroll', forceVideoPlayback)
   
-  // Escuchar cuando la página se carga completamente
+  // 8. Escuchar cuando la página se carga completamente
   window.addEventListener('load', () => {
-    setTimeout(() => {
-      forceVideoPlayback()
-    }, 100)
+    setTimeout(forceVideoPlayback, 100)
   })
-});
+})
 
 onUnmounted(() => {
-  removeScrollListener();
+  removeScrollListener()
   
   if (scrollObserver) {
-    scrollObserver.disconnect();
+    scrollObserver.disconnect()
   }
   
-  // Remover event listeners
+  if (imageObserver) {
+    imageObserver.disconnect()
+  }
+  
   document.removeEventListener('click', handleUserInteraction)
   document.removeEventListener('touchstart', handleUserInteraction)
   document.removeEventListener('scroll', forceVideoPlayback)
-});
+})
 
-// Page meta
+// ============================================
+// PAGE META
+// ============================================
 definePageMeta({
   layout: 'alter8'
-});
+})
 </script>
 
 <style scoped>
@@ -373,7 +407,7 @@ footer {
   transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.3, 1.2);
 }
 
-/* ===== FONDO FIJO PARA IMPORTANT NEWS ===== */
+/* ===== FONDO FIJO - SOLO PARA IMPORTANT NEWS ===== */
 .global-fixed-background {
   position: fixed;
   top: 0;
@@ -393,7 +427,6 @@ footer {
   transition: opacity 0.5s ease, visibility 0.5s ease;
 }
 
-/* Overlay elegante */
 .global-fixed-background::after {
   content: '';
   position: fixed;
@@ -411,7 +444,6 @@ footer {
   z-index: 1;
 }
 
-/* Mostrar solo cuando estamos en Important News */
 .global-fixed-background.show-fixed {
   opacity: 1;
   visibility: visible;
@@ -437,7 +469,6 @@ footer {
   transition: opacity 0.5s ease, visibility 0.5s ease;
 }
 
-/* Overlay elegante */
 .morenews-fixed-background::after {
   content: '';
   position: fixed;
@@ -455,7 +486,6 @@ footer {
   z-index: 1;
 }
 
-/* Mostrar solo cuando estamos en More News */
 .morenews-fixed-background.show-fixed {
   opacity: 1;
   visibility: visible;
@@ -483,7 +513,6 @@ footer {
   background: #f5f5f5 !important;
 }
 
-/* Museo - SIN FONDO AQUÍ PORQUE YA LO TIENE EN EL STYLE INLINE */
 [ref="museumRef"] {
   background: transparent !important;
 }
@@ -495,8 +524,6 @@ footer {
   position: relative;
   z-index: 10;
 }
-
-
 </style>
 
 <style>

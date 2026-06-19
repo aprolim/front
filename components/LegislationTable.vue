@@ -1563,7 +1563,7 @@ watch(itemsPorPagina, (nuevoValor) => {
 
 /* Estilos para el buscador global */
 .global-search-container {
-  margin-bottom: 24px;
+  margin-top: 54px;
 }
 
 .global-search-wrapper {

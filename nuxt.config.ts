@@ -1,19 +1,43 @@
 // nuxt.config.ts
 export default defineNuxtConfig({
+  // ============================================
+  // SSR
+  // ============================================
   ssr: true,
+  
+  // ============================================
+  // Devtools
+  // ============================================
   devtools: { enabled: false },
   
+  // ============================================
+  // Módulos - SIN @nuxt/image para evitar errores
+  // ============================================
   modules: [
     '@pinia/nuxt',
     '@nuxtjs/tailwindcss'
   ],
   
+  // ============================================
+  // Pinia - Configuración para stores
+  // ============================================
+  pinia: {
+    storesDirs: ['./stores/**'],
+  },
+  
+  // ============================================
+  // Plugins
+  // ============================================
   plugins: [
     { src: '~/plugins/adaptive-image-loader.client.ts', mode: 'client' },
     { src: '~/plugins/clean-console.client.ts', mode: 'client' },
-    { src: '~/plugins/sw-register.client.ts', mode: 'client' }
+    { src: '~/plugins/sw-register.client.ts', mode: 'client' },
+    { src: '~/plugins/preload.client.js', mode: 'client' }
   ],
   
+  // ============================================
+  // App
+  // ============================================
   app: {
     baseURL: '/',
     head: {
@@ -34,12 +58,18 @@ export default defineNuxtConfig({
     }
   },
   
+  // ============================================
+  // CSS
+  // ============================================
   css: [
     '~/assets/css/fonts.css',
     '~/assets/css/main.css',
     '~/assets/css/tailwind.css'
   ],
   
+  // ============================================
+  // Nitro
+  // ============================================
   nitro: {
     preset: 'node-server',
     output: {
@@ -57,6 +87,9 @@ export default defineNuxtConfig({
     }
   },
   
+  // ============================================
+  // Route Rules
+  // ============================================
   routeRules: {
     '/centro-de-noticias': { 
       ssr: true,
@@ -70,6 +103,9 @@ export default defineNuxtConfig({
     }
   },
   
+  // ============================================
+  // Vite
+  // ============================================
   vite: {
     server: {
       hmr: {
@@ -88,14 +124,47 @@ export default defineNuxtConfig({
       devSourcemap: true
     },
     optimizeDeps: {
-      include: ['nuxt', '@nuxtjs/tailwindcss'],
+      include: ['nuxt', '@nuxtjs/tailwindcss', 'pinia'],
       exclude: []
     }
   },
   
+  // ============================================
+  // TailwindCSS
+  // ============================================
   tailwindcss: {
     cssPath: '~/assets/css/tailwind.css',
     configPath: 'tailwind.config.js',
     viewer: false
+  },
+  
+  // ============================================
+  // TypeScript
+  // ============================================
+  typescript: {
+    strict: false,
+    typeCheck: false
+  },
+  
+  // ============================================
+  // Components y Auto-imports
+  // ============================================
+  components: [
+    {
+      path: '~/components',
+      pathPrefix: false,
+      extensions: ['.vue'],
+    }
+  ],
+  
+  imports: {
+    dirs: ['stores', 'composables'],
+  },
+  
+  // ============================================
+  // Build - Transpilar dependencias
+  // ============================================
+  build: {
+    transpile: ['@pinia/nuxt'],
   }
 })
