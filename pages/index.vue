@@ -87,23 +87,7 @@
       </SenateChamber>
     </div>
     
-    <!-- Museo - CON SU PROPIO FONDO -->
-    <div 
-      ref="museumRef" 
-      class="h-screen w-full scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out delay-400 z-10 snap-section"
-      :class="{ 'animate-in': isMuseumVisible }"
-      style="background-image: url('/fondo1.png'); background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed;"
-    >
-      <div class="h-[4.2vw]"></div>
-      <MuseumSectionMinimal
-        :dark-mode="darkMode"
-        @collection-selected="handleCollectionSelect"
-        @exhibition-selected="handleExhibitionSelect"
-        @program-registration="handleProgramRegistration"
-        @virtual-tour-started="handleVirtualTour"
-        @donation-clicked="handleDonationClick"
-      />
-    </div>
+
   </div>
 </template>
 
