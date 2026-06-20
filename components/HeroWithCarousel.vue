@@ -76,8 +76,8 @@
                 : 'opacity-0 translate-x-full'
             ]"
           >
-            <!-- ✅ Usando ReliableImage con reintentos automáticos -->
-            <ReliableImage 
+            <!-- Solo imágenes -->
+            <SafeImage 
               :src="slide.image.url" 
               :alt="slide.image.alt"
               image-class="w-full h-full object-cover"
@@ -90,7 +90,6 @@
             
             <div v-if="slide.image.title" class="absolute bottom-0 left-0 right-0 p-3 text-white">
               <h3 class="font-bold text-[1.4vw]">{{ slide.image.title }}</h3>
-              <!-- <p v-if="slide.image.caption" class="text-white/80 text-[1.15vw]">{{ slide.image.caption }}</p> -->
             </div>
           </div>
         </div>
@@ -101,7 +100,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import ReliableImage from '@/components/ReliableImage.vue'
+import SafeImage from '@/components/SafeImage.vue'
 
 const props = defineProps({
   bannerTextSize: {
@@ -149,14 +148,6 @@ const props = defineProps({
 })
 
 const currentSlide = ref(0)
-
-const nextSlide = () => {
-  currentSlide.value = (currentSlide.value + 1) % props.slides.length
-}
-
-const prevSlide = () => {
-  currentSlide.value = (currentSlide.value - 1 + props.slides.length) % props.slides.length
-}
 </script>
 
 <style scoped>

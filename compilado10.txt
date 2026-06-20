@@ -2,6 +2,2124 @@ COMPILADO DE ARCHIVOS - Parte 10
  
  
 ================================= 
+layouts\data\menuIcons.js 
+================================= 
+ 
+// ============================================
+// ICONOS DEL MENÚ PRINCIPAL - SIN clases de tamaño
+// ============================================
+
+export const menuIcons = {
+  // Icono del menú hamburguesa (con sus clases responsive ORIGINALES - NO TOCAR)
+  menu: `
+    <svg class="w-5 h-5 xs:w-6 xs:h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 lg:w-12 lg:h-12 xl:w-14 xl:h-14 2xl:w-16 2xl:h-16 3xl:w-20 3xl:h-20 4xl:w-32 4xl:h-32 5xl:w-40 5xl:h-40 text-white" 
+         fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+    </svg>
+  `,
+
+  // Icono de La institución (sin clases de tamaño)
+  institution: `
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M3 21h18M5 21V11h3V6h8v5h3v10M9 9h1m1.5 0h1m1.5 0h1M7 13h3m-3 2.5h3m-3 2.5h3m4-5h3m-3 2.5h3m-3 2.5h3M11 21v-3h2v3M12 6V2l4 1.5-4 1.5" 
+            stroke="white" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  `,
+
+  // Icono de Legisladores (sin clases de tamaño)
+  legislators: `
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
+         style="display: block; overflow: visible;">
+      <g transform="translate(12, 12) scale(0.7)" fill="none" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="-9" cy="-8" r="3.5"/>
+        <path d="M-15 2 C-15 -4 -10 -7 -9 -7 C-8 -7 -3 -4 -3 2" />
+        <line x1="-16.5" y1="-1" x2="-16.5" y2="3" />
+        <circle cx="9" cy="-8" r="3.5"/>
+        <path d="M3 2 C3 -4 8 -7 9 -7 C10 -7 15 -4 15 2" />
+        <line x1="16.5" y1="-1" x2="16.5" y2="3" />
+        <circle cx="0" cy="-7" r="4"/>
+        <path d="M-6 8 C-6 2 -3 0 0 0 C3 0 6 2 6 8" />
+        <line x1="-3.5" y1="5" x2="-3.5" y2="8" />
+        <line x1="3.5" y1="5" x2="3.5" y2="8" />
+        <path d="M0 0 L2.5 4 L0 8 L-2.5 4 Z" fill="none" />
+        <line x1="0" y1="0" x2="0" y2="4" />
+        <path d="M-12 3 C-12 12 -6 16 0 16 C6 16 12 12 12 3" />
+        <path d="M-9 6 C-9 12 -4.5 14 0 14 C4.5 14 9 12 9 6" />
+      </g>
+    </svg>
+  `,
+
+  // Icono de Gestión Legislativa (Mazo) (sin clases de tamaño)
+  gavel: `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390.99 404.1137">
+      <title>MAZO</title>
+      <path d="M367.4827,328.424v41.33c0,6.7754-1.3566,10.1631-8.818,11.5182-14.2444,2.0326-22.384,12.8732-22.384,26.424,0,12.8732,8.8179,22.3587,22.384,25.7464,3.3915.6775,5.4265,4.7428,8.14,6.7754-3.3916,1.355-6.1048,4.0652-9.4963,4.0652-92.2494,0-184.4988.6775-277.4265,0-21.0274,0-35.95-16.9384-36.6284-38.62V89.9307c0-31.1667,18.3142-49.46,50.1945-49.46H352.56c10.1746,0,14.9227,5.42,14.9227,15.5833V236.9564c0,8.1305,2.7132,12.1957,9.4963,15.5834,15.601,7.4529,31.202,16.2609,46.1247,25.0689,12.21,6.7754,14.2444,14.2283,6.783,25.7465-6.1047,10.163-12.8878,21.0036-18.9925,31.1667-7.4614,11.5181-14.2444,12.1957-25.7756,5.42a160.1411,160.1411,0,0,0-17.6358-11.5182ZM324.75,224.0832V105.5141c-12.2095-3.3877-22.3841-8.808-27.81-20.3261-1.3565-2.0326-5.4264-4.0652-8.14-4.0652H178.2358c-2.7132,0-6.783.6775-8.14,2.71-5.4265,12.8733-16.2793,18.2936-28.4888,21.6812V314.8733c12.2095,3.3877,22.384,8.8081,27.81,21.6812.6783,2.0327,5.4265,2.71,8.818,2.71,35.95,0,71.9.6775,108.5287,0,4.07,0,7.4613-4.0652,10.8528-6.7754,6.7831-4.7427,12.2095-11.5181,18.9926-14.9058,7.4613-4.0652,11.5311-16.2609,4.7481-21.6812-21.7057-15.5834-44.09-30.4892-69.8653-48.7827-.6783,10.1631,0,16.9384-2.035,23.7138s-4.7481,15.5834-9.4962,18.9711-14.2444,2.71-19.6709,0c-16.2793-8.808-31.88-18.9711-47.4813-28.4566-6.783-4.0652-12.8877-9.4856-10.8528-18.2936,2.0349-9.4855,6.783-16.9384,17.6359-18.971,3.3915-.6775,6.783-4.0652,8.8179-6.7754,12.2095-19.6486,25.0973-39.2972,36.6285-58.9458,2.0349-3.3877.6783-8.13,2.0349-12.1957,2.0349-7.4529,3.3915-16.2609,8.14-21.6812,5.4265-6.7754,13.5661-4.7427,21.0275-.6775,16.2793,10.1631,32.5586,18.9711,48.16,30.4892,4.7481,3.3877,10.8528,12.1957,9.4963,16.9384-2.035,6.7754-8.818,12.8733-14.9227,18.2936-4.07,4.0652-10.1746,6.7753-17.6359,12.1956,16.9576,8.13,29.167,14.9058,43.4114,22.3587Zm29.8454,144.3156c.6783-2.0326,1.3566-2.71,1.3566-3.3877V335.1994c0-18.2935-.6783-19.6486-19.6708-27.779,3.3915,13.5507-2.7133,18.9711-15.6011,21.0036-5.4264.6776-9.4962,9.4856-14.2443,14.2283-2.7133,2.71-6.1048,7.4529-8.818,7.4529-42.7332.6776-86.1447.6776-128.8778,0-2.7132,0-7.4614-3.3877-8.14-6.0978-3.3915-10.8406-10.1745-16.2609-20.3491-16.9385-8.818-.6775-10.1746-4.7427-10.1746-12.8732V105.5141c0-8.13,2.7133-11.5182,10.8529-12.1957,9.4963-.6775,16.9576-6.0979,18.9925-15.5834,1.3566-7.4529,5.4264-8.13,12.2095-8.13H295.5824c6.783,0,10.8528.6775,12.8877,8.808,1.3566,5.42,8.14,10.163,13.5661,13.5507,4.07,2.71,9.4963,2.0326,15.6011,3.3877V217.3078c0,14.2283,4.07,18.9711,18.9925,21.0037V52.6662H112.44V368.3988Zm-21.0274,12.1957c-84.788,0-168.8978,0-253.0075.6775-6.783,0-14.9227,5.42-19.6708,10.8406-6.7831,7.4529-6.7831,17.616-2.0349,26.424,4.7481,9.4855,12.8878,14.2283,23.7406,14.2283H328.8194a8.6122,8.6122,0,0,0,4.07-.6775c-10.8529-23.0363-10.8529-29.1342.6783-51.4929ZM98.1959,366.3662v-313.7C69.7071,50.6336,56.141,63.5068,56.141,90.6083V375.1742C69.7071,372.464,83.2732,369.7538,98.1959,366.3662Zm276.07-48.1052c8.14-13.5508,16.2794-26.424,25.0973-40.6523-31.88-17.616-63.0823-33.8769-94.9626-51.4929-6.1048,10.1631-12.2095,20.3262-18.9926,30.4892,29.8455,20.3262,59.0125,40.6523,88.8579,61.656ZM238.6049,255.9275c14.9227-23.7138,29.1671-46.75,43.4115-71.1415-14.2444-8.8079-28.4888-17.6159-42.7332-27.1015-14.9227,23.7139-29.1671,47.4277-44.09,71.1415C210.1161,238.3115,224.3605,247.12,238.6049,255.9275ZM304.4,168.5251a12.7018,12.7018,0,0,0-4.07-4.7427c-16.2793-10.1631-32.5587-20.3262-49.5162-29.8117-2.0349-1.3551-8.818.6775-9.4963,2.0326-.6783,3.3877,0,8.808,2.0349,10.8406,15.601,10.1631,31.88,20.3261,48.16,29.8117C297.6173,180.7208,303.7221,176.6556,304.4,168.5251ZM243.353,276.2537c-4.07-4.7428-4.7481-6.7754-6.783-7.4529-16.9576-10.8406-33.9152-21.0037-51.5511-31.1668-2.0349-1.3551-7.4614.6775-8.14,2.0326-1.3566,3.3877-1.3566,9.4856,0,10.1631,16.9576,10.8406,33.9152,21.6812,50.8728,31.8443,3.3916,1.355,9.4963-3.3878,15.601-5.42ZM381.7271,327.069c7.4613,1.355,16.2793,4.7427,17.6359,2.71,8.818-12.1957,16.2793-25.0689,24.4189-38.62-6.1047-3.3877-10.1745-5.42-14.9226-8.13C400.0413,297.2573,392.58,310.8081,381.7271,327.069ZM278.6249,212.5651c-6.1048,9.4855-10.8529,18.2935-16.9577,27.1015,4.7482,3.3877,8.818,6.7754,14.2444,10.1631,6.1048-10.1631,11.5312-18.9711,17.6359-29.1342A161.86,161.86,0,0,1,278.6249,212.5651Z" transform="translate(-43.2532 -40.4705)" fill="#fff"/>
+    </svg>
+  `,
+
+  // Icono de Noticias (sin clases de tamaño)
+  news: `
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path>
+    </svg>
+  `,
+
+  // Icono de Participación (manos) (sin clases de tamaño)
+  hands: `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="120 180 320 200">
+      <title>manos</title>
+      <path fill="#ffffff" d="M238.371,238.1017a10.4336,10.4336,0,0,0-9.7737,7.0508c-1.629,5.4238-3.8009,11.39-5.43,16.8136q-2.4433,6.5085-4.8869,13.0169c-.5429,1.0848-1.0859,2.7119-2.7149,2.1695s-1.6289-1.6271-1.6289-3.2542v-36.339h-.543V201.22a9.5316,9.5316,0,0,0-10.3168-9.7628,10.1072,10.1072,0,0,0-9.2307,10.3051v45.5594c-.543.5423-1.086,1.6271-1.629,1.6271s-1.086-1.0848-1.629-1.6271V189.8305a9.7738,9.7738,0,0,0-19.5475,0v57.4916c-.5429.5423-1.0859,1.6271-1.6289,1.6271s-1.629-1.0848-2.172-1.6271V197.4238c0-5.9661-4.3439-10.8475-9.7737-10.8475-5.9729,0-9.7738,4.8814-9.7738,10.8475v47.7288c0,1.6271.543,3.2542-1.6289,3.2542-1.629,0-2.172-1.0847-2.172-3.2542V211.5255a8.9756,8.9756,0,0,0-2.7149-7.0509,9.2908,9.2908,0,0,0-10.86-2.7118c-3.8009,1.6271-6.5159,4.8813-6.5159,9.22v87.8644c0,6.5085,1.629,11.39,5.9729,16.2712,7.6018,9.22,10.86,19.5254,10.3167,31.4577,0,1.6271.543,2.17,1.629,2.17h65.1583c1.629,0,1.629-.5424,1.629-1.6272-1.629-11.39,1.6289-21.1525,9.7737-28.7458,8.1448-8.1355,14.6607-17.3559,17.9186-28.2033,4.3439-13.5593,8.1448-27.1187,11.9457-40.1356.543-1.6271,0-3.2543,0-4.8814a10.4337,10.4337,0,0,0-9.7738-7.0509Z"/>
+      <path fill="#ffffff" d="M380.0905,245.1525a9.3063,9.3063,0,0,0-9.2308-7.0508,10.4335,10.4335,0,0,0-9.7737,7.0508c-3.2579,9.7628-7.0589,19.5255-10.3168,29.2882,0,.5423-.543,1.0847-.543,1.6271a4.1175,4.1175,0,0,1-2.1719,1.0847c-.543,0-1.086-1.0847-1.629-1.6271v-1.0847c0-16.2712,0-33.0848-.543-49.356v-22.78a9.754,9.754,0,0,0-3.8009-8.1356,9.1143,9.1143,0,0,0-10.3167-1.0848c-3.8009,1.6272-5.43,4.8814-5.43,8.678v46.1017c-.543.5424-1.0859,1.6271-1.6289,1.6271a2.4462,2.4462,0,0,1-1.629-1.6271V190.3729c0-7.5933-8.1448-12.4746-14.6606-8.678-3.8009,2.1695-4.8869,5.4237-4.8869,9.7627,0,18.4407,0,36.339.543,54.78v1.6271c-.543.5424-1.086,1.6271-1.629,1.6271s-1.629-1.0847-2.172-1.6271,0-1.0847,0-1.6271V197.9661c0-5.9661-4.3439-10.3051-9.7738-10.3051s-9.7737,4.339-9.7737,10.3051V246.78c0,1.6271,0,2.7118-2.172,2.7118-1.6289,0-1.6289-1.0847-1.6289-2.7118V209.8983c-.543-4.339-4.3439-7.5932-8.6878-8.1356-5.9728-.5423-10.86,3.7966-10.86,10.3051V299.39c0,6.5084,1.6289,11.9321,5.9728,16.8135a41.6372,41.6372,0,0,1,9.7738,21.6949c.5429,3.7966.5429,7.0509,1.0859,10.8475h64.6155c1.086,0,2.172,0,1.629-1.6272-1.629-11.39,2.172-21.6949,10.3168-29.8305a61.7,61.7,0,0,0,17.3755-27.661c3.8009-13.0169,7.6018-26.5763,11.4027-39.5932,1.086-1.0847,1.086-3.2542.543-4.8814Z"/>
+      <path fill="#ffffff" d="M270.4072,194.7119c1.086.5423,1.629,0,2.172-1.0848,2.7149-10.8474,13.0316-16.2712,23.8914-12.4745,1.0859.5423,1.629,0,2.1719-.5424l4.8869-4.8814c.543-.5423,1.086-1.6271,1.629-2.1695,3.2579-10.3051,5.9728-20.61,9.2307-30.9152a11.93,11.93,0,0,0,.543-4.339c-.543-4.339-4.3439-8.1356-8.6878-8.1356a9.9364,9.9364,0,0,0-10.3167,6.5085c-3.8009,10.3051-7.0588,20.61-10.86,30.3728-.543,1.0848-1.086,2.1695-2.172,1.6272-1.629,0-1.629-1.6272-1.629-2.7119v-36.339h-.5429V93.8305c0-3.7966-1.086-6.5085-4.3439-8.678s-6.5159-2.7118-9.7738-.5423-5.43,4.8813-5.43,8.6779V139.39c-.543.5424-1.086,1.6271-2.172,1.6271a2.4462,2.4462,0,0,1-1.629-1.6271V82.983c0-5.9661-4.3438-10.305-9.7737-10.305s-9.7738,4.3389-9.7738,10.305v56.9492c0,.5423-1.0859,1.6271-1.6289,2.1695a4.1184,4.1184,0,0,1-2.172-1.0848,3.2583,3.2583,0,0,1-.5429-2.1695V90.0339c0-4.339-1.629-7.5932-5.43-9.22-6.5158-3.2542-14.1176,1.6272-14.1176,9.22v49.8983c0,1.0847-.543,2.1695-1.629,2.1695a1.9878,1.9878,0,0,1-2.172-2.1695V105.22a9.7276,9.7276,0,0,0-9.7737-9.7627c-5.43,0-9.7738,4.339-9.7738,10.3051v69.4237c0,1.6271.543,2.1695,1.629,3.2542a34.824,34.824,0,0,1,5.43,7.0509,2.5085,2.5085,0,0,0,2.7149,1.6271,38.5068,38.5068,0,0,1,7.6018-.5424c7.6018,1.0848,14.6607,8.1356,14.6607,17.8983v34.7119c0,.5424.5429,1.0848.5429,1.6271.543-.5423,1.086-.5423,1.629-1.0847a17.7478,17.7478,0,0,1,22.2624-5.4238c2.172,1.0848,2.172,1.0848,2.172-1.6271V215.322c-1.086-14.644,9.7737-23.322,21.1764-20.61Z"/>
+      <path fill="#ffffff" d="M212.8507,357.4237H135.2036c-3.8009,0-5.9728,2.17-5.9728,5.9661V379.661a5.1271,5.1271,0,0,0,5.43,5.4237h77.6471c3.8009,0,5.9728-2.1695,5.9728-5.966V362.8475c.543-3.2543-1.6289-5.4238-5.43-5.4238Z"/>
+      <path fill="#ffffff" d="M345.3394,357.4237H268.2353c-3.8009,0-5.9729,2.17-5.9729,5.9661v15.1865c0,4.339,2.172,5.9661,5.9729,5.9661h77.1041c3.8008,0,5.9728-2.1695,5.9728-5.9661V362.8475C351.3122,359.5932,349.14,357.4237,345.3394,357.4237Z"/>
+    </svg>
+  `,
+
+  // Icono de Cultura (sin clases de tamaño)
+  culture: `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 418 425">
+      <title>cultura</title>
+      <path d="M362.3443,250.26a81.163,81.163,0,0,1-31.5213,10.328,119.7279,119.7279,0,0,0,8.2229,9.6395,29.5829,29.5829,0,0,1,6.8525,16.5248c.6852,11.705-4.7968,20.6559-14.39,26.8527-10.2787,6.8854-20.5574,13.0822-30.8361,19.279-24.6688,15.8362-50.0229,31.6724-74.6918,47.5087a119.0655,119.0655,0,0,1-12.3344,7.5739,6.2328,6.2328,0,0,0-.6852-3.4427c-1.37-12.3936-5.482-23.41-13.02-33.05-16.4459-21.3445-32.8918-42.0005-49.3377-63.3449-23.2984-29.6069-45.9115-58.5253-69.21-88.1322a181.7028,181.7028,0,0,1-14.39-19.9675c-6.1672-11.0165-6.1672-22.033.6852-33.0495,7.5377-11.0165,17.8164-15.8362,30.8361-13.7707,12.3344,2.0656,20.5574,9.6395,23.9836,20.656s2.0557,22.7216-6.8525,31.6725a72.8908,72.8908,0,0,1-7.5377,6.1968c6.1673,8.2624,12.3345,15.8362,19.1869,24.0986l47.282-26.8527c27.41-15.8363,54.82-30.984,82.2295-46.82,5.482-3.4427,11.6492-5.5083,16.4459-9.64,18.5017-15.1477,26.0394-35.1152,20.5574-59.2138-7.5377-35.1152-45.2262-55.7711-78.8033-42a247.0275,247.0275,0,0,0-30.1508,15.1477c-28.78,14.4592-57.5607,29.6069-86.341,44.0661-13.02,6.8853-26.0393,13.0821-38.3738,19.9674-13.7049,7.5739-22.6131,19.9675-27.41,35.1152-1.37,4.1312-1.37,8.2624-2.741,12.3936v8.9509q1.0278,5.1641,2.0557,10.328c2.741,11.0165,8.223,19.9674,14.39,28.9183,19.1869,24.7872,39.059,49.5744,58.2459,74.3616,23.2984,29.6069,45.9115,59.2137,69.21,88.8207,8.9082,11.705,9.5935,26.1642,1.37,37.8692s-22.6131,15.8363-35.6328,11.7051a31.9,31.9,0,0,1-21.2426-29.6069c0-11.7051,5.482-20.656,15.0754-26.8528a2.3894,2.3894,0,0,1,1.37-.6885c-6.1672-8.2624-12.3344-16.5248-19.1868-24.7872a59.7418,59.7418,0,0,0-18.5017,18.59c-15.7606,24.7871-13.02,55.7711,6.8525,76.427,10.9639,11.7051,23.9836,17.9019,39.7442,19.279a2.51,2.51,0,0,1,2.0558.6885h7.5377c.6852,0,1.37-.6885,2.0557-.6885a60.7887,60.7887,0,0,0,24.6688-7.5739c7.5377-4.1312,14.39-8.9509,21.9279-13.7706,23.2984-15.1477,47.282-29.6069,70.58-44.7546,24.6689-15.8363,49.3377-30.984,74.0066-46.82,21.2426-13.7706,30.8361-33.05,28.78-58.5252,0-10.328-5.4819-20.656-13.02-29.6069ZM137.5836,107.7338c28.78-15.1477,57.5607-29.6069,86.341-44.7546,12.3344-6.1968,28.095-2.7542,35.6328,8.2624,8.2229,12.3935,6.8524,28.23-4.1115,37.8693a24.6126,24.6126,0,0,1-6.8525,4.82c-30.836,17.2133-60.9868,35.1151-91.8229,52.3284-.6852,0-.6852.6886-2.0557.6886q0-34.0824-28.78-53.7056c4.7967-2.0656,8.223-4.1311,11.6492-5.5082Z" transform="translate(-30 -27)" style="fill:#fff"/>
+      <path d="M438.4065,66.4218a130.4181,130.4181,0,0,0-52.7639,15.8363,21.7018,21.7018,0,0,0-9.5934,9.6394,98.2341,98.2341,0,0,0-7.5377,22.7216,51.7783,51.7783,0,0,1-2.741-11.0165c-.6852-3.4427,0-7.5738,0-11.0165-.6852,0-.6852,0-1.3705.6885a183.48,183.48,0,0,0-35.6327,24.7872c-.6853.6885-1.37,1.377-1.37,2.0656a85.7667,85.7667,0,0,0-6.1672,26.1642c0,3.4427-.6853,7.5738-.6853,11.705-1.37-2.7541-2.741-4.82-3.4262-6.8853a41.1573,41.1573,0,0,1-4.1115-18.59,151.1142,151.1142,0,0,0-13.7049,15.8363C288.3378,163.5049,280.8,180.03,283.5411,199.3086a62.2391,62.2391,0,0,0,5.4819,19.2789c15.0754-15.1477,30.1509-29.6069,47.9672-41.3119-28.0951,33.0495-50.7082,70.23-71.9509,110.1652,7.5377-2.0656,15.0754-4.82,21.9279-6.8853.6852,0,1.37-.6886,2.0557-1.3771L295.19,268.85c6.1673-10.328,13.02-21.3445,19.1869-31.6725.6853-.6885,1.37-1.377,2.0558-1.377,13.02,1.377,25.3541-2.7542,36.3181-8.9509,11.6491-6.8854,20.5573-15.8363,28.78-26.1643,2.0557-2.7541,4.7967-5.5082,6.8524-8.9509-10.2787.6885-23.2983-1.3771-27.41-4.82h.6852a87.3261,87.3261,0,0,0,34.2623-8.9509c1.3705-.6886,3.4263-2.0656,4.1115-3.4427,5.482-8.9509,10.2787-18.59,15.7607-27.5413,1.37-2.0656,2.0557-4.82,3.4262-6.8853a74.9408,74.9408,0,0,1-24.6688-2.0656,2.3889,2.3889,0,0,0,1.37-.6885,73.2943,73.2943,0,0,0,26.0394-8.951c2.0557-.6885,3.4262-2.7541,4.7967-4.1311,7.5377-11.7051,12.3344-24.0987,16.4459-37.1808A197.9463,197.9463,0,0,0,448,67.799v-.6885c-2.0558-.6887-5.482-.6887-9.5935-.6887Z" transform="translate(-30 -27)" style="fill:#fff"/>
+      <path d="M252.02,202.0627c-30.8361,17.9019-61.6722,36.4923-92.5082,54.3941,4.7967,6.8853,9.5934,13.0821,14.39,19.2789,30.8361-18.59,61.6721-36.4922,93.1935-54.394-5.482-6.8854-10.2787-13.0822-15.0754-19.279Z" transform="translate(-30 -27)" style="fill:#fff"/>
+      <path d="M203.3672,314.9821c9.5934-5.5083,19.1869-11.0165,28.78-17.2133l2.0557-2.0657q7.1952-14.4591,14.39-28.9183l4.1115-8.2624H252.02c-20.5573,12.3936-41.8,24.7871-63.0426,37.1807,4.7968,6.1968,9.5935,12.3937,14.39,19.279Z" transform="translate(-30 -27)" style="fill:#fff"/>
+    </svg>
+  `,
+
+  // Flecha para submenús (sin clases de tamaño - solo la rotación)
+  arrow: (isOpen) => `
+    <svg class="transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+    </svg>
+  `
+} 
+================================= 
+pages\centro-de-noticias.vue 
+================================= 
+ 
+<template>
+  <div class="min-h-screen text-style">
+    <!-- Fondos fijos -->
+    <div class="global-fixed-background seccion1-fondo" :class="{ 'show-fixed': isSeccion1Visible }"></div>
+    <div class="global-fixed-background seccion2-fondo" :class="{ 'show-fixed': isSeccion2Visible }"></div>
+    <div class="global-fixed-background seccion3-fondo" :class="{ 'show-fixed': isSeccion3Visible }"></div>
+    <div class="global-fixed-background seccion4-fondo" :class="{ 'show-fixed': isSeccion4Visible }"></div>
+    
+    <!-- SECCIÓN 1 - NOTICIAS IMPORTANTES -->
+    <section 
+      id="noticias-importantes"
+      ref="seccion1Ref"
+      class="scroll-section opacity-0 transition-all duration-800 ease-out"
+      :class="{ 'animate-in': isSeccion1Visible }"
+      style="height: 100vh; position: relative; background: transparent; margin: 0; padding: 0; display: flex; flex-direction: column;"
+    > 
+      <div style="height: 4.2vw; flex-shrink: 0;"></div>
+      
+      <div 
+        style="height: calc(100vh - 4.2vw); display: flex; align-items: center; justify-content: center;"
+        class="mx-[5vw]"
+      >
+        <div style="width: 100%; margin: 0 auto;" class="rounded-2xl">
+          
+          <div v-if="loadingImportantes" class="flex justify-center items-center">
+            <div class="text-center">
+              <div class="inline-block w-12 h-12 border-4 border-[#E03636] border-t-transparent rounded-full animate-spin"></div>
+              <p class="mt-4 text-gray-600">Cargando noticias importantes...</p>
+            </div>
+          </div>
+          
+          <div v-else-if="noticiasCarousel.length > 0" class="grid grid-cols-1 lg:grid-cols-2 gap-[3vw] items-center">
+            
+            <div class="flex flex-col items-center text-center px-4">
+              <div class="w-full">
+                <h2 class="text-[#E03636] text-[2.2vw] lg:text-[2vw] font-bold mb-[1.5vw] leading-tight">
+                  {{ limpiarAsteriscos(noticiasCarousel[currentIndex].titulo) }}
+                </h2>
+                <div class="text-gray-800 text-[1.2vw] lg:text-[1.1vw] leading-relaxed my-[2vw] text-justify">
+                  <p>{{ noticiasCarousel[currentIndex].descripcion }}</p>
+                  <p v-if="noticiasCarousel[currentIndex].descripcion2">{{ noticiasCarousel[currentIndex].descripcion2 }}</p>
+                  <p class="text-[#E03636] font-semibold text-right mt-4">
+                    {{ formatearFecha(noticiasCarousel[currentIndex].publishedAt || noticiasCarousel[currentIndex].fecha) }}
+                  </p>
+                </div>
+              </div>
+              
+              <div class="flex justify-center items-center gap-[1.5vw] pt-[2vw]">
+                <button 
+                  v-for="(noticia, index) in noticiasCarousel" 
+                  :key="noticia.id"
+                  @click="currentIndex = index"
+                  class="rounded-full transition-all duration-300"
+                  :class="currentIndex === index 
+                    ? 'w-[2vw] h-[2vw] bg-[#E03636] ring-[.2vw] ring-[#E03636] ring-offset-[.2vw] ring-offset-white' 
+                    : 'w-[2vw] h-[2vw] bg-[#E03636]/40 hover:bg-[#E03636]/70'"
+                ></button>
+              </div>
+            </div>
+            
+            <div class="flex flex-col items-center justify-center px-4">
+              <div class="rounded-xl overflow-hidden shadow-lg w-[80%] mx-auto aspect-square">
+                <!-- ✅ SOLO CAMBIO: <img> → <SafeImage> -->
+                <SafeImage 
+                  :src="noticiasCarousel[currentIndex].featuredImage?.url || noticiasCarousel[currentIndex].imagen || '/images/default-news.jpg'"
+                  :alt="limpiarAsteriscos(noticiasCarousel[currentIndex].titulo)"
+                  image-class="w-full h-full object-cover"
+                  :max-retries="8"
+                  :persistent="true"
+                  loading-strategy="eager"
+                />
+              </div>
+              <div class="flex justify-center mt-8">
+                <button 
+                  @click="verNoticia(noticiasCarousel[currentIndex])"
+                  class="px-[1.5vw] py-[0.8vw] bg-[#E03636] hover:bg-[#C12F2F] text-white font-semibold rounded-[0.8vw] transition-all duration-300 flex items-center gap-2 group text-[1.1vw] lg:text-[1vw]"
+                >
+                  Ver noticia completa
+                  <svg class="w-[1.2vw] h-[1.2vw] group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            
+          </div>
+          
+          <div v-else-if="!loadingImportantes" class="text-center py-12">
+            <p class="text-gray-600">No hay noticias importantes disponibles</p>
+            <button @click="recargarDatos" class="mt-4 px-4 py-2 bg-[#E03636] text-white rounded-lg hover:bg-[#C12F2F] transition">Reintentar</button>
+          </div>
+          
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 2 - MÁS NOTICIAS -->
+    <div 
+      id="mas-noticias"
+      ref="seccion2Ref"
+      class="scroll-section opacity-0 transition-all duration-800 ease-out delay-200"
+      :class="{ 'animate-in': isSeccion2Visible }"
+      style="height: 100vh; position: relative; background: white; display: flex; flex-direction: column; justify-content: center; align-items: center;"
+    >
+      <MoreNewsGrid :limpiarAsteriscos="limpiarAsteriscos" targetRoute="/noticias"/>
+    </div>
+    
+    <!-- SECCIÓN 3 - SESIONES -->
+    <div 
+      id="sesiones"
+      ref="seccion3Ref"
+      class="scroll-section opacity-0 transition-all duration-800 ease-out delay-200"
+      :class="{ 'animate-in': isSeccion3Visible }"
+      style="height: 100vh; position: relative; background: transparent; display: flex; flex-direction: column; justify-content: center"
+    >
+      <div class="relative w-full text-center pt-[4.4vw] flex-shrink-0">
+        <div class="relative inline-block w-full">
+          <div class="absolute top-0 left-0 h-[.1vw] bg-[#E4D294] animate-slide-right" style="width: 100%;"></div>
+          <div class="absolute bottom-0 right-0 h-[.1vw] bg-[#E4D294] animate-slide-left" style="width: 100%;"></div>
+          <div class="absolute top-0 right-0 w-[.1vw] bg-[#E4D294] animate-slide-down" style="height: 100%;"></div>
+          <div class="absolute bottom-0 left-0 w-[.1vw] bg-[#E4D294] animate-slide-up" style="height: 100%;"></div>
+          <h2 class="text-[3vw] text-white font-semibold bg-[#E03636] py-[.3vw]">Sesiones</h2>
+        </div>
+      </div>
+
+      <div class="flex-1 flex flex-col justify-center">
+        <div v-if="loadingSesiones" class="flex justify-center items-center py-12">
+          <div class="inline-block w-12 h-12 border-4 border-[#E03636] border-t-transparent rounded-full animate-spin"></div>
+          <p class="ml-3 text-gray-600">Cargando videos...</p>
+        </div>
+        
+        <div v-else class="grid grid-cols-1 sm:grid-cols-3 gap-[2vw] mx-auto px-[6vw] w-full">
+          <div v-for="video in sesionesVideos" :key="video.position" class="flex flex-col items-center">
+            <div class="w-full aspect-video rounded-[1vw] overflow-hidden border-[.6vw] border-white shadow-lg">
+              <iframe 
+                class="w-full h-full" 
+                :src="`https://www.youtube.com/embed/${video.youtubeId}?autoplay=0&rel=0&modestbranding=1`" 
+                :title="video.title"
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+              ></iframe>
+            </div>
+            <p class="text-[1.6vw] text-center font-semibold mt-3 text-[#E03636] line-clamp-2">
+              {{ video.title }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- SECCIÓN 4 - PRODUCCIÓN AUDIOVISUAL -->
+    <div 
+      id="produccion-audiovisual"
+      ref="seccion4Ref"
+      class="scroll-section opacity-0 transition-all duration-800 ease-out delay-200"
+      :class="{ 'animate-in': isSeccion4Visible }"
+      style="height: 100vh; position: relative; background: white; display: flex; flex-direction: column; justify-content: center"
+    >
+      <div class="relative w-full text-center pt-[4.4vw] pb-[1vw] flex-shrink-0">
+        <div class="relative inline-block w-full">
+          <div class="absolute top-0 left-0 h-[2px] bg-[#E4D294] animate-slide-right" style="width: 100%;"></div>
+          <div class="absolute bottom-0 right-0 h-[2px] bg-[#E4D294] animate-slide-left" style="width: 100%;"></div>
+          <div class="absolute top-0 right-0 w-[2px] bg-[#E4D294] animate-slide-down" style="height: 100%;"></div>
+          <div class="absolute bottom-0 left-0 w-[2px] bg-[#E4D294] animate-slide-up" style="height: 100%;"></div>
+          <h2 class="text-[3vw] text-white font-semibold bg-[#E03636] py-2">Producción Audiovisual</h2>
+        </div>
+      </div>
+
+      <div class="text-center py-4 flex-shrink-0">
+        <h3 class="text-[#E03636] text-[2.3vw] font-semibold">Desde el Curul</h3>
+        <div class="w-16 h-0.5 bg-[#E4D294] mx-auto mt-2"></div>
+      </div>
+      
+      <div class="flex-1 flex items-center justify-center px-4">
+        <NuxtLink 
+          to="https://www.youtube.com/watch?v=M4oGsn60dkE&list=PLa1BPhXlaW2fX3iN-hn6O5nPBHrSYEL5Y" 
+          class="image-link-wrapper block rounded-[1.8vw] overflow-hidden shadow-2xl w-[45%] transition-all duration-500 ease-out hover:shadow-2xl" 
+          target="_blank"
+        >
+          <div class="relative overflow-hidden">
+            <!-- ✅ SOLO CAMBIO: <img> → <SafeImage> -->
+            <SafeImage 
+              src="/images/curul/Recurso-1.jpg"
+              alt="Producción Audiovisual - Desde el Curul"
+              image-class="w-full h-auto object-cover transition-all duration-700 ease-out"
+              :max-retries="8"
+              :persistent="true"
+              loading-strategy="eager"
+            />
+          </div>
+        </NuxtLink>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted, onUnmounted, onActivated, onDeactivated, nextTick, computed, watch } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import MoreNewsGrid from '~/components/MoreNewsGrid.vue'
+import { useNoticias } from '~/composables/useNoticias'
+import { useSesiones } from '~/composables/useSesiones'
+// ✅ AGREGAR IMPORT
+import SafeImage from '@/components/SafeImage.vue'
+
+definePageMeta({ layout: 'alter8', ssr: true })
+
+const route = useRoute()
+const router = useRouter()
+
+console.log('🚀 [PAGE] centro-de-noticias.vue - INICIALIZANDO')
+
+const { 
+  noticiasImportantes, 
+  ultimasNoticias, 
+  todasLasNoticias, 
+  loading, 
+  error, 
+  recargarDatos 
+} = useNoticias()
+
+const { videos: sesionesVideos, loading: loadingSesiones, fetchVideos: fetchSesionesVideos } = useSesiones()
+
+const limpiarAsteriscos = (texto) => {
+  if (!texto) return ''
+  return texto.replace(/\*/g, '')
+}
+
+const currentIndex = ref(0)
+let carouselInterval = null
+let scrollObserver = null
+
+const seccion1Ref = ref(null)
+const seccion2Ref = ref(null)
+const seccion3Ref = ref(null)
+const seccion4Ref = ref(null)
+
+const isSeccion1Visible = ref(false)
+const isSeccion2Visible = ref(false)
+const isSeccion3Visible = ref(false)
+const isSeccion4Visible = ref(false)
+
+const noticiasCarousel = computed(() => noticiasImportantes.value || [])
+const loadingImportantes = computed(() => loading.value)
+
+const formatearFecha = (fecha) => {
+  if (!fecha) return ''
+  return new Date(fecha).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })
+}
+
+const verNoticia = (noticia) => {
+  if (noticia && noticia.slug) {
+    router.push(`/noticias/${noticia.slug}`)
+  }
+}
+
+const startCarousel = () => {
+  if (carouselInterval) clearInterval(carouselInterval)
+  if (noticiasCarousel.value.length === 0) return
+  carouselInterval = setInterval(() => {
+    currentIndex.value = (currentIndex.value + 1) % noticiasCarousel.value.length
+  }, 8000)
+}
+
+const stopCarousel = () => {
+  if (carouselInterval) {
+    clearInterval(carouselInterval)
+    carouselInterval = null
+  }
+}
+
+const destroyObserver = () => {
+  if (scrollObserver) {
+    scrollObserver.disconnect()
+    scrollObserver = null
+  }
+}
+
+const initObserver = () => {
+  destroyObserver()
+  
+  const options = { threshold: 0.3, rootMargin: '0px 0px -50px 0px' }
+  
+  scrollObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      const targetId = entry.target.id
+      if (entry.isIntersecting) {
+        switch(targetId) {
+          case 'noticias-importantes':
+            if (!isSeccion1Visible.value) {
+              isSeccion1Visible.value = true
+              startCarousel()
+            }
+            break
+          case 'mas-noticias':
+            if (!isSeccion2Visible.value) {
+              isSeccion2Visible.value = true
+              stopCarousel()
+            }
+            break
+          case 'sesiones':
+            if (!isSeccion3Visible.value) {
+              isSeccion3Visible.value = true
+              stopCarousel()
+            }
+            break
+          case 'produccion-audiovisual':
+            if (!isSeccion4Visible.value) {
+              isSeccion4Visible.value = true
+              stopCarousel()
+            }
+            break
+        }
+        entry.target.classList.add('animate-in')
+      }
+    })
+  }, options)
+  
+  const sections = [
+    document.getElementById('noticias-importantes'),
+    document.getElementById('mas-noticias'),
+    document.getElementById('sesiones'),
+    document.getElementById('produccion-audiovisual')
+  ]
+  
+  sections.forEach(section => {
+    if (section) scrollObserver.observe(section)
+  })
+}
+
+// ============================================
+// MAPA DE SECCIONES PARA SCROLL DEL MENÚ
+// ============================================
+const sectionsMap = {
+  'noticias-importantes': seccion1Ref,
+  'mas-noticias': seccion2Ref,
+  'sesiones': seccion3Ref,
+  'produccion-audiovisual': seccion4Ref
+}
+
+const scrollToSection = (id) => {
+  const sectionRef = sectionsMap[id]
+  if (sectionRef?.value) {
+    const container = document.querySelector('.snap-container')
+    if (container) container.style.scrollSnapType = 'none'
+    
+    sectionRef.value.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    
+    setTimeout(() => {
+      if (container) container.style.scrollSnapType = 'y mandatory'
+    }, 800)
+  }
+}
+
+// Watch para cambios en el hash (navegación desde el menú)
+watch(() => route.hash, (newHash) => {
+  if (newHash && newHash !== '') {
+    const id = newHash.replace('#', '')
+    console.log(`📍 [PAGE] Navegando a sección: ${id}`)
+    setTimeout(() => scrollToSection(id), 100)
+  }
+})
+
+watch(noticiasCarousel, (nuevas) => {
+  if (nuevas.length > 0) {
+    console.log(`📊 [PAGE] ${nuevas.length} noticias importantes disponibles`)
+    if (isSeccion1Visible.value) {
+      startCarousel()
+    }
+  }
+}, { immediate: true })
+
+onActivated(async () => {
+  console.log('🔄 [PAGE] Reactivada')
+  stopCarousel()
+  destroyObserver()
+  await recargarDatos()
+  await fetchSesionesVideos()
+  isSeccion1Visible.value = false
+  isSeccion2Visible.value = false
+  isSeccion3Visible.value = false
+  isSeccion4Visible.value = false
+  await nextTick()
+  initObserver()
+  if (route.hash) {
+    const id = route.hash.replace('#', '')
+    setTimeout(() => scrollToSection(id), 200)
+  } else {
+    setTimeout(() => {
+      if (!isSeccion1Visible.value) {
+        isSeccion1Visible.value = true
+        startCarousel()
+      }
+    }, 200)
+  }
+})
+
+onDeactivated(() => {
+  console.log('💤 [PAGE] Desactivada')
+  stopCarousel()
+  destroyObserver()
+})
+
+onMounted(async () => {
+  console.log('🎬 [PAGE] Montada')
+  await recargarDatos()
+  await fetchSesionesVideos()
+  await nextTick()
+  initObserver()
+  if (route.hash) {
+    const id = route.hash.replace('#', '')
+    setTimeout(() => scrollToSection(id), 500)
+  } else {
+    setTimeout(() => {
+      if (!isSeccion1Visible.value) {
+        isSeccion1Visible.value = true
+        startCarousel()
+      }
+    }, 200)
+  }
+})
+
+onUnmounted(() => {
+  stopCarousel()
+  destroyObserver()
+})
+
+if (error.value) {
+  console.error('❌ [PAGE] Error:', error.value)
+}
+</script>
+
+<style scoped>
+.text-style {
+  font-family: 'Montserrat', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.global-fixed-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.8s ease-in-out, visibility 0.8s ease-in-out;
+}
+
+.global-fixed-background.show-fixed {
+  opacity: 1;
+  visibility: visible;
+}
+
+.seccion1-fondo { background-color: #d9d9d9; background-image: none; }
+.seccion2-fondo { background-color: #e0e0e0; background-image: none; }
+.seccion3-fondo { background-image: url('/Recurso 5.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat; }
+.seccion4-fondo { background-color: #ffffff; background-image: none; }
+
+html, body {
+  scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
+}
+
+section, .scroll-section {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.3, 1.2);
+}
+
+footer {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.3, 1.2);
+}
+
+.scroll-section {
+  position: relative;
+  width: 100%;
+  z-index: 5;
+  background: transparent;
+}
+
+.scroll-section.animate-in {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+.aspect-video { aspect-ratio: 16 / 9; }
+iframe { pointer-events: auto; }
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.aspect-\[4\/5\] {
+  aspect-ratio: 4 / 5;
+}
+
+.image-link-wrapper {
+  display: block;
+  cursor: pointer;
+  transform: scale(1);
+}
+
+.image-link-wrapper:hover {
+  transform: scale(1.02);
+  box-shadow: 0 25px 40px -12px rgba(0, 0, 0, 0.3);
+}
+
+.image-link-wrapper:active {
+  transform: scale(0.98);
+}
+
+.image-link-wrapper img {
+  transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.3, 1.2);
+}
+
+.image-link-wrapper:hover img {
+  transform: scale(1.05);
+}
+
+@keyframes slide-right {
+  0% { width: 0%; left: 0; }
+  50% { width: 100%; left: 0; }
+  100% { width: 0%; left: 100%; }
+}
+
+@keyframes slide-left {
+  0% { width: 0%; right: 0; }
+  50% { width: 100%; right: 0; }
+  100% { width: 0%; right: 100%; }
+}
+
+@keyframes slide-down {
+  0% { height: 0%; top: 0; }
+  50% { height: 100%; top: 0; }
+  100% { height: 0%; top: 100%; }
+}
+
+@keyframes slide-up {
+  0% { height: 0%; bottom: 0; }
+  50% { height: 100%; bottom: 0; }
+  100% { height: 0%; bottom: 100%; }
+}
+
+.animate-slide-right { animation: slide-right 4s ease-in-out infinite; }
+.animate-slide-left { animation: slide-left 4s ease-in-out infinite; }
+.animate-slide-down { animation: slide-down 4s ease-in-out infinite; }
+.animate-slide-up { animation: slide-up 4s ease-in-out infinite; }
+</style>
+
+<style>
+.scroll-section {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+.scroll-section.animate-in {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+.scroll-section.animate-in > * {
+  animation: fadeInUpChild 0.6s ease-out forwards;
+}
+
+@keyframes fadeInUpChild {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+footer {
+  display: block !important;
+  position: relative !important;
+  z-index: 100 !important;
+  background-image: url('/footer-main.png') !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-section,
+  .scroll-section.animate-in,
+  .scroll-section.animate-in > * {
+    transition: none !important;
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+</style> 
+================================= 
+pages\en-construccion.vue 
+================================= 
+ 
+<!-- pages/en-construccion.vue -->
+<template>
+  <div class="min-h-screen w-full relative">
+    <!-- Imagen de fondo -->
+    <img 
+      src="/images/Mesa de trabajo 3.png" 
+      alt="Página en construcción" 
+      class="w-full h-screen object-cover object-center"
+    />
+    
+    <!-- Botón volver al inicio -->
+    <button 
+      @click="goToHome"
+      class="fixed bottom-8 right-8 z-20 px-6 py-2 bg-[#E03636] hover:bg-[#C12F2F] text-white font-semibold rounded-lg transition-all duration-300 shadow-lg"
+    >
+      ← Volver
+    </button>
+  </div>
+</template>
+
+<script setup>
+definePageMeta({
+  layout: 'alter8'
+})
+
+const goToHome = () => {
+  navigateTo('/')
+}
+
+// Forzar scroll al inicio de la página
+onMounted(() => {
+  window.scrollTo(0, 0)
+  // También intentar con el contenedor snap si existe
+  const snapContainer = document.querySelector('.snap-container')
+  if (snapContainer) {
+    snapContainer.scrollTo(0, 0)
+  }
+})
+</script> 
+================================= 
+pages\gestion-legislativa.vue 
+================================= 
+ 
+<!-- pages/gestion-legislativa.vue - VERSIÓN CORREGIDA -->
+<template>
+  <div class="min-h-screen text-style">
+    <!-- Fondo fijo GLOBAL - PARA las secciones que lo necesiten -->
+    <div class="global-fixed-background" :class="{ 'show-fixed': isSection2Visible || isSection3Visible || isSection4Visible }"></div>
+    
+    <!-- Hero Section - Sesiones del Pleno (PRIMERA SECCIÓN) -->
+    <section 
+      id="sesiones-pleno"
+      class="relative h-screen flex items-start overflow-hidden transition-all duration-500"
+      :class="{ 'min-h-[40vh] md:min-h-[45vh]': scrolled }"
+      ref="plenarySessionsRef"
+      style="background-color: #eeeeee; background-size: cover"
+    >
+      <PlenarySessions />
+      <ScrollProgress
+        :scrolled="scrolled"
+        :scroll-progress="scrollProgress"
+      />
+    </section>
+
+    <!-- Sección Directiva Camaral (SEGUNDA SECCIÓN) -->
+    <div 
+      id="area-de-legislacion"
+      ref="section2Ref" 
+      class="scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out z-10"
+      :class="{ 'animate-in': isSection2Visible }"
+      style="min-height: 100vh; position: relative; background: transparent; align-items: center; display: flex; justify-content: center; flex-direction: column;"
+    >
+      <LegislationTable
+        :hash="hashParams" 
+        :query="$route.query"
+      ></LegislationTable>
+    </div>
+    
+    <!-- Sección Reseña Histórica Original (TERCERA SECCIÓN) -->
+    <div 
+      id="area-de-fiscalizacion"
+      ref="section3Ref" 
+      class="scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out delay-200 z-10"
+      :class="{ 'animate-in': isSection3Visible }"
+      style="min-height: 100vh; position: relative; background: transparent; align-items: center; display: flex; justify-content: center; flex-direction: column;"
+    >
+      <FiscalizationTable
+        :hash="hashParams" 
+        :query="$route.query"
+      ></FiscalizationTable>
+    </div>
+
+    <!-- Sección Reseña Histórica Duplicada (CUARTA SECCIÓN) -->
+    <div 
+      id="area-de-gestion"
+      ref="section4Ref" 
+      class="scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out delay-200 z-10"
+      :class="{ 'animate-in': isSection4Visible }"
+      style="min-height: 100vh; position: relative; background: transparent; align-items: center; display: flex; justify-content: center; flex-direction: column;"
+    >
+      <ManagementTable
+        :hash="hashParams" 
+        :query="$route.query"
+      ></ManagementTable>
+    </div>
+    
+    <!-- Sección Museo / Gaceta Legislativa (QUINTA SECCIÓN) -->
+    <div 
+      id="gaceta-legislativa"
+      ref="section5Ref" 
+      class="h-screen w-full scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out delay-400 z-10"
+      :class="{ 'animate-in': isSection5Visible }"
+      style="background-color: #eeeeee; background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed;"
+    >
+      <LegislativeGazette />
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted, onUnmounted, nextTick, watch, computed } from 'vue'
+import { useRoute } from 'vue-router'
+import { useScrollEffects } from '@/composables/useScrollEffects'
+import ScrollProgress from '@/components/UI/ScrollProgress.vue'
+import PlenarySessions from '~/components/PlenarySessions.vue'
+import LegislativeGazette from '~/components/LegislativeGazette.vue'
+import LegislationTable from '~/components/LegislationTable.vue'
+import FiscalizationTable from '~/components/FiscalizationTable.vue'
+import ManagementTable from '~/components/ManagementTable.vue'
+
+const hashParams = computed(() => {
+  const hash = route.hash
+  if (!hash) return {}
+  return hash.substring(1)
+})
+
+const { scrolled, scrollProgress, initScrollListener, removeScrollListener } = useScrollEffects()
+const route = useRoute()
+
+const plenarySessionsRef = ref(null)
+const section2Ref = ref(null)
+const section3Ref = ref(null)
+const section4Ref = ref(null)
+const section5Ref = ref(null)
+
+const isSection2Visible = ref(false)
+const isSection3Visible = ref(false)
+const isSection4Visible = ref(false)
+const isSection5Visible = ref(false)
+
+// Mapa de secciones para scroll
+const sections = {
+  'sesiones-pleno': plenarySessionsRef,
+  'area-de-legislacion': section2Ref,
+  'area-de-fiscalizacion': section3Ref,
+  'area-de-gestion': section4Ref,
+  'gaceta-legislativa': section5Ref
+}
+
+// Función mejorada para hacer scroll a una sección
+const scrollToSection = (id) => {
+  const sectionRef = sections[id]
+  if (sectionRef?.value) {
+    // Desactivar scroll-snap temporalmente
+    const container = document.querySelector('.snap-container')
+    if (container) {
+      container.style.scrollSnapType = 'none'
+    }
+    
+    // Hacer scroll a la sección
+    sectionRef.value.scrollIntoView({ 
+      behavior: 'smooth', 
+      block: 'start',
+      inline: 'nearest'
+    })
+    
+    // Reactivar scroll-snap después del scroll
+    setTimeout(() => {
+      if (container) {
+        container.style.scrollSnapType = 'y mandatory'
+      }
+    }, 800)
+  }
+}
+
+let scrollObserver = null
+
+const initScrollObserver = () => {
+  scrollObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          if (entry.target === section2Ref.value) {
+            isSection2Visible.value = true;
+          } else if (entry.target === section3Ref.value) {
+            isSection3Visible.value = true;
+          } else if (entry.target === section4Ref.value) {
+            isSection4Visible.value = true;
+          } else if (entry.target === section5Ref.value) {
+            isSection5Visible.value = true;
+          }
+          
+          entry.target.classList.add('animate-in');
+          scrollObserver.unobserve(entry.target);
+        }
+      });
+    },
+    {
+      threshold: 0.15,
+      rootMargin: '0px 0px -30px 0px'
+    }
+  );
+  
+  const sectionsToObserve = [
+    section2Ref.value,
+    section3Ref.value,
+    section4Ref.value,
+    section5Ref.value
+  ];
+  
+  sectionsToObserve.forEach(section => {
+    if (section) {
+      scrollObserver.observe(section);
+    }
+  });
+};
+
+onMounted(async () => {
+  initScrollListener();
+  await nextTick();
+  initScrollObserver();
+  
+  // Si hay hash al cargar la página, hacer scroll
+  if (route.hash) {
+    const id = route.hash.replace('#', '')
+    setTimeout(() => {
+      scrollToSection(id)
+    }, 500)
+  }
+});
+
+// Detectar cambios en el hash (navegación desde el menú)
+watch(() => route.hash, (newHash) => {
+  if (newHash) {
+    const id = newHash.replace('#', '')
+    scrollToSection(id)
+  }
+})
+
+onUnmounted(() => {
+  removeScrollListener();
+  if (scrollObserver) {
+    scrollObserver.disconnect();
+  }
+});
+
+definePageMeta({
+  layout: 'alter8'
+});
+</script>
+
+<style scoped>
+.text-style {
+  font-family: 'Montserrat', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ===== SNAP SCROLL CON PADDING PARA HEADER ===== */
+:global(html), :global(body) {
+  scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
+  scroll-padding-top: 80px;
+}
+
+/* Cada sección con snap */
+section, .scroll-section {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.3, 1.2);
+}
+
+/* El footer también hace snap - ESTO ES CRUCIAL */
+footer {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.3, 1.2);
+}
+
+/* ===== FONDO FIJO ===== */
+.global-fixed-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: url('/Recurso_2.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: #f1f1f3;
+  z-index: 0;
+  pointer-events: none;
+  will-change: transform;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.global-fixed-background::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(
+    circle at 50% 30%,
+    transparent 0%,
+    rgba(0, 0, 0, 0.25) 80%,
+    rgba(0, 0, 0, 0.35) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.global-fixed-background.show-fixed {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Todas las secciones */
+.scroll-section {
+  position: relative;
+  width: 100%;
+  z-index: 5;
+}
+
+/* Transparencias para cada sección */
+[ref="plenarySessionsRef"],
+[ref="section2Ref"],
+[ref="section3Ref"],
+[ref="section4Ref"],
+[ref="section5Ref"] {
+  background: transparent !important;
+}
+</style>
+
+<style>
+.scroll-section {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+.scroll-section.animate-in {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+.scroll-section.animate-in > * {
+  animation: fadeInUpChild 0.6s ease-out forwards;
+}
+
+@keyframes fadeInUpChild {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Scrollbar elegante */
+::-webkit-scrollbar {
+  width: 10px;
+  background: transparent;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(224, 54, 54, 0.4);
+  border-radius: 10px;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(224, 54, 54, 0.7);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Asegurar que el footer sea visible - ESTO ES CRUCIAL */
+footer {
+  display: block !important;
+  position: relative !important;
+  z-index: 100 !important;
+  background-image: url('/footer-main.png') !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-section,
+  .scroll-section.animate-in,
+  .scroll-section.animate-in > * {
+    transition: none !important;
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+</style> 
+================================= 
+pages\index.vue 
+================================= 
+ 
+<template>
+  <div class="min-h-screen text-style">
+    <!-- Fondo fijo GLOBAL - SOLO para Important News -->
+    <div class="global-fixed-background" :class="{ 'show-fixed': isImportantNewsVisible }"></div>
+    
+    <!-- Fondo fijo para More News -->
+    <div class="morenews-fixed-background" :class="{ 'show-fixed': isMoreNewsVisible }"></div>
+    
+    <!-- Hero Section con video persistente -->
+    <section 
+      class="relative h-screen flex items-center overflow-hidden transition-all duration-500 snap-section"
+      :class="{ 'min-h-[40vh] md:min-h-[45vh] pt-20': scrolled }"
+      ref="heroSection"
+      @mouseleave="resumeCarousel"
+    >
+      <!-- Video persistente de fondo -->
+      <div class="absolute inset-0 z-0">
+        <PersistentVideo
+          :src="heroVideoSrc"
+          autoplay
+          muted
+          loop
+          playsinline
+        />
+        <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent z-10"></div>
+      </div>
+      
+      <HeroContent :scrolled="scrolled" />
+      <ScrollProgress
+        :scrolled="scrolled"
+        :scroll-progress="scrollProgress"
+      />
+    </section>
+
+    <!-- Sección Important News - CON FONDO FIJO -->
+    <div 
+      ref="importantNewsRef" 
+      class="scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out z-10 snap-section"
+      :class="{ 'show': showSection, 'animate-in': isImportantNewsVisible }"
+      style="min-height: 100vh; position: relative; background: transparent;"
+    >
+      <!-- Contenedor del contenido -->
+      <div class="pt-1 relative z-20 flex items-center justify-center min-h-screen">
+        <div class="news-container">
+          <ImportantNewsSection />
+        </div>
+      </div>
+    </div>
+    
+    <!-- Más noticias - CON FONDO FIJO -->
+    <div 
+      ref="moreNewsRef" 
+      class="h-screen scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out delay-200 z-10 snap-section"
+      :class="{ 'animate-in': isMoreNewsVisible }"
+      style="position: relative;"
+    >
+      <!-- Contenedor del contenido con fondo transparente -->
+      <div style="position: relative; z-index: 2; background: transparent; height: 100%;" class="pt-3">
+        <MoreNewsGrid targetRoute="/centro-de-noticias#noticias-importantes"/>
+      </div>
+    </div>
+    
+    <!-- Parte de los senadores - SIN FONDO FIJO -->
+    <div 
+      ref="senateRef" 
+      class="h-screen w-full scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out delay-300 z-10 snap-section"
+      :class="{ 'animate-in': isSenateVisible }"
+      style="position: relative; background: #f5f5f5;"
+    >
+      <div class="h-[4.4vw]"></div>
+      <SenateChamber
+        :show-footer="false"
+        class="h-screen"
+      >
+        <template #header>
+          <div class="px-1 xs:px-2 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16 3xl:px-20 4xl:px-24 5xl:px-32 text-center sm:text-left">
+            <h2 class="font-bold text-white leading-tight
+                      text-[11px] xs:text-[14px] sm:text-[18px] md:text-[22px] 
+                      lg:text-[26px] xl:text-[30px] 2xl:text-[39px] 
+                      3xl:text-[58px] 4xl:text-[80px] 5xl:text-[102px] text-center
+                      p-1
+                      ">
+              Distribución del senado
+            </h2>
+          </div>
+        </template>
+      </SenateChamber>
+    </div>
+    
+
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted, onUnmounted, nextTick } from 'vue'
+import { useCarousel } from '@/composables/useCarousel'
+import { useScrollEffects } from '@/composables/useScrollEffects'
+import { usePriorityImages } from '@/composables/usePriorityImages'
+import SenateChamber from '@/components/SenateChamber.vue'
+import MuseumSectionMinimal from '@/components/MuseumSectionMinimal.vue'
+import HeroContent from '@/components/HeroSection/HeroContent.vue'
+import ScrollProgress from '@/components/UI/ScrollProgress.vue'
+import ImportantNewsSection from '@/components/ImportantNewsSection.vue'
+import MoreNewsGrid from '@/components/MoreNewsGrid.vue'
+import PersistentVideo from '@/components/PersistentVideo.vue'
+
+defineOptions({
+  name: 'IndexPage'
+})
+
+// ============================================
+// VIDEO DEL HERO
+// ============================================
+const heroVideoSrc = '/video/video web.mp4'
+
+// ============================================
+// PRECARGA DE IMÁGENES PRIORITARIAS
+// ============================================
+const { preloadPriorityImages, preloadImagesInViewport } = usePriorityImages()
+
+// ============================================
+// CAROUSEL (para compatibilidad con HeroContent)
+// ============================================
+const heroMedia = ref([
+  {
+    type: 'video',
+    url: '/video/video web.mp4',
+    alt: 'Video institucional del Senado de Bolivia'
+  },
+  {
+    type: 'image',
+    url: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
+    alt: 'Edificio del Senado Nacional de Bolivia'
+  },
+  {
+    type: 'image',
+    url: 'https://pxcdn.reduno.com.bo/reduno/112025/1762461432445.webp?cw=800&ch=450&extw=jpg',
+    alt: 'Edificio del Congreso Nacional de Bolivia'
+  },
+  {
+    type: 'image', 
+    url: 'https://apisi.senado.gob.bo/images/a001535c-1750-49a8-b277-37b32b038c45_1759275539.jpeg',
+    alt: 'Asamblea Legislativa Plurinacional de Bolivia'
+  }
+])
+
+const {
+  currentMediaIndex,
+  filteredHeroMedia,
+  startCarousel,
+  goToMedia,
+  pauseCarousel,
+  resumeCarousel
+} = useCarousel(heroMedia.value)
+
+// ============================================
+// SCROLL EFFECTS
+// ============================================
+const { scrolled, scrollProgress, initScrollListener, removeScrollListener } = useScrollEffects()
+
+// ============================================
+// REFS
+// ============================================
+const darkMode = ref(false)
+const heroSection = ref(null)
+const heroCarouselRef = ref(null)
+const showSection = ref(true)
+
+const importantNewsRef = ref(null)
+const moreNewsRef = ref(null)
+const senateRef = ref(null)
+const museumRef = ref(null)
+
+// ============================================
+// VISIBILITY STATES
+// ============================================
+const isImportantNewsVisible = ref(false)
+const isMoreNewsVisible = ref(false)
+const isSenateVisible = ref(false)
+const isMuseumVisible = ref(false)
+
+// ============================================
+// EVENT HANDLERS
+// ============================================
+const handleCollectionSelect = (collection) => {
+  console.log('Colección seleccionada:', collection)
+}
+
+const handleExhibitionSelect = (exhibition) => {
+  console.log('Exhibición seleccionada:', exhibition)
+}
+
+const handleProgramRegistration = (program) => {
+  console.log('Registro a programa:', program)
+}
+
+const handleVirtualTour = () => {
+  console.log('Tour virtual iniciado')
+}
+
+const handleDonationClick = () => {
+  console.log('Donación solicitada')
+}
+
+// ============================================
+// SCROLL OBSERVER
+// ============================================
+let scrollObserver = null
+
+const initScrollObserver = () => {
+  scrollObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          if (entry.target === importantNewsRef.value) {
+            isImportantNewsVisible.value = true
+          } else if (entry.target === moreNewsRef.value) {
+            isMoreNewsVisible.value = true
+          } else if (entry.target === senateRef.value) {
+            isSenateVisible.value = true
+          } else if (entry.target === museumRef.value) {
+            isMuseumVisible.value = true
+          }
+          
+          entry.target.classList.add('animate-in')
+          scrollObserver.unobserve(entry.target)
+        }
+      })
+    },
+    {
+      threshold: 0.15,
+      rootMargin: '0px 0px -30px 0px'
+    }
+  )
+  
+  const sections = [
+    importantNewsRef.value,
+    moreNewsRef.value,
+    senateRef.value,
+    museumRef.value
+  ]
+  
+  sections.forEach(section => {
+    if (section) {
+      scrollObserver.observe(section)
+    }
+  })
+}
+
+// ============================================
+// PRECARGA DE IMÁGENES EN SECCIONES VISIBLES
+// ============================================
+let imageObserver = null
+
+const initImagePreload = () => {
+  // Observar cambios en el DOM para precargar imágenes cuando aparecen
+  const observer = new MutationObserver(() => {
+    // Precargar imágenes en el viewport actual
+    const containers = document.querySelectorAll('.scroll-section')
+    containers.forEach(container => {
+      if (container.getBoundingClientRect().top < window.innerHeight) {
+        preloadImagesInViewport(container)
+      }
+    })
+  })
+  
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
+  })
+  
+  return observer
+}
+
+// ============================================
+// LIFECYCLE
+// ============================================
+onMounted(async () => {
+  console.log('🎬 IndexPage montada')
+  
+  // 1. Precargar imágenes prioritarias
+  preloadPriorityImages()
+  
+  // 2. Iniciar carrusel (para compatibilidad)
+  startCarousel()
+  
+  // 3. Inicializar scroll
+  initScrollListener()
+  
+  await nextTick()
+  showSection.value = true
+  
+  // 4. Inicializar observers
+  initScrollObserver()
+  imageObserver = initImagePreload()
+  
+  // 5. Forzar scroll al inicio
+  const doScroll = () => {
+    window.scrollTo({ top: 0, behavior: 'auto' })
+    const container = document.querySelector('.snap-container')
+    if (container) container.scrollTo({ top: 0, behavior: 'auto' })
+  }
+  
+  setTimeout(doScroll, 10)
+  setTimeout(doScroll, 100)
+  setTimeout(doScroll, 300)
+  
+  // ✅ ELIMINADOS: setTimeout(forceVideoPlayback, ...) - ya no son necesarios
+  // ✅ ELIMINADOS: event listeners click/touchstart/scroll - ya no son necesarios
+})
+
+onUnmounted(() => {
+  removeScrollListener()
+  
+  if (scrollObserver) {
+    scrollObserver.disconnect()
+  }
+  
+  if (imageObserver) {
+    imageObserver.disconnect()
+  }
+  
+  // ✅ ELIMINADOS: removeEventListener de click/touchstart/scroll
+})
+
+// ============================================
+// PAGE META
+// ============================================
+definePageMeta({
+  layout: 'alter8'
+})
+</script>
+
+<style scoped>
+.text-style {
+  font-family: 'Montserrat', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ===== SNAP SCROLL MÁS NOTORIO ===== */
+html, body {
+  scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
+  scroll-padding-top: 0;
+}
+
+/* Cada sección con snap */
+section, .scroll-section {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.3, 1.2);
+}
+
+/* El footer también hace snap */
+footer {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.3, 1.2);
+}
+
+/* ===== FONDO FIJO - SOLO PARA IMPORTANT NEWS ===== */
+.global-fixed-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: url('/Recurso_2.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: #f1f1f3;
+  z-index: 0;
+  pointer-events: none;
+  will-change: transform;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.global-fixed-background::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(
+    circle at 50% 30%,
+    transparent 0%,
+    rgba(0, 0, 0, 0.25) 80%,
+    rgba(0, 0, 0, 0.35) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.global-fixed-background.show-fixed {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ===== FONDO FIJO PARA MORE NEWS ===== */
+.morenews-fixed-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: url('/Recurso_2.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: #f1f1f3;
+  z-index: 0;
+  pointer-events: none;
+  will-change: transform;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.morenews-fixed-background::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(
+    circle at 50% 30%,
+    transparent 0%,
+    rgba(0, 0, 0, 0.25) 80%,
+    rgba(0, 0, 0, 0.35) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.morenews-fixed-background.show-fixed {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Todas las secciones */
+.scroll-section {
+  position: relative;
+  width: 100%;
+  z-index: 5;
+}
+
+/* Important News debe ser transparente */
+[ref="importantNewsRef"] {
+  background: transparent !important;
+}
+
+/* More News debe ser transparente para mostrar su fondo fijo */
+[ref="moreNewsRef"] {
+  background: transparent !important;
+}
+
+/* Las otras secciones tienen fondos sólidos */
+[ref="senateRef"] {
+  background: #f5f5f5 !important;
+}
+
+[ref="museumRef"] {
+  background: transparent !important;
+}
+
+.news-container {
+  width: 85%;
+  margin: 0 auto;
+  background: transparent !important;
+  position: relative;
+  z-index: 10;
+}
+</style>
+
+<style>
+.scroll-section {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+.scroll-section.animate-in {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+.scroll-section.animate-in > * {
+  animation: fadeInUpChild 0.6s ease-out forwards;
+}
+
+@keyframes fadeInUpChild {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Scrollbar elegante */
+::-webkit-scrollbar {
+  width: 10px;
+  background: transparent;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(224, 54, 54, 0.4);
+  border-radius: 10px;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(224, 54, 54, 0.7);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Asegurar que el footer sea visible */
+footer {
+  display: block !important;
+  position: relative !important;
+  z-index: 100 !important;
+  background-image: url('/footer-main.png') !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-section,
+  .scroll-section.animate-in,
+  .scroll-section.animate-in > * {
+    transition: none !important;
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+</style> 
+================================= 
+pages\index2.vue 
+================================= 
+ 
+<!-- pages/index.vue - VERSIÓN CON SNAP MEJORADO Y FONDO DEL MUSEO -->
+<template>
+  <div class="min-h-screen text-style">
+    <!-- Fondo fijo GLOBAL - SOLO para Important News -->
+    <div class="global-fixed-background" :class="{ 'show-fixed': isImportantNewsVisible }"></div>
+    
+    <!-- Hero Section -->
+    <section 
+      class="relative h-screen flex items-center overflow-hidden transition-all duration-500 snap-section"
+      :class="{ 'min-h-[40vh] md:min-h-[45vh] pt-20': scrolled }"
+      ref="heroSection"
+      @mouseleave="resumeCarousel"
+    >
+      <HeroCarousel
+        :scrolled="scrolled"
+        :current-media-index="currentMediaIndex"
+        :filtered-hero-media="filteredHeroMedia"
+      />
+      <HeroContent :scrolled="scrolled" />
+      <ScrollProgress
+        :scrolled="scrolled"
+        :scroll-progress="scrollProgress"
+      />
+    </section>
+
+    <!-- Transición entre secciones -->
+    <div class="relative h-6 -mt-8 overflow-hidden z-20 snap-section">
+      <div class="absolute inset-0 bg-gradient-to-b from-transparent via-white/20 to-white"></div>
+      <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#E03636]/30 to-transparent"></div>
+    </div>
+
+    <!-- Sección Important News -->
+    <div 
+      ref="importantNewsRef" 
+      class="scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out z-10 snap-section"
+      :class="{ 'show': showSection, 'animate-in': isImportantNewsVisible }"
+      style="min-height: 100vh; position: relative; background: transparent;"
+    >
+      <!-- Contenedor del contenido -->
+      <div class="relative z-20 flex items-center justify-center min-h-screen">
+        <div class="news-container">
+          <ImportantNewsSection />
+        </div>
+      </div>
+    </div>
+    
+    <!-- Más noticias -->
+    <div 
+      ref="moreNewsRef" 
+      class="h-screen scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out delay-200 z-10 snap-section"
+      :class="{ 'animate-in': isMoreNewsVisible }"
+      style="position: relative; background: white;"
+    >
+      <MoreNewsGrid />
+    </div>
+    
+    <!-- Parte de los senadores -->
+    <div 
+      ref="senateRef" 
+      class="h-screen w-full scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out delay-300 z-10 snap-section"
+      :class="{ 'animate-in': isSenateVisible }"
+      style="position: relative; background: #f5f5f5;"
+    >
+      <SenateChamber
+        :show-footer="false"
+        class="h-screen"
+      >
+        <template #header>
+          <div class="custom-header">
+            <h2 class="text-3xl md:text-4xl font-bold text-white">
+              Distribución del senado
+            </h2>
+            <h5 class="text-white">Selecciona un senador para ver detalles</h5>
+          </div>
+        </template>
+      </SenateChamber>
+    </div>
+    
+    <!-- Museo - CON SU PROPIO FONDO (AGREGADO DIRECTAMENTE) -->
+    <div 
+      ref="museumRef" 
+      class="h-screen w-full scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out delay-400 z-10 snap-section"
+      :class="{ 'animate-in': isMuseumVisible }"
+      style="background-image: url('/fondo1.png'); background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed;"
+    >
+      <MuseumSectionMinimal
+        :dark-mode="darkMode"
+        @collection-selected="handleCollectionSelect"
+        @exhibition-selected="handleExhibitionSelect"
+        @program-registration="handleProgramRegistration"
+        @virtual-tour-started="handleVirtualTour"
+        @donation-clicked="handleDonationClick"
+      />
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted, onUnmounted, nextTick } from 'vue'
+import { useCarousel } from '@/composables/useCarousel'
+import { useScrollEffects } from '@/composables/useScrollEffects'
+import SenateChamber from '@/components/SenateChamber.vue'
+import MuseumSectionMinimal from '@/components/MuseumSectionMinimal.vue'
+import HeroCarousel from '@/components/HeroSection/HeroCarousel.vue'
+import HeroContent from '@/components/HeroSection/HeroContent.vue'
+import ScrollProgress from '@/components/UI/ScrollProgress.vue'
+import ImportantNewsSection from '@/components/ImportantNewsSection.vue'
+import MoreNewsGrid from '@/components/MoreNewsGrid.vue'
+
+const heroMedia = ref([
+  {
+    type: 'video',
+    url: 'https://senado.gob.bo//assets/intro2025-C9lburAD.mp4',
+    alt: 'Video institucional del Senado de Bolivia'
+  },
+  {
+    type: 'image',
+    url: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
+    alt: 'Edificio del Senado Nacional de Bolivia'
+  },
+  {
+    type: 'image',
+    url: 'https://pxcdn.reduno.com.bo/reduno/112025/1762461432445.webp?cw=800&ch=450&extw=jpg',
+    alt: 'Edificio del Congreso Nacional de Bolivia'
+  },
+  {
+    type: 'image', 
+    url: 'https://apisi.senado.gob.bo/images/a001535c-1750-49a8-b277-37b32b038c45_1759275539.jpeg',
+    alt: 'Asamblea Legislativa Plurinacional de Bolivia'
+  }
+])
+
+const {
+  currentMediaIndex,
+  filteredHeroMedia,
+  startCarousel,
+  goToMedia,
+  pauseCarousel,
+  resumeCarousel
+} = useCarousel(heroMedia.value)
+
+const { scrolled, scrollProgress, initScrollListener, removeScrollListener } = useScrollEffects()
+
+const darkMode = ref(false)
+const heroSection = ref(null)
+const showSection = ref(true)
+
+const importantNewsRef = ref(null)
+const moreNewsRef = ref(null)
+const senateRef = ref(null)
+const museumRef = ref(null)
+
+const isImportantNewsVisible = ref(false)
+const isMoreNewsVisible = ref(false)
+const isSenateVisible = ref(false)
+const isMuseumVisible = ref(false)
+
+const handleCollectionSelect = (collection) => {
+  console.log('Colección seleccionada:', collection)
+}
+
+const handleExhibitionSelect = (exhibition) => {
+  console.log('Exhibición seleccionada:', exhibition)
+}
+
+const handleProgramRegistration = (program) => {
+  console.log('Registro a programa:', program)
+}
+
+const handleVirtualTour = () => {
+  console.log('Tour virtual iniciado')
+}
+
+const handleDonationClick = () => {
+  console.log('Donación solicitada')
+}
+
+let scrollObserver = null
+
+const initScrollObserver = () => {
+  scrollObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          if (entry.target === importantNewsRef.value) {
+            isImportantNewsVisible.value = true;
+          } else if (entry.target === moreNewsRef.value) {
+            isMoreNewsVisible.value = true;
+          } else if (entry.target === senateRef.value) {
+            isSenateVisible.value = true;
+          } else if (entry.target === museumRef.value) {
+            isMuseumVisible.value = true;
+          }
+          
+          entry.target.classList.add('animate-in');
+          scrollObserver.unobserve(entry.target);
+        }
+      });
+    },
+    {
+      threshold: 0.15,
+      rootMargin: '0px 0px -30px 0px'
+    }
+  );
+  
+  const sections = [
+    importantNewsRef.value,
+    moreNewsRef.value,
+    senateRef.value,
+    museumRef.value
+  ];
+  
+  sections.forEach(section => {
+    if (section) {
+      scrollObserver.observe(section);
+    }
+  });
+};
+
+onMounted(async () => {
+  startCarousel();
+  initScrollListener();
+  await nextTick();
+  showSection.value = true;
+  initScrollObserver();
+});
+
+onUnmounted(() => {
+  removeScrollListener();
+  if (scrollObserver) {
+    scrollObserver.disconnect();
+  }
+});
+
+definePageMeta({
+  layout: 'alter8'
+});
+</script>
+
+<style scoped>
+.text-style {
+  font-family: 'Montserrat', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ===== SNAP SCROLL MÁS NOTORIO ===== */
+html, body {
+  scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
+  scroll-padding-top: 0;
+}
+
+/* Cada sección con snap - MÁS AGL UTILIZANDO SCROLL-SNAP-STOP */
+section, .scroll-section {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  transition: transform 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.1);
+}
+
+/* El footer también hace snap */
+footer {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  transition: transform 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.1);
+}
+
+/* ===== FONDO FIJO - SOLO PARA IMPORTANT NEWS ===== */
+.global-fixed-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: url('/Recurso_2.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: #f1f1f3;
+  z-index: 0;
+  pointer-events: none;
+  will-change: transform;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+/* Overlay elegante */
+.global-fixed-background::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(
+    circle at 50% 30%,
+    transparent 0%,
+    rgba(0, 0, 0, 0.25) 80%,
+    rgba(0, 0, 0, 0.35) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Mostrar solo cuando estamos en Important News */
+.global-fixed-background.show-fixed {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Todas las secciones */
+.scroll-section {
+  position: relative;
+  width: 100%;
+  z-index: 5;
+}
+
+/* Important News debe ser transparente */
+[ref="importantNewsRef"] {
+  background: transparent !important;
+}
+
+/* Las otras secciones tienen fondos sólidos */
+[ref="moreNewsRef"] {
+  background: white !important;
+}
+
+[ref="senateRef"] {
+  background: #f5f5f5 !important;
+}
+
+/* Museo - SIN FONDO AQUÍ PORQUE YA LO TIENE EN EL STYLE INLINE */
+[ref="museumRef"] {
+  background: transparent !important; /* El fondo viene del style inline */
+}
+
+.news-container {
+  width: 90%;
+  margin: 0 auto;
+  max-width: 1400px;
+  background: transparent !important;
+  position: relative;
+  z-index: 10;
+}
+
+@media (max-width: 768px) {
+  .news-container {
+    width: 95%;
+  }
+}
+
+@media (max-width: 480px) {
+  .news-container {
+    width: 98%;
+  }
+}
+</style>
+
+<style>
+.scroll-section {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+.scroll-section.animate-in {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+.scroll-section.animate-in > * {
+  animation: fadeInUpChild 0.6s ease-out forwards;
+}
+
+@keyframes fadeInUpChild {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Scrollbar elegante */
+::-webkit-scrollbar {
+  width: 10px;
+  background: transparent;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(224, 54, 54, 0.4);
+  border-radius: 10px;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(224, 54, 54, 0.7);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Asegurar que el footer sea visible */
+footer {
+  display: block !important;
+  position: relative !important;
+  z-index: 100 !important;
+  min-height: 250px;
+  background-image: url('/footer-main.png') !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-section,
+  .scroll-section.animate-in,
+  .scroll-section.animate-in > * {
+    transition: none !important;
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+</style> 
+================================= 
 pages\index7.vue 
 ================================= 
  
@@ -776,14 +2894,8 @@ footer {
 }
 
 @keyframes fadeInUpChild {
-  from {
-    opacity: 0;
-    transform: translateY(15px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 ::-webkit-scrollbar {
@@ -833,2149 +2945,5 @@ section:first-of-type {
     opacity: 1 !important;
     transform: none !important;
   }
-}
-</style> 
-================================= 
-pages\legisladores-nacionales.vue 
-================================= 
- 
-<template>
-  <div class="min-h-screen text-style">
-    <!-- Fondos fijos para cada sección -->
-    <div class="global-fixed-background seccion1-fondo" :class="{ 'show-fixed': isSeccion1Visible }"></div>
-    <div class="global-fixed-background seccion3-fondo" :class="{ 'show-fixed': isSeccion3Visible }"></div>
-    <div class="global-fixed-background seccion4-fondo" :class="{ 'show-fixed': isSeccion4Visible }"></div>
-    
-    <!-- ==================== SECCIÓN 1 ==================== -->
-    <section 
-      id="directiva-camaral"
-      class="relative h-screen overflow-y-auto transition-all duration-500"
-      ref="seccion1Ref"
-    >
-      <div class="text-[3vw] w-full text-center mt-[4.1vw] bg-white relative py-[.08vw]">
-        <div class="absolute top-0 left-0 h-[2px] bg-[#E4D294] animate-slide-right"></div>
-        <div class="absolute bottom-0 right-0 h-[2px] bg-[#E4D294] animate-slide-left"></div>
-        <div class="absolute top-0 right-0 w-[2px] bg-[#E4D294] animate-slide-down"></div>
-        <div class="absolute bottom-0 left-0 w-[2px] bg-[#E4D294] animate-slide-up"></div>
-        
-        <h2 class="text-[#E03636] font-semibold py-[-1.3vw]">
-          Directiva Camaral
-        </h2>
-        <p class="text-gray-500 translate-y-[-.5vw] text-[.35em]">Selecciona un senador para ver detalles</p>
-      </div>
-      <div class="mx-[5vw] px-4 z-10 relative mt-[2.3vh]">
-        <div class="flex flex-row gap-[2vw] h-full items-center">
-          
-          <div class="w-[60%] p-[0.8vw] rounded-2xl shadow-left-column" 
-              :style="{ backgroundColor: 'rgba(190, 0, 0, 0.60)' }">
-            
-            <div class="grid grid-cols-3 gap-[.6vh] mb-[1.8vh]">
-              <div v-for="persona in fila1" :key="persona.id" 
-                class="text-center cursor-pointer group"
-                @click="selectedImage = { 
-                  img: persona.imagen, 
-                  text: persona.textoCompleto, 
-                  nombre: persona.nombre, 
-                  apellido: persona.apellido, 
-                  cargo: persona.cargo 
-                }"
-              >
-                <div class="relative w-[16vh] h-[16vh] mx-auto">
-                  <div class="w-full h-full rounded-full overflow-hidden border-4 circle-shadow transition-all duration-300 group-hover:scale-[1.3] group-hover:relative group-hover:z-50" 
-                      style="border-color: #E4D294;">
-                    <img 
-                      :src="persona.imagen" 
-                      :alt="persona.nombre" 
-                      loading="lazy" 
-                      class="w-full h-full object-cover"
-                    />
-                  </div>
-                </div>
-                <p class="mt-2 text-white font-semibold drop-shadow text-[2.3vh]">{{ persona.nombre }}</p>
-                <p class="text-white font-semibold drop-shadow text-[2.3vh]">{{ persona.apellido }}</p>
-                <p class="text-gray-200 drop-shadow text-[1.8vh]">{{ persona.cargoPartido.toUpperCase() }}</p>
-                <p class="text-gray-200 drop-shadow text-[1.8vh]">{{ persona.partido.toUpperCase() }}</p>
-              </div>
-            </div>
-
-            <div class="grid grid-cols-3 gap-[.6vh]">
-              <div v-for="persona in fila2" :key="persona.id" 
-                class="text-center cursor-pointer group"
-                @click="selectedImage = { 
-                  img: persona.imagen, 
-                  text: persona.textoCompleto, 
-                  nombre: persona.nombre, 
-                  apellido: persona.apellido, 
-                  cargo: persona.cargo 
-                }"
-              >
-                <div class="relative w-[16vh] h-[16vh] mx-auto">
-                  <div class="w-full h-full rounded-full overflow-hidden border-4 circle-shadow transition-all duration-300 group-hover:scale-[1.3] group-hover:relative group-hover:z-50" 
-                      style="border-color: #E4D294;">
-                    <img 
-                      :src="persona.imagen" 
-                      :alt="persona.nombre" 
-                      loading="lazy" 
-                      class="w-full h-full object-cover"
-                    />
-                  </div>
-                </div>
-                <p class="mt-2 text-white font-semibold drop-shadow text-[2.3vh]">{{ persona.nombre }}</p>
-                <p class="text-white font-semibold drop-shadow text-[2.3vh]">{{ persona.apellido }}</p>
-                <p class="text-gray-200 drop-shadow text-[1.8vh]">{{ persona.cargoPartido.toUpperCase() }}</p>
-                <p class="text-gray-200 drop-shadow text-[1.8vh]">{{ persona.partido.toUpperCase() }}</p>
-              </div>
-            </div>
-          </div>
-          
-          <div class="w-[40%] flex flex-col items-center justify-center px-[3.0vh] py-[1.0vh] rounded-2xl shadow-right-column"
-              :style="{ backgroundColor: 'rgba(0, 0, 0, 0.0)' }">
-            <div class="w-[29vh] h-[29vh] rounded-full overflow-hidden mb-[.9vh] transition-all duration-300 circle-shadow-large border-[.4vh]" 
-                style="border-color: #E4D294;">
-              <img 
-                :src="selectedImage.img" 
-                :alt="selectedImage.nombre" 
-                loading="lazy" 
-                class="w-full h-full object-cover"
-              />
-            </div>
-            <h3 class="text-[2.9vh] font-bold text-white drop-shadow-lg text-center">
-              {{ selectedImage.nombre }}
-            </h3>
-            <h3 class="text-[2.9vh] font-bold text-white drop-shadow-lg mb-[.8vh] text-center">
-              {{ selectedImage.apellido }}
-            </h3>
-            <p class="text-gray-100 drop-shadow-lg mb-[.8vh] text-center text-[2.0vh]">
-              {{ selectedImage.cargo }}
-            </p>
-            <div class="text-center">
-              <p class="text-white drop-shadow-lg leading-relaxed text-[1.9vh] text-justify" v-html="selectedImage.text">
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <ScrollProgress
-        :scrolled="scrolled"
-        :scroll-progress="scrollProgress"
-      />
-    </section>
-
-    <!-- ==================== SECCIÓN 2 - COMISIONES Y COMITES ==================== -->
-    <div 
-      id="comisiones-y-comites"
-      ref="seccion2Ref" 
-      class="scroll-section opacity-0 transition-all duration-800 ease-out z-10 pt-[4.2vw]"
-      :class="{ 'animate-in': isSeccion2Visible }"
-      style="height: 100vh; position: relative; background: white; overflow-y: auto;"
-    >
-      <div class="mx-[5vw] px-4 h-full flex flex-col">
-        <div class="bg-[#E03636] rounded-lg flex-shrink-0">
-          <h2 class="text-[2.2vw] font-bold text-center text-white py-[0.5vw] tracking-wide">
-            COMISIONES Y COMITÉS
-          </h2>
-        </div>
-
-        <!-- Contenedor padre con flex y items-center para alinear verticalmente - AHORA OCUPA TODO EL ALTO -->
-        <div class="flex flex-col md:flex-row gap-6 flex-1 items-center">
-          
-          <!-- COLUMNA IZQUIERDA: Lista de comisiones -->
-          <div class="w-full md:w-[40%]">
-            <button
-              v-for="comision in comisionesList"
-              :key="comision.id"
-              @click="seleccionarComision(comision)"
-              :class="[
-                'w-full py-[.1vw] px-4 rounded-lg font-semibold transition-all duration-300 text-left',
-                comisionSeleccionada?.id === comision.id 
-                  ? 'bg-[#E03636] text-white' 
-                  : 'bg-white text-[#E03636] border border-[#E03636] hover:bg-[#E03636] hover:text-white'
-              ]"
-              class="text-[1.05vw]"
-            >
-              {{ comision.nombre }}
-            </button>
-          </div>
-
-          <!-- COLUMNA DERECHA: Detalle de la comisión -->
-          <div class="w-full md:w-[60%] bg-gray-400/90 rounded-lg text-[1vw]">
-            <div v-if="comisionSeleccionada">
-              <h3 class="text-[1.6vw] font-bold text-white drop-shadow-md text-center">
-                {{ comisionSeleccionada.nombre }}
-              </h3>
-
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-0">
-                <div v-for="(miembro, idx) in comisionSeleccionada.miembrosGrupo1" :key="'g1-'+idx" class="flex items-center gap-0 p-[1vw] rounded-lg pl-[2vw]">
-                  <img 
-                    :src="miembro.foto" 
-                    :alt="miembro.nombre" 
-                    loading="lazy" 
-                    class="w-[7vw] h-[7vw] rounded-full object-cover transition-all duration-700 hover:scale-[2] hover:z-50"
-                  />
-                  <div class="text-white text-center text-[1.vw]">
-                    <p class="font-bold drop-shadow-md">{{ miembro.cargo }}</p>
-                    <p class="drop-shadow-md">{{ miembro.nombre }}</p>
-                    <p class="drop-shadow-md">{{ miembro.apellido }}</p>
-                    <p class="drop-shadow-md">{{ miembro.partido }}</p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="py-[.4vw] bg-[#E03636]">
-                <h4 class="font-semibold text-white text-[.95em] text-center">{{ comisionSeleccionada.tituloLinea1 }}</h4>
-              </div>
-
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-0">
-                <div v-for="(miembro, idx) in comisionSeleccionada.miembrosGrupo2" :key="'g2-'+idx" class="flex items-center gap-0 p-[1vw] rounded-lg pl-[2vw]">
-                  <img 
-                    :src="miembro.foto" 
-                    :alt="miembro.nombre" 
-                    loading="lazy" 
-                    class="w-[7vw] h-[7vw] rounded-full object-cover transition-all duration-700 hover:scale-[2] hover:z-50"
-                  />
-                  <div class="text-white text-center text-[1vw]">
-                    <p class="font-bold drop-shadow-md">{{ miembro.cargo }}</p>
-                    <p class="drop-shadow-md">{{ miembro.nombre }}</p>
-                    <p class="drop-shadow-md">{{ miembro.apellido }}</p>
-                    <p class="drop-shadow-md">{{ miembro.partido }}</p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="py-[.4vw] bg-[#E03636]">
-                <h4 class="text-[.95em] font-semibold text-white text-center">{{ comisionSeleccionada.tituloLinea2 }}</h4>
-              </div>
-
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-0">
-                <div v-for="(miembro, idx) in comisionSeleccionada.miembrosGrupo3" :key="'g3-'+idx" class="flex items-center gap-0 p-[1vw] rounded-lg pl-[2vw]">
-                  <img 
-                    :src="miembro.foto" 
-                    :alt="miembro.nombre" 
-                    loading="lazy" 
-                    class="w-[7vw] h-[7vw] rounded-full object-cover transition-all duration-700 hover:scale-[2] hover:z-50"
-                  />
-                  <div class="text-white text-center text-[1vw]">
-                    <p class="font-bold drop-shadow-md">{{ miembro.cargo }}</p>
-                    <p class="drop-shadow-md">{{ miembro.nombre }}</p>
-                    <p class="drop-shadow-md">{{ miembro.apellido }}</p>
-                    <p class="drop-shadow-md">{{ miembro.partido }}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div v-else class="flex items-center justify-center h-96">
-              <p class="text-gray-500 text-lg">Seleccione una comisión o comité para ver sus miembros</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    <!-- ==================== SECCIÓN 3 - BRIGADAS PARLAMENTARIAS ==================== -->
-    <div 
-      id="brigadas-parlamentarias"
-      ref="seccion3Ref" 
-      class="scroll-section opacity-0 transition-all duration-800 ease-out delay-200 z-10"
-      :class="{ 'animate-in': isSeccion3Visible }"
-      style="height: 100vh; position: relative; background: transparent; display: flex; flex-direction: column; overflow-y: auto;"
-    >
-      <div class="w-full text-center mt-[4.1vw] mb-0 relative py-[.2em] flex-shrink-0">
-        <div class="absolute top-0 left-0 h-[2px] bg-[#E4D294] animate-slide-right"></div>
-        <div class="absolute bottom-0 right-0 h-[2px] bg-[#E4D294] animate-slide-left"></div>
-        <div class="absolute top-0 right-0 w-[2px] bg-[#E4D294] animate-slide-down"></div>
-        <div class="absolute bottom-0 left-0 w-[2px] bg-[#E4D294] animate-slide-up"></div>
-        
-        <h2 class="text-[3vw] text-white font-semibold bg-[#E03636]">
-          Brigadas Parlamentarias
-        </h2>
-      </div>
-      
-      <div class="mx-auto px-4 z-10 relative w-full flex-1 flex flex-col justify-center">
-        
-        <!-- SKELETON LOADER mientras cargan los departamentos -->
-        <div v-if="!departamentosLoaded" class="flex flex-col items-center justify-center" style="min-height: 60vh;">
-          <div class="animate-spin rounded-full h-16 w-16 border-4 border-[#E03636] border-t-transparent mb-4"></div>
-          <p class="text-white text-lg">Cargando brigadas parlamentarias...</p>
-        </div>
-        
-        <!-- CONTENIDO REAL - Solo cuando los datos están cargados -->
-        <template v-else>
-          <div v-if="!departamentoSeleccionado" class="flex flex-col items-center justify-center">
-            <div class="grid grid-cols-5 gap-8 mb-8">
-              <div v-for="dep in departamentos.slice(0,5)" :key="dep.id" 
-                  @click="seleccionarDepartamento(dep)"
-                  class="cursor-pointer transition-all duration-300 hover:scale-[1.5] text-center group relative hover:z-50">
-                <div v-html="dep.escudoDorado" 
-                    class="w-[15vw] h-[15vw] mx-auto transition-all duration-300 group-hover:opacity-0"></div>
-                <div v-html="dep.escudoReal" 
-                    class="w-[15vw] h-[15vw] mx-auto absolute top-0 left-0 right-0 transition-all duration-300 opacity-0 group-hover:opacity-100 group-hover:z-10"></div>
-                <p class="text-center text-white mt-2 text-[2.4vh] font-semibold relative z-0">{{ dep.nombre }}</p>
-              </div>
-            </div>
-            <div class="grid grid-cols-4 gap-8">
-              <div v-for="dep in departamentos.slice(5,9)" :key="dep.id" 
-                  @click="seleccionarDepartamento(dep)"
-                  class="cursor-pointer transition-all duration-300 hover:scale-[1.5] text-center group relative hover:z-50">
-                <div v-html="dep.escudoDorado" 
-                    class="w-[15vw] h-[15vw] mx-auto transition-all duration-300 group-hover:opacity-0"></div>
-                <div v-html="dep.escudoReal" 
-                    class="w-[15vw] h-[15vw] mx-auto absolute top-0 left-0 right-0 transition-all duration-300 opacity-0 group-hover:opacity-100 group-hover:z-10"></div>
-                <p class="text-center text-white mt-2 text-[2.4vh] font-semibold relative z-0">{{ dep.nombre }}</p>
-              </div>
-            </div>
-          </div>
-          
-          <transition name="fade-fast" mode="out-in">
-            <div v-if="departamentoSeleccionado" :key="departamentoSeleccionado?.id" class="w-full flex flex-col justify-center items-center px-[5vw]">
-              <div class="grid grid-cols-9 gap-5">
-                <div v-for="dep in departamentos" :key="dep.id" 
-                    @click="seleccionarDepartamento(dep)"
-                    class="cursor-pointer text-center group relative">
-                  <div v-html="departamentoSeleccionado?.id === dep.id ? dep.escudoReal : dep.escudoDorado" 
-                      class="w-[7.5vw] h-[7.5vw] mx-auto transition-all duration-500 group-hover:opacity-0 group-hover:scale-[2.0] group-hover:translate-y-[2vw]"></div>
-                  <div v-html="dep.escudoReal" 
-                      class="w-[5.5vw] h-[5.5vw] mx-auto absolute top-0 left-0 right-0 transition-all duration-500 opacity-0 group-hover:opacity-100 group-hover:scale-[2.0] group-hover:translate-y-[2vw] group-hover:z-50"></div>
-                  <p class="text-center text-white text-[2.0vh] mt-1 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,1)]">{{ dep.nombre }}</p>
-                </div>
-              </div>
-              
-              <div class="bg-[rgba(190,0,0,0.6)] pt-[2vw] px-[2vw] pb-[1vw] rounded-lg w-full">
-                <div class="grid grid-cols-5 gap-2 mb-[1vw]">
-                  <div class="text-center">
-                    <div class="text-[1.5vh] mt-[4vw] inline-block px-1 py-2 rounded-full text-white font-semibold w-[12vw]" 
-                        :style="{ backgroundColor: 'rgba(224, 54, 54, 0.8)' }">
-                      <!-- {{ departamentoSeleccionado?.nombre }} -->
-                        TITULARES
-                    </div>
-                  </div>
-                  <div v-for="(titular, index) in titulares" :key="'titular-'+index" class="text-center">
-                    <div class="w-[12vh] h-[12vh] mx-auto rounded-full overflow-hidden mb-2 transition-all duration-300 hover:scale-[2.6]">
-                      <img 
-                        :src="titular.imagen" 
-                        :alt="titular.nombre" 
-                        loading="lazy" 
-                        class="w-full h-full object-cover"
-                      />
-                    </div>
-                    <p class="text-[1.4vh] text-white font-semibold">{{ titular.nombre }}</p>
-                    <p class="text-[1.4vh] text-white font-semibold">{{ titular.apellido }}</p>
-                    <p v-if="titular.nombre" class="text-gray-300 text-[1.4vh]">{{ titular.partido.toUpperCase() }}</p>
-                  </div>
-                </div>
-                
-                <div class="grid grid-cols-5 gap-2">
-                  <div class="text-center">
-                    <div class="text-[1.5vh] mt-[5vw] inline-block px-6 py-2 rounded-full text-white font-semibold w-[12vw]" 
-                        :style="{ backgroundColor: 'rgba(224, 54, 54, 0.8)' }">
-                      <!-- {{ departamentoSeleccionado?.nombre }} -->
-                        SUPLENTES
-                    </div>
-                  </div>
-                  <div v-for="(suplente, index) in suplentes" :key="'suplente-'+index" class="text-center">
-                    <div v-if="suplente.nombre" class="w-[12vh] h-[12vh] mx-auto rounded-full overflow-hidden mb-2 transition-all duration-300 hover:scale-[2.6]">
-                      <img 
-                        :src="suplente.imagen" 
-                        :alt="suplente.nombre" 
-                        loading="lazy" 
-                        class="w-full h-full object-cover"
-                      />
-                    </div>
-                    <p class="text-white font-semibold text-[1.4vh]">{{ suplente.nombre }}</p>
-                    <p class="text-white font-semibold text-[1.4vh]">{{ suplente.apellido }}</p>
-                    <p v-if="suplente.nombre" class="text-gray-300 text-[1.4vh]">{{ suplente.partido.toUpperCase() }}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </transition>
-        </template>
-      </div>
-    </div>
-
-    <!-- ==================== SECCIÓN 4 - BANCADAS POLÍTICAS ==================== -->
-    <div 
-      id="bancadas-politicas"
-      ref="seccion4Ref" 
-      class="scroll-section opacity-0 transition-all duration-800 ease-out delay-400 z-10"
-      :class="{ 'animate-in': isSeccion4Visible }"
-      style="height: 100vh; position: relative; background: transparent; overflow-y: auto;"
-    >
-      <div class="w-full text-center mt-[4.1vw] bg-white relative flex-shrink-0">
-        <div class="absolute top-0 left-0 h-[1px] bg-[#E4D294] animate-slide-right"></div>
-        <div class="absolute bottom-0 right-0 h-[1px] bg-[#E4D294] animate-slide-left"></div>
-        <div class="absolute top-0 right-0 w-[1px] bg-[#E4D294] animate-slide-down"></div>
-        <div class="absolute bottom-0 left-0 w-[1px] bg-[#E4D294] animate-slide-up"></div>
-        
-        <h2 class="text-[3vw] text-[#E03636] font-semibold bg-white">
-          Bancadas Políticas
-        </h2>
-      </div>
-
-      <div class="mx-[5vw] px-4 z-10 relative pb-8">
-        <transition name="fade-scale" mode="out-in">
-          <div v-if="!partidoSeleccionado" key="initial" class="flex flex-col items-center justify-center" style="min-height: 80vh;">
-            <div class="flex justify-center gap-12">
-              <div v-for="partido in partidos" :key="partido.id" 
-                  @click="seleccionarPartido(partido)"
-                  class="cursor-pointer transition-all duration-300 hover:scale-105 text-center items-center">
-                <div v-html="partido.iconoBlanco" class="w-[18vw] h-[18vw] mx-auto"></div>
-                <p class="text-center text-white mt-3 text-[2.5vh] font-semibold">{{ partido.nombre }}</p>
-              </div>
-            </div>
-          </div>
-        </transition>
-
-        <transition name="fade-scale" mode="out-in">
-          <div v-if="partidoSeleccionado" key="selected" class="w-full">
-            <div class="flex justify-center gap-8 mb-2">
-              <div v-for="partido in partidos" :key="partido.id" 
-                  @click="seleccionarPartido(partido)"
-                  class="cursor-pointer transition-all duration-300 text-center"
-                  :class="{ 'transform scale-90': partidoSeleccionado?.id === partido.id }">
-                <div class="w-[12vh] h-[12vh] rounded-full flex items-center justify-center mx-auto transition-all duration-300 hover:scale-[1.6] hover:translate-y-[1vw]"
-                    :style="{ backgroundColor: partidoSeleccionado?.id === partido.id ? 'rgba(228,210,148,0.2)' : 'rgba(255,255,255,0.1)' }">
-                  <div v-html="partidoSeleccionado?.id === partido.id ? partido.iconoDorado : partido.iconoBlanco" 
-                      class="w-full h-full"></div>
-                </div>
-                <p class="text-center text-white text-xs mt-1">{{ partido.nombreCorto }}</p>
-              </div>
-            </div>
-
-            <div class="bg-red-700 rounded-lg px-6 py-1 flex items-center justify-between">
-              <button 
-                @click="toggleTipoMiembros"
-                class="bg-[#E03636] hover:bg-red-900 text-white font-semibold px-[1.5vw] py-[.1vw] rounded-lg transition-colors">
-                {{ mostrarSuplentes ? 'VER TITULARES' : 'VER SUPLENTES' }}
-              </button>
-              <h3 class="text-white font-bold text-[2vw]">{{ partidoSeleccionado?.nombre }}</h3>
-              <div class="w-[15vw]"></div>
-            </div>
-
-            <transition name="fade-scale" mode="out-in">
-              <div :key="mostrarSuplentes ? 'suplentes' : 'titulares'" class="-mt-1 bg-[rgba(190,0,0,0.6)] ">
-                <div v-if="partidoSeleccionado?.id === 'pdc'" class="group pt-2 rounded-lg aspect-[3000/800] w-100 m-auto">
-                  <div class="grid grid-cols-6 mb-[.5vw]">
-                    <div v-for="(persona, index) in miembrosMostrar.slice(0,6)" :key="persona.nombre" class="text-center">
-                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40">
-                        <img 
-                          :src="persona.imagen" 
-                          :alt="persona.nombre" 
-                          loading="lazy" 
-                          class="w-full h-full object-cover"
-                        />
-                      </div>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre}}</p>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido}}</p>
-                      <p class="text-gray-200 text-[1.4vh] drop-shadow-lg">{{ persona.departamento }}</p>
-                    </div>
-                  </div>
-                  <div class="grid grid-cols-5 mb-[.5vw]">
-                    <div v-for="(persona, index) in miembrosMostrar.slice(6,11)" :key="persona.nombre" class="text-center">
-                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40">
-                        <img 
-                          :src="persona.imagen" 
-                          :alt="persona.nombre" 
-                          loading="lazy" 
-                          class="w-full h-full object-cover"
-                        />
-                      </div>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre}}</p>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido}}</p>
-                      <p class="text-gray-200 text-[1.4vh] drop-shadow-lg">{{ persona.departamento }}</p>
-                    </div>
-                  </div>
-                  <div class="grid grid-cols-5">
-                    <div v-for="(persona, index) in miembrosMostrar.slice(11,16)" :key="persona.nombre" class="text-center">
-                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40 hover:translate-y-[-2vw]">
-                        <img 
-                          :src="persona.imagen" 
-                          :alt="persona.nombre" 
-                          loading="lazy" 
-                          class="w-full h-full object-cover"
-                        />
-                      </div>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre}}</p>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido}}</p>
-                      <p class="text-gray-200 text-[1.4vh] drop-shadow-lg">{{ persona.departamento }}</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div v-else-if="partidoSeleccionado?.id === 'libre'" class="group pt-2 rounded-lg aspect-[3000/800] w-100 m-auto">
-                  <div class="grid grid-cols-4 mb-[.5vw]">
-                    <div v-for="(persona, index) in miembrosMostrar.slice(0,4)" :key="persona.nombre" class="text-center">
-                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40">
-                        <img 
-                          :src="persona.imagen" 
-                          :alt="persona.nombre" 
-                          loading="lazy" 
-                          class="w-full h-full object-cover"
-                        />
-                      </div>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre}}</p>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido}}</p>
-                      <p class="text-gray-200 text-[1.4vh] drop-shadow-lg">{{ persona.departamento }}</p>
-                    </div>
-                  </div>
-                  <div class="grid grid-cols-4 mb-[.5vw]">
-                    <div v-for="(persona, index) in miembrosMostrar.slice(4,8)" :key="persona.nombre" class="text-center">
-                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40">
-                        <img 
-                          :src="persona.imagen" 
-                          :alt="persona.nombre" 
-                          loading="lazy" 
-                          class="w-full h-full object-cover"
-                        />
-                      </div>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre}}</p>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido}}</p>
-                      <p class="text-gray-200 text-[1.4vh] drop-shadow-lg">{{ persona.departamento }}</p>
-                    </div>
-                  </div>
-                  <div class="grid grid-cols-4">
-                    <div v-for="(persona, index) in miembrosMostrar.slice(8,12)" :key="persona.nombre" class="text-center">
-                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40 hover:translate-y-[-2vw]">
-                        <img 
-                          :src="persona.imagen" 
-                          :alt="persona.nombre" 
-                          loading="lazy" 
-                          class="w-full h-full object-cover"
-                        />
-                      </div>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre}}</p>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido}}</p>
-                      <p class="text-gray-200 text-[1.4vh] drop-shadow-lg">{{ persona.departamento }}</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div v-else-if="partidoSeleccionado?.id === 'alianza'" class="group pt-2 rounded-lg aspect-[3000/800] w-100 m-auto">
-                  <div class="grid grid-cols-3 mb-[.5vw]">
-                    <div v-for="(persona, index) in miembrosMostrar.slice(0,3)" :key="persona.nombre" class="text-center">
-                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40">
-                        <img 
-                          :src="persona.imagen" 
-                          :alt="persona.nombre" 
-                          loading="lazy" 
-                          class="w-full h-full object-cover"
-                        />
-                      </div>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre}}</p>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido}}</p>
-                      <p class="text-gray-200 text-[1.4vh] drop-shadow-lg">{{ persona.departamento }}</p>
-                    </div>
-                  </div>
-                  <div class="grid grid-cols-3 mb-[.5vw]">
-                    <div v-for="(persona, index) in miembrosMostrar.slice(3,6)" :key="persona.nombre" class="text-center">
-                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40">
-                        <img 
-                          :src="persona.imagen" 
-                          :alt="persona.nombre" 
-                          loading="lazy" 
-                          class="w-full h-full object-cover"
-                        />
-                      </div>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre}}</p>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido}}</p>
-                      <p class="text-gray-200 text-[1.4vh] drop-shadow-lg">{{ persona.departamento }}</p>
-                    </div>
-                  </div>
-                  <div class="grid grid-cols-3">
-                    <div v-if="miembrosMostrar[6]" class="text-center">
-                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40 hover:translate-y-[-2vw]">
-                        <img 
-                          :src="miembrosMostrar[6].imagen" 
-                          :alt="miembrosMostrar[6].nombre" 
-                          loading="lazy" 
-                          class="w-full h-full object-cover"
-                        />
-                      </div>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ miembrosMostrar[6].nombre }}</p>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ miembrosMostrar[6].apellido }}</p>
-                      <p class="text-gray-200 text-[1.4vh] drop-shadow-lg">{{ miembrosMostrar[6].departamento }}</p>
-                    </div>
-                    <div></div>
-                    <div></div>
-                  </div>
-                </div>
-
-                <div v-else-if="partidoSeleccionado?.id === 'sumate'" class="group pt-2 rounded-lg aspect-[3000/800] w-100 m-auto">
-                  <div class="flex justify-center">
-                    <div v-if="miembrosMostrar[0]" class="text-center">
-                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40">
-                        <img 
-                          :src="miembrosMostrar[0].imagen" 
-                          :alt="miembrosMostrar[0].nombre" 
-                          loading="lazy" 
-                          class="w-full h-full object-cover"
-                        />
-                      </div>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ miembrosMostrar[0].nombre }}</p>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ miembrosMostrar[0].apellido }}</p>
-                      <p class="text-gray-200 text-[1.4vh] drop-shadow-lg">{{ miembrosMostrar[0].departamento }}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </transition>
-          </div>
-        </transition>
-      </div>
-    </div>
-  </div>
-</template>
-
-<script setup>
-import { ref, onMounted, onUnmounted, nextTick, watch, computed } from 'vue'
-import { useRoute } from 'vue-router'
-import { useDepartamentosStore } from '@/stores/departamentosStore'
-import { useScrollEffects } from '@/composables/useScrollEffects'
-import ScrollProgress from '@/components/UI/ScrollProgress.vue'
-import { partidosData } from '~/data/partidos'
-
-// ==================== STORE ====================
-const departamentosStore = useDepartamentosStore()
-const departamentos = computed(() => departamentosStore.getDepartamentos || [])
-const departamentosLoaded = computed(() => departamentosStore.isLoaded)
-
-// ==================== DATOS SECCIÓN 1 ====================
-const { scrolled, scrollProgress, initScrollListener, removeScrollListener } = useScrollEffects()
-const route = useRoute()
-
-const seccion1Ref = ref(null)
-const seccion2Ref = ref(null)
-const seccion3Ref = ref(null)
-const seccion4Ref = ref(null)
-
-const isSeccion1Visible = ref(true)
-const isSeccion2Visible = ref(false)
-const isSeccion3Visible = ref(false)
-const isSeccion4Visible = ref(false)
-
-const fila1 = ref([
-  {
-    id: 1,
-    nombre: 'Diego Esteban Mateo',
-    apellido: 'Ávila Navajas',
-    cargoPartido: 'Presidencia',
-    partido: 'PDC',
-    cargo: 'Presidente del Senado',
-    imagen: '/new/titulares/g2/DIEGO ESTEBAN MATEO ÁVILA NAVAJAS.png',
-    textoCompleto: 'Diego Esteban Mateo Ávila Navajas es economista y docente nacido en Tarija, con amplia experiencia en gestión pública y cooperación internacional. Como actual Presidente del Senado (2025–2026), lidera una gestión enfocada en la transparencia, el diálogo político y el desarrollo productivo, buscando fortalecer la institucionalidad legislativa y la estabilidad democrática de Bolivia.'
-  },
-  {
-    id: 2,
-    nombre: 'Carmen Soledad',
-    apellido:'Chapetón Tancara',
-    cargoPartido: 'Primera Vicepresidencia',
-    partido: 'Unidad',
-    cargo: 'Vicepresidente',
-    imagen: '/new/titulares/g1/CARMEN SOLEDAD CHAPETÓN TANCARA.png',
-    textoCompleto: 'C. Soledad Chapetón Tancara, nació en El Alto, es Licenciada en Cs. de la Educación de la UMSA. Fue asambleísta Constituyente y la primera mujer Alcaldesa de El Alto. Su gestión destacó por la Construcción de la Terminal Metropolitana, el Jach’a Uta, la  Estación de bomberos, la revolución del pavimento, impulso más de 80 centros infantiles entre otros proyectos y programas. Actualmente es Senadora, con trayectoria en liderazgo y servicio público.'
-  },
-  {
-    id: 3,
-    nombre: 'Khatia Lisbeth',
-    apellido: 'Quiroga Fernández',
-    cargoPartido: 'Segunda Vicepresidencia',
-    partido: 'Libre',
-    cargo: 'Secretario General',
-    imagen: '/new/titulares/g3/KATHIA LISBETH QUIROGA FERNÁNDEZ.png',
-    textoCompleto: `Kathia Quiroga Fernández, ingeniera en Sistemas y abogada, es Segunda Vicepresidenta de la Cámara de Senadores para el periodo <strong>2025-2026</strong>. Su gestión impulsa la autonomía mediante un nuevo pacto fiscal, la aprobación urgente de la ley 50/50, reformas al sistema de justicia y un medio ambiente libre de contaminación minera.`
-  }
-])
-
-const fila2 = ref([
-  {
-    id: 4,
-    nombre: 'Yasmin',
-    apellido:'Estívariz Villarroel',
-    cargoPartido: 'Primera Secretaria',
-    partido: 'PDC',
-    cargo: 'Directora de Comunicación',
-    imagen: '/new/titulares/g2/YASMIN ESTIVARIZ VILLARROEL.png',
-    textoCompleto: `Yasmin Estívariz Villarroel, licenciada en Psicología del departamento de Oruro, destaca por su labor en favor de niños con discapacidad. Actualmente ejerce el cargo de Primera Secretaria del Senado, gestión <strong>2025-2026</strong>,  donde promueve alianzas estratégicas institucionales para beneficiar a este sector vulnerable.
-Asimismo, impulsa iniciativas legislativas orientadas a la protección del medio ambiente frente a la minería ilegal, desarrollando una gestión comprometida con el progreso de Oruro y el bienestar de su población.`
-  },
-  {
-    id: 5,
-    nombre: 'Julio',
-    apellido:'Diego Romaña',
-    cargoPartido: 'Segunda Secretaria',
-    partido: 'Libre',
-    cargo: 'Jefe de Protocolo',
-    imagen: '/new/titulares/g3/JULIO DIEGO ROMAÑA GALINDO.png',
-    textoCompleto: `Julio Diego Romaña Galindo es Ingeniero Agrónomo y docente de la Universidad Amazónica de Pando, a sus 33 años fue Vicerrector en la universidad, Senador titular en la gestión <strong>2020-2025</strong> desempeñó funciones como Segundo Secretario y Presidente de la Comisión. Actualmente es el Segundo Secretario de la Cámara de Senadores, su gestión, fiscalización y legislación están enfocada en la incorporación a la red vial fundamental y tramo carreteros buscando transparencia, el dialogo y una democracia participativa.`
-  },
-  {
-    id: 6,
-    nombre: 'Rosa Tatiana',
-    apellido:'Áñez Carrasco',
-    cargoPartido: 'Tercera Secretaria',
-    partido: 'Unidad',
-    cargo: 'Coordinadora Legislativa',
-    imagen: '/new/titulares/g3/ROSA TATIANA AÑEZ CARRASCO.png',
-    textoCompleto: 'Rosa Tatiana Añez Carrasco, abogada de profesión con especialidad en Derecho Procesal Penal, destacando en los diferentes cargos desempeñados, docente universitaria, dos veces Diputada uninominal, proyectista de importantes Leyes para su región, en la actualidad enfocada en el ejercicio de la Tercera Secretaria del Senado, buscando fortalecer la democracia.'
-  }
-])
-
-const selectedImage = ref({
-  img: fila1.value[0].imagen,
-  text: fila1.value[0].textoCompleto,
-  nombre: fila1.value[0].nombre,
-  apellido: fila1.value[0].apellido,
-  cargo: fila1.value[0].cargo
-})
-
-// ==================== DATOS SECCIÓN 2 ====================
-const comisionesList = ref([
-  { id: 1, nombre: 'Comisión de Constitución, Derechos Humanos, Legislación y Sistema Electoral' },
-  { id: 2, nombre: 'Comisión de Justicia Plural, Ministerio Público y Defensa Legal del Estado' },
-  { id: 3, nombre: 'Comisión de Seguridad del Estado, Fuerzas Armadas y Policía Boliviana' },
-  { id: 4, nombre: 'Comisión de Organización Territorial del Estado y Autonomías' },
-  { id: 5, nombre: 'Comisión de Planificación, Política Económica y Finanzas' },
-  { id: 6, nombre: 'Comisión de Economía Plural, Producción,Industria e Industrialización' },
-  { id: 7, nombre: 'Comisión de Naciones y Pueblos Indígena Originario Campesinos e Interculturalidad' },
-  { id: 8, nombre: 'Comisión de Política Social, Educación y Salud' },
-  { id: 9, nombre: 'Comisión de Política Internacional' },
-  { id: 10, nombre: 'Comisión de Tierra y Territorio, Recursos Naturales y Medio Ambiente' }
-])
-
-const comisionSeleccionada = ref(null)
-
-const comisionesData = {
-  1: {
-    miembrosGrupo1: [
-      { foto: '/new/titulares/g1/DANIEL ANTONIO ORTIZ VELASQUEZ.png', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Daniel Antonio', apellido:'Ortiz Velasquez', partido: 'PDC' },
-      { foto: '/new/suplentes/g1/REINA ISABEL PALLARES MORALES.png', cargo: 'SENADORA SUPLENTE', nombre: 'Reina Isabel', apellido:'Pallares Morales', partido: 'PDC' }
-    ],
-    tituloLinea1: 'COMITE DE CONSTITUCIÓN, LEGISLACIÓN E INTERPRETACIÓN LEGISLATIVA Y CONSTITUCIONAL',
-    miembrosGrupo2: [
-      { foto: '/new/titulares/g2/FREDDY CASTILLO CHAVEZ.png', cargo: 'SECRETARIO DE COMITÉ', nombre: 'Freddy', apellido:'Castillo Chavez', partido: 'PDC' },
-      { foto: '/new/suplentes/g2/VILLMA COLQUE CAMACHO.png', cargo: 'SENADORA SUPLENTE', nombre: 'Villma ', apellido:'Colque Camacho', partido: 'PDC' }
-    ],
-    tituloLinea2: 'COMITE DE SISTEMA ELECTORAL, DERECHOS HUMANOS Y EQUIDAD SOCIAL',
-    miembrosGrupo3: [
-      { foto: '/new/titulares/g1/TOMASA YARHUI JACOME.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Tomasa', apellido:'Yarhui Jacome', partido: 'PDC' },
-      { foto: '/new/suplentes/g1/HUGO MARCELO CORTEZ CALVIMONTES.png', cargo: 'SENADOR SUPLENTE', nombre: 'Hugo Marcelo', apellido:'Cortez Calvimontes', partido: 'PDC' }
-    ]
-  },
-  2: {
-    miembrosGrupo1: [
-      { foto: '/new/titulares/g3/ERICK NELSON SORUCO ALPIRE.png', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Erick Nelson', apellido:'Soruco Alpire', partido: 'PDC' },
-      { foto: '/new/suplentes/g3/CESIA ROCA ESCALANTE.png', cargo: 'SENADORA SUPLENTE', nombre: 'Cesia', apellido:'Roca Escalante', partido: 'PDC' }
-    ],
-    tituloLinea1: 'COMITÉ DE JUSTICIA PLURAL Y CONSEJO DE LA MAGISTRATURA',
-    miembrosGrupo2: [
-      { foto: '/new/titulares/g1/WILDER VELIZ ARMAS.png', cargo: 'SECRETARIO DE COMITÉ', nombre: 'Wilder', apellido:'Veliz Armas', partido: 'PDC' },
-      { foto: '/new/suplentes/g1/LENNY MAYRA AYALA JUSTINIANO.png', cargo: 'SENADORA SUPLENTE', nombre: 'Lenny Mayra', apellido:'Ayala Justiniano', partido: 'PDC' }
-    ],
-    tituloLinea2: 'COMITÉ DE MINISTERIO PÚBLICO Y DEFENSA LEGAL DEL ESTADO',
-    miembrosGrupo3: [
-      { foto: '/new/titulares/g2/MARIA ISABEL MORENO CORTEZ.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Maria Isabel', apellido:'Moreno Cortez', partido: 'LIBRE' },
-      { foto: '/new/suplentes/g2/ROLANDO VACAFLOR GABRIEL ARANA.png', cargo: 'SENADOR SUPLENTE', nombre: 'Rolando Vacaflor', apellido:'Gabriel Arana', partido: 'LIBRE' }
-    ]
-  },
-  3: {
-    miembrosGrupo1: [
-      { foto: '/new/titulares/g1/JUDITH ROSARIO GARCIA COCA.png', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Judith Rosario', apellido:'Garcia Coca', partido: 'PDC' },
-      { foto: '/new/suplentes/g1/ROYER IVAN MAMANI GARCIA.png', cargo: 'SENADOR SUPLENTE', nombre: 'Royer Ivan', apellido:'Mamani Garcia', partido: 'PDC' }
-    ],
-    tituloLinea1: 'COMITÉ DE FUERZAS ARMADAS Y POLICÍA BOLIVIANA',
-    miembrosGrupo2: [
-      { foto: '/new/titulares/g3/ANA KARINA VELASCO ÁÑEZ.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Ana Karina', apellido:'Velasco Áñez', partido: 'UNIDAD' },
-      { foto: '/new/suplentes/g3/MARCELO MATIAS CARDONA IBAÑEZ.png', cargo: 'SENADOR SUPLENTE', nombre: 'Marcelo Matias', apellido:'Cardona Ibañez', partido: 'UNIDAD' }
-    ],
-    tituloLinea2: 'COMITÉ DE SEGURIDAD DEL ESTADO Y LUCHA CONTRA EL NARCOTRÁFICO',
-    miembrosGrupo3: [
-      { foto: '/new/titulares/g3/PAOLA LIMBANIA LOPEZ ZEBALLOS.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Paola Limbania', apellido:'Lopez Zeballos', partido: 'PDC' },
-      { foto: '/new/suplentes/g3/RICHARD ESPADA UGARTE.png', cargo: 'SENADOR SUPLENTE', nombre: 'Richard', apellido:'Espada Ugarte', partido: 'PDC' }
-    ]
-  },
-  4: {
-    miembrosGrupo1: [
-      { foto: '/new/titulares/g2/CESAR MENTASTI PADILLA.png', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Cesar', apellido:'Mentasti Padilla', partido: 'UNIDAD' },
-      { foto: '/new/suplentes/g2/MARCELA GUERRERO VILCA.png', cargo: 'SENADORA SUPLENTE', nombre: 'Marcela', apellido:'Guerrero Vilca', partido: 'UNIDAD' }
-    ],
-    tituloLinea1: 'COMITÉ DE AUTONOMÍAS MUNICIPALES, INDÍGENA ORIGINARIO CAMPESINAS Y REGIONALES',
-    miembrosGrupo2: [
-      { foto: '/new/titulares/g3/JOSE ROCA HAENSEL.png', cargo: 'SECRETARIO DE COMITÉ', nombre: 'Jose', apellido:'Roca Haensel', partido: 'UNIDAD' },
-      { foto: '/new/suplentes/g3/MABEL GIORDANO SONNENSCHEIN.png', cargo: 'SENADORA SUPLENTE', nombre: 'Mabel', apellido:'Giordano Sonnenschein', partido: 'UNIDAD' }
-    ],
-    tituloLinea2: 'COMITÉ DE AUTONOMÍAS DEPARTAMENTALES',
-    miembrosGrupo3: [
-      { foto: '/new/titulares/g3/ERNESTO SUAREZ SATTORI.png', cargo: 'SECRETARIO DE COMITÉ', nombre: 'Ernesto', apellido:'Suarez Sattori', partido: 'LIBRE' },
-      { foto: '/new/suplentes/g3/CLAUDIA CARDENAS VELASQUEZ.png', cargo: 'SENADORA SUPLENTE', nombre: 'Claudia', apellido:'Cardenas Velasquez', partido: 'LIBRE' }
-    ]
-  },
-  5: {
-    miembrosGrupo1: [
-      { foto: '/new/titulares/g3/ELIANA RINA ACOSTA QUISPE.png', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Eliana Rina', apellido:'Acosta Quispe', partido: 'UNIDAD' },
-      { foto: '/new/suplentes/g3/SICHARD HANS SORAIDE CASTEDO.png', cargo: 'SENADOR SUPLENTE', nombre: 'Sichard Hans', apellido:'Soraide Castedo', partido: 'UNIDAD' }
-    ],
-    tituloLinea1: 'COMITÉ DE PLANIFICACIÓN, PRESUPUESTO, INVERSIÓN PÚBLICA Y CONTRALORÍA GENERAL DEL ESTADO',
-    miembrosGrupo2: [
-      { foto: '/new/titulares/g2/LEONOR ROSALVA ROMERO GUTIERREZ.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Leonor Rosalva', apellido:'Romero Gutierrez', partido: 'UNIDAD' },
-      { foto: '/new/suplentes/g2/MARCO ANTONIO SEGOVIA VARGAS.png', cargo: 'SENADOR SUPLENTE', nombre: 'Marco Antonio', apellido:'Segovia Vargas', partido: 'UNIDAD' }
-    ],
-    tituloLinea2: 'COMITÉ DE POLÍTICAS FINANCIERA, MONETARIA, TRIBUTARIA Y SEGUROS',
-    miembrosGrupo3: [
-      { foto: '/new/titulares/g1/ABDON PORCEL ARANCIBIA.png', cargo: 'SECRETARIO DE COMITÉ', nombre: 'Abdon', apellido:'Porcel Arancibia', partido: 'LIBRE' },
-      { foto: '/new/suplentes/g1/ILSE FATIMA DAVILA ARANCIBIA.png', cargo: 'SENADORA SUPLENTE', nombre: 'Ilse Fatima', apellido:'Davila Arancibia', partido: 'LIBRE' }
-    ]
-  },
-  6: {
-    miembrosGrupo1: [
-      { foto: '/new/titulares/g1/ANA MARIA CRISPIN CHOQUE.png', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Ana Maria', apellido:'Crispin Choque', partido: 'PDC' },
-      { foto: '/new/suplentes/g1/VICTOR SEVERO QUISPE SANTANDER.png', cargo: 'SENADOR SUPLENTE', nombre: 'Victor Severo', apellido:'Quispe Santander', partido: 'PDC' }
-    ],
-    tituloLinea1: 'COMITÉ DE ENERGÍA, HIDROCARBUROS, MINERÍA Y METALURGIA',
-    miembrosGrupo2: [
-      { foto: '/new/titulares/g2/MARCELINO FLORES ORDOÑEZ.png', cargo: 'SECRETARIODE COMITÉ', nombre: 'Marcelino', apellido:'Flores Ordoñez', partido: 'PDC' },
-      { foto: '/new/suplentes/g2/SUSANA GABRIELA RUIZ ZULETA.png', cargo: 'SENADORA SUPLENTE', nombre: 'Susana Gabriela', apellido:'Ruiz Zuleta', partido: 'PDC' }
-    ],
-    tituloLinea2: 'COMITÉ DE ECONOMÍA PLURAL, DESARROLLO PRODUCTIVO, OBRAS PÚBLICAS E INFRAESTRUCTURA',
-    miembrosGrupo3: [
-      { foto: '/new/titulares/g2/BETTY CANAVIRI VILLANUEVA.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Betty', apellido:'Canaviri Villanueva', partido: 'LIBRE' },
-      { foto: '/new/suplentes/g2/ROGER MAMANI CORONADO.png', cargo: 'SENADOR SUPLENTE', nombre: 'Roger', apellido:'Mamani Coronado', partido: 'LIBRE' }
-    ]
-  },
-  7: {
-    miembrosGrupo1: [
-      { foto: '/new/titulares/g1/JOSE MANUEL ORMACHEA MENDIETA.png', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Jose Manuel', apellido:'Ormachea Mendieta', partido: 'LIBRE' },
-      { foto: '/new/suplentes/g1/MARIA ELENA PACHACUTE TICONA.png', cargo: 'SENADORA SUPLENTE', nombre: 'Maria Elena', apellido:'Pachacute Ticona', partido: 'LIBRE' }
-    ],
-    tituloLinea1: 'COMITÉ DE NACIONES Y PUEBLOS INDÍGENA ORIGINARIO CAMPESINOS',
-    miembrosGrupo2: [
-      { foto: '/new/titulares/g2/BERTHA NURMY GUTIERREZ MENESES.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Bertha Nurmy', apellido:'Gutierrez Meneses', partido: 'PDC' },
-      { foto: '/new/suplentes/g2/FREDDY RIOJA MELGAR.png', cargo: 'SENADOR SUPLENTE', nombre: 'Freddy', apellido:'Rioja Melgar', partido: 'PDC' }
-    ],
-    tituloLinea2: 'COMITÉ DE CULTURAS, INTERCULTURALIDAD Y PATRIMONIO CULTURAL',
-    miembrosGrupo3: [
-      { foto: '/new/titulares/g1/BERTHA CARTAGENA SANCHEZ.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Bertha', apellido:'Cartagena Sanchez', partido: 'PDC' },
-      { foto: '/new/suplentes/g1/MANFRED LEO PEREZ HASSENTEUFEL.png', cargo: 'SENADOR SUPLENTE', nombre: 'Manfred Leo', apellido:'Perez Hassenteufel', partido: 'PDC' }
-    ]
-  },
-  8: {
-    miembrosGrupo1: [
-      { foto: '/new/titulares/g2/JOSE SANCHEZ AGUILAR.png', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Jose', apellido:'Sanchez Aguilar', partido: 'LIBRE' },
-      { foto: '/new/suplentes/g2/CINTHYA INGA GUTIERREZ GUZMAN.png', cargo: 'SENADORA SUPLENTE', nombre: 'Cinthya Inga', apellido:'Gutierrez Guzman', partido: 'LIBRE' }
-    ],
-    tituloLinea1: 'COMITÉ DE EDUCACIÓN, SALUD, CIENCIA, TECNOLOGÍA Y DEPORTES',
-    miembrosGrupo2: [
-      { foto: '/new/titulares/g2/MARIA ANTONIETA ALCON SANCHEZ.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Maria Antonieta', apellido:'Alcon Sanchez', partido: 'PDC' },
-      { foto: '/new/suplentes/g2/EDWIN LOPEZ QUIROGA.png', cargo: 'SENADOR SUPLENTE', nombre: 'Edwin', apellido:'Lopez Quiroga', partido: 'PDC' }
-    ],
-    tituloLinea2: 'COMITÉ DE VIVIENDA, RÉGIMEN LABORAL, SEGURIDAD INDUSTRIAL Y SEGURIDAD SOCIAL',
-    miembrosGrupo3: [
-      { foto: '/new/titulares/g1/CLAUDIA MALLON VARGAS.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Claudia', apellido:'Mallon Vargas', partido: 'APB SUMATE' },
-      { foto: '/new/suplentes/g1/APOLINAR RIVERA MUÑOZ.png', cargo: 'SENADOR SUPLENTE', nombre: 'Apolinar', apellido:'Rivera Muñoz', partido: 'APB SUMATE' }
-    ]
-  },
-  9: {
-    miembrosGrupo1: [
-      { foto: '/new/titulares/g1/NICANOR GONZALO COCHI CONDORI.png', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Nicanor Gonzalo', apellido:'Cochi Condori', partido: 'PDC' },
-      { foto: '/new/suplentes/g1/ROXANA MAMANI COLQUEHUANCA.png', cargo: 'SENADORA SUPLENTE', nombre: 'Roxana', apellido:'Mamani Colquehuanca', partido: 'PDC' }
-    ],
-    tituloLinea1: 'COMITÉ DE ASUNTOS EXTERIORES, INTERPARLAMENTARIOS Y ORGANISMOS INTERNACIONALES',
-    miembrosGrupo2: [
-      { foto: '/new/titulares/g2/TERESA ALARCON ARANA.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Teresa', apellido:'Alarcon Arana', partido: 'PDC' },
-    ],
-    tituloLinea2: 'COMITÉ DE RELACIONES ECONÓMICAS INTERNACIONALES',
-    miembrosGrupo3: [
-      { foto: '/new/titulares/g1/WANDA XIMENA MEDRANO HERVAS.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Wanda Ximena', apellido:'Medrano Hervas', partido: 'LIBRE' },
-      { foto: '/new/suplentes/g1/ALDO SERGIO VILLEGAS MORA.png', cargo: 'SENADOR SUPLENTE', nombre: 'Aldo Sergio', apellido:'Villegas Mora', partido: 'LIBRE' }
-    ]
-  },
-  10: {
-    miembrosGrupo1: [
-      { foto: '/new/titulares/g3/BRANKO GORAN MARINKOVIC JOVICEVIC.png', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Branko Goran', apellido:'Marinkovic Jovicevic', partido: 'LIBRE' },
-      { foto: '/new/suplentes/g3/KATHIA NATALIA MISERENDINO ROMERO.png', cargo: 'SENADORA SUPLENTE', nombre: 'Kathia Natalia', apellido:'Miserendino Romero', partido: 'LIBRE' }
-    ],
-    tituloLinea1: 'COMITÉ DE TIERRA Y TERRITORIO, RECURSOS NATURALES Y HOJA DE LA COCA',
-    miembrosGrupo2: [
-      { foto: '/new/titulares/g3/CAROL CARLO DURAN.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Carol', apellido:'Carlo Duran', partido: 'LIBRE' },
-      { foto: '/new/suplentes/g3/JORGE ANTONIO QUISPE FLORES.png', cargo: 'SENADOR SUPLENTE', nombre: 'Jorge Antonio', apellido:'Quispe Flores', partido: 'LIBRE' }
-    ],
-    tituloLinea2: 'COMITÉ DE MEDIO AMBIENTE, BIODIVERSIDAD, AMAZONÍA, ÁREAS PROTEGIDAS Y CAMBIO CLIMÁTICO',
-    miembrosGrupo3: [
-      { foto: '/new/titulares/g3/CINTIA MONICA PUERTA CAMPOS.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Cintia Monica', apellido:'Puerta Campos', partido: 'PDC' },
-      { foto: '/new/suplentes/g3/JESUS HUMBERTO SUAREZ EGUEZ.png', cargo: 'SENADOR SUPLENTE', nombre: 'Jesus Humberto', apellido:'Suarez Eguez', partido: 'PDC' }
-    ]
-  }
-}
-
-const seleccionarComision = (comision) => {
-  comisionSeleccionada.value = {
-    ...comision,
-    ...comisionesData[comision.id]
-  }
-}
-seleccionarComision(comisionesList.value[0])
-
-// ==================== DATOS SECCIÓN 3 ====================
-const departamentoSeleccionado = ref(null)
-
-const titularesPorDepartamento = {
-  'LA PAZ': [],
-  'SANTA CRUZ': [],
-  'COCHABAMBA': [],
-  'POTOSÍ': [],
-  'CHUQUISACA': [],
-  'ORURO': [],
-  'TARIJA': [],
-  'BENI': [],
-  'PANDO': []
-}
-
-const suplentesPorDepartamento = {
-  'LA PAZ': [],
-  'SANTA CRUZ': [],
-  'COCHABAMBA': [],
-  'POTOSÍ': [],
-  'CHUQUISACA': [],
-  'ORURO': [],
-  'TARIJA': [],
-  'BENI': [],
-  'PANDO': []
-}
-
-const titulares = ref([])
-const suplentes = ref([])
-
-const seleccionarDepartamento = (dep) => {
-  departamentoSeleccionado.value = dep
-  titulares.value = titularesPorDepartamento[dep.nombre] || []
-  suplentes.value = suplentesPorDepartamento[dep.nombre] || []
-}
-
-// ==================== DATOS SECCIÓN 4 ====================
-const partidoSeleccionado = ref(null)
-const mostrarSuplentes = ref(false)
-const partidos = ref(partidosData)
-
-const senadoresData = [
-  { tnombre: 'Cintia Monica', tapellido:'Puerta Campos', snombre: 'Jesus Humberto', sapellido:'Suarez Eguez', partido: 'pdc', departamento:'Pando', imagen:'new/titulares/g3/CINTIA MONICA PUERTA CAMPOS.png', imagensu:'new/suplentes/g3/JESUS HUMBERTO SUAREZ EGUEZ.png', pos:116 },
-  { tnombre: 'Paola Limbania', tapellido:'Lopez Zeballos', snombre: 'Richard', sapellido:'Espada Ugarte', partido: 'pdc', departamento:'Santa Cruz', imagen:'new/titulares/g3/PAOLA LIMBANIA LOPEZ ZEBALLOS.png', imagensu:'new/suplentes/g3/RICHARD ESPADA UGARTE.png', pos:114 },
-  { tnombre: 'Diego Esteban Mateo', tapellido:'Avila Navajas', snombre: 'Luzmaya', sapellido:'Zelaya Vega', partido: 'pdc', departamento:'Tarija', imagen:'new/titulares/g2/DIEGO ESTEBAN MATEO ÁVILA NAVAJAS.png', imagensu:'new/suplentes/g2/LUZMAYA ZELAYA VEGA.png', pos:113 },
-  { tnombre: 'Maria Isabel', tapellido:'Moreno Cortez', snombre: 'Rolando Vacaflor', sapellido:'Gabriel Arana', partido: 'libre', departamento:'Tarija', imagen:'new/titulares/g2/MARIA ISABEL MORENO CORTEZ.png', imagensu:'new/suplentes/g2/ROLANDO VACAFLOR GABRIEL ARANA.png', pos:207 },
-  { tnombre: 'Yasmin', tapellido:'Estivariz Villarroel', snombre: 'Ramiro', sapellido:'Mamani Ramirez', partido: 'pdc', departamento:'Oruro', imagen:'new/titulares/g2/YASMIN ESTIVARIZ VILLARROEL.png', imagensu:'new/suplentes/g2/RAMIRO MAMANI RAMIREZ.png', pos:107},
-  { tnombre: 'Wilder', tapellido:'Veliz Armas', snombre: 'Lenny Mayra', sapellido:'Ayala Justiniano', partido: 'pdc', departamento:'Cochabamba', imagen:'new/titulares/g1/WILDER VELIZ ARMAS.png', imagensu:'new/suplentes/g1/LENNY MAYRA AYALA JUSTINIANO.png', pos:105 },
-  { tnombre: 'Judith Rosario', tapellido:'Garcia Coca', snombre: 'Royer Ivan', sapellido:'Mamani Garcia', partido: 'pdc', departamento:'Cochabamba', imagen:'new/titulares/g1/JUDITH ROSARIO GARCIA COCA.png', imagensu:'new/suplentes/g1/ROYER IVAN MAMANI GARCIA.png', pos:106 },
-  { tnombre: 'Nicanor Gonzalo', tapellido:'Cochi Condori', snombre: 'Roxana', sapellido:'Mamani Colquehuanca', partido: 'pdc', departamento:'La Paz', imagen:'new/titulares/g1/NICANOR GONZALO COCHI CONDORI.png', imagensu:'new/suplentes/g1/ROXANA MAMANI COLQUEHUANCA.png', pos:103 },
-  { tnombre: 'Bertha', tapellido:'Cartagena Sanchez', snombre: 'Manfred Leo', sapellido:'Perez Hassenteufel', partido: 'pdc', departamento:'Chuquisaca', imagen:'new/titulares/g1/BERTHA CARTAGENA SANCHEZ.png', imagensu:'new/suplentes/g1/MANFRED LEO PEREZ HASSENTEUFEL.png', pos:101 },
-  { tnombre: 'Bertha Nurmy', tapellido:'Gutierrez Meneses De Mamani', snombre: 'Freddy', sapellido:'Rioja Melgar', partido: 'pdc', departamento:'Potosí', imagen:'new/titulares/g2/BERTHA NURMY GUTIERREZ MENESES.png', imagensu:'new/suplentes/g2/FREDDY RIOJA MELGAR.png', pos:110 },
-  { tnombre: 'Marcelino', tapellido:'Flores Ordoñez', snombre: 'Susana Gabriela', sapellido:'Ruiz Zuleta', partido: 'pdc', departamento:'Potosí', imagen:'new/titulares/g2/MARCELINO FLORES ORDOÑEZ.png', imagensu:'new/suplentes/g2/SUSANA GABRIELA RUIZ ZULETA.png', pos:111 },
-  { tnombre: 'Branko Goran', tapellido:'Marinkovic Jovicevic', snombre: 'Kathia Natalia', sapellido:'Miserendino Romero', partido: 'libre', departamento:'Santa Cruz', imagen:'new/titulares/g3/BRANKO GORAN MARINKOVIC JOVICEVIC.png', imagensu:'new/suplentes/g3/KATHIA NATALIA MISERENDINO ROMERO.png', pos:208 },
-  { tnombre: 'Carol', tapellido:'Carlo Duran', snombre: 'Jorge Antonio', sapellido:'Quispe Flores', partido: 'libre', departamento:'Pando', imagen:'new/titulares/g3/CAROL CARLO DURAN.png', imagensu:'new/suplentes/g3/JORGE ANTONIO QUISPE FLORES.png', pos:211 },
-  { tnombre: 'Cesar', tapellido:'Mentasti Padilla', snombre: 'Marcela', sapellido:'Guerrero Vilca', partido: 'alianza', departamento:'Tarija', imagen:'new/titulares/g2/CESAR MENTASTI PADILLA.png', imagensu:'new/suplentes/g2/MARCELA GUERRERO VILCA.png', pos:302 },
-  { tnombre: 'Claudia', tapellido:'Mallon Vargas', snombre: 'Apolinar', sapellido:'Rivera Muñoz', partido: 'sumate', departamento:'Cochabamba', imagen:'new/titulares/g1/CLAUDIA MALLON VARGAS.png', imagensu:'new/suplentes/g1/APOLINAR RIVERA MUÑOZ.png', pos:401 },
-  { tnombre: 'Daniel Antonio', tapellido:'Ortiz Velasquez', snombre: 'Reina Isabel', sapellido:'Pallares Morales', partido: 'pdc', departamento:'Chuquisaca', imagen:'new/titulares/g1/DANIEL ANTONIO ORTIZ VELASQUEZ.png', imagensu:'new/suplentes/g1/REINA ISABEL PALLARES MORALES.png', pos:102 },
-  { tnombre: 'Erick Nelson', tapellido:'Soruco Alpire', snombre: 'Cesia', sapellido:'Roca Escalante', partido: 'pdc', departamento:'Beni', imagen:'new/titulares/g3/ERICK NELSON SORUCO ALPIRE.png', imagensu:'new/suplentes/g3/CESIA ROCA ESCALANTE.png', pos:115 },
-  { tnombre: 'Ernesto', tapellido:'Suarez Sattori', snombre: 'Claudia', sapellido:'Cardenas Velasquez', partido: 'libre', departamento:'Beni', imagen:'new/titulares/g3/ERNESTO SUAREZ SATTORI.png', imagensu:'new/suplentes/g3/CLAUDIA CARDENAS VELASQUEZ.png', pos:210 },
-  { tnombre: 'Freddy', tapellido:'Castillo Chavez', snombre: 'Villma', sapellido:'Colque Camacho', partido: 'pdc', departamento:'Oruro', imagen:'new/titulares/g2/FREDDY CASTILLO CHAVEZ.png', imagensu:'new/suplentes/g2/VILLMA COLQUE CAMACHO.png', pos:108 },
-  { tnombre: 'Jose', tapellido:'Roca Haensel', snombre: 'Mabel', sapellido:'Giordano Sonnenschein', partido: 'alianza', departamento:'Beni', imagen:'new/titulares/g3/JOSE ROCA HAENSEL.png', imagensu:'new/suplentes/g3/MABEL GIORDANO SONNENSCHEIN.png', pos:305 },
-  { tnombre: 'Leonor Rosalva', tapellido:'Romero Gutierrez', snombre: 'Marco Antonio', sapellido:'Segovia Vargas', partido: 'alianza', departamento:'Tarija', imagen:'new/titulares/g2/LEONOR ROSALVA ROMERO GUTIERREZ.png', imagensu:'new/suplentes/g2/MARCO ANTONIO SEGOVIA VARGAS.png', pos:303 },
-  { tnombre: 'Teresa', tapellido:'Alarcon Arana', snombre: '', sapellido:'', partido: 'pdc', departamento:'Potosí', imagen:'new/titulares/g2/TERESA ALARCON ARANA.png', imagensu:'', pos:112 },
-  { tnombre: 'Tomasa', tapellido:'Yarhui Jacome', snombre: 'Hugo Marcelo', sapellido:'Cortez Calvimontes', partido: 'libre', departamento:'Chuquisaca', imagen:'new/titulares/g1/TOMASA YARHUI JACOME.png', imagensu:'new/suplentes/g1/HUGO MARCELO CORTEZ CALVIMONTES.png', pos:201 },
-  { tnombre: 'Wanda Ximena', tapellido:'Medrano Hervas', snombre: 'Aldo Sergio', sapellido:'Villegas Mora', partido: 'libre', departamento:'Cochabamba', imagen:'new/titulares/g1/WANDA XIMENA MEDRANO HERVAS.png', imagensu:'new/suplentes/g1/ALDO SERGIO VILLEGAS MORA.png', pos:204 },
-  { tnombre: 'Ana Maria', tapellido:'Crispin Choque', snombre: 'Victor S.', sapellido:'Quispe Santander', partido: 'pdc', departamento:'La Paz', imagen:'new/titulares/g1/ANA MARIA CRISPIN CHOQUE.png', imagensu:'new/suplentes/g1/VICTOR SEVERO QUISPE SANTANDER.png', pos:104 },
-  { tnombre: 'Jose Manuel', tapellido:'Ormachea Mendienta', snombre: 'Maria Elena', sapellido:'Pachacute Ticona', partido: 'libre', departamento:'La Paz', imagen:'new/titulares/g1/JOSE MANUEL ORMACHEA MENDIETA.png', imagensu:'new/suplentes/g1/MARIA ELENA PACHACUTE TICONA.png', pos:203},
-  { tnombre: 'Maria Antonieta', tapellido:'Alcon Sanchez', snombre: 'Edwin', sapellido:'Lopez Quiroga', partido: 'pdc', departamento:'Oruro', imagen:'new/titulares/g2/MARIA ANTONIETA ALCON SANCHEZ.png', imagensu:'new/suplentes/g2/EDWIN LOPEZ QUIROGA.png', pos:109 },
-  { tnombre: 'Ana Karina', tapellido:'Velasco Añez', snombre: 'Marcelo Matias', sapellido:'Cardona Ibañez', partido: 'alianza', departamento:'Beni', imagen:'new/titulares/g3/ANA KARINA VELASCO ÁÑEZ.png', imagensu:'new/suplentes/g3/MARCELO MATIAS CARDONA IBAÑEZ.png', pos:306 },
-  { tnombre: 'Betty', tapellido:'Canaviri Villanueva', snombre: 'Roger', sapellido:'Mamani Coronado', partido: 'libre', departamento:'Potosí', imagen:'new/titulares/g2/BETTY CANAVIRI VILLANUEVA.png', imagensu:'new/suplentes/g2/ROGER MAMANI CORONADO.png', pos:206 },
-  { tnombre: 'Carmen Soledad', tapellido:'Chapeton Tancara', snombre: 'Nilton', sapellido:'Condori Alanoca', partido: 'alianza', departamento:'La Paz', imagen:'new/titulares/g1/CARMEN SOLEDAD CHAPETÓN TANCARA.png', imagensu:'new/suplentes/g1/NILTON CONDORI ALANOCA.png', pos:301 },
-  { tnombre: 'Julio Diego', tapellido:'Romaña Galindo', snombre: 'Carolina', sapellido:'Giese Urresti', partido: 'libre', departamento:'Pando', imagen:'new/titulares/g3/JULIO DIEGO ROMAÑA GALINDO.png', imagensu:'new/suplentes/g3/CAROLINA GIESE URRESTI.png', pos:212 },
-  { tnombre: 'Kathia Lisbeth', tapellido:'Quiroga Fernandez', snombre: 'Leonardo', sapellido:'Roca Eguez', partido: 'libre', departamento:'Santa Cruz', imagen:'new/titulares/g3/KATHIA LISBETH QUIROGA FERNÁNDEZ.png', imagensu:'new/suplentes/g3/LEONARDO ROCA EGUEZ.png', pos:209 },
-  { tnombre: 'Rosa Tatiana', tapellido:'Añez Carrasco', snombre: 'Lorgio Fernando', sapellido:'Pareja Saucedo', partido: 'alianza', departamento:'Santa Cruz', imagen:'new/titulares/g3/ROSA TATIANA AÑEZ CARRASCO.png', imagensu:'new/suplentes/g3/LORGIO FERNANDO PAREJA SAUCEDO.png', pos:304 },
-  { tnombre: 'Abdon', tapellido:'Porcel Arancibia', snombre: 'Ilse Fatima', sapellido:'Davila Arancibia', partido: 'libre', departamento:'Chuquisaca', imagen:'/new/titulares/g1/ABDON PORCEL ARANCIBIA.png', imagensu:'new/suplentes/g1/ILSE FATIMA DAVILA ARANCIBIA.png', pos:202},
-  { tnombre: 'Jose', tapellido:'Sanchez Aguilar', snombre: 'Cinthya Inga', sapellido:'Gutierrez Guzman', partido: 'libre', departamento:'Oruro', imagen:'new/titulares/g2/JOSE SANCHEZ AGUILAR.png', imagensu:'new/suplentes/g2/CINTHYA INGA GUTIERREZ GUZMAN.png', pos:205 },
-  { tnombre: 'Eliana Rina', tapellido:'Acosta Quispe', snombre: 'Sichard Hans', sapellido:'Soraide Castedo', partido: 'alianza', departamento:'Pando', imagen:'new/titulares/g3/ELIANA RINA ACOSTA QUISPE.png', imagensu:'new/suplentes/g3/SICHARD HANS SORAIDE CASTEDO.png', pos:307 },
-]
-
-const sorted = senadoresData.sort((a, b) => a.pos - b.pos);
-for (let i = 0; i < sorted.length; i++) {
-  const item = sorted[i];
-  const depto = item.departamento.toUpperCase();
-  titularesPorDepartamento[depto].push({ 
-    nombre: item.tnombre, 
-    partido: item.partido, 
-    imagen: item.imagen,
-    apellido: item.tapellido 
-  });
-  suplentesPorDepartamento[depto].push({ 
-    nombre: item.snombre, 
-    partido: item.partido, 
-    imagen: item.imagensu,
-    apellido: item.sapellido 
-  });
-}
-
-const miembrosPorPartido = {
-  pdc: { titulares: [], suplentes: [] },
-  libre: { titulares: [], suplentes: [] },
-  alianza: { titulares: [], suplentes: [] },
-  sumate: { titulares: [], suplentes: [] }
-}
-
-const partidoMap = {
-  pdc: miembrosPorPartido.pdc,
-  libre: miembrosPorPartido.libre,
-  alianza: miembrosPorPartido.alianza,
-  sumate: miembrosPorPartido.sumate
-};
-
-for (let i = 0; i < senadoresData.length; i++) {
-  const s = senadoresData[i];
-  const target = partidoMap[s.partido];
-  if (target) {
-    target.titulares.push({
-      nombre: s.tnombre,
-      apellido: s.tapellido,
-      partido: s.partido,
-      departamento: s.departamento,
-      imagen: s.imagen
-    });
-    if (s.snombre) {
-      target.suplentes.push({
-        nombre: s.snombre,
-        apellido: s.sapellido,
-        partido: s.partido,
-        departamento: s.departamento,
-        imagen: s.imagensu
-      });
-    }
-  }
-}
-
-const miembrosMostrar = computed(() => {
-  if (!partidoSeleccionado.value) return []
-  const data = miembrosPorPartido[partidoSeleccionado.value.id]
-  return mostrarSuplentes.value ? data.suplentes : data.titulares
-})
-
-const seleccionarPartido = (partido) => {
-  partidoSeleccionado.value = partido
-  mostrarSuplentes.value = false
-}
-
-const toggleTipoMiembros = () => {
-  mostrarSuplentes.value = !mostrarSuplentes.value
-}
-
-// ==================== SCROLL OBSERVER ====================
-const sections = {
-  'directiva-camaral': seccion1Ref,
-  'comisiones-y-comites': seccion2Ref,
-  'brigadas-parlamentarias': seccion3Ref,
-  'bancadas-politicas': seccion4Ref
-}
-
-const scrollToSection = (id) => {
-  const sectionRef = sections[id]
-  if (sectionRef?.value) {
-    sectionRef.value.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
-}
-
-let scrollObserver = null
-
-const initScrollObserver = () => {
-  scrollObserver = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          if (entry.target === seccion1Ref.value) {
-            isSeccion1Visible.value = true;
-            isSeccion2Visible.value = false;
-            isSeccion3Visible.value = false;
-            isSeccion4Visible.value = false;
-          } else if (entry.target === seccion2Ref.value) {
-            isSeccion1Visible.value = false;
-            isSeccion2Visible.value = true;
-            isSeccion3Visible.value = false;
-            isSeccion4Visible.value = false;
-          } else if (entry.target === seccion3Ref.value) {
-            isSeccion1Visible.value = false;
-            isSeccion2Visible.value = false;
-            isSeccion3Visible.value = true;
-            isSeccion4Visible.value = false;
-          } else if (entry.target === seccion4Ref.value) {
-            isSeccion1Visible.value = false;
-            isSeccion2Visible.value = false;
-            isSeccion3Visible.value = false;
-            isSeccion4Visible.value = true;
-          }
-          entry.target.classList.add('animate-in');
-        }
-      });
-    },
-    { threshold: 0.3, rootMargin: '0px 0px 0px 0px' }
-  );
-  
-  [seccion1Ref.value, seccion2Ref.value, seccion3Ref.value, seccion4Ref.value].forEach(section => {
-    if (section) scrollObserver.observe(section);
-  });
-};
-
-// ==================== PRECARGA ====================
-const preloadImagenesCriticas = () => {
-  const imagenesCriticas = [
-    '/senadores/g1/DIEGO ESTEBAN MATEO ÁVILA NAVAJAS.png',
-    '/senadores/g2/CARMEN SOLEDAD CHAPETON TANCARA.png',
-    '/senadores/g3/KHATIA LISBETH QUIROGA FERNÁNDEZ.png',
-    '/senadores/g1/YASMIN ESTIVARIZ VILLARROEL.png',
-    '/senadores/g4/JULIO DIEGO ROMAÑA GALINDO.png',
-    '/senadores/g2/ROSA TATIANA AÑEZ CARRASCO.png'
-  ]
-  
-  imagenesCriticas.forEach(src => {
-    const img = new Image()
-    img.src = src
-  })
-}
-
-// ==================== LIFECYCLE ====================
-onMounted(async () => {
-  initScrollListener();
-  
-  // Precargar departamentos en segundo plano
-  departamentosStore.preload()
-  
-  await nextTick();
-  initScrollObserver();
-  
-  setTimeout(() => {
-    if (seccion1Ref.value) {
-      isSeccion1Visible.value = true;
-      seccion1Ref.value.classList.add('animate-in');
-    }
-  }, 100);
-  
-  if (route.hash) {
-    const id = route.hash.replace('#', '')
-    setTimeout(() => scrollToSection(id), 500)
-  }
-  
-  // Precarga de imágenes críticas
-  if (process.client) {
-    setTimeout(() => {
-      preloadImagenesCriticas()
-    }, 500)
-  }
-});
-
-watch(() => route.hash, (newHash) => {
-  if (newHash) {
-    const id = newHash.replace('#', '')
-    scrollToSection(id)
-  }
-})
-
-onUnmounted(() => {
-  removeScrollListener();
-  if (scrollObserver) scrollObserver.disconnect();
-});
-
-definePageMeta({ layout: 'alter8' });
-</script>
-
-<style scoped>
-/* Tus estilos existentes se mantienen igual */
-.text-style {
-  font-family: 'Montserrat', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-/* ... resto de tus estilos ... */
-</style>
-
-<style>
-/* Tus estilos globales se mantienen igual */
-/* ... */
-</style>
-
-<style scoped>
-.text-style {
-  font-family: 'Montserrat', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-html, body {
-  scroll-behavior: smooth;
-  scroll-snap-type: y mandatory;
-}
-
-section, .scroll-section {
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
-  transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.3, 1.2);
-}
-
-.shadow-left-column {
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 15px rgba(224, 54, 54, 0.3);
-}
-
-.shadow-right-column {
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 0, 0, 0.5);
-}
-
-.circle-shadow {
-  box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.4), 0 0 0 2px rgba(228, 210, 148, 0.3);
-}
-
-.circle-shadow-large {
-  box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.5), 0 0 0 3px rgba(228, 210, 148, 0.3);
-}
-
-.global-fixed-background {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.8s ease-in-out, visibility 0.8s ease-in-out;
-}
-
-.global-fixed-background::after {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: radial-gradient(circle at 50% 30%, transparent 0%, rgba(0, 0, 0, 0.3) 80%, rgba(0, 0, 0, 0.4) 100%);
-  pointer-events: none;
-  z-index: 1;
-}
-
-.global-fixed-background.show-fixed {
-  opacity: 1;
-  visibility: visible;
-}
-
-.seccion1-fondo {
-  background-image: url('/legisladores nacionales/fondo directiva.jpg');
-}
-
-.seccion3-fondo {
-  background-image: url('/legisladores nacionales/fondo departamentos.jpg');
-}
-
-.seccion4-fondo {
-  background-image: url('/legisladores nacionales/fondo partidos.jpg');
-}
-
-.scroll-section {
-  position: relative;
-  width: 100%;
-  z-index: 5;
-}
-
-section, .scroll-section {
-  position: relative;
-  z-index: 10;
-}
-
-.scroll-section > div {
-  position: relative;
-  z-index: 15;
-}
-
-@keyframes fade-in-up {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.animate-fade-in-up {
-  animation: fade-in-up 0.8s ease-out forwards;
-}
-
-.animation-delay-200 {
-  animation-delay: 0.2s;
-  opacity: 0;
-  animation-fill-mode: forwards;
-}
-
-.drop-shadow-lg {
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-}
-
-.drop-shadow {
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-}
-
-@media (min-width: 1024px) {
-  .container { max-width: 1280px; }
-}
-</style>
-
-<style>
-.scroll-section {
-  will-change: transform, opacity;
-  backface-visibility: hidden;
-}
-
-.scroll-section.animate-in {
-  opacity: 1 !important;
-  transform: translateY(0) !important;
-}
-
-.scroll-section.animate-in > * {
-  animation: fadeInUpChild 0.6s ease-out forwards;
-}
-
-@keyframes fadeInUpChild {
-  from { opacity: 0; transform: translateY(15px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-::-webkit-scrollbar {
-  width: 10px;
-  background: transparent;
-}
-
-::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.05);
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: rgba(224, 54, 54, 0.4);
-  border-radius: 10px;
-  transition: background 0.3s ease;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(224, 54, 54, 0.7);
-}
-
-html { scroll-behavior: smooth; }
-
-footer {
-  display: block !important;
-  position: relative !important;
-  z-index: 100 !important;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .scroll-section,
-  .scroll-section.animate-in,
-  .scroll-section.animate-in > * {
-    transition: none !important;
-    animation: none !important;
-    opacity: 1 !important;
-    transform: none !important;
-  }
-}
-
-.fade-fast-enter-active,
-.fade-fast-leave-active {
-  transition: opacity 0.6s ease-in;
-}
-
-.fade-fast-enter-from,
-.fade-fast-leave-to {
-  opacity: 0;
-}
-
-.fade-scale-enter-active,
-.fade-scale-leave-active {
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.fade-scale-enter-from {
-  opacity: 0;
-  transform: scale(0.95);
-}
-
-.fade-scale-leave-to {
-  opacity: 0;
-  transform: scale(0.95);
-}
-
-@keyframes slide-right {
-  0% { width: 0%; left: 0; }
-  50% { width: 100%; left: 0; }
-  100% { width: 0%; left: 100%; }
-}
-
-@keyframes slide-left {
-  0% { width: 0%; right: 0; }
-  50% { width: 100%; right: 0; }
-  100% { width: 0%; right: 100%; }
-}
-
-@keyframes slide-down {
-  0% { height: 0%; top: 0; }
-  50% { height: 100%; top: 0; }
-  100% { height: 0%; top: 100%; }
-}
-
-@keyframes slide-up {
-  0% { height: 0%; bottom: 0; }
-  50% { height: 100%; bottom: 0; }
-  100% { height: 0%; bottom: 100%; }
-}
-
-.animate-slide-right {
-  animation: slide-right 4s ease-in-out infinite;
-}
-
-.animate-slide-left {
-  animation: slide-left 4s ease-in-out infinite;
-}
-
-.animate-slide-down {
-  animation: slide-down 4s ease-in-out infinite;
-}
-
-.animate-slide-up {
-  animation: slide-up 4s ease-in-out infinite;
-}
-
-svg title {
-  display: none;
-}
-
-.group svg title {
-  display: none;
-}
-</style> 
-================================= 
-pages\proyectos.vue 
-================================= 
- 
-<template>
-  <div class="p-8">
-    <h1 class="text-2xl font-bold mb-4">Demostración: Hash vs Query</h1>
-    
-    <div class="grid grid-cols-2 gap-8">
-      <!-- COLUMNA HASH -->
-      <div class="border p-4 rounded">
-        <h2 class="text-xl font-bold mb-4 text-blue-600">🔗 HASH (#)</h2>
-        <p class="text-sm text-gray-600 mb-4">NUNCA recarga la página</p>
-        
-        <div class="space-y-2">
-          <button @click="cambiarHash('departamento', 'lapaz')" 
-                  class="bg-blue-500 px-3 py-1 rounded block w-full">
-            #departamento=lapaz
-          </button>
-          <button @click="cambiarHash('comision', 'justicia')" 
-                  class="bg-blue-500 px-3 py-1 rounded block w-full">
-            #comision=justicia
-          </button>
-          <button @click="cambiarHashMultiple" 
-                  class="bg-blue-500 px-3 py-1 rounded block w-full">
-            #departamento=lapaz&comision=justicia
-          </button>
-          <button @click="limpiarHash" 
-                  class="bg-gray-500 px-3 py-1 rounded block w-full">
-            Limpiar Hash
-          </button>
-        </div>
-        
-        <div class="mt-4 p-2 bg-gray-100 rounded">
-          <p><strong>Hash actual:</strong> {{ hashActual }}</p>
-          <p><strong>Parámetros:</strong> {{ JSON.stringify(hashParams) }}</p>
-        </div>
-      </div>
-      
-      <!-- COLUMNA QUERY -->
-      <div class="border p-4 rounded">
-        <h2 class="text-xl font-bold mb-4 text-green-600">❓ QUERY (?)</h2>
-        <p class="text-sm text-gray-600 mb-4">Con router.push() NO recarga</p>
-        
-        <div class="space-y-2">
-          <button @click="cambiarQuery('departamento', 'lapaz')" 
-                  class="bg-green-500 text-white px-3 py-1 rounded block w-full">
-            ?departamento=lapaz
-          </button>
-          <button @click="cambiarQuery('comision', 'justicia')" 
-                  class="bg-green-500 text-white px-3 py-1 rounded block w-full">
-            ?comision=justicia
-          </button>
-          <button @click="cambiarQueryMultiple" 
-                  class="bg-green-500 text-white px-3 py-1 rounded block w-full">
-            ?departamento=lapaz&comision=justicia
-          </button>
-          <button @click="limpiarQuery" 
-                  class="bg-gray-500 text-white px-3 py-1 rounded block w-full">
-            Limpiar Query
-          </button>
-        </div>
-        
-        <div class="mt-4 p-2 bg-gray-100 rounded">
-          <p><strong>Query actual:</strong> {{ JSON.stringify($route.query) }}</p>
-        </div>
-        
-        <!-- Botón que SÍ recarga -->
-        <div class="mt-4 pt-4 border-t">
-          <p class="text-sm text-red-600 mb-2">⚠️ Esto SÍ recarga:</p>
-          <a :href="`/proyectos?departamento=lapaz`" 
-             class="bg-red-500 text-white px-3 py-1 rounded block w-full text-center">
-            Link normal ?departamento=lapaz (RECARGA)
-          </a>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Contador de recargas -->
-    <div class="mt-8 p-4 bg-yellow-100 rounded">
-      <p><strong>Recargas de página:</strong> {{ recargas }}</p>
-      <p><strong>Cambios de hash:</strong> {{ cambiosHash }}</p>
-      <p><strong>Cambios de query (con router):</strong> {{ cambiosQuery }}</p>
-    </div>
-    
-    <!-- Elementos para scroll (hash) -->
-    <div class="mt-96">
-      <div id="departamento=lapaz" class="bg-blue-100 p-8 m-4">
-        🟦 Sección: departamento-lapaz (scroll automático con hash)
-      </div>
-      <div id="comision=justicia" class="bg-green-100 p-8 m-4">
-        🟩 Sección: comision-justicia
-      </div>
-    </div>
-  </div>
-</template>
-
-<script setup>
-import { ref, computed, watch, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-
-const route = useRoute()
-const router = useRouter()
-
-// Contadores
-const recargas = ref(0)
-const cambiosHash = ref(0)
-const cambiosQuery = ref(0)
-
-// Detectar recarga
-onMounted(() => {
-  recargas.value++
-  console.log('🔄 Página recargada #', recargas.value)
-})
-
-// ===== FUNCIONES PARA HASH =====
-const hashActual = computed(() => route.hash)
-const hashParams = computed(() => {
-  const hash = route.hash
-  if (!hash) return {}
-  
-  const params = {}
-  const pairs = hash.substring(1).split('&')
-  pairs.forEach(pair => {
-    const [key, value] = pair.split('=')
-    if (key) params[key] = value || true
-  })
-  return params
-})
-
-const cambiarHash = (key, value) => {
-  const nuevosParams = { ...hashParams.value, [key]: value }
-  const hashString = Object.entries(nuevosParams)
-    .map(([k, v]) => v === true ? k : `${k}=${v}`)
-    .join('&')
-  
-  router.push({ hash: `#${hashString}` })
-  cambiosHash.value++
-}
-
-const cambiarHashMultiple = () => {
-  router.push({ hash: '#departamento=lapaz&comision=justicia' })
-  cambiosHash.value++
-}
-
-const limpiarHash = () => {
-  router.push({ hash: '' })
-  cambiosHash.value++
-}
-
-// ===== FUNCIONES PARA QUERY =====
-const cambiarQuery = (key, value) => {
-  router.push({
-    query: {
-      ...route.query,
-      [key]: value
-    }
-  })
-  cambiosQuery.value++
-}
-
-const cambiarQueryMultiple = () => {
-  router.push({
-    query: {
-      departamento: 'lapaz',
-      comision: 'justicia'
-    }
-  })
-  cambiosQuery.value++
-}
-
-const limpiarQuery = () => {
-  router.push({ query: {} })
-  cambiosQuery.value++
-}
-
-// Watches
-watch(() => route.hash, (newHash, oldHash) => {
-  console.log('📍 Hash cambió:', oldHash, '→', newHash)
-})
-
-watch(() => route.query, (newQuery, oldQuery) => {
-  console.log('📊 Query cambió:', oldQuery, '→', newQuery)
-}, { deep: true })
-</script> 
-================================= 
-pages\test.vue 
-================================= 
- 
-<!-- pages/detalle-proyecto/[id].vue -->
-<template>
-  <div class="proyecto-detalle">
-    <!-- Header -->
-    <h1>{{ proyecto.titulo }}</h1>
-    
-    <!-- Barra de navegación de secciones -->
-    <div class="secciones-nav bg-gray-100 p-4 sticky top-0">
-      <button @click="scrollToSection('info')">Información</button>
-      <button @click="scrollToSection('debates')">Debates</button>
-      <button @click="scrollToSection('votaciones')">Votaciones</button>
-      <button @click="scrollToSection('comentarios')">Comentarios</button>
-      <button @click="scrollToSection('documentos')">Documentos</button>
-    </div>
-    
-    <!-- Secciones con IDs -->
-    <section id="info" class="seccion">
-      <h2>Información General</h2>
-      <p>{{ proyecto.descripcion }}</p>
-    </section>
-    
-    <section id="debates" class="seccion">
-      <h2>Debates</h2>
-      <div v-for="debate in proyecto.debates" :key="debate.id">
-        {{ debate.titulo }}
-      </div>
-    </section>
-    
-    <section id="votaciones" class="seccion">
-      <h2>Votaciones</h2>
-      <!-- contenido -->
-    </section>
-    
-    <section id="comentarios" class="seccion">
-      <h2>Comentarios</h2>
-      <div v-for="comentario in proyecto.comentarios" :key="comentario.id">
-        {{ comentario.texto }}
-      </div>
-    </section>
-    
-    <section id="documentos" class="seccion">
-      <h2>Documentos</h2>
-      <!-- contenido -->
-    </section>
-  </div>
-</template>
-
-<script setup>
-import { ref, onMounted, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-
-const route = useRoute()
-const router = useRouter()
-
-// Datos del proyecto (simulados)
-const proyecto = ref({})
-
-// Cargar datos del proyecto
-const { id } = route.params
-const { seccion } = route.query // Leer el query parameter
-
-// Función para hacer scroll a una sección
-const scrollToSection = (sectionId, options = { behavior: 'smooth' }) => {
-  console.log(`📜 Haciendo scroll a: #${sectionId}`)
-  
-  // Esperar a que el DOM esté listo
-  setTimeout(() => {
-    const element = document.getElementById(sectionId)
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      
-      // Opcional: Resaltar la sección
-      element.classList.add('highlight-section')
-      setTimeout(() => {
-        element.classList.remove('highlight-section')
-      }, 2000)
-    } else {
-      console.warn(`⚠️ No se encontró el elemento con id: ${sectionId}`)
-    }
-  }, 300) // Pequeño delay para asegurar que el DOM cargó
-}
-
-// Cuando el componente se monta
-onMounted(async () => {
-  // Cargar datos del proyecto
-  await cargarProyecto(id)
-  
-  // Si hay una sección en el query, hacer scroll
-  if (route.query.seccion) {
-    scrollToSection(route.query.seccion)
-  }
-  
-  // Si hay un hash, también hacer scroll (por si acaso)
-  if (route.hash) {
-    const hashId = route.hash.substring(1) // quitar el #
-    scrollToSection(hashId)
-  }
-})
-
-// Watch para cuando cambia la ruta (por si navegas dentro de la misma página)
-watch(() => route.query.seccion, (nuevaSeccion, viejaSeccion) => {
-  if (nuevaSeccion && nuevaSeccion !== viejaSeccion) {
-    scrollToSection(nuevaSeccion)
-  }
-})
-
-// Función para actualizar la URL sin recargar
-const cambiarSeccion = (seccionId) => {
-  router.push({
-    query: { ...route.query, seccion: seccionId },
-    hash: `#${seccionId}`
-  })
-  // El scroll se hará automáticamente por el watch
-}
-</script>
-
-<style scoped>
-.seccion {
-  min-height: 500px;
-  padding: 20px;
-  margin-bottom: 20px;
-  border-bottom: 1px solid #eee;
-  transition: background-color 0.3s;
-}
-
-.highlight-section {
-  background-color: #fff3cd;
-  box-shadow: 0 0 10px rgba(255, 193, 7, 0.5);
-}
-
-.secciones-nav {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.secciones-nav button {
-  padding: 8px 16px;
-  background-color: #e0e0e0;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.secciones-nav button:hover {
-  background-color: #d0d0d0;
-  transform: translateY(-2px);
-}
-</style> 
-================================= 
-pages\museo\galeria.vue 
-================================= 
- 
-<template>
-  <div class="min-h-screen bg-gray-100">
-    <!-- ============================================ -->
-    <!-- TÍTULO CON ESTILO SENADO -->
-    <!-- ============================================ -->
-    <div class="relative w-full pt-[4.4vw]" ref="topSection">
-      <div class="relative w-full">
-        <!-- Líneas animadas estilo Senado -->
-        <div class="absolute top-0 left-0 h-[2px] bg-[#E4D294] animate-slide-right" style="width: 100%;"></div>
-        <div class="absolute bottom-0 right-0 h-[2px] bg-[#E4D294] animate-slide-left" style="width: 100%;"></div>
-        <div class="absolute top-0 right-0 w-[2px] bg-[#E4D294] animate-slide-down" style="height: 100%;"></div>
-        <div class="absolute bottom-0 left-0 w-[2px] bg-[#E4D294] animate-slide-up" style="height: 100%;"></div>
-        
-        <div class="bg-[#E03636] py-[0.8vw] text-center">
-          <h1 class="text-[3vw] text-white font-semibold">
-            Galería Institucional
-          </h1>
-        </div>
-      </div>
-      
-      <p class="text-gray-600 text-lg text-center max-w-2xl mx-auto mt-6 px-4">
-        Conoce la historia y el patrimonio del Senado de Bolivia
-      </p>
-      <p class="text-gray-500 text-sm text-center mt-2 px-4">
-        {{ totalImages }} imágenes | Página {{ currentPage }} de {{ totalPages }}
-        <span v-if="!useApi" class="ml-2 text-xs text-gray-400">(datos locales)</span>
-      </p>
-    </div>
-
-    <!-- Contenido principal -->
-    <div class="container mx-auto px-4 py-8">
-      <!-- Loading -->
-      <div v-if="loading" class="flex justify-center items-center py-20">
-        <div class="inline-block w-12 h-12 border-4 border-[#E03636] border-t-transparent rounded-full animate-spin"></div>
-        <p class="ml-3 text-gray-600">Cargando galería...</p>
-      </div>
-
-      <!-- Grid de imágenes -->
-      <div v-else class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 md:gap-6">
-        <div 
-          v-for="img in paginatedImages" 
-          :key="img.id"
-          class="gallery-item cursor-pointer group"
-          @click="openImageModal(img)"
-        >
-          <div class="relative overflow-hidden rounded-xl shadow-lg bg-gray-200" style="aspect-ratio: 4/3">
-            <img 
-              :src="`/G-Institucional/${img.id}.webp`"
-              :alt="img.description"
-              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-              loading="lazy"
-              @error="handleImageError"
-            />
-            
-            <div class="absolute bottom-0 left-0 right-0 bg-[#E03636]/80 backdrop-blur-sm py-2 px-2">
-              <p class="text-white text-xs md:text-sm font-medium line-clamp-2 text-center">
-                {{ img.description }}
-              </p>
-            </div>
-
-            <div class="absolute inset-0 border-2 border-white rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
-            <div class="absolute inset-[3px] border border-black/30 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Paginación -->
-      <div class="flex justify-center items-center gap-2 mt-10 flex-wrap">
-        <button 
-          @click="goToPage(currentPage - 1)"
-          :disabled="currentPage === 1"
-          class="px-4 py-2 bg-[#E03636] text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#C12F2F] transition-colors text-sm"
-        >
-          ← Anterior
-        </button>
-        
-        <div class="flex gap-1 mx-2">
-          <button
-            v-for="page in visiblePages"
-            :key="page"
-            @click="goToPage(page)"
-            class="w-8 h-8 md:w-10 md:h-10 rounded-full transition-all duration-300 text-sm font-medium"
-            :class="currentPage === page 
-              ? 'bg-[#E03636] text-white scale-105 shadow-md' 
-              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'"
-          >
-            {{ page }}
-          </button>
-        </div>
-        
-        <button 
-          @click="goToPage(currentPage + 1)"
-          :disabled="currentPage === totalPages"
-          class="px-4 py-2 bg-[#E03636] text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#C12F2F] transition-colors text-sm"
-        >
-          Siguiente →
-        </button>
-      </div>
-
-      <p class="text-center text-gray-500 text-sm mt-4">
-        Página {{ currentPage }} de {{ totalPages }}
-      </p>
-    </div>
-
-    <!-- Modal de imagen ampliada -->
-    <Teleport to="body">
-      <div v-if="showImageModal" class="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center" @click.self="closeImageViewer">
-        <div class="relative w-full h-full flex flex-col items-center justify-center p-4">
-          <button 
-            @click="closeImageViewer"
-            class="absolute top-4 right-4 text-white hover:text-[#E03636] transition-colors text-3xl z-10"
-          >
-            ✕
-          </button>
-
-          <button 
-            @click="prevImage"
-            class="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 text-white/60 hover:text-white transition-colors text-3xl md:text-5xl z-10"
-          >
-            ‹
-          </button>
-
-          <div class="relative max-w-[90vw] max-h-[70vh] flex items-center justify-center">
-            <img 
-              :src="`/G-Institucional/${currentImage?.id}.webp`"
-              :alt="currentImage?.description"
-              class="max-w-full max-h-[70vh] object-contain rounded-lg"
-            />
-          </div>
-
-          <div class="mt-6 text-center max-w-2xl px-4">
-            <p class="text-white text-base md:text-xl font-medium">{{ currentImage?.description }}</p>
-          </div>
-
-          <button 
-            @click="nextImage"
-            class="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 text-white/60 hover:text-white transition-colors text-3xl md:text-5xl z-10"
-          >
-            ›
-          </button>
-
-          <p class="text-white/50 text-sm mt-4">
-            {{ currentImageIndex + 1 }} / {{ totalImages }}
-          </p>
-        </div>
-      </div>
-    </Teleport>
-  </div>
-</template>
-
-<script setup>
-import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
-import { useGaleria } from '~/composables/useGaleria'
-
-definePageMeta({
-  layout: 'alter8'
-})
-
-const router = useRouter()
-const route = useRoute()
-const { images: allImages, loading, fetchImages, USE_API } = useGaleria()
-
-// Referencia a la sección superior
-const topSection = ref(null)
-
-// ============================================
-// 🔥 FUNCIÓN PARA FORZAR SCROLL AL INICIO
-// ============================================
-const forceScrollToTop = () => {
-  if (process.client) {
-    // Múltiples métodos para asegurar
-    window.scrollTo(0, 0)
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
-    document.documentElement.scrollTop = 0
-    document.body.scrollTop = 0
-    document.body.scrollIntoView({ block: 'start', behavior: 'instant' })
-    
-    // Si existe la referencia, hacer scroll a ella
-    if (topSection.value) {
-      topSection.value.scrollIntoView({ block: 'start', behavior: 'instant' })
-    }
-  }
-}
-
-// ============================================
-// ESTADO
-// ============================================
-const totalImages = computed(() => allImages.value.length)
-const useApi = computed(() => USE_API)
-
-const itemsPerPage = 20
-const currentPage = ref(1)
-const totalPages = computed(() => Math.ceil(totalImages.value / itemsPerPage))
-
-const paginatedImages = computed(() => {
-  const start = (currentPage.value - 1) * itemsPerPage
-  const end = start + itemsPerPage
-  return allImages.value.slice(start, end)
-})
-
-const visiblePages = computed(() => {
-  const maxVisible = 7
-  let start = Math.max(1, currentPage.value - Math.floor(maxVisible / 2))
-  let end = Math.min(totalPages.value, start + maxVisible - 1)
-  
-  if (end - start + 1 < maxVisible) {
-    start = Math.max(1, end - maxVisible + 1)
-  }
-  
-  const pages = []
-  for (let i = start; i <= end; i++) {
-    pages.push(i)
-  }
-  return pages
-})
-
-const goToPage = (page) => {
-  if (page < 1 || page > totalPages.value) return
-  currentPage.value = page
-  forceScrollToTop()
-}
-
-// Manejo de error de carga
-const handleImageError = (event) => {
-  const img = event.target
-  img.src = '/images/placeholder.jpg'
-}
-
-// ============================================
-// MODAL
-// ============================================
-const showImageModal = ref(false)
-const currentImage = ref(null)
-const currentImageIndex = ref(0)
-
-const openImageModal = (image) => {
-  currentImage.value = image
-  currentImageIndex.value = image.id - 1
-  showImageModal.value = true
-  document.body.style.overflow = 'hidden'
-}
-
-const closeImageViewer = () => {
-  showImageModal.value = false
-  currentImage.value = null
-  document.body.style.overflow = ''
-}
-
-const nextImage = () => {
-  if (currentImageIndex.value < totalImages.value - 1) {
-    currentImageIndex.value++
-    currentImage.value = allImages.value[currentImageIndex.value]
-  }
-}
-
-const prevImage = () => {
-  if (currentImageIndex.value > 0) {
-    currentImageIndex.value--
-    currentImage.value = allImages.value[currentImageIndex.value]
-  }
-}
-
-const handleKeydown = (e) => {
-  if (!showImageModal.value) return
-  switch(e.key) {
-    case 'ArrowLeft': prevImage(); break
-    case 'ArrowRight': nextImage(); break
-    case 'Escape': closeImageViewer(); break
-  }
-}
-
-// ============================================
-// CICLO DE VIDA - FORZAR SCROLL AL INICIO
-// ============================================
-onMounted(async () => {
-  window.addEventListener('keydown', handleKeydown)
-  
-  // 🔥 FORZAR SCROLL INMEDIATAMENTE
-  forceScrollToTop()
-  
-  // Cargar datos
-  await fetchImages()
-  console.log(`📸 Galería cargada: ${totalImages.value} imágenes | Usando API: ${USE_API}`)
-  
-  // 🔥 FORZAR SCROLL NUEVAMENTE DESPUÉS DE CARGAR
-  nextTick(() => {
-    forceScrollToTop()
-  })
-  
-  // 🔥 FORZAR SCROLL CON DELAY (por si hay renderizado asíncrono)
-  setTimeout(() => {
-    forceScrollToTop()
-  }, 50)
-  
-  setTimeout(() => {
-    forceScrollToTop()
-  }, 200)
-})
-
-// 🔥 Escuchar cambios de ruta para forzar scroll
-if (process.client) {
-  // Cada vez que se complete la navegación
-  router.afterEach((to) => {
-    if (to.path === '/museo/galeria') {
-      forceScrollToTop()
-    }
-  })
-}
-
-onUnmounted(() => {
-  window.removeEventListener('keydown', handleKeydown)
-  document.body.style.overflow = ''
-})
-</script>
-
-<style scoped>
-.line-clamp-2 {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.fixed {
-  animation: fadeIn 0.2s ease-out;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-.gallery-item {
-  transition: transform 0.2s ease;
-}
-
-.gallery-item:hover {
-  transform: translateY(-3px);
-}
-
-/* ============================================ */
-/* ANIMACIONES DE BORDES ESTILO SENADO */
-/* ============================================ */
-@keyframes slide-right {
-  0% { width: 0%; left: 0; }
-  50% { width: 100%; left: 0; }
-  100% { width: 0%; left: 100%; }
-}
-
-@keyframes slide-left {
-  0% { width: 0%; right: 0; }
-  50% { width: 100%; right: 0; }
-  100% { width: 0%; right: 100%; }
-}
-
-@keyframes slide-down {
-  0% { height: 0%; top: 0; }
-  50% { height: 100%; top: 0; }
-  100% { height: 0%; top: 100%; }
-}
-
-@keyframes slide-up {
-  0% { height: 0%; bottom: 0; }
-  50% { height: 100%; bottom: 0; }
-  100% { height: 0%; bottom: 100%; }
-}
-
-.animate-slide-right {
-  animation: slide-right 4s ease-in-out infinite;
-}
-
-.animate-slide-left {
-  animation: slide-left 4s ease-in-out infinite;
-}
-
-.animate-slide-down {
-  animation: slide-down 4s ease-in-out infinite;
-}
-
-.animate-slide-up {
-  animation: slide-up 4s ease-in-out infinite;
 }
 </style>

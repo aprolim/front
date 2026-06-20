@@ -203,25 +203,6 @@ const handleDonationClick = () => {
 }
 
 // ============================================
-// FORZAR REPRODUCCIÓN DEL VIDEO
-// ============================================
-const forceVideoPlayback = () => {
-  // El video ahora es manejado por PersistentVideo
-  // Buscar el video en el DOM y reproducirlo si está pausado
-  const video = document.querySelector('video')
-  if (video && video.paused) {
-    video.play().catch(() => {})
-  }
-}
-
-// ============================================
-// MANEJAR INTERACCIÓN DEL USUARIO
-// ============================================
-const handleUserInteraction = () => {
-  forceVideoPlayback()
-}
-
-// ============================================
 // SCROLL OBSERVER
 // ============================================
 let scrollObserver = null
@@ -324,21 +305,8 @@ onMounted(async () => {
   setTimeout(doScroll, 100)
   setTimeout(doScroll, 300)
   
-  // 6. Forzar reproducción del video
-  setTimeout(forceVideoPlayback, 200)
-  setTimeout(forceVideoPlayback, 500)
-  setTimeout(forceVideoPlayback, 1000)
-  setTimeout(forceVideoPlayback, 2000)
-  
-  // 7. Event listeners para interacción del usuario
-  document.addEventListener('click', handleUserInteraction)
-  document.addEventListener('touchstart', handleUserInteraction)
-  document.addEventListener('scroll', forceVideoPlayback)
-  
-  // 8. Escuchar cuando la página se carga completamente
-  window.addEventListener('load', () => {
-    setTimeout(forceVideoPlayback, 100)
-  })
+  // ✅ ELIMINADOS: setTimeout(forceVideoPlayback, ...) - ya no son necesarios
+  // ✅ ELIMINADOS: event listeners click/touchstart/scroll - ya no son necesarios
 })
 
 onUnmounted(() => {
@@ -352,9 +320,7 @@ onUnmounted(() => {
     imageObserver.disconnect()
   }
   
-  document.removeEventListener('click', handleUserInteraction)
-  document.removeEventListener('touchstart', handleUserInteraction)
-  document.removeEventListener('scroll', forceVideoPlayback)
+  // ✅ ELIMINADOS: removeEventListener de click/touchstart/scroll
 })
 
 // ============================================

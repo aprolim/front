@@ -7,7 +7,7 @@ export function useCarousel(heroMedia = []) {
   
   // Estados reactivos para configuración
   //const useVideo = ref(false)
-  const useVideo = ref(true)
+  const useVideo = ref(false)
   const mediaCount = ref(3)
   const transitionTime = ref(5000)
   const currentMediaIndex = ref(0)

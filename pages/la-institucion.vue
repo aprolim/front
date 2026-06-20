@@ -9,7 +9,6 @@
       class="relative h-screen flex items-start overflow-hidden transition-all duration-500"
       :class="{ 'min-h-[40vh] md:min-h-[45vh]': scrolled }"
       ref="heroSection"
-      @mouseleave="resumeCarousel"
       style="background-color: #eeeeee; background-size: cover"
     >
       <HeroWithCarousel 
@@ -59,7 +58,6 @@
 <script setup>
 import { ref, onMounted, onUnmounted, nextTick, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { useCarousel } from '@/composables/useCarousel'
 import { useScrollEffects } from '@/composables/useScrollEffects'
 import ScrollProgress from '@/components/UI/ScrollProgress.vue'
 import HeroWithCarousel from '~/components/HeroWithCarousel.vue'
@@ -67,33 +65,10 @@ import SenateDirectors from '~/components/SenateDirectors.vue'
 import HistoricalReview from '~/components/HistoricalReview.vue'
 import HorizontalCarousel from '~/components/HorizontalCarousel.vue'
 
-const heroMedia = ref([
-  {
-    type: 'video',
-    url: 'https://senado.gob.bo//assets/intro2025-C9lburAD.mp4',
-    alt: 'Video institucional del Senado de Bolivia'
-  },
-  {
-    type: 'image',
-    url: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
-    alt: 'Edificio del Senado Nacional de Bolivia'
-  },
-  {
-    type: 'image',
-    url: 'https://pxcdn.reduno.com.bo/reduno/112025/1762461432445.webp?cw=800&ch=450&extw=jpg',
-    alt: 'Edificio del Congreso Nacional de Bolivia'
-  },
-  {
-    type: 'image', 
-    url: 'https://apisi.senado.gob.bo/images/a001535c-1750-49a8-b277-37b32b038c45_1759275539.jpeg',
-    alt: 'Asamblea Legislativa Plurinacional de Bolivia'
-  }
-])
-
-const {
-  startCarousel,
-  resumeCarousel
-} = useCarousel(heroMedia.value)
+// ============================================
+// ✅ ELIMINADO: heroMedia (ya no se usa)
+// ✅ ELIMINADO: useCarousel (ya no se usa)
+// ============================================
 
 const { scrolled, scrollProgress, initScrollListener, removeScrollListener } = useScrollEffects()
 const route = useRoute()
@@ -184,7 +159,7 @@ const initScrollObserver = () => {
 };
 
 onMounted(async () => {
-  startCarousel();
+  // ✅ ELIMINADO: startCarousel()
   initScrollListener();
   await nextTick();
   showSection.value = true;
@@ -347,14 +322,8 @@ footer {
 }
 
 @keyframes fadeInUpChild {
-  from {
-    opacity: 0;
-    transform: translateY(15px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 ::-webkit-scrollbar {

@@ -9,9 +9,9 @@ export const usePriorityImages = () => {
     '/Mandato Constitucional Senado/15.png',
     '/Mandato Constitucional Senado/27.JPG',
     // Images importantes
-    '/Reseña Histórica del Senado/17.png',
-    '/Reseña Histórica del Senado/63.png',
-    '/Reseña Histórica del Senado/118.JPG',
+    '/Reseña Histórica del Senado/17.webp',
+    '/Reseña Histórica del Senado/63.webp',
+    '/Reseña Histórica del Senado/118.webp',
     // Logos
     '/2R.png',
     '/senadores2.png',

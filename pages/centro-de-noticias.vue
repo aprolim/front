@@ -31,6 +31,7 @@
           
           <div v-else-if="noticiasCarousel.length > 0" class="grid grid-cols-1 lg:grid-cols-2 gap-[3vw] items-center">
             
+            <!-- COLUMNA IZQUIERDA - TEXTO -->
             <div class="flex flex-col items-center text-center px-4">
               <div class="w-full">
                 <h2 class="text-[#E03636] text-[2.2vw] lg:text-[2vw] font-bold mb-[1.5vw] leading-tight">
@@ -58,17 +59,25 @@
               </div>
             </div>
             
+            <!-- COLUMNA DERECHA - IMAGEN -->
             <div class="flex flex-col items-center justify-center px-4">
-              <div class="rounded-xl overflow-hidden shadow-lg w-[80%] mx-auto aspect-square">
-                <!-- ✅ SOLO CAMBIO: <img> → <SafeImage> -->
-                <SafeImage 
-                  :src="noticiasCarousel[currentIndex].featuredImage?.url || noticiasCarousel[currentIndex].imagen || '/images/default-news.jpg'"
-                  :alt="limpiarAsteriscos(noticiasCarousel[currentIndex].titulo)"
-                  image-class="w-full h-full object-cover"
-                  :max-retries="8"
-                  :persistent="true"
-                  loading-strategy="eager"
-                />
+              <div class="relative rounded-xl overflow-hidden shadow-lg w-[80%] mx-auto aspect-square">
+                <!-- TODAS las imágenes en el DOM, solo se ocultan/muestran -->
+                <div 
+                  v-for="(noticia, index) in noticiasCarousel" 
+                  :key="noticia.id"
+                  class="absolute inset-0 transition-opacity duration-700 ease-in-out"
+                  :class="[
+                    currentIndex === index ? 'opacity-100 z-10' : 'opacity-0 z-0'
+                  ]"
+                >
+                  <img 
+                    :src="noticia.featuredImage?.url || noticia.imagen || '/images/default-news.jpg'"
+                    :alt="limpiarAsteriscos(noticia.titulo)"
+                    class="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                </div>
               </div>
               <div class="flex justify-center mt-8">
                 <button 
@@ -179,14 +188,11 @@
           target="_blank"
         >
           <div class="relative overflow-hidden">
-            <!-- ✅ SOLO CAMBIO: <img> → <SafeImage> -->
-            <SafeImage 
+            <img 
               src="/images/curul/Recurso-1.jpg"
               alt="Producción Audiovisual - Desde el Curul"
-              image-class="w-full h-auto object-cover transition-all duration-700 ease-out"
-              :max-retries="8"
-              :persistent="true"
-              loading-strategy="eager"
+              class="w-full h-auto object-cover transition-all duration-700 ease-out"
+              loading="lazy"
             />
           </div>
         </NuxtLink>
@@ -201,15 +207,11 @@ import { useRouter, useRoute } from 'vue-router'
 import MoreNewsGrid from '~/components/MoreNewsGrid.vue'
 import { useNoticias } from '~/composables/useNoticias'
 import { useSesiones } from '~/composables/useSesiones'
-// ✅ AGREGAR IMPORT
-import SafeImage from '@/components/SafeImage.vue'
 
 definePageMeta({ layout: 'alter8', ssr: true })
 
 const route = useRoute()
 const router = useRouter()
-
-console.log('🚀 [PAGE] centro-de-noticias.vue - INICIALIZANDO')
 
 const { 
   noticiasImportantes, 
@@ -357,22 +359,17 @@ const scrollToSection = (id) => {
 watch(() => route.hash, (newHash) => {
   if (newHash && newHash !== '') {
     const id = newHash.replace('#', '')
-    console.log(`📍 [PAGE] Navegando a sección: ${id}`)
     setTimeout(() => scrollToSection(id), 100)
   }
 })
 
 watch(noticiasCarousel, (nuevas) => {
-  if (nuevas.length > 0) {
-    console.log(`📊 [PAGE] ${nuevas.length} noticias importantes disponibles`)
-    if (isSeccion1Visible.value) {
-      startCarousel()
-    }
+  if (nuevas.length > 0 && isSeccion1Visible.value) {
+    startCarousel()
   }
 }, { immediate: true })
 
 onActivated(async () => {
-  console.log('🔄 [PAGE] Reactivada')
   stopCarousel()
   destroyObserver()
   await recargarDatos()
@@ -397,13 +394,11 @@ onActivated(async () => {
 })
 
 onDeactivated(() => {
-  console.log('💤 [PAGE] Desactivada')
   stopCarousel()
   destroyObserver()
 })
 
 onMounted(async () => {
-  console.log('🎬 [PAGE] Montada')
   await recargarDatos()
   await fetchSesionesVideos()
   await nextTick()

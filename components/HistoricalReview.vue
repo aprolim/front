@@ -179,17 +179,17 @@ import { ref, computed, onMounted } from 'vue'
 // DATOS DE LAS IMÁGENES CON TEXTO ESPECÍFICO
 const imageData = ref([
   {
-    url: '/Reseña Histórica del Senado/17.png',
+    url: '/Reseña Histórica del Senado/17.webp',
     titulo: 'Palacio Legislativo',
     descripcion: `Palacio Legislativo Restaurado, año 1940 (Fuente: Colección Fotográfica de la Vicepresidencia del Estado Plurinacional de Bolivia).`
   },
   {
-    url: '/Reseña Histórica del Senado/63.png',
+    url: '/Reseña Histórica del Senado/63.webp',
     titulo: 'Antiguo Hemiciclo',
     descripcion: `Hemiciclo antiguo de la Honorable Cámara de Senadores. (Fuente: Colección Fotográfica del Honorable Senado del Estado Plurinacional de Bolivia).`
   },
   {
-    url: '/Reseña Histórica del Senado/118.JPG',
+    url: '/Reseña Histórica del Senado/118.webp',
     titulo: 'Nuevo Hemicilo',
     descripcion: `Nuevo Hemiciclo de la Honorable Cámara de Senadores. (Fuente: Colección Fotográfica del Honorable Senado del Estado Plurinacional de Bolivia).`
   }

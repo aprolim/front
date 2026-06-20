@@ -25,12 +25,25 @@ if (process.client && window.location.hostname === 'localhost') {
       }
     }
     
-    // Limpiar cachés
+    // ✅ Limpiar cachés PERO EXCLUYENDO el video
     if ('caches' in window) {
       const cacheNames = await caches.keys()
-      await Promise.all(cacheNames.map(name => caches.delete(name)))
-      if (cacheNames.length > 0) {
-        console.log(`✅ [APP] Cachés eliminadas: ${cacheNames.join(', ')}`)
+      
+      // Filtrar para NO eliminar senado-videos-v2
+      const cachesToDelete = cacheNames.filter(name => name !== 'senado-videos-v2')
+      
+      await Promise.all(cachesToDelete.map(name => caches.delete(name)))
+      
+      if (cachesToDelete.length > 0) {
+        console.log(`✅ [APP] Cachés eliminadas: ${cachesToDelete.join(', ')}`)
+      } else {
+        console.log('ℹ️ [APP] No se eliminaron cachés (solo existe video cache)')
+      }
+      
+      // Mostrar que el video se mantiene
+      const videoCache = cacheNames.find(name => name === 'senado-videos-v2')
+      if (videoCache) {
+        console.log('📹 [APP] Cache de video conservada: senado-videos-v2')
       }
     }
   }

@@ -37,6 +37,11 @@ const isMounted = ref(false)
 const retryTimer = ref(null)
 const isLoaded = ref(false)
 const maxRetriesReached = ref(false)
+const loadStartTime = ref(0)
+const loadCount = ref(0)
+
+// ✅ LOG: Cuando el componente se crea
+console.log(`🖼️ [SafeImage] COMPONENTE CREADO para: ${props.src}`)
 
 const clearTimers = () => {
   if (retryTimer.value) {
@@ -54,6 +59,9 @@ const getUrlWithCacheBust = (url, retry = 0) => {
 const initSrc = () => {
   const url = props.src || ''
   currentSrc.value = props.useCacheBust ? getUrlWithCacheBust(url, 0) : url
+  loadStartTime.value = Date.now()
+  loadCount.value++
+  console.log(`🔄 [SafeImage] INICIANDO CARGA #${loadCount.value} para: ${url.substring(0, 50)}...`)
 }
 
 const resetState = () => {
@@ -65,6 +73,8 @@ const resetState = () => {
 }
 
 const onLoad = () => {
+  const elapsed = Date.now() - loadStartTime.value
+  console.log(`✅ [SafeImage] CARGA COMPLETADA #${loadCount.value} en ${elapsed}ms: ${props.src.substring(0, 50)}...`)
   retryCount.value = 0
   isLoaded.value = true
   maxRetriesReached.value = false
@@ -73,17 +83,18 @@ const onLoad = () => {
 
 const onError = () => {
   retryCount.value++
+  console.warn(`⚠️ [SafeImage] ERROR #${retryCount.value} en carga #${loadCount.value}: ${props.src.substring(0, 50)}...`)
   
-  // Si superó el máximo de reintentos y no es persistente, no seguir
   if (retryCount.value >= props.maxRetries) {
     maxRetriesReached.value = true
     clearTimers()
+    console.error(`❌ [SafeImage] MÁXIMO DE REINTENTOS ALCANZADO para: ${props.src}`)
     return
   }
   
-  // Si es persistente, seguir reintentando indefinidamente
   if (props.persistent) {
     const delay = props.retryDelay * Math.pow(1.5, retryCount.value - 1)
+    console.log(`🔄 [SafeImage] Reintentando en ${delay}ms (intento ${retryCount.value}/${props.maxRetries})`)
     
     clearTimers()
     retryTimer.value = setTimeout(() => {
@@ -91,6 +102,7 @@ const onError = () => {
         const url = props.src
         currentSrc.value = props.useCacheBust ? getUrlWithCacheBust(url, retryCount.value) : url
         imgRef.value.src = currentSrc.value
+        console.log(`🔄 [SafeImage] REINTENTO #${retryCount.value} para: ${url.substring(0, 50)}...`)
       }
     }, delay)
   } else {
@@ -98,7 +110,6 @@ const onError = () => {
   }
 }
 
-// Forzar recarga manual
 const forceReload = () => {
   if (maxRetriesReached.value || !isLoaded.value) {
     retryCount.value = 0
@@ -121,8 +132,9 @@ const wrapperStyle = computed(() => {
   return {}
 })
 
-watch(() => props.src, (newSrc) => {
-  if (newSrc !== currentSrc.value) {
+watch(() => props.src, (newSrc, oldSrc) => {
+  if (newSrc !== oldSrc) {
+    console.log(`🔄 [SafeImage] SRC CAMBIADO: ${oldSrc?.substring(0, 30)}... → ${newSrc?.substring(0, 30)}...`)
     resetState()
     if (isMounted.value) {
       setTimeout(() => {
@@ -137,6 +149,7 @@ watch(() => props.src, (newSrc) => {
 onMounted(() => {
   isMounted.value = true
   initSrc()
+  console.log(`🎬 [SafeImage] MONTADO: ${props.src.substring(0, 50)}...`)
   
   setTimeout(() => {
     if (imgRef.value) {
@@ -146,10 +159,10 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
+  console.log(`🗑️ [SafeImage] DESMONTADO: ${props.src.substring(0, 50)}...`)
   clearTimers()
 })
 
-// Exponer métodos
 defineExpose({
   forceReload,
   isLoaded

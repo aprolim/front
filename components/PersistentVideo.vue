@@ -8,8 +8,8 @@
         <span>Cargando video...</span>
       </div>
     </div>
-    
-    <!-- Video - usa src del store si está disponible -->
+
+    <!-- Video principal -->
     <video
       ref="videoRef"
       :src="videoSrc"
@@ -20,14 +20,15 @@
       :playsinline="playsinline"
       :controls="controls"
       class="w-full h-full object-cover"
-      @loadeddata="onLoaded"
-      @error="onError"
+      @loadeddata="onLoadedData"
       @canplay="onCanPlay"
+      @error="onError"
       @waiting="onWaiting"
+      @loadedmetadata="onLoadedMetadata"
     >
       Tu navegador no soporta videos HTML5.
     </video>
-    
+
     <!-- Estado de error -->
     <div v-if="error && !isLoading" class="video-error">
       <div class="error-content">
@@ -35,16 +36,14 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
         </svg>
         <p class="error-text">No se pudo cargar el video</p>
-        <button @click="retry" class="retry-btn">
-          Reintentar
-        </button>
+        <button @click="retry" class="retry-btn">Reintentar</button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount, watch, nextTick } from 'vue'
 import { useVideoStore } from '~/stores/videoStore'
 
 const props = defineProps({
@@ -57,6 +56,7 @@ const props = defineProps({
   controls: { type: Boolean, default: false }
 })
 
+const isClient = typeof window !== 'undefined'
 const videoStore = useVideoStore()
 
 const videoRef = ref(null)
@@ -65,103 +65,201 @@ const isLoading = ref(true)
 const error = ref(null)
 const retryCount = ref(0)
 
-// ✅ Usar URL del store si existe, sino usar src directo
+// URL del video (desde store o src original)
 const videoSrc = computed(() => {
-  // Si el store ya tiene el video cargado, usar esa URL
+  if (!isClient) return props.src
   if (videoStore.isVideoLoaded() && videoStore.getVideoUrl()) {
-    console.log('📹 Usando video desde store')
+    console.log('📹 [PersistentVideo] Usando video DESDE EL STORE')
     return videoStore.getVideoUrl()
   }
-  // Sino, usar el src original (se cargará y se guardará en store)
+  console.log('📹 [PersistentVideo] Video NO está en store, usando src original')
   return props.src
 })
 
-// Cargar video usando el store
+// Cargar video (solo en cliente)
 const loadVideo = async () => {
-  if (videoStore.isVideoLoaded() && videoStore.getVideoUrl()) {
-    // Ya está cargado en store
-    isLoaded.value = true
-    isLoading.value = false
+  if (!isClient) {
+    console.log('📹 [PersistentVideo] SSR - Ignorando carga')
     return
   }
-  
+
+  console.log('🔍 [PersistentVideo] loadVideo() llamado')
+  console.log('🔍 [PersistentVideo] Store tiene video?', videoStore.isVideoLoaded())
+
+  if (videoStore.isVideoLoaded() && videoStore.getVideoUrl()) {
+    console.log('✅ [PersistentVideo] Video YA ESTÁ EN STORE')
+    isLoaded.value = true
+    isLoading.value = false
+    
+    await nextTick()
+    const video = videoRef.value
+    if (video) {
+      const url = videoStore.getVideoUrl()
+      console.log('📹 [PersistentVideo] Asignando URL del store al video:', url.substring(0, 50) + '...')
+      video.src = url
+      video.load()
+      
+      try {
+        await video.play()
+        console.log('✅ [PersistentVideo] Video reproduciéndose desde store')
+      } catch (playError) {
+        console.warn('⚠️ [PersistentVideo] Autoplay bloqueado:', playError.message)
+      }
+    }
+    return
+  }
+
+  console.log('🔄 [PersistentVideo] Video NO está en store, descargando...')
   isLoading.value = true
   error.value = null
-  
+
   try {
     const url = await videoStore.loadVideo(props.src)
     if (url) {
+      console.log('✅ [PersistentVideo] Video descargado y guardado en store')
       isLoaded.value = true
-      // Forzar recarga del video element
-      if (videoRef.value) {
-        videoRef.value.src = url
-        videoRef.value.load()
+      
+      await nextTick()
+      const video = videoRef.value
+      if (video) {
+        video.src = url
+        video.load()
+        try {
+          await video.play()
+          console.log('✅ [PersistentVideo] Video reproduciéndose')
+        } catch (playError) {
+          console.warn('⚠️ [PersistentVideo] Autoplay bloqueado:', playError.message)
+        }
       }
     } else {
       throw new Error('No se pudo cargar el video')
     }
   } catch (err) {
-    console.error('❌ Error en loadVideo:', err)
+    console.error('❌ [PersistentVideo] Error:', err.message)
     error.value = err.message
     retryCount.value++
-    
     if (retryCount.value < 3) {
-      setTimeout(() => {
-        loadVideo()
-      }, 2000 * retryCount.value)
+      console.log(`🔄 [PersistentVideo] Reintento ${retryCount.value} en ${2000 * retryCount.value}ms`)
+      setTimeout(() => loadVideo(), 2000 * retryCount.value)
     }
   } finally {
     isLoading.value = false
   }
 }
 
-const onLoaded = () => {
+// Eventos del video
+const onLoadedData = () => {
+  console.log('✅ [PersistentVideo] Video cargado (loadeddata)')
   isLoaded.value = true
   isLoading.value = false
   error.value = null
   retryCount.value = 0
+  if (videoRef.value && videoRef.value.paused) {
+    videoRef.value.play().catch(() => {})
+  }
 }
 
-const onError = () => {
+const onLoadedMetadata = () => {
+  console.log('✅ [PersistentVideo] Metadatos cargados (loadedmetadata)')
+  isLoaded.value = true
+  isLoading.value = false
+}
+
+const onCanPlay = () => {
+  console.log('✅ [PersistentVideo] Video listo para reproducir (canplay)')
+  isLoaded.value = true
+  isLoading.value = false
+  if (videoRef.value && videoRef.value.paused) {
+    videoRef.value.play().catch(() => {})
+  }
+}
+
+const onError = (e) => {
+  // ✅ Si el video ya está cargado y hay error, ignorar (puede ser por desmontaje)
+  if (isLoaded.value) {
+    console.log('⚠️ [PersistentVideo] Error ignorado (video ya cargado)')
+    return
+  }
+  
+  console.error('❌ [PersistentVideo] Error en video:', e)
+  console.log('❌ [PersistentVideo] src actual:', videoRef.value?.src)
+  
+  // Si no hay src, ignorar el error
+  if (!props.src) {
+    console.log('📹 [PersistentVideo] Sin src, ignorando error')
+    return
+  }
+  
+  // Si hay error y el src es un blob, intentar usar el src original
+  if (videoRef.value && videoRef.value.src && videoRef.value.src.startsWith('blob:')) {
+    console.log('🔄 [PersistentVideo] Error con blob URL, intentando con src original')
+    videoRef.value.src = props.src
+    videoRef.value.load()
+    return
+  }
+  
   if (!isLoaded.value) {
     isLoading.value = false
     error.value = 'Error al cargar el video'
   }
 }
 
-const onCanPlay = () => {
-  isLoaded.value = true
-  isLoading.value = false
-}
-
 const onWaiting = () => {
   if (!isLoaded.value) {
+    console.log('⏳ [PersistentVideo] Video en espera (buffering)')
     isLoading.value = true
   }
 }
 
 const retry = () => {
+  console.log('🔄 [PersistentVideo] Reintentando carga manual')
   retryCount.value = 0
   error.value = null
   isLoading.value = true
+  videoStore.clearVideo()
   loadVideo()
 }
 
-// Montar componente
+// Ciclo de vida
 onMounted(() => {
+  console.log('🎬 [PersistentVideo] Componente montado, src:', props.src)
   loadVideo()
 })
 
-// Limpiar cuando se destruye el componente
+// ✅ Manejar el desmontaje correctamente
 onBeforeUnmount(() => {
-  // No destruimos el video en store, solo el elemento DOM
+  console.log('🗑️ [PersistentVideo] Componente desmontando')
+  
+  // ✅ Limpiar el video sin generar errores
   if (videoRef.value) {
-    videoRef.value.pause()
-    videoRef.value.src = ''
+    try {
+      videoRef.value.pause()
+      // ✅ NO eliminar el src para evitar errores
+      // videoRef.value.src = ''  // <- ESTO CAUSABA EL ERROR
+      videoRef.value.load()
+    } catch (err) {
+      console.log('⚠️ [PersistentVideo] Error al limpiar video:', err.message)
+    }
   }
 })
 
-// Exponer métodos
+// Watch para cambios en src
+watch(() => props.src, (newSrc, oldSrc) => {
+  if (isClient && newSrc !== oldSrc) {
+    console.log('🔄 [PersistentVideo] src cambiado:', oldSrc, '→', newSrc)
+    loadVideo()
+  }
+})
+
+// Watch para cambios en videoSrc
+watch(videoSrc, (newSrc) => {
+  if (isClient && newSrc && videoRef.value) {
+    console.log('🔄 [PersistentVideo] videoSrc cambiado, actualizando video')
+    videoRef.value.src = newSrc
+    videoRef.value.load()
+  }
+})
+
 defineExpose({
   videoRef,
   isLoaded,
