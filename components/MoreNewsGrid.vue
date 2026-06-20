@@ -26,23 +26,29 @@
         @click="verNoticia(noticia)"
       >
         <div class="relative overflow-hidden aspect-[4/5]">
-          <!-- ✅ IMAGEN CON REINTENTOS AUTOMÁTICOS -->
-          <SafeImage 
-            :src="noticia.featuredImage?.url || noticia.imagen || '/images/default-news.jpg'"
-            :alt="limpiarAsteriscos(noticia.titulo)"
-            image-class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-            :max-retries="8"
-            :persistent="true"
-            loading-strategy="lazy"
+          <!-- Imagen -->
+          <img 
+            v-if="noticia && (noticia.featuredImage?.url || noticia.imagen)"
+            :src="noticia.featuredImage?.url || noticia.imagen"
+            :alt="limpiarAsteriscos(noticia.titulo || '')"
+            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            loading="lazy"
           />
+          <div v-else class="w-full h-full bg-gray-200 flex items-center justify-center">
+            <span class="text-gray-400 text-sm">Sin imagen</span>
+          </div>
           
+          <!-- ✅ ESTILO ORIGINAL: overlay con blur y fondo rojo -->
           <div class="absolute bottom-0 left-0 right-0 h-[40%] bg-[rgba(224,54,54,0.85)] backdrop-blur-sm p-4 flex flex-col justify-end">
+            <!-- Fecha -->
             <p class="text-white text-[0.7rem] sm:text-[0.8rem] md:text-[0.9rem] lg:text-[1rem] mb-1 opacity-90">
               {{ formatearFecha(noticia.publishedAt || noticia.fecha) }}
             </p>
+            <!-- Título -->
             <h3 class="font-bold text-white group-hover:text-red-200 transition-colors line-clamp-2 text-[0.8rem] sm:text-[0.9rem] md:text-[1rem] lg:text-[1.1rem] leading-tight">
-              {{ limpiarAsteriscos(noticia.titulo) }}
+              {{ limpiarAsteriscos(noticia.titulo || '') }}
             </h3>
+            <!-- Botón Leer más -->
             <div class="mt-2 flex justify-end">
               <span class="text-white text-[0.7rem] sm:text-[0.8rem] md:text-[0.9rem] font-semibold flex items-center gap-1 group-hover:translate-x-1 transition-transform">
                 Leer más
@@ -82,10 +88,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import { useNoticias } from '~/composables/useNoticias'
-import SafeImage from '@/components/SafeImage.vue'
 
 const props = defineProps({
   targetRoute: {
@@ -94,7 +99,10 @@ const props = defineProps({
   },
   limpiarAsteriscos: {
     type: Function,
-    default: (texto) => texto ? texto.replace(/\*/g, '') : ''
+    default: (texto) => {
+      if (!texto) return ''
+      return texto.replace(/\*/g, '')
+    }
   }
 })
 
@@ -118,30 +126,36 @@ const verNoticia = (noticia) => {
 }
 
 const irATodasLasNoticias = () => {
-  console.log(`🔗 [MoreNewsGrid] Navegando a: ${props.targetRoute}`)
   router.push(props.targetRoute)
 }
 
 const cargarNoticias = async () => {
-  console.log('📡 [MoreNewsGrid] Cargando noticias...')
-  await cargarDatos()
-  noticiasLocal.value = [...ultimasNoticias.value]
-  console.log(`✅ [MoreNewsGrid] ${noticiasLocal.value.length} noticias`)
+  try {
+    await cargarDatos()
+    if (ultimasNoticias.value && ultimasNoticias.value.length > 0) {
+      noticiasLocal.value = [...ultimasNoticias.value]
+    }
+  } catch (error) {
+    console.error('Error cargando noticias:', error)
+  }
 }
 
 watch(ultimasNoticias, (nuevas) => {
-  if (nuevas.length > 0 && noticiasLocal.value.length === 0) {
+  if (nuevas && Array.isArray(nuevas) && nuevas.length > 0 && noticiasLocal.value.length === 0) {
     noticiasLocal.value = [...nuevas]
   }
 }, { immediate: true })
 
 onMounted(async () => {
-  console.log('📦 [MoreNewsGrid] Montado')
-  if (ultimasNoticias.value.length === 0) {
+  if (ultimasNoticias.value && Array.isArray(ultimasNoticias.value) && ultimasNoticias.value.length === 0) {
     await cargarNoticias()
-  } else {
+  } else if (ultimasNoticias.value && Array.isArray(ultimasNoticias.value)) {
     noticiasLocal.value = [...ultimasNoticias.value]
   }
+})
+
+onBeforeUnmount(() => {
+  noticiasLocal.value = []
 })
 </script>
 

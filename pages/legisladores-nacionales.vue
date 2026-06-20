@@ -128,7 +128,7 @@
         :scroll-progress="scrollProgress"
       />
     </section>
-    <!-- ==================== SECCIÓN 2 - COMISIONES Y COMITES ==================== -->
+    <!-- SECCIÓN 2 - COMISIONES Y COMITES (VERSIÓN ORIGINAL) -->
     <div 
       id="comisiones-y-comites"
       ref="seccion2Ref" 
@@ -173,22 +173,17 @@
               <!-- GRUPO 1 -->
               <div class="grid grid-cols-1 md:grid-cols-2 gap-0">
                 <div v-for="(miembro, idx) in comisionSeleccionada.miembrosGrupo1" :key="'g1-'+idx" 
-                     class="flex items-center gap-0 p-[0.8vw] rounded-lg pl-[1.8vw] overflow-visible">
-                  <!-- ✅ CONTENEDOR QUE CRECE MANTENIENDO CIRCULAR -->
+                    class="flex items-center gap-0 p-[0.8vw] rounded-lg pl-[1.8vw] overflow-visible">
                   <div class="w-[6.8vw] h-[6.8vw] flex-shrink-0 rounded-full overflow-visible transition-all duration-700 hover:scale-[2.5] hover:z-50">
-                    <SafeImage 
+                    <img 
                       :src="miembro.foto" 
                       :alt="miembro.nombre"
-                      image-class="w-full h-full rounded-full object-cover"
-                      :max-retries="8"
-                      :persistent="true"
-                      loading-strategy="lazy"
+                      class="w-full h-full rounded-full object-cover"
                     />
                   </div>
                   <div class="text-white text-center text-[0.98vw] flex-1">
                     <p class="font-bold drop-shadow-md">{{ miembro.cargo }}</p>
-                    <p class="drop-shadow-md">{{ miembro.nombre }}</p>
-                    <p class="drop-shadow-md">{{ miembro.apellido }}</p>
+                    <p class="drop-shadow-md">{{ miembro.nombre }} {{ miembro.apellido }}</p>
                     <p class="drop-shadow-md">{{ miembro.partido }}</p>
                   </div>
                 </div>
@@ -201,22 +196,17 @@
               <!-- GRUPO 2 -->
               <div class="grid grid-cols-1 md:grid-cols-2 gap-0">
                 <div v-for="(miembro, idx) in comisionSeleccionada.miembrosGrupo2" :key="'g2-'+idx" 
-                     class="flex items-center gap-0 p-[0.8vw] rounded-lg pl-[1.8vw] overflow-visible">
-                  <!-- ✅ CONTENEDOR QUE CRECE MANTENIENDO CIRCULAR -->
+                    class="flex items-center gap-0 p-[0.8vw] rounded-lg pl-[1.8vw] overflow-visible">
                   <div class="w-[6.8vw] h-[6.8vw] flex-shrink-0 rounded-full overflow-visible transition-all duration-700 hover:scale-[2.5] hover:z-50">
-                    <SafeImage 
+                    <img 
                       :src="miembro.foto" 
                       :alt="miembro.nombre"
-                      image-class="w-full h-full rounded-full object-cover"
-                      :max-retries="8"
-                      :persistent="true"
-                      loading-strategy="lazy"
+                      class="w-full h-full rounded-full object-cover"
                     />
                   </div>
                   <div class="text-white text-center text-[0.98vw] flex-1">
                     <p class="font-bold drop-shadow-md">{{ miembro.cargo }}</p>
-                    <p class="drop-shadow-md">{{ miembro.nombre }}</p>
-                    <p class="drop-shadow-md">{{ miembro.apellido }}</p>
+                    <p class="drop-shadow-md">{{ miembro.nombre }} {{ miembro.apellido }}</p>
                     <p class="drop-shadow-md">{{ miembro.partido }}</p>
                   </div>
                 </div>
@@ -229,22 +219,17 @@
               <!-- GRUPO 3 -->
               <div class="grid grid-cols-1 md:grid-cols-2 gap-0">
                 <div v-for="(miembro, idx) in comisionSeleccionada.miembrosGrupo3" :key="'g3-'+idx" 
-                     class="flex items-center gap-0 p-[0.8vw] rounded-lg pl-[1.8vw] overflow-visible">
-                  <!-- ✅ CONTENEDOR QUE CRECE MANTENIENDO CIRCULAR -->
+                    class="flex items-center gap-0 p-[0.8vw] rounded-lg pl-[1.8vw] overflow-visible">
                   <div class="w-[6.8vw] h-[6.8vw] flex-shrink-0 rounded-full overflow-visible transition-all duration-700 hover:scale-[2.5] hover:z-50">
-                    <SafeImage 
+                    <img 
                       :src="miembro.foto" 
                       :alt="miembro.nombre"
-                      image-class="w-full h-full rounded-full object-cover"
-                      :max-retries="8"
-                      :persistent="true"
-                      loading-strategy="lazy"
+                      class="w-full h-full rounded-full object-cover"
                     />
                   </div>
                   <div class="text-white text-center text-[0.98vw] flex-1">
                     <p class="font-bold drop-shadow-md">{{ miembro.cargo }}</p>
-                    <p class="drop-shadow-md">{{ miembro.nombre }}</p>
-                    <p class="drop-shadow-md">{{ miembro.apellido }}</p>
+                    <p class="drop-shadow-md">{{ miembro.nombre }} {{ miembro.apellido }}</p>
                     <p class="drop-shadow-md">{{ miembro.partido }}</p>
                   </div>
                 </div>

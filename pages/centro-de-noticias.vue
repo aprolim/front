@@ -59,23 +59,29 @@
               </div>
             </div>
             
-            <!-- COLUMNA DERECHA - IMAGEN -->
+            <!-- COLUMNA DERECHA - IMAGEN (CON DETECCIÓN DE VISIBILIDAD) -->
             <div class="flex flex-col items-center justify-center px-4">
               <div class="relative rounded-xl overflow-hidden shadow-lg w-[80%] mx-auto aspect-square">
-                <!-- TODAS las imágenes en el DOM, solo se ocultan/muestran -->
+                <!-- ✅ Cada imagen tiene su propia referencia para detectar visibilidad -->
                 <div 
                   v-for="(noticia, index) in noticiasCarousel" 
                   :key="noticia.id"
+                  ref="imageRefs"
                   class="absolute inset-0 transition-opacity duration-700 ease-in-out"
                   :class="[
                     currentIndex === index ? 'opacity-100 z-10' : 'opacity-0 z-0'
                   ]"
+                  :data-index="index"
                 >
-                  <img 
+                  <SafeImage 
                     :src="noticia.featuredImage?.url || noticia.imagen || '/images/default-news.jpg'"
                     :alt="limpiarAsteriscos(noticia.titulo)"
-                    class="w-full h-full object-cover"
-                    loading="lazy"
+                    image-class="w-full h-full object-cover"
+                    :priority="currentIndex === index ? 'high' : 'low'"
+                    :loading-strategy="currentIndex === index ? 'eager' : 'lazy'"
+                    :show-skeleton="currentIndex === index"
+                    :max-retries="8"
+                    :persistent="true"
                   />
                 </div>
               </div>
@@ -188,11 +194,14 @@
           target="_blank"
         >
           <div class="relative overflow-hidden">
-            <img 
+            <SafeImage 
               src="/images/curul/Recurso-1.jpg"
               alt="Producción Audiovisual - Desde el Curul"
-              class="w-full h-auto object-cover transition-all duration-700 ease-out"
-              loading="lazy"
+              image-class="w-full h-auto object-cover transition-all duration-700 ease-out"
+              priority="low"
+              loading-strategy="lazy"
+              :max-retries="8"
+              :persistent="true"
             />
           </div>
         </NuxtLink>
@@ -202,11 +211,12 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, onActivated, onDeactivated, nextTick, computed, watch } from 'vue'
+import { ref, onMounted, onUnmounted, onActivated, onDeactivated, nextTick, computed, watch, onUpdated } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import MoreNewsGrid from '~/components/MoreNewsGrid.vue'
 import { useNoticias } from '~/composables/useNoticias'
 import { useSesiones } from '~/composables/useSesiones'
+import SafeImage from '@/components/SafeImage.vue'
 
 definePageMeta({ layout: 'alter8', ssr: true })
 
@@ -256,6 +266,9 @@ const verNoticia = (noticia) => {
     router.push(`/noticias/${noticia.slug}`)
   }
 }
+
+// ✅ REFERENCIAS A LAS IMÁGENES PARA DETECTAR VISIBILIDAD
+const imageRefs = ref([])
 
 const startCarousel = () => {
   if (carouselInterval) clearInterval(carouselInterval)
@@ -368,6 +381,12 @@ watch(noticiasCarousel, (nuevas) => {
     startCarousel()
   }
 }, { immediate: true })
+
+// ✅ Cuando cambia el índice, actualizar prioridades
+watch(currentIndex, (newIndex, oldIndex) => {
+  // No hacer nada, el template ya usa currentIndex para decidir priority
+  console.log(`🔄 [Carousel] Slide cambió: ${oldIndex} → ${newIndex}`)
+})
 
 onActivated(async () => {
   stopCarousel()

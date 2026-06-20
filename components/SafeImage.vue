@@ -1,6 +1,15 @@
 <!-- components/SafeImage.vue -->
 <template>
-  <div class="safe-image-wrapper" :style="wrapperStyle">
+  <div 
+    ref="wrapperRef"
+    class="safe-image-wrapper" 
+    :style="wrapperStyle"
+  >
+    <!-- Skeleton de carga (solo si está cargando) -->
+    <div v-if="isLoading && showSkeleton" class="image-skeleton">
+      <div class="skeleton-pulse"></div>
+    </div>
+    
     <img
       ref="imgRef"
       :src="currentSrc"
@@ -8,6 +17,7 @@
       :loading="loadingStrategy"
       :class="imageClass"
       :style="imageStyle"
+      :fetchpriority="actualPriority"
       @load="onLoad"
       @error="onError"
     />
@@ -15,7 +25,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
+import { ref, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
 
 const props = defineProps({
   src: { type: String, required: true },
@@ -26,10 +36,20 @@ const props = defineProps({
   aspectRatio: { type: String, default: 'auto' },
   maxRetries: { type: Number, default: 8 },
   retryDelay: { type: Number, default: 500 },
-  useCacheBust: { type: Boolean, default: true },
-  persistent: { type: Boolean, default: true }
+  useCacheBust: { type: Boolean, default: false },
+  persistent: { type: Boolean, default: true },
+  // ✅ Prioridad manual (opcional, si no se usa, se detecta automáticamente)
+  priority: { 
+    type: String, 
+    default: 'auto',
+    validator: (value) => ['high', 'low', 'auto'].includes(value)
+  },
+  showSkeleton: { type: Boolean, default: true },
+  // ✅ Tiempo de espera para considerar que la imagen es visible
+  visibilityThreshold: { type: Number, default: 0.1 }
 })
 
+const wrapperRef = ref(null)
 const imgRef = ref(null)
 const currentSrc = ref('')
 const retryCount = ref(0)
@@ -37,11 +57,23 @@ const isMounted = ref(false)
 const retryTimer = ref(null)
 const isLoaded = ref(false)
 const maxRetriesReached = ref(false)
-const loadStartTime = ref(0)
-const loadCount = ref(0)
+const isLoading = ref(true)
+const isVisible = ref(false)
+const hasStartedLoading = ref(false)
+let intersectionObserver = null
 
-// ✅ LOG: Cuando el componente se crea
-console.log(`🖼️ [SafeImage] COMPONENTE CREADO para: ${props.src}`)
+// ✅ Prioridad real: si el usuario lo definió manualmente, usar eso, sino detectar
+const actualPriority = computed(() => {
+  if (props.priority !== 'auto') return props.priority
+  // Si la imagen es visible, prioridad alta
+  return isVisible.value ? 'high' : 'low'
+})
+
+// ✅ Loading strategy: si es visible, eager, sino lazy
+const actualLoadingStrategy = computed(() => {
+  if (isVisible.value) return 'eager'
+  return props.loadingStrategy || 'lazy'
+})
 
 const clearTimers = () => {
   if (retryTimer.value) {
@@ -59,42 +91,48 @@ const getUrlWithCacheBust = (url, retry = 0) => {
 const initSrc = () => {
   const url = props.src || ''
   currentSrc.value = props.useCacheBust ? getUrlWithCacheBust(url, 0) : url
-  loadStartTime.value = Date.now()
-  loadCount.value++
-  console.log(`🔄 [SafeImage] INICIANDO CARGA #${loadCount.value} para: ${url.substring(0, 50)}...`)
+}
+
+const startLoading = () => {
+  if (hasStartedLoading.value) return
+  hasStartedLoading.value = true
+  isLoading.value = true
+  initSrc()
+  if (imgRef.value) {
+    imgRef.value.src = currentSrc.value
+  }
 }
 
 const resetState = () => {
   retryCount.value = 0
   isLoaded.value = false
   maxRetriesReached.value = false
+  isLoading.value = true
+  hasStartedLoading.value = false
   clearTimers()
   initSrc()
 }
 
 const onLoad = () => {
-  const elapsed = Date.now() - loadStartTime.value
-  console.log(`✅ [SafeImage] CARGA COMPLETADA #${loadCount.value} en ${elapsed}ms: ${props.src.substring(0, 50)}...`)
   retryCount.value = 0
   isLoaded.value = true
   maxRetriesReached.value = false
+  isLoading.value = false
   clearTimers()
 }
 
 const onError = () => {
   retryCount.value++
-  console.warn(`⚠️ [SafeImage] ERROR #${retryCount.value} en carga #${loadCount.value}: ${props.src.substring(0, 50)}...`)
   
   if (retryCount.value >= props.maxRetries) {
     maxRetriesReached.value = true
+    isLoading.value = false
     clearTimers()
-    console.error(`❌ [SafeImage] MÁXIMO DE REINTENTOS ALCANZADO para: ${props.src}`)
     return
   }
   
   if (props.persistent) {
     const delay = props.retryDelay * Math.pow(1.5, retryCount.value - 1)
-    console.log(`🔄 [SafeImage] Reintentando en ${delay}ms (intento ${retryCount.value}/${props.maxRetries})`)
     
     clearTimers()
     retryTimer.value = setTimeout(() => {
@@ -102,7 +140,6 @@ const onError = () => {
         const url = props.src
         currentSrc.value = props.useCacheBust ? getUrlWithCacheBust(url, retryCount.value) : url
         imgRef.value.src = currentSrc.value
-        console.log(`🔄 [SafeImage] REINTENTO #${retryCount.value} para: ${url.substring(0, 50)}...`)
       }
     }, delay)
   } else {
@@ -115,6 +152,8 @@ const forceReload = () => {
     retryCount.value = 0
     maxRetriesReached.value = false
     isLoaded.value = false
+    isLoading.value = true
+    hasStartedLoading.value = false
     
     const url = props.src
     currentSrc.value = props.useCacheBust ? getUrlWithCacheBust(url, 0) : url
@@ -132,16 +171,63 @@ const wrapperStyle = computed(() => {
   return {}
 })
 
-watch(() => props.src, (newSrc, oldSrc) => {
-  if (newSrc !== oldSrc) {
-    console.log(`🔄 [SafeImage] SRC CAMBIADO: ${oldSrc?.substring(0, 30)}... → ${newSrc?.substring(0, 30)}...`)
+// ✅ Configurar IntersectionObserver para detectar visibilidad
+const setupIntersectionObserver = () => {
+  if (typeof window === 'undefined' || !wrapperRef.value) return
+  
+  // Si ya existe, desconectar
+  if (intersectionObserver) {
+    intersectionObserver.disconnect()
+  }
+  
+  intersectionObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        const wasVisible = isVisible.value
+        isVisible.value = entry.isIntersecting
+        
+        // Si se vuelve visible y no ha empezado a cargar, empezar
+        if (isVisible.value && !hasStartedLoading.value) {
+          startLoading()
+        }
+        
+        // Si cambia la visibilidad, log para depuración
+        if (wasVisible !== isVisible.value) {
+          console.log(`🖼️ [SafeImage] Visibilidad: ${isVisible.value ? '🟢 VISIBLE' : '🔴 OCULTA'} - ${props.src.substring(0, 40)}...`)
+        }
+      })
+    },
+    {
+      threshold: props.visibilityThreshold,
+      rootMargin: '50px' // Pre-carga cuando está a 50px del viewport
+    }
+  )
+  
+  intersectionObserver.observe(wrapperRef.value)
+}
+
+// ✅ Forzar carga si la imagen ya es visible al montar
+const checkInitialVisibility = () => {
+  if (typeof window === 'undefined' || !wrapperRef.value) return
+  
+  const rect = wrapperRef.value.getBoundingClientRect()
+  const windowHeight = window.innerHeight || document.documentElement.clientHeight
+  
+  // Si la imagen está en el viewport o cerca
+  if (rect.top < windowHeight + 100 && rect.bottom > -100) {
+    isVisible.value = true
+    startLoading()
+  }
+}
+
+watch(() => props.src, (newSrc) => {
+  if (newSrc !== currentSrc.value) {
     resetState()
     if (isMounted.value) {
-      setTimeout(() => {
-        if (imgRef.value) {
-          imgRef.value.src = currentSrc.value
-        }
-      }, 50)
+      // Si la imagen es visible, cargar inmediatamente
+      if (isVisible.value) {
+        startLoading()
+      }
     }
   }
 })
@@ -149,23 +235,33 @@ watch(() => props.src, (newSrc, oldSrc) => {
 onMounted(() => {
   isMounted.value = true
   initSrc()
-  console.log(`🎬 [SafeImage] MONTADO: ${props.src.substring(0, 50)}...`)
   
-  setTimeout(() => {
-    if (imgRef.value) {
-      imgRef.value.src = currentSrc.value
+  // Esperar a que el DOM esté listo
+  nextTick(() => {
+    // Verificar si es visible inicialmente
+    checkInitialVisibility()
+    // Configurar observer
+    setupIntersectionObserver()
+    
+    // Si no es visible, esperar a que lo sea
+    if (!isVisible.value) {
+      console.log(`⏳ [SafeImage] Esperando visibilidad: ${props.src.substring(0, 40)}...`)
     }
-  }, 50)
+  })
 })
 
 onBeforeUnmount(() => {
-  console.log(`🗑️ [SafeImage] DESMONTADO: ${props.src.substring(0, 50)}...`)
   clearTimers()
+  if (intersectionObserver) {
+    intersectionObserver.disconnect()
+    intersectionObserver = null
+  }
 })
 
 defineExpose({
   forceReload,
-  isLoaded
+  isLoaded,
+  isVisible
 })
 </script>
 
@@ -174,5 +270,34 @@ defineExpose({
   width: 100%;
   height: 100%;
   overflow: hidden;
+  position: relative;
+  background: #f3f4f6;
+}
+
+.image-skeleton {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.skeleton-pulse {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+img {
+  position: relative;
+  z-index: 2;
 }
 </style>

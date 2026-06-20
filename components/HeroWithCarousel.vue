@@ -76,14 +76,15 @@
                 : 'opacity-0 translate-x-full'
             ]"
           >
-            <!-- Solo imágenes -->
+            <!-- ✅ SafeImage con detección de visibilidad -->
             <SafeImage 
               :src="slide.image.url" 
               :alt="slide.image.alt"
               image-class="w-full h-full object-cover"
               :max-retries="5"
               :retry-delay="500"
-              loading-strategy="eager"
+              :show-skeleton="true"
+              :visibility-threshold="0.1"
               fallback-src="/images/placeholder.jpg"
             />
             <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
