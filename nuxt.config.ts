@@ -11,7 +11,7 @@ export default defineNuxtConfig({
   devtools: { enabled: false },
   
   // ============================================
-  // Módulos - SIN @nuxt/image para evitar errores
+  // Módulos
   // ============================================
   modules: [
     '@pinia/nuxt',
@@ -19,7 +19,7 @@ export default defineNuxtConfig({
   ],
   
   // ============================================
-  // Pinia - Configuración para stores
+  // Pinia
   // ============================================
   pinia: {
     storesDirs: ['./stores/**'],
@@ -46,8 +46,8 @@ export default defineNuxtConfig({
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: 'Portal Oficial del Senado Nacional de Bolivia' },
-        { 'http-equiv': 'Cache-Control', content: 'no-cache' }
+        { name: 'description', content: 'Portal Oficial del Senado Nacional de Bolivia' }
+        // ✅ ELIMINADO: Cache-Control: no-cache
       ],
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
@@ -68,7 +68,7 @@ export default defineNuxtConfig({
   ],
   
   // ============================================
-  // Nitro
+  // Nitro (CORREGIDO)
   // ============================================
   nitro: {
     preset: 'node-server',
@@ -79,16 +79,17 @@ export default defineNuxtConfig({
       gzip: true,
       brotli: true
     },
+    // ✅ Aumentar caché en memoria
     storage: {
       'cache': {
         driver: 'memory',
-        maxEntries: 100
+        maxEntries: 1000  // ✅ Aumentado de 100 a 1000
       }
     }
   },
   
   // ============================================
-  // Route Rules
+  // Route Rules (CORREGIDO)
   // ============================================
   routeRules: {
     '/centro-de-noticias': { 
@@ -100,6 +101,55 @@ export default defineNuxtConfig({
       ssr: true,
       swr: false,
       cache: false
+    },
+    // ✅ Reglas para imágenes y videos
+    '/new/**': {
+      swr: true,
+      cache: {
+        maxAge: 60 * 60 * 24 * 7 // 7 días
+      }
+    },
+    '/video/**': {
+      swr: true,
+      cache: {
+        maxAge: 60 * 60 * 24 * 30 // 30 días
+      }
+    },
+    '/images/**': {
+      swr: true,
+      cache: {
+        maxAge: 60 * 60 * 24 * 7 // 7 días
+      }
+    },
+    '/new/titulares/**': {
+      swr: true,
+      cache: {
+        maxAge: 60 * 60 * 24 * 7 // 7 días
+      }
+    },
+    '/new/suplentes/**': {
+      swr: true,
+      cache: {
+        maxAge: 60 * 60 * 24 * 7 // 7 días
+      }
+    },
+    '/Mandato Constitucional Senado/**': {
+      swr: true,
+      cache: {
+        maxAge: 60 * 60 * 24 * 7 // 7 días
+      }
+    },
+    '/Reseña Histórica del Senado/**': {
+      swr: true,
+      cache: {
+        maxAge: 60 * 60 * 24 * 7 // 7 días
+      }
+    },
+    '/G-Institucional/**': {
+      swr: true,
+      cache: {
+        maxAge: 60 * 60 * 24 * 7 // 7 días
+      }
     }
   },
   
@@ -162,7 +212,7 @@ export default defineNuxtConfig({
   },
   
   // ============================================
-  // Build - Transpilar dependencias
+  // Build
   // ============================================
   build: {
     transpile: ['@pinia/nuxt'],
