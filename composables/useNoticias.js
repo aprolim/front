@@ -65,7 +65,6 @@ export const fetchNoticiasImportantes = async () => {
 export const fetchNoticiasUltimas = async () => {
   console.log(`📡 [useNoticias] Cargando NOTICIAS NO IMPORTANTES...`)
   
-  // Pedir noticias que NO sean importantes
   const url = `${API_BASE_URL}/content?status=published&category=noticia&limit=100`
   console.log(`📍 URL últimas: ${url}`)
   
@@ -77,7 +76,6 @@ export const fetchNoticiasUltimas = async () => {
       const noticias = data.data.contents
         .map(transformarNoticia)
         .filter(Boolean)
-        .sort((a, b) => new Date(b.publishedAt || b.fecha) - new Date(a.publishedAt || a.fecha))
       
       console.log(`✅ [useNoticias] Cargadas ${noticias.length} noticias NO IMPORTANTES`)
       return noticias
@@ -89,6 +87,15 @@ export const fetchNoticiasUltimas = async () => {
   }
 }
 
+// 🔥 FUNCIÓN PARA ORDENAR NOTICIAS POR FECHA (más reciente primero)
+const ordenarPorFecha = (noticias) => {
+  return [...noticias].sort((a, b) => {
+    const fechaA = new Date(a.publishedAt || a.fecha || 0)
+    const fechaB = new Date(b.publishedAt || b.fecha || 0)
+    return fechaB - fechaA // Descendente (más reciente primero)
+  })
+}
+
 // Función que carga ambas (para mantener compatibilidad)
 export const fetchNoticias = async () => {
   console.log(`📡 [useNoticias] Cargando todas las noticias (importantes + últimas)...`)
@@ -98,10 +105,23 @@ export const fetchNoticias = async () => {
     fetchNoticiasUltimas()
   ])
   
+  // 🔥 COMBINAR Y ORDENAR POR FECHA
+  const todasLasNoticias = ordenarPorFecha([...noticiasImportantes, ...ultimasNoticias])
+  
+  console.log(`📊 [useNoticias] Total combinado: ${todasLasNoticias.length} noticias`)
+  
+  // 🔥 LOG DE FECHAS PARA DEPURACIÓN
+  if (todasLasNoticias.length > 0) {
+    console.log('   📅 Primeras 5 fechas (ordenadas):')
+    todasLasNoticias.slice(0, 5).forEach((n, i) => {
+      console.log(`      ${i+1}. ${n.titulo.substring(0, 40)}... → ${n.publishedAt}`)
+    })
+  }
+  
   return {
     noticiasImportantes: noticiasImportantes.slice(0, 4),
     ultimasNoticias: ultimasNoticias.slice(0, 4),
-    todasLasNoticias: [...noticiasImportantes, ...ultimasNoticias],
+    todasLasNoticias: todasLasNoticias,
     error: null
   }
 }

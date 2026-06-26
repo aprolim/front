@@ -59,10 +59,9 @@
               </div>
             </div>
             
-            <!-- COLUMNA DERECHA - IMAGEN (CON DETECCIÓN DE VISIBILIDAD) -->
+            <!-- COLUMNA DERECHA - IMAGEN -->
             <div class="flex flex-col items-center justify-center px-4">
               <div class="relative rounded-xl overflow-hidden shadow-lg w-[80%] mx-auto aspect-square">
-                <!-- ✅ Cada imagen tiene su propia referencia para detectar visibilidad -->
                 <div 
                   v-for="(noticia, index) in noticiasCarousel" 
                   :key="noticia.id"
@@ -211,7 +210,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, onActivated, onDeactivated, nextTick, computed, watch, onUpdated } from 'vue'
+import { ref, onMounted, onUnmounted, onActivated, onDeactivated, nextTick, computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import MoreNewsGrid from '~/components/MoreNewsGrid.vue'
 import { useNoticias } from '~/composables/useNoticias'
@@ -239,6 +238,15 @@ const limpiarAsteriscos = (texto) => {
   return texto.replace(/\*/g, '')
 }
 
+// 🔥 ORDENAR NOTICIAS POR FECHA (más reciente primero)
+const ordenarPorFecha = (noticias) => {
+  return [...noticias].sort((a, b) => {
+    const fechaA = new Date(a.publishedAt || a.fecha || 0)
+    const fechaB = new Date(b.publishedAt || b.fecha || 0)
+    return fechaB - fechaA // Descendente (más reciente primero)
+  })
+}
+
 const currentIndex = ref(0)
 let carouselInterval = null
 let scrollObserver = null
@@ -253,7 +261,11 @@ const isSeccion2Visible = ref(false)
 const isSeccion3Visible = ref(false)
 const isSeccion4Visible = ref(false)
 
-const noticiasCarousel = computed(() => noticiasImportantes.value || [])
+// 🔥 noticiasCarousel con ordenamiento
+const noticiasCarousel = computed(() => {
+  const noticias = noticiasImportantes.value || []
+  return ordenarPorFecha(noticias)
+})
 const loadingImportantes = computed(() => loading.value)
 
 const formatearFecha = (fecha) => {
@@ -267,7 +279,6 @@ const verNoticia = (noticia) => {
   }
 }
 
-// ✅ REFERENCIAS A LAS IMÁGENES PARA DETECTAR VISIBILIDAD
 const imageRefs = ref([])
 
 const startCarousel = () => {
@@ -344,9 +355,7 @@ const initObserver = () => {
   })
 }
 
-// ============================================
-// MAPA DE SECCIONES PARA SCROLL DEL MENÚ
-// ============================================
+// Mapa de secciones para scroll del menú
 const sectionsMap = {
   'noticias-importantes': seccion1Ref,
   'mas-noticias': seccion2Ref,
@@ -376,15 +385,14 @@ watch(() => route.hash, (newHash) => {
   }
 })
 
+// 🔥 Watch con ordenamiento
 watch(noticiasCarousel, (nuevas) => {
   if (nuevas.length > 0 && isSeccion1Visible.value) {
     startCarousel()
   }
 }, { immediate: true })
 
-// ✅ Cuando cambia el índice, actualizar prioridades
 watch(currentIndex, (newIndex, oldIndex) => {
-  // No hacer nada, el template ya usa currentIndex para decidir priority
   console.log(`🔄 [Carousel] Slide cambió: ${oldIndex} → ${newIndex}`)
 })
 

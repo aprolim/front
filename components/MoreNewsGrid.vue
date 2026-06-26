@@ -38,7 +38,7 @@
             <span class="text-gray-400 text-sm">Sin imagen</span>
           </div>
           
-          <!-- ✅ ESTILO ORIGINAL: overlay con blur y fondo rojo -->
+          <!-- Overlay con blur y fondo rojo -->
           <div class="absolute bottom-0 left-0 right-0 h-[40%] bg-[rgba(224,54,54,0.85)] backdrop-blur-sm p-4 flex flex-col justify-end">
             <!-- Fecha -->
             <p class="text-white text-[0.7rem] sm:text-[0.8rem] md:text-[0.9rem] lg:text-[1rem] mb-1 opacity-90">
@@ -129,20 +129,37 @@ const irATodasLasNoticias = () => {
   router.push(props.targetRoute)
 }
 
+// 🔥 ORDENAR NOTICIAS POR FECHA (más reciente primero)
+const ordenarPorFecha = (noticias) => {
+  return [...noticias].sort((a, b) => {
+    const fechaA = new Date(a.publishedAt || a.fecha || 0)
+    const fechaB = new Date(b.publishedAt || b.fecha || 0)
+    return fechaB - fechaA // Descendente (más reciente primero)
+  })
+}
+
 const cargarNoticias = async () => {
   try {
     await cargarDatos()
     if (ultimasNoticias.value && ultimasNoticias.value.length > 0) {
-      noticiasLocal.value = [...ultimasNoticias.value]
+      // 🔥 SOLO NOTICIAS NO IMPORTANTES (categoría 'noticia'), ordenadas por fecha
+      const noticiasFiltradas = ultimasNoticias.value.filter(
+        n => n.categoria === 'noticia' || n.category === 'noticia'
+      )
+      noticiasLocal.value = ordenarPorFecha(noticiasFiltradas)
     }
   } catch (error) {
     console.error('Error cargando noticias:', error)
   }
 }
 
+// 🔥 Watch con filtro y ordenamiento
 watch(ultimasNoticias, (nuevas) => {
-  if (nuevas && Array.isArray(nuevas) && nuevas.length > 0 && noticiasLocal.value.length === 0) {
-    noticiasLocal.value = [...nuevas]
+  if (nuevas && Array.isArray(nuevas) && nuevas.length > 0) {
+    const noticiasFiltradas = nuevas.filter(
+      n => n.categoria === 'noticia' || n.category === 'noticia'
+    )
+    noticiasLocal.value = ordenarPorFecha(noticiasFiltradas)
   }
 }, { immediate: true })
 
@@ -150,7 +167,10 @@ onMounted(async () => {
   if (ultimasNoticias.value && Array.isArray(ultimasNoticias.value) && ultimasNoticias.value.length === 0) {
     await cargarNoticias()
   } else if (ultimasNoticias.value && Array.isArray(ultimasNoticias.value)) {
-    noticiasLocal.value = [...ultimasNoticias.value]
+    const noticiasFiltradas = ultimasNoticias.value.filter(
+      n => n.categoria === 'noticia' || n.category === 'noticia'
+    )
+    noticiasLocal.value = ordenarPorFecha(noticiasFiltradas)
   }
 })
 

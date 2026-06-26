@@ -63,31 +63,44 @@
     <!-- Parte de los senadores - SIN FONDO FIJO -->
     <div 
       ref="senateRef" 
-      class="h-screen w-full scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out delay-300 z-10 snap-section"
+      class="h-screen w-full scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out delay-300 z-10 snap-section overflow-hidden"
       :class="{ 'animate-in': isSenateVisible }"
-      style="position: relative; background: #f5f5f5;"
+      style="position: relative; background: #f5f5f5; box-sizing: border-box; height: 100vh; max-height: 100vh;"
     >
-      <div class="h-[4.4vw]"></div>
-      <SenateChamber
-        :show-footer="false"
-        class="h-screen"
+      <div 
+        class="w-full" 
+        style="height: 4.2vw; box-sizing: border-box; flex-shrink: 0;"
+      ></div>
+      
+      <div 
+        style="height: calc(100% - 4.2vw); width: 100%; overflow: hidden; box-sizing: border-box; flex: 1;"
       >
-        <template #header>
-          <div class="px-1 xs:px-2 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16 3xl:px-20 4xl:px-24 5xl:px-32 text-center sm:text-left">
-            <h2 class="font-bold text-white leading-tight
-                      text-[11px] xs:text-[14px] sm:text-[18px] md:text-[22px] 
-                      lg:text-[26px] xl:text-[30px] 2xl:text-[39px] 
-                      3xl:text-[58px] 4xl:text-[80px] 5xl:text-[102px] text-center
-                      p-1
-                      ">
-              Distribución del senado
-            </h2>
-          </div>
-        </template>
-      </SenateChamber>
+        <SenateChamber
+          :show-footer="false"
+          :show-header="true"
+          :show-controls="true"
+          class="w-full h-full"
+          style="width: 100%; height: 100%; box-sizing: border-box; display: flex; flex-direction: column;"
+        >
+          <template #header>
+            <div 
+              class="w-full text-center"
+              style="box-sizing: border-box; padding: 0.5vw 0; flex-shrink: 0;"
+            >
+              <h2 
+                class="font-bold text-white leading-tight
+                       text-[11px] xs:text-[14px] sm:text-[18px] md:text-[22px] 
+                       lg:text-[26px] xl:text-[30px] 2xl:text-[39px] 
+                       3xl:text-[58px] 4xl:text-[80px] 5xl:text-[102px] text-center"
+                style="box-sizing: border-box;"
+              >
+                Distribución del senado
+              </h2>
+            </div>
+          </template>
+        </SenateChamber>
+      </div>
     </div>
-    
-
   </div>
 </template>
 
@@ -253,9 +266,7 @@ const initScrollObserver = () => {
 let imageObserver = null
 
 const initImagePreload = () => {
-  // Observar cambios en el DOM para precargar imágenes cuando aparecen
   const observer = new MutationObserver(() => {
-    // Precargar imágenes en el viewport actual
     const containers = document.querySelectorAll('.scroll-section')
     containers.forEach(container => {
       if (container.getBoundingClientRect().top < window.innerHeight) {
@@ -278,23 +289,16 @@ const initImagePreload = () => {
 onMounted(async () => {
   console.log('🎬 IndexPage montada')
   
-  // 1. Precargar imágenes prioritarias
   preloadPriorityImages()
-  
-  // 2. Iniciar carrusel (para compatibilidad)
   startCarousel()
-  
-  // 3. Inicializar scroll
   initScrollListener()
   
   await nextTick()
   showSection.value = true
   
-  // 4. Inicializar observers
   initScrollObserver()
   imageObserver = initImagePreload()
   
-  // 5. Forzar scroll al inicio
   const doScroll = () => {
     window.scrollTo({ top: 0, behavior: 'auto' })
     const container = document.querySelector('.snap-container')
@@ -304,9 +308,6 @@ onMounted(async () => {
   setTimeout(doScroll, 10)
   setTimeout(doScroll, 100)
   setTimeout(doScroll, 300)
-  
-  // ✅ ELIMINADOS: setTimeout(forceVideoPlayback, ...) - ya no son necesarios
-  // ✅ ELIMINADOS: event listeners click/touchstart/scroll - ya no son necesarios
 })
 
 onUnmounted(() => {
@@ -319,8 +320,6 @@ onUnmounted(() => {
   if (imageObserver) {
     imageObserver.disconnect()
   }
-  
-  // ✅ ELIMINADOS: removeEventListener de click/touchstart/scroll
 })
 
 // ============================================
@@ -336,28 +335,26 @@ definePageMeta({
   font-family: 'Montserrat', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* ===== SNAP SCROLL MÁS NOTORIO ===== */
+/* ===== SNAP SCROLL ===== */
 html, body {
   scroll-behavior: smooth;
   scroll-snap-type: y mandatory;
   scroll-padding-top: 0;
 }
 
-/* Cada sección con snap */
 section, .scroll-section {
   scroll-snap-align: start;
   scroll-snap-stop: always;
   transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.3, 1.2);
 }
 
-/* El footer también hace snap */
 footer {
   scroll-snap-align: start;
   scroll-snap-stop: always;
   transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.3, 1.2);
 }
 
-/* ===== FONDO FIJO - SOLO PARA IMPORTANT NEWS ===== */
+/* ===== FONDO FIJO - IMPORTANT NEWS ===== */
 .global-fixed-background {
   position: fixed;
   top: 0;
@@ -448,17 +445,17 @@ footer {
   z-index: 5;
 }
 
-/* Important News debe ser transparente */
+/* Important News transparente */
 [ref="importantNewsRef"] {
   background: transparent !important;
 }
 
-/* More News debe ser transparente para mostrar su fondo fijo */
+/* More News transparente */
 [ref="moreNewsRef"] {
   background: transparent !important;
 }
 
-/* Las otras secciones tienen fondos sólidos */
+/* Senate con fondo */
 [ref="senateRef"] {
   background: #f5f5f5 !important;
 }

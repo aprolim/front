@@ -2,11 +2,1916 @@ COMPILADO DE ARCHIVOS - Parte 8
  
  
 ================================= 
+components\NewsCarousel.vue 
+================================= 
+ 
+<template>
+  <div class="news-carousel">
+    <div v-if="loading" class="loader-wrapper">
+      <div class="spinner"></div>
+      <p>Cargando noticias...</p>
+    </div>
+    
+    <div v-else-if="noticias.length > 0" class="carousel-content">
+      <div class="text-column">
+        <h2 class="title">{{ noticias[currentIndex].titulo }}</h2>
+        <div class="description">
+          <p>{{ noticias[currentIndex].descripcion }}</p>
+          <p class="date">{{ formatearFecha(noticias[currentIndex].publishedAt) }}</p>
+        </div>
+        <div class="indicators">
+          <button 
+            v-for="(_, idx) in noticias" 
+            :key="idx"
+            @click="currentIndex = idx"
+            class="indicator"
+            :class="{ active: currentIndex === idx }"
+          ></button>
+        </div>
+      </div>
+      
+      <div class="image-column">
+        <div class="image-wrapper">
+          <!-- ✅ IMAGEN CON REINTENTOS AUTOMÁTICOS -->
+          <SafeImage 
+            :src="noticias[currentIndex].featuredImage?.url || noticias[currentIndex].imagen || '/images/default-news.jpg'"
+            :alt="noticias[currentIndex].titulo"
+            image-class="w-full h-full object-cover"
+            :max-retries="8"
+            :persistent="true"
+            loading-strategy="eager"
+          />
+        </div>
+        <button @click="verNoticia(noticias[currentIndex])" class="btn-view">
+          Ver noticia completa
+          <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted, onUnmounted, watch } from 'vue'
+import { useRouter } from 'vue-router'
+import { useNoticias } from '~/composables/useNoticias'
+import SafeImage from '@/components/SafeImage.vue'
+
+const router = useRouter()
+const { noticiasImportantes } = useNoticias()
+
+const props = defineProps({
+  resetKey: {
+    type: Number,
+    default: 0
+  }
+})
+
+const noticias = ref([])
+const currentIndex = ref(0)
+const loading = ref(true)
+let interval = null
+
+const formatearFecha = (fecha) => {
+  if (!fecha) return ''
+  return new Date(fecha).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })
+}
+
+const verNoticia = (noticia) => {
+  if (noticia?.slug) {
+    router.push(`/noticias/${noticia.slug}`)
+  }
+}
+
+const startCarousel = () => {
+  if (interval) clearInterval(interval)
+  if (noticias.value.length <= 1) return
+  interval = setInterval(() => {
+    currentIndex.value = (currentIndex.value + 1) % noticias.value.length
+  }, 8000)
+}
+
+const stopCarousel = () => {
+  if (interval) {
+    clearInterval(interval)
+    interval = null
+  }
+}
+
+watch(noticiasImportantes, (nuevas) => {
+  if (nuevas.length > 0) {
+    noticias.value = nuevas.slice(0, 4)
+    loading.value = false
+    startCarousel()
+  }
+}, { immediate: true })
+
+watch(() => props.resetKey, () => {
+  stopCarousel()
+  currentIndex.value = 0
+  if (noticias.value.length > 0) {
+    startCarousel()
+  }
+})
+
+onUnmounted(() => {
+  stopCarousel()
+})
+</script>
+
+<style scoped>
+.news-carousel {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.carousel-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.text-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.title {
+  color: #E03636;
+  font-size: clamp(1.2rem, 2.5vw, 2rem);
+  font-weight: bold;
+  line-height: 1.3;
+}
+
+.description {
+  color: #4a5568;
+  font-size: clamp(0.8rem, 1.2vw, 1rem);
+  line-height: 1.6;
+  text-align: justify;
+}
+
+.date {
+  color: #E03636;
+  font-weight: 600;
+  text-align: right;
+  margin-top: 1rem;
+}
+
+.indicators {
+  display: flex;
+  justify-content: center;
+  gap: 0.8rem;
+  margin-top: 1rem;
+}
+
+.indicator {
+  width: clamp(0.6rem, 1.2vw, 0.8rem);
+  height: clamp(0.6rem, 1.2vw, 0.8rem);
+  border-radius: 50%;
+  background-color: rgba(224, 54, 54, 0.4);
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.indicator.active {
+  background-color: #E03636;
+  transform: scale(1.2);
+}
+
+.indicator:hover {
+  background-color: rgba(224, 54, 54, 0.7);
+  transform: scale(1.1);
+}
+
+.image-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.image-wrapper {
+  width: 100%;
+  max-width: 350px;
+  aspect-ratio: 1 / 1;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  background-color: #f3f4f6;
+}
+
+.image-wrapper :deep(img) {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.btn-view {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.2rem;
+  background-color: #E03636;
+  color: white;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: clamp(0.7rem, 1vw, 0.9rem);
+}
+
+.btn-view:hover {
+  background-color: #C12F2F;
+  transform: translateY(-2px);
+}
+
+.icon {
+  width: 1rem;
+  height: 1rem;
+  transition: transform 0.3s;
+}
+
+.btn-view:hover .icon {
+  transform: translateX(4px);
+}
+
+.loader-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.spinner {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 3px solid #e2e8f0;
+  border-top-color: #E03636;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 768px) {
+  .carousel-content {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 0 1rem;
+  }
+  
+  .image-wrapper {
+    max-width: 280px;
+  }
+}
+</style> 
+================================= 
+components\OptimizedGalleryImage.vue 
+================================= 
+ 
+<template>
+  <AppImage
+    :src="src"
+    :alt="alt || caption || 'Imagen'"
+    :fallback-src="fallbackSrc"
+    image-class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+    :aspect-ratio="aspectRatio"
+    :show-skeleton="true"
+    :max-retries="3"
+  />
+</template>
+
+<script setup lang="ts">
+import AppImage from './AppImage.vue'
+
+defineProps<{
+  src: string
+  alt?: string
+  caption?: string
+  fallbackSrc?: string
+  aspectRatio?: string
+}>()
+</script> 
+================================= 
+components\PersistentVideo.vue 
+================================= 
+ 
+<template>
+  <div class="persistent-video-wrapper relative">
+    <!-- Skeleton mientras carga -->
+    <div v-if="isLoading && !isLoaded" class="video-skeleton">
+      <div class="skeleton-pulse"></div>
+      <div class="loading-indicator">
+        <div class="spinner"></div>
+        <span>Cargando video...</span>
+      </div>
+    </div>
+
+    <!-- Video principal -->
+    <video
+      ref="videoRef"
+      :src="videoSrc"
+      :poster="poster"
+      :autoplay="autoplay"
+      :loop="loop"
+      :muted="muted"
+      :playsinline="playsinline"
+      :controls="controls"
+      class="w-full h-full object-cover"
+      @loadeddata="onLoadedData"
+      @canplay="onCanPlay"
+      @error="onError"
+      @waiting="onWaiting"
+      @loadedmetadata="onLoadedMetadata"
+    >
+      Tu navegador no soporta videos HTML5.
+    </video>
+
+    <!-- Estado de error -->
+    <div v-if="error && !isLoading" class="video-error">
+      <div class="error-content">
+        <svg class="error-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+        <p class="error-text">No se pudo cargar el video</p>
+        <button @click="retry" class="retry-btn">Reintentar</button>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, computed, onMounted, onBeforeUnmount, watch, nextTick } from 'vue'
+import { useVideoStore } from '~/stores/videoStore'
+
+const props = defineProps({
+  src: { type: String, required: true },
+  poster: { type: String, default: '' },
+  autoplay: { type: Boolean, default: false },
+  loop: { type: Boolean, default: false },
+  muted: { type: Boolean, default: true },
+  playsinline: { type: Boolean, default: true },
+  controls: { type: Boolean, default: false }
+})
+
+const isClient = typeof window !== 'undefined'
+const videoStore = useVideoStore()
+
+const videoRef = ref(null)
+const isLoaded = ref(false)
+const isLoading = ref(true)
+const error = ref(null)
+const retryCount = ref(0)
+
+// URL del video (desde store o src original)
+const videoSrc = computed(() => {
+  if (!isClient) return props.src
+  if (videoStore.isVideoLoaded() && videoStore.getVideoUrl()) {
+    console.log('📹 [PersistentVideo] Usando video DESDE EL STORE')
+    return videoStore.getVideoUrl()
+  }
+  console.log('📹 [PersistentVideo] Video NO está en store, usando src original')
+  return props.src
+})
+
+// Cargar video (solo en cliente)
+const loadVideo = async () => {
+  if (!isClient) {
+    console.log('📹 [PersistentVideo] SSR - Ignorando carga')
+    return
+  }
+
+  console.log('🔍 [PersistentVideo] loadVideo() llamado')
+  console.log('🔍 [PersistentVideo] Store tiene video?', videoStore.isVideoLoaded())
+
+  if (videoStore.isVideoLoaded() && videoStore.getVideoUrl()) {
+    console.log('✅ [PersistentVideo] Video YA ESTÁ EN STORE')
+    isLoaded.value = true
+    isLoading.value = false
+    
+    await nextTick()
+    const video = videoRef.value
+    if (video) {
+      const url = videoStore.getVideoUrl()
+      console.log('📹 [PersistentVideo] Asignando URL del store al video:', url.substring(0, 50) + '...')
+      video.src = url
+      video.load()
+      
+      try {
+        await video.play()
+        console.log('✅ [PersistentVideo] Video reproduciéndose desde store')
+      } catch (playError) {
+        console.warn('⚠️ [PersistentVideo] Autoplay bloqueado:', playError.message)
+      }
+    }
+    return
+  }
+
+  console.log('🔄 [PersistentVideo] Video NO está en store, descargando...')
+  isLoading.value = true
+  error.value = null
+
+  try {
+    const url = await videoStore.loadVideo(props.src)
+    if (url) {
+      console.log('✅ [PersistentVideo] Video descargado y guardado en store')
+      isLoaded.value = true
+      
+      await nextTick()
+      const video = videoRef.value
+      if (video) {
+        video.src = url
+        video.load()
+        try {
+          await video.play()
+          console.log('✅ [PersistentVideo] Video reproduciéndose')
+        } catch (playError) {
+          console.warn('⚠️ [PersistentVideo] Autoplay bloqueado:', playError.message)
+        }
+      }
+    } else {
+      throw new Error('No se pudo cargar el video')
+    }
+  } catch (err) {
+    console.error('❌ [PersistentVideo] Error:', err.message)
+    error.value = err.message
+    retryCount.value++
+    if (retryCount.value < 3) {
+      console.log(`🔄 [PersistentVideo] Reintento ${retryCount.value} en ${2000 * retryCount.value}ms`)
+      setTimeout(() => loadVideo(), 2000 * retryCount.value)
+    }
+  } finally {
+    isLoading.value = false
+  }
+}
+
+// Eventos del video
+const onLoadedData = () => {
+  console.log('✅ [PersistentVideo] Video cargado (loadeddata)')
+  isLoaded.value = true
+  isLoading.value = false
+  error.value = null
+  retryCount.value = 0
+  if (videoRef.value && videoRef.value.paused) {
+    videoRef.value.play().catch(() => {})
+  }
+}
+
+const onLoadedMetadata = () => {
+  console.log('✅ [PersistentVideo] Metadatos cargados (loadedmetadata)')
+  isLoaded.value = true
+  isLoading.value = false
+}
+
+const onCanPlay = () => {
+  console.log('✅ [PersistentVideo] Video listo para reproducir (canplay)')
+  isLoaded.value = true
+  isLoading.value = false
+  if (videoRef.value && videoRef.value.paused) {
+    videoRef.value.play().catch(() => {})
+  }
+}
+
+const onError = (e) => {
+  // ✅ Si el video ya está cargado y hay error, ignorar (puede ser por desmontaje)
+  if (isLoaded.value) {
+    console.log('⚠️ [PersistentVideo] Error ignorado (video ya cargado)')
+    return
+  }
+  
+  console.error('❌ [PersistentVideo] Error en video:', e)
+  console.log('❌ [PersistentVideo] src actual:', videoRef.value?.src)
+  
+  // Si no hay src, ignorar el error
+  if (!props.src) {
+    console.log('📹 [PersistentVideo] Sin src, ignorando error')
+    return
+  }
+  
+  // Si hay error y el src es un blob, intentar usar el src original
+  if (videoRef.value && videoRef.value.src && videoRef.value.src.startsWith('blob:')) {
+    console.log('🔄 [PersistentVideo] Error con blob URL, intentando con src original')
+    videoRef.value.src = props.src
+    videoRef.value.load()
+    return
+  }
+  
+  if (!isLoaded.value) {
+    isLoading.value = false
+    error.value = 'Error al cargar el video'
+  }
+}
+
+const onWaiting = () => {
+  if (!isLoaded.value) {
+    console.log('⏳ [PersistentVideo] Video en espera (buffering)')
+    isLoading.value = true
+  }
+}
+
+const retry = () => {
+  console.log('🔄 [PersistentVideo] Reintentando carga manual')
+  retryCount.value = 0
+  error.value = null
+  isLoading.value = true
+  videoStore.clearVideo()
+  loadVideo()
+}
+
+// Ciclo de vida
+onMounted(() => {
+  console.log('🎬 [PersistentVideo] Componente montado, src:', props.src)
+  loadVideo()
+})
+
+// ✅ Manejar el desmontaje correctamente
+onBeforeUnmount(() => {
+  console.log('🗑️ [PersistentVideo] Componente desmontando')
+  
+  // ✅ Limpiar el video sin generar errores
+  if (videoRef.value) {
+    try {
+      videoRef.value.pause()
+      // ✅ NO eliminar el src para evitar errores
+      // videoRef.value.src = ''  // <- ESTO CAUSABA EL ERROR
+      videoRef.value.load()
+    } catch (err) {
+      console.log('⚠️ [PersistentVideo] Error al limpiar video:', err.message)
+    }
+  }
+})
+
+// Watch para cambios en src
+watch(() => props.src, (newSrc, oldSrc) => {
+  if (isClient && newSrc !== oldSrc) {
+    console.log('🔄 [PersistentVideo] src cambiado:', oldSrc, '→', newSrc)
+    loadVideo()
+  }
+})
+
+// Watch para cambios en videoSrc
+watch(videoSrc, (newSrc) => {
+  if (isClient && newSrc && videoRef.value) {
+    console.log('🔄 [PersistentVideo] videoSrc cambiado, actualizando video')
+    videoRef.value.src = newSrc
+    videoRef.value.load()
+  }
+})
+
+defineExpose({
+  videoRef,
+  isLoaded,
+  isLoading,
+  error,
+  retry,
+  loadVideo
+})
+</script>
+
+<style scoped>
+.persistent-video-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #1a1a1a;
+}
+
+.video-skeleton {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #1a1a1a;
+}
+
+.skeleton-pulse {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, #2a2a2a 25%, #3a3a3a 50%, #2a2a2a 75%);
+  background-size: 200% 100%;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.loading-indicator {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  color: white;
+}
+
+.spinner {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #E03636;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.video-error {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.error-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  color: white;
+}
+
+.error-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  color: #9ca3af;
+}
+
+.error-text {
+  font-size: 0.875rem;
+  color: #9ca3af;
+}
+
+.retry-btn {
+  padding: 0.5rem 1.5rem;
+  background: #E03636;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.retry-btn:hover {
+  background: #C12F2F;
+}
+</style> 
+================================= 
+components\PlenarySessions.vue 
+================================= 
+ 
+<template>
+  <div class="w-full min-h-screen flex flex-col bg-gray-50">
+    <!-- FRANJA ROJA DE ANCHO COMPLETO (superior) -->
+    <div class="relative w-screen left-1/2 right-1/2 -mx-[50vw] mt-[4.4vw]">
+      <div class="relative bg-[#E03636] py-2 sm:py-3 md:py-4 shadow-2xl overflow-hidden group full-width-franja">
+        <div class="absolute inset-0 opacity-5">
+          <div class="absolute top-0 left-0 w-16 h-16 border-t-2 border-l-2 border-yellow-300 rounded-tl-lg"></div>
+          <div class="absolute bottom-0 right-0 w-16 h-16 border-b-2 border-r-2 border-yellow-300 rounded-br-lg"></div>
+        </div>
+        <div class="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-yellow-400 to-transparent animate-pulse"></div>
+        <div class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-yellow-400 to-transparent animate-pulse"></div>
+        <div class="container mx-auto px-4 relative z-10 text-center">
+          <p class="font-bold text-white text-[clamp(0.8rem,2vw,1.5rem)]">
+            <span class="bg-clip-text text-transparent bg-gradient-to-r from-white via-yellow-100 to-yellow-200">
+              <span class="inline-flex items-center justify-center text-white text-[clamp(0.5rem,1vw,0.9rem)] mx-1">⚪</span> 
+              PRIMERA LEGISLATURA DEL TRICENTENARIO
+              <span class="inline-flex items-center justify-center text-white text-[clamp(0.5rem,1vw,0.9rem)] mx-1">⚪</span>
+            </span>
+          </p>
+        </div>
+        <div class="absolute top-2 left-2 w-2 h-2 border border-yellow-300/50 rounded-full animate-ping"></div>
+        <div class="absolute top-2 right-2 w-2 h-2 border border-yellow-300/50 rounded-full animate-ping" style="animation-delay: 0.5s;"></div>
+        <div class="absolute bottom-2 left-2 w-2 h-2 border border-yellow-300/50 rounded-full animate-ping" style="animation-delay: 1s;"></div>
+        <div class="absolute bottom-2 right-2 w-2 h-2 border border-yellow-300/50 rounded-full animate-ping" style="animation-delay: 1.5s;"></div>
+      </div>
+    </div>
+    
+    <div class="text-center">
+      <h2 class="text-[#E03636] text-[clamp(1.2em,2.8vw,2.5em)]">
+        Sesiones del Pleno
+      </h2>
+    </div>
+
+    <!-- Contenedor de 3 columnas -->
+    <div class="flex-1 mx-auto px-[2vw] w-[90vw] text-[1.1vw] flex items-center">
+      <div class="grid grid-cols-3 gap-[2vw] w-full items-center pb-[2vw]">
+        
+        <!-- COLUMNA 1: CALENDARIO COMPLETO -->
+        <div class="bg-transparent rounded-xl overflow-visible flex flex-col">
+          <h3 class="text-[#E03636] text-[1.8em] md:text-[2em] text-center py-[0.8em] font-medium">Calendario de sesiones</h3>
+          
+          <div class="flex-1 text-[1.2vw]">
+            <div class="mx-[2.8vw] shadow-xl">
+              <div class="bg-[#E03636] text-white flex items-center justify-between">
+                <button 
+                  @click="previousMonth"
+                  class="w-[2em] h-[2em] flex items-center justify-center hover:scale-125 rounded-full transition-colors"
+                >
+                  <svg class="w-[1.0em] h-[1.0em]" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M15 5l-7 7 7 7V5z"/>
+                  </svg>
+                </button>
+                
+                <span class="font-bold text-[1.2em]">{{ currentMonthName }} {{ currentYear }}</span>
+                
+                <button 
+                  @click="nextMonth"
+                  class="w-[2em] h-[2em] flex items-center justify-center hover:scale-125 rounded-full transition-colors"
+                >
+                  <svg class="w-[1.0em] h-[1.0em]" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M9 5l7 7-7 7V5z"/>
+                  </svg>
+                </button>
+              </div>
+
+              <div class="bg-white rounded-lg p-[1em]">
+                <div class="grid grid-cols-7 gap-[0.2em] text-center text-[0.8em] font-semibold text-gray-600 mb-[0.5em]">
+                  <div>L</div>
+                  <div>M</div>
+                  <div>M</div>
+                  <div>J</div>
+                  <div>V</div>
+                  <div>S</div>
+                  <div>D</div>
+                </div>
+                
+                <div class="grid grid-cols-7 gap-[0.2em]">
+                  <div 
+                    v-for="(day, index) in calendarDays" 
+                    :key="index"
+                    class="relative text-center p-[0.2em] text-[0.9em] cursor-default"
+                    :class="[
+                      day.month === 'current' ? 'text-gray-800' : 'text-gray-400',
+                      getInfoSesion(day.date) ? 'bg-[#E03636]/20 rounded-full font-bold text-[#E03636]' : ''
+                    ]"
+                    @mouseenter="showTooltip(day.date, $event)"
+                    @mouseleave="hideTooltip"
+                    @mousemove="moveTooltip($event)"
+                  >
+                    {{ day.day }}
+                  </div>
+                </div>
+                
+                <div class="mt-[0.8em] flex items-center justify-center text-[0.8em]">
+                  <div class="flex items-center mr-[0.8em]">
+                    <div class="w-[0.8em] h-[0.8em] bg-[#E03636]/20 rounded-full mr-[0.3em]"></div>
+                    <span>Día de sesión</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- COLUMNA 2: ORDEN DEL DÍA -->
+        <div class="bg-transparent rounded-xl overflow-hidden flex flex-col">
+          <h3 class="text-[#E03636] text-[1.8em] md:text-[2em] text-center py-[0.8em] font-medium">Orden del día</h3>
+          
+          <div class="px-[3em] flex-1">
+            <NuxtLink to="/" class="block w-full h-[25vw]">
+              <div class="relative w-full h-full rounded-lg overflow-hidden group bg-white p-[0.6em] shadow-lg">
+                <img 
+                  src="/images/orden-del-dia.jpg" 
+                  alt="Orden del día" 
+                  class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors"></div>
+              </div>
+            </NuxtLink>
+          </div>
+        </div>
+
+        <!-- COLUMNA 3: ACTAS OFICIALES -->
+        <div class="bg-transparent rounded-xl overflow-visible flex flex-col">
+          <h3 class="text-[#E03636] text-[1.8em] md:text-[2em] text-center py-[0.8em] font-medium">Actas oficiales</h3>
+          
+          <div class="px-[4em] flex-1">
+            <div class="relative px-[1vw] rounded-lg bg-white p-[0.6em] shadow-lg w-full h-[23vw] overflow-visible">
+              <img 
+                src="/images/actas-oficiales.jpg" 
+                alt="Actas oficiales" 
+                class="w-full h-full object-cover"
+              />
+              
+              <div class="absolute left-0 right-0 flex justify-center" style="top: 100%; transform: translateY(-50%);">
+                <NuxtLink 
+                  to="/en-construccion" 
+                  class="bg-[#E03636] hover:bg-[#C12F2F] text-white font-bold py-[0.8em] px-[2em] rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg z-10 text-[1em]"
+                >
+                  Ver más
+                </NuxtLink>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 🔥 TOOLTIP / MODAL PARA FECHAS DE SESIÓN -->
+    <Teleport to="body">
+      <div 
+        v-if="tooltipVisible && tooltipData"
+        class="fixed z-50 pointer-events-none transition-opacity duration-200"
+        :style="{ 
+          left: tooltipPosition.x + 'px', 
+          top: tooltipPosition.y + 'px',
+          opacity: tooltipVisible ? 1 : 0,
+          transform: 'translate(-50%, -100%)',
+          marginTop: '-10px'
+        }"
+      >
+        <div class="bg-white rounded-lg shadow-2xl border border-gray-200 p-4 max-w-xs pointer-events-auto" style="min-width: 200px;">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="text-[#E03636] text-lg">📅</span>
+            <span class="font-bold text-gray-800 text-sm">{{ tooltipData.fechaFormateada }}</span>
+            <span 
+              class="ml-auto px-2 py-0.5 rounded-full text-xs font-medium"
+              :class="getTipoClass(tooltipData.tipo)"
+            >
+              {{ getTipoLabel(tooltipData.tipo) }}
+            </span>
+          </div>
+          
+          <h4 class="font-semibold text-gray-900 text-base mb-1">
+            {{ tooltipData.titulo || 'Sesión del Senado' }}
+          </h4>
+          
+          <p v-if="tooltipData.descripcion" class="text-gray-600 text-sm mt-1">
+            {{ tooltipData.descripcion }}
+          </p>
+          
+          <div class="mt-2 pt-2 border-t border-gray-100 flex items-center gap-1 text-xs text-gray-400">
+            <span>🕐</span>
+            <span>Sesión programada</span>
+          </div>
+        </div>
+      </div>
+    </Teleport>
+  </div>
+</template>
+
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+
+const API_BASE_URL = 'http://demoback.senado.gob.bo/api'
+
+const currentDate = ref(new Date())
+const currentYear = computed(() => currentDate.value.getFullYear())
+const currentMonth = computed(() => currentDate.value.getMonth())
+const currentMonthName = computed(() => {
+  return new Intl.DateTimeFormat('es', { month: 'long' }).format(currentDate.value)
+})
+
+// 🔥 FECHAS DE SESIONES DESDE EL BACKEND (con datos completos)
+const sesionesData = ref([])
+
+// 🔥 Tooltip
+const tooltipVisible = ref(false)
+const tooltipData = ref(null)
+const tooltipPosition = ref({ x: 0, y: 0 })
+let tooltipTimeout = null
+
+const previousMonth = () => {
+  currentDate.value = new Date(currentYear.value, currentMonth.value - 1, 1)
+}
+
+const nextMonth = () => {
+  currentDate.value = new Date(currentYear.value, currentMonth.value + 1, 1)
+}
+
+// 🔥 Cargar fechas de sesiones desde el backend (con datos completos)
+const cargarFechasSesiones = async () => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/sesiones/fechas`)
+    const result = await response.json()
+    if (result.success) {
+      sesionesData.value = result.data || []
+      console.log(`📅 ${sesionesData.value.length} fechas de sesiones cargadas`)
+    }
+  } catch (error) {
+    console.error('Error cargando fechas de sesiones:', error)
+  }
+}
+
+// 🔥 Obtener información de una fecha
+const getInfoSesion = (date) => {
+  if (!date) return null
+  const dateStr = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
+  return sesionesData.value.find(s => s.fecha === dateStr) || null
+}
+
+// 🔥 Mostrar tooltip
+const showTooltip = (date, event) => {
+  const info = getInfoSesion(date)
+  if (!info) {
+    tooltipVisible.value = false
+    return
+  }
+  
+  // Formatear fecha para mostrar
+  const fechaObj = new Date(date)
+  const fechaFormateada = fechaObj.toLocaleDateString('es-ES', { 
+    day: '2-digit', 
+    month: 'long', 
+    year: 'numeric' 
+  })
+  
+  tooltipData.value = {
+    ...info,
+    fechaFormateada
+  }
+  
+  // Posicionar tooltip
+  const rect = event.target.getBoundingClientRect()
+  tooltipPosition.value = {
+    x: rect.left + rect.width / 2,
+    y: rect.top
+  }
+  
+  tooltipVisible.value = true
+}
+
+const hideTooltip = () => {
+  tooltipVisible.value = false
+  tooltipData.value = null
+}
+
+const moveTooltip = (event) => {
+  if (!tooltipVisible.value) return
+  const rect = event.target.getBoundingClientRect()
+  tooltipPosition.value = {
+    x: rect.left + rect.width / 2,
+    y: rect.top
+  }
+}
+
+// 🔥 Clases para tipos de sesión
+const getTipoClass = (tipo) => {
+  const clases = {
+    ordinaria: 'bg-blue-100 text-blue-800',
+    extraordinaria: 'bg-yellow-100 text-yellow-800',
+    especial: 'bg-purple-100 text-purple-800'
+  }
+  return clases[tipo] || 'bg-gray-100 text-gray-800'
+}
+
+const getTipoLabel = (tipo) => {
+  const labels = {
+    ordinaria: 'Ordinaria',
+    extraordinaria: 'Extraordinaria',
+    especial: 'Especial'
+  }
+  return labels[tipo] || tipo
+}
+
+const calendarDays = computed(() => {
+  const year = currentYear.value
+  const month = currentMonth.value
+  
+  const firstDay = new Date(year, month, 1).getDay()
+  const startOffset = firstDay === 0 ? 6 : firstDay - 1
+  const lastDate = new Date(year, month + 1, 0).getDate()
+  const prevMonthLastDate = new Date(year, month, 0).getDate()
+  
+  const days = []
+  
+  for (let i = 0; i < startOffset; i++) {
+    days.push({
+      day: prevMonthLastDate - startOffset + i + 1,
+      month: 'prev',
+      date: new Date(year, month - 1, prevMonthLastDate - startOffset + i + 1)
+    })
+  }
+  
+  for (let i = 1; i <= lastDate; i++) {
+    days.push({
+      day: i,
+      month: 'current',
+      date: new Date(year, month, i)
+    })
+  }
+  
+  const remainingDays = 42 - days.length
+  for (let i = 1; i <= remainingDays; i++) {
+    days.push({
+      day: i,
+      month: 'next',
+      date: new Date(year, month + 1, i)
+    })
+  }
+  
+  return days
+})
+
+// 🔥 Verificar si un día es de sesión (basado en fechas del backend)
+const isSessionDay = (date) => {
+  return !!getInfoSesion(date)
+}
+
+// Cargar fechas al montar
+onMounted(() => {
+  cargarFechasSesiones()
+})
+</script>
+
+<style scoped>
+.w-\[90vw\] {
+  width: 90vw;
+}
+
+.grid-cols-7 > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.text-lg {
+  text-transform: capitalize;
+}
+
+.min-h-\[15em\] {
+  min-height: 15em;
+}
+
+.min-h-\[18em\] {
+  min-height: 18em;
+}
+
+/* Tooltip animation */
+.fixed.z-50 {
+  animation: tooltipFadeIn 0.15s ease-out;
+}
+
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -100%) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -100%) scale(1);
+  }
+}
+</style> 
+================================= 
+components\RedactorPdfViewer.vue 
+================================= 
+ 
+<!-- components/RedactorPdfViewer.vue -->
+<template>
+  <div class="redactor-pdf-viewer">
+    <!-- Selector de Tomos -->
+    <div class="tomo-selector">
+      <div class="selector-header">
+        <h3 class="text-xl font-semibold text-gray-800">Redactor - Tomos</h3>
+        <p class="text-sm text-gray-500">Seleccione un tomo para visualizar</p>
+      </div>
+      
+      <div class="tomo-grid">
+        <button
+          v-for="tomo in allTomos"
+          :key="tomo.tomo"
+          @click="selectTomo(tomo)"
+          :disabled="!tomo.disponible"
+          :class="[
+            'tomo-card',
+            selectedTomo?.tomo === tomo.tomo ? 'selected' : '',
+            !tomo.disponible ? 'disabled' : ''
+          ]"
+        >
+          <span class="tomo-number">Tomo {{ tomo.tomo }}</span>
+          <span class="tomo-periodo">{{ tomo.periodo }}</span>
+          <span v-if="!tomo.disponible" class="badge-no">Próximamente</span>
+          <span v-else class="badge-yes">Disponible</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Visor PDF -->
+    <div v-if="selectedTomo?.disponible" class="pdf-container">
+      <div class="pdf-toolbar">
+        <div class="toolbar-left">
+          <span class="font-medium">Tomo {{ selectedTomo.tomo }}</span>
+          <span class="text-sm text-gray-500">{{ selectedTomo.periodo }}</span>
+        </div>
+        <div class="toolbar-right">
+          <button 
+            @click="downloadPdf" 
+            class="btn-download"
+            title="Descargar PDF"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+            </svg>
+            Descargar
+          </button>
+          <button 
+            @click="toggleFullscreen" 
+            class="btn-fullscreen"
+            title="Pantalla completa"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+      
+      <div ref="pdfContainerRef" class="pdf-iframe-wrapper">
+        <iframe
+          :src="`${selectedTomo.pdfUrl}#toolbar=0&navpanes=1&scrollbar=1`"
+          class="pdf-iframe"
+          frameborder="0"
+          type="application/pdf"
+        ></iframe>
+      </div>
+    </div>
+
+    <!-- Placeholder cuando no hay selección -->
+    <div v-else class="pdf-placeholder">
+      <svg class="w-20 h-20 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+      </svg>
+      <p class="mt-4 text-gray-500">Seleccione un tomo del Redactor para visualizarlo</p>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, computed } from 'vue'
+import { useRedactorTomos } from '@/composables/useRedactorTomos'
+
+const { tomos, tomosFaltantes } = useRedactorTomos()
+const allTomos = computed(() => [...tomos, ...tomosFaltantes])
+
+const selectedTomo = ref(null)
+const pdfContainerRef = ref(null)
+
+const selectTomo = (tomo) => {
+  if (!tomo.disponible) return
+  selectedTomo.value = tomo
+}
+
+const downloadPdf = () => {
+  if (!selectedTomo.value?.pdfUrl) return
+  
+  const link = document.createElement('a')
+  link.href = selectedTomo.value.pdfUrl
+  link.download = `REDACTOR_TOMO_${selectedTomo.value.tomo}_${selectedTomo.value.periodo}.pdf`
+  link.target = '_blank'
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+}
+
+const toggleFullscreen = () => {
+  const wrapper = pdfContainerRef.value
+  if (!wrapper) return
+  
+  if (!document.fullscreenElement) {
+    wrapper.requestFullscreen()
+  } else {
+    document.exitFullscreen()
+  }
+}
+</script>
+
+<style scoped>
+.redactor-pdf-viewer {
+  @apply w-full max-w-7xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden;
+}
+
+.tomo-selector {
+  @apply border-b border-gray-200 p-6 bg-gray-50;
+}
+
+.selector-header {
+  @apply mb-4;
+}
+
+.tomo-grid {
+  @apply grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3;
+}
+
+.tomo-card {
+  @apply flex flex-col items-center p-3 rounded-lg border-2 transition-all duration-200 cursor-pointer;
+  @apply bg-white border-gray-200 hover:border-red-400 hover:shadow-md;
+}
+
+.tomo-card.selected {
+  @apply border-red-600 bg-red-50 shadow-md;
+}
+
+.tomo-card.disabled {
+  @apply opacity-50 cursor-not-allowed bg-gray-100;
+}
+
+.tomo-number {
+  @apply font-bold text-gray-800 text-sm;
+}
+
+.tomo-periodo {
+  @apply text-xs text-gray-500 mt-1;
+}
+
+.badge-yes, .badge-no {
+  @apply text-xs px-2 py-0.5 rounded-full mt-2;
+}
+
+.badge-yes {
+  @apply bg-green-100 text-green-700;
+}
+
+.badge-no {
+  @apply bg-gray-100 text-gray-500;
+}
+
+.pdf-container {
+  @apply flex flex-col;
+}
+
+.pdf-toolbar {
+  @apply flex justify-between items-center p-4 bg-gray-100 border-b border-gray-200;
+}
+
+.toolbar-left, .toolbar-right {
+  @apply flex items-center gap-3;
+}
+
+.btn-download, .btn-fullscreen {
+  @apply flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all duration-200;
+  @apply text-gray-700 hover:bg-gray-200;
+}
+
+.pdf-iframe-wrapper {
+  @apply relative w-full;
+  height: 70vh;
+  min-height: 500px;
+}
+
+.pdf-iframe {
+  @apply w-full h-full rounded-b-lg;
+}
+
+.pdf-placeholder {
+  @apply flex flex-col items-center justify-center p-12;
+  min-height: 400px;
+}
+</style> 
+================================= 
+components\ReliableImage.vue 
+================================= 
+ 
+<!-- components/ReliableImage.vue -->
+<template>
+  <div class="reliable-image-wrapper" :style="wrapperStyle">
+    <!-- Skeleton de carga -->
+    <div v-if="loading && showSkeleton" class="image-skeleton">
+      <div class="skeleton-pulse"></div>
+    </div>
+    
+    <!-- Imagen principal -->
+    <img
+      ref="imgRef"
+      :src="currentSrc"
+      :alt="alt"
+      :loading="loadingStrategy"
+      :class="imageClass"
+      :style="imageStyle"
+      @load="onLoad"
+      @error="onError"
+    />
+    
+    <!-- Estado de error con reintento -->
+    <div v-if="hasError && !loading" class="image-error">
+      <div class="error-content">
+        <svg class="error-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+        <span class="error-text">No se pudo cargar la imagen</span>
+        <button @click="retry" class="retry-btn">
+          Reintentar
+        </button>
+        <span class="retry-count">Intento {{ retryCount }} de {{ maxRetries }}</span>
+      </div>
+    </div>
+    
+    <!-- Fallback (placeholder) -->
+    <img
+      v-if="showPlaceholder && hasError && !loading && fallbackSrc"
+      :src="fallbackSrc"
+      :alt="alt"
+      class="w-full h-full object-cover"
+    />
+  </div>
+</template>
+
+<script setup>
+import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
+
+// ✅ CORREGIDO: Usar sintaxis de objetos con defineProps directamente
+const props = defineProps({
+  src: { type: String, required: true },
+  alt: { type: String, default: 'Imagen' },
+  fallbackSrc: { type: String, default: '/images/placeholder.jpg' },
+  imageClass: { type: String, default: 'w-full h-full object-cover' },
+  imageStyle: { type: Object, default: () => ({}) },
+  loadingStrategy: { type: String, default: 'lazy' },
+  aspectRatio: { type: String, default: 'auto' },
+  showSkeleton: { type: Boolean, default: true },
+  maxRetries: { type: Number, default: 5 },
+  retryDelay: { type: Number, default: 500 },
+  useCacheBust: { type: Boolean, default: true }
+})
+
+// Refs
+const imgRef = ref(null)
+const currentSrc = ref('')
+const loading = ref(true)
+const hasError = ref(false)
+const retryCount = ref(0)
+const isMounted = ref(false)
+const retryTimer = ref(null)
+const loadTimeout = ref(null)
+
+// Limpiar timers
+const clearAllTimers = () => {
+  if (retryTimer.value) {
+    clearTimeout(retryTimer.value)
+    retryTimer.value = null
+  }
+  if (loadTimeout.value) {
+    clearTimeout(loadTimeout.value)
+    loadTimeout.value = null
+  }
+}
+
+// Generar URL con cache buster
+const getUrlWithCacheBust = (url, retry = 0) => {
+  if (!props.useCacheBust) return url
+  
+  const separator = url.includes('?') ? '&' : '?'
+  return `${url}${separator}_t=${Date.now()}&_retry=${retry}`
+}
+
+// Inicializar src
+const initSrc = () => {
+  const url = props.src || ''
+  currentSrc.value = props.useCacheBust ? getUrlWithCacheBust(url, 0) : url
+}
+
+// Reiniciar estado
+const resetState = () => {
+  loading.value = true
+  hasError.value = false
+  retryCount.value = 0
+  clearAllTimers()
+  initSrc()
+}
+
+// Cargar imagen con timeout
+const loadWithTimeout = () => {
+  clearAllTimers()
+  
+  // Timeout de 15 segundos
+  loadTimeout.value = setTimeout(() => {
+    if (loading.value && !hasError.value) {
+      console.warn(`[ReliableImage] Timeout cargando: ${props.src}`)
+      onError()
+    }
+  }, 15000)
+}
+
+const onLoad = () => {
+  loading.value = false
+  hasError.value = false
+  retryCount.value = 0
+  clearAllTimers()
+}
+
+const onError = () => {
+  retryCount.value++
+  
+  if (retryCount.value < props.maxRetries) {
+    // Reintentar con backoff exponencial
+    const delay = props.retryDelay * Math.pow(1.8, retryCount.value - 1)
+    
+    clearAllTimers()
+    retryTimer.value = setTimeout(() => {
+      if (imgRef.value) {
+        const url = props.src
+        currentSrc.value = props.useCacheBust ? getUrlWithCacheBust(url, retryCount.value) : url
+        imgRef.value.src = currentSrc.value
+        loadWithTimeout()
+      }
+    }, delay)
+  } else {
+    loading.value = false
+    hasError.value = true
+    clearAllTimers()
+  }
+}
+
+const retry = () => {
+  if (!hasError.value) return
+  
+  // Resetear estado y reintentar
+  retryCount.value = 0
+  hasError.value = false
+  loading.value = true
+  
+  const url = props.src
+  currentSrc.value = props.useCacheBust ? getUrlWithCacheBust(url, 0) : url
+  
+  if (imgRef.value) {
+    imgRef.value.src = currentSrc.value
+    loadWithTimeout()
+  }
+}
+
+// Computed
+const wrapperStyle = computed(() => {
+  if (props.aspectRatio && props.aspectRatio !== 'auto') {
+    return { aspectRatio: props.aspectRatio }
+  }
+  return {}
+})
+
+const showPlaceholder = computed(() => {
+  return hasError.value && !loading.value && !!props.fallbackSrc
+})
+
+// Watchers
+watch(() => props.src, (newSrc, oldSrc) => {
+  if (newSrc !== oldSrc) {
+    resetState()
+    if (isMounted.value) {
+      setTimeout(() => {
+        if (imgRef.value) {
+          imgRef.value.src = currentSrc.value
+          loadWithTimeout()
+        }
+      }, 50)
+    }
+  }
+})
+
+// Lifecycle
+onMounted(() => {
+  isMounted.value = true
+  initSrc()
+  
+  // Forzar carga después del montaje
+  setTimeout(() => {
+    if (imgRef.value && loading.value) {
+      imgRef.value.src = currentSrc.value
+      loadWithTimeout()
+    }
+  }, 50)
+  
+  // Reintentar después de 2 segundos si sigue cargando
+  setTimeout(() => {
+    if (loading.value && !hasError.value) {
+      console.log(`[ReliableImage] Reintentando carga forzada: ${props.src}`)
+      if (imgRef.value) {
+        const url = props.src
+        currentSrc.value = props.useCacheBust ? getUrlWithCacheBust(url, retryCount.value + 1) : url
+        imgRef.value.src = currentSrc.value
+        loadWithTimeout()
+      }
+    }
+  }, 2000)
+})
+
+onBeforeUnmount(() => {
+  clearAllTimers()
+})
+</script>
+
+<style scoped>
+.reliable-image-wrapper {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  background: #f3f4f6;
+}
+
+.image-skeleton {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.skeleton-pulse {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.image-error {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(249, 250, 251, 0.95);
+}
+
+.error-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  text-align: center;
+}
+
+.error-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  color: #9ca3af;
+}
+
+.error-text {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.retry-btn {
+  padding: 0.25rem 1rem;
+  background: #E03636;
+  color: white;
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.retry-btn:hover {
+  background: #C12F2F;
+}
+
+.retry-count {
+  font-size: 0.6rem;
+  color: #9ca3af;
+}
+</style> 
+================================= 
+components\SafeImage.vue 
+================================= 
+ 
+<!-- components/SafeImage.vue -->
+<template>
+  <div 
+    ref="wrapperRef"
+    class="safe-image-wrapper" 
+    :style="wrapperStyle"
+  >
+    <!-- Skeleton de carga (solo si está cargando) -->
+    <div v-if="isLoading && showSkeleton" class="image-skeleton">
+      <div class="skeleton-pulse"></div>
+    </div>
+    
+    <img
+      ref="imgRef"
+      :src="currentSrc"
+      :alt="alt"
+      :loading="loadingStrategy"
+      :class="imageClass"
+      :style="imageStyle"
+      :fetchpriority="actualPriority"
+      @load="onLoad"
+      @error="onError"
+    />
+  </div>
+</template>
+
+<script setup>
+import { ref, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
+
+const props = defineProps({
+  src: { type: String, required: true },
+  alt: { type: String, default: 'Imagen' },
+  imageClass: { type: String, default: 'w-full h-full object-cover' },
+  imageStyle: { type: Object, default: () => ({}) },
+  loadingStrategy: { type: String, default: 'lazy' },
+  aspectRatio: { type: String, default: 'auto' },
+  maxRetries: { type: Number, default: 8 },
+  retryDelay: { type: Number, default: 500 },
+  useCacheBust: { type: Boolean, default: false },
+  persistent: { type: Boolean, default: true },
+  // ✅ Prioridad manual (opcional, si no se usa, se detecta automáticamente)
+  priority: { 
+    type: String, 
+    default: 'auto',
+    validator: (value) => ['high', 'low', 'auto'].includes(value)
+  },
+  showSkeleton: { type: Boolean, default: true },
+  // ✅ Tiempo de espera para considerar que la imagen es visible
+  visibilityThreshold: { type: Number, default: 0.1 }
+})
+
+const wrapperRef = ref(null)
+const imgRef = ref(null)
+const currentSrc = ref('')
+const retryCount = ref(0)
+const isMounted = ref(false)
+const retryTimer = ref(null)
+const isLoaded = ref(false)
+const maxRetriesReached = ref(false)
+const isLoading = ref(true)
+const isVisible = ref(false)
+const hasStartedLoading = ref(false)
+let intersectionObserver = null
+
+// ✅ Prioridad real: si el usuario lo definió manualmente, usar eso, sino detectar
+const actualPriority = computed(() => {
+  if (props.priority !== 'auto') return props.priority
+  // Si la imagen es visible, prioridad alta
+  return isVisible.value ? 'high' : 'low'
+})
+
+// ✅ Loading strategy: si es visible, eager, sino lazy
+const actualLoadingStrategy = computed(() => {
+  if (isVisible.value) return 'eager'
+  return props.loadingStrategy || 'lazy'
+})
+
+const clearTimers = () => {
+  if (retryTimer.value) {
+    clearTimeout(retryTimer.value)
+    retryTimer.value = null
+  }
+}
+
+const getUrlWithCacheBust = (url, retry = 0) => {
+  if (!props.useCacheBust) return url
+  const separator = url.includes('?') ? '&' : '?'
+  return `${url}${separator}_t=${Date.now()}&_retry=${retry}`
+}
+
+const initSrc = () => {
+  const url = props.src || ''
+  currentSrc.value = props.useCacheBust ? getUrlWithCacheBust(url, 0) : url
+}
+
+const startLoading = () => {
+  if (hasStartedLoading.value) return
+  hasStartedLoading.value = true
+  isLoading.value = true
+  initSrc()
+  if (imgRef.value) {
+    imgRef.value.src = currentSrc.value
+  }
+}
+
+const resetState = () => {
+  retryCount.value = 0
+  isLoaded.value = false
+  maxRetriesReached.value = false
+  isLoading.value = true
+  hasStartedLoading.value = false
+  clearTimers()
+  initSrc()
+}
+
+const onLoad = () => {
+  retryCount.value = 0
+  isLoaded.value = true
+  maxRetriesReached.value = false
+  isLoading.value = false
+  clearTimers()
+}
+
+const onError = () => {
+  retryCount.value++
+  
+  if (retryCount.value >= props.maxRetries) {
+    maxRetriesReached.value = true
+    isLoading.value = false
+    clearTimers()
+    return
+  }
+  
+  if (props.persistent) {
+    const delay = props.retryDelay * Math.pow(1.5, retryCount.value - 1)
+    
+    clearTimers()
+    retryTimer.value = setTimeout(() => {
+      if (imgRef.value) {
+        const url = props.src
+        currentSrc.value = props.useCacheBust ? getUrlWithCacheBust(url, retryCount.value) : url
+        imgRef.value.src = currentSrc.value
+      }
+    }, delay)
+  } else {
+    clearTimers()
+  }
+}
+
+const forceReload = () => {
+  if (maxRetriesReached.value || !isLoaded.value) {
+    retryCount.value = 0
+    maxRetriesReached.value = false
+    isLoaded.value = false
+    isLoading.value = true
+    hasStartedLoading.value = false
+    
+    const url = props.src
+    currentSrc.value = props.useCacheBust ? getUrlWithCacheBust(url, 0) : url
+    
+    if (imgRef.value) {
+      imgRef.value.src = currentSrc.value
+    }
+  }
+}
+
+const wrapperStyle = computed(() => {
+  if (props.aspectRatio && props.aspectRatio !== 'auto') {
+    return { aspectRatio: props.aspectRatio }
+  }
+  return {}
+})
+
+// ✅ Configurar IntersectionObserver para detectar visibilidad
+const setupIntersectionObserver = () => {
+  if (typeof window === 'undefined' || !wrapperRef.value) return
+  
+  // Si ya existe, desconectar
+  if (intersectionObserver) {
+    intersectionObserver.disconnect()
+  }
+  
+  intersectionObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        const wasVisible = isVisible.value
+        isVisible.value = entry.isIntersecting
+        
+        // Si se vuelve visible y no ha empezado a cargar, empezar
+        if (isVisible.value && !hasStartedLoading.value) {
+          startLoading()
+        }
+        
+        // Si cambia la visibilidad, log para depuración
+        if (wasVisible !== isVisible.value) {
+          console.log(`🖼️ [SafeImage] Visibilidad: ${isVisible.value ? '🟢 VISIBLE' : '🔴 OCULTA'} - ${props.src.substring(0, 40)}...`)
+        }
+      })
+    },
+    {
+      threshold: props.visibilityThreshold,
+      rootMargin: '50px' // Pre-carga cuando está a 50px del viewport
+    }
+  )
+  
+  intersectionObserver.observe(wrapperRef.value)
+}
+
+// ✅ Forzar carga si la imagen ya es visible al montar
+const checkInitialVisibility = () => {
+  if (typeof window === 'undefined' || !wrapperRef.value) return
+  
+  const rect = wrapperRef.value.getBoundingClientRect()
+  const windowHeight = window.innerHeight || document.documentElement.clientHeight
+  
+  // Si la imagen está en el viewport o cerca
+  if (rect.top < windowHeight + 100 && rect.bottom > -100) {
+    isVisible.value = true
+    startLoading()
+  }
+}
+
+watch(() => props.src, (newSrc) => {
+  if (newSrc !== currentSrc.value) {
+    resetState()
+    if (isMounted.value) {
+      // Si la imagen es visible, cargar inmediatamente
+      if (isVisible.value) {
+        startLoading()
+      }
+    }
+  }
+})
+
+onMounted(() => {
+  isMounted.value = true
+  initSrc()
+  
+  // Esperar a que el DOM esté listo
+  nextTick(() => {
+    // Verificar si es visible inicialmente
+    checkInitialVisibility()
+    // Configurar observer
+    setupIntersectionObserver()
+    
+    // Si no es visible, esperar a que lo sea
+    if (!isVisible.value) {
+      console.log(`⏳ [SafeImage] Esperando visibilidad: ${props.src.substring(0, 40)}...`)
+    }
+  })
+})
+
+onBeforeUnmount(() => {
+  clearTimers()
+  if (intersectionObserver) {
+    intersectionObserver.disconnect()
+    intersectionObserver = null
+  }
+})
+
+defineExpose({
+  forceReload,
+  isLoaded,
+  isVisible
+})
+</script>
+
+<style scoped>
+.safe-image-wrapper {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  background: #f3f4f6;
+}
+
+.image-skeleton {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.skeleton-pulse {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+img {
+  position: relative;
+  z-index: 2;
+}
+</style> 
+================================= 
 components\SenateChamber.vue 
 ================================= 
  
 <template>
-  <div class="h-full senate-chamber">
+  <div class="senate-chamber">
     <!-- Header -->
     <header v-if="showHeader" class="chamber-header text-center">
       <slot name="header">
@@ -18,16 +1923,14 @@ components\SenateChamber.vue
     </header>
 
     <main class="h-full">
-      <!-- Contenedor con imagen de fondo -->
-      <div class="h-full background-container" :style="{ backgroundImage: `url('${backgroundImage}')` }">
-        <!-- Contenedor principal CON GRID DE 3 COLUMNAS REALES -->
+      <div class="background-container h-full" :style="{ backgroundImage: `url('${backgroundImage}')` }">
         <div :class="senateChamberStyles.senator" class="columns-container">
-          <!-- COLUMNA IZQUIERDA: Panel de Controles -->
+          
+          <!-- COLUMNA IZQUIERDA -->
           <div v-if="showControls" class="column left-column text-[1.4em]">
             <div class="controls-panel transparent-panel">
-              <!-- Leyenda -->
               <div class="controls-section">
-                <h3 class="pill-red">Distribución <br> 2025-2030</h3>
+                <h3 class="pill-red w-full">Distribución <br> 2025-2030</h3>
                 <div class="legend-vertical">
                   <div 
                     v-for="party in parties"
@@ -38,7 +1941,6 @@ components\SenateChamber.vue
                   >
                     <div class="grid grid-cols-[20px_1fr_20px] 2xl:grid-cols-[40px_1fr_40px] 3xl:grid-cols-[50px_1fr_50px] 4xl:grid-cols-[70px_1fr_70px] 5xl:grid-cols-[90px_1fr_90px] items-center w-full">
                       <div class="flex justify-center w-full">
-                        <!-- CÍRCULO CON EFECTO CONCÉNTRICO -->
                         <div class="legend-color-vertical w-full">
                           <svg viewBox="0 0 40 40" class="w-full">
                             <circle cx="20" cy="20" r="18" :fill="party.color"/>
@@ -54,10 +1956,7 @@ components\SenateChamber.vue
                         </span>
                       </div>
                       <div class="flex justify-center">
-                        <span 
-                          class="font-bold text-[1.1em]"
-                          :style="{ color: party.color }"
-                        >
+                        <span class="font-bold text-[1.1em]" :style="{ color: party.color }">
                           {{ getFilteredCount(party.id) }}
                         </span>
                       </div>
@@ -68,7 +1967,7 @@ components\SenateChamber.vue
             </div>
           </div>
 
-          <!-- COLUMNA CENTRAL: Hemiciclo SVG -->
+          <!-- COLUMNA CENTRAL -->
           <div class="column center-column">
             <div class="hemicycle-container center-transparent-panel">
               <div class="hemicycle-svg-container" @mousemove="onMouseMove">
@@ -80,9 +1979,6 @@ components\SenateChamber.vue
                   preserveAspectRatio="xMidYMid meet"
                 >
                   <defs>
-                    <filter id="circleShadow" x="-20%" y="-20%" width="140%" height="140%">
-                      <feDropShadow dx="1" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.1)"/>
-                    </filter>
                     <pattern id="hemicyclePattern" patternUnits="userSpaceOnUse" width="1000" height="1000">
                       <image 
                         :href="backgroundImage"
@@ -96,27 +1992,58 @@ components\SenateChamber.vue
                     </pattern>
                   </defs>
 
-                  <!-- TODOS LOS ASIENTOS -->
                   <g>
-                    <g v-for="seat in allSeats" :key="seat.id">
+                    <!-- ASIENTO #1 - RENDERIZADO INDEPENDIENTE -->
+                    <g v-if="seat1">
+                      <circle
+                        :cx="seat1.x"
+                        :cy="seat1.y"
+                        r="20" 
+                        :fill="getSeatColor(seat1)"
+                        :stroke-width="selectedSenator?.id === 1 ? '2' : '1.5'"
+                        :class="['senator-circle', { 
+                          'selected': selectedSenator?.id === 1, 
+                          'hovered': hoveredSeat?.id === 1 
+                        }]"
+                        @click="selectSenator(seat1)"
+                        @mouseenter="handleMouseEnter(seat1)"
+                        @mouseleave="handleMouseLeave()"
+                      />
+                      <text 
+                        v-if="showLabels"
+                        :x="seat1.x"
+                        :y="seat1.y"
+                        text-anchor="middle"
+                        :fill="getTextColor(seat1.partyColor)"
+                        font-size="12" 
+                        font-weight="bold"
+                        class="seat-number"
+                      >
+                        {{ seat1.seatNumber }}
+                      </text>
+                    </g>
+
+                    <!-- ASIENTOS #2 al #36 -->
+                    <g 
+                      v-for="seat in otherSeats" 
+                      :key="`seat-${seat.id}`"
+                    >
                       <circle
                         :cx="seat.x"
                         :cy="seat.y"
                         r="20" 
                         :fill="getSeatColor(seat)"
                         :stroke-width="selectedSenator?.id === seat.id ? '2' : '1.5'"
-                        :class="['senator-circle', 
-                          { 
-                            'selected': selectedSenator?.id === seat.id,
-                            'hovered': hoveredSeat?.id === seat.id
-                          }]"
+                        :class="['senator-circle', { 
+                          'selected': selectedSenator?.id === seat.id, 
+                          'hovered': hoveredSeat?.id === seat.id 
+                        }]"
                         @click="selectSenator(seat)"
                         @mouseenter="handleMouseEnter(seat)"
                         @mouseleave="handleMouseLeave()"
-                        filter="url(#circleShadow)"
                       />
-                      
-                      <text v-if="showLabels"
+                      <text 
+                        v-if="showLabels"
                         :x="seat.x"
                         :y="seat.y"
                         text-anchor="middle"
@@ -131,12 +2058,10 @@ components\SenateChamber.vue
                   </g>
                 </svg>
 
-                <!-- Tooltip -->
+                <!-- TOOLTIP -->
                 <div 
-                  v-if="hoveredSeat && hoveredSeat.id !== selectedSenator?.id" 
-                  class="seat-tooltip 
-                  text-[6px] xs:text-[8px] sm:text-[9px] md:text-[10px] lg:text-[12px] xl:text-[15px] 2xl:text-[17px] 3xl:text-[19px] 4xl:text-[23px] 5xl:text-[33px]
-                  "
+                  v-if="hoveredSeat && hoveredSeat.id !== selectedSenator?.id && !isSelecting" 
+                  class="seat-tooltip text-[6px] xs:text-[8px] sm:text-[9px] md:text-[10px] lg:text-[12px] xl:text-[15px] 2xl:text-[17px] 3xl:text-[19px] 4xl:text-[23px] 5xl:text-[33px]"
                   :style="tooltipStyle"
                 >
                   <div class="tooltip-header">
@@ -157,28 +2082,29 @@ components\SenateChamber.vue
                       <span class="label">Partido:</span>
                       <span class="value">{{ hoveredSeat.party }}</span>
                     </div>
-                    <div class="hint">👆 Click para detalles</div>
+                    <div class="hint">🖱️ Click para detalles</div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- COLUMNA DERECHA: Información del Senador CON FOTOS REALES -->
+          <!-- COLUMNA DERECHA -->
           <div class="column right-column w-full">
             <div class="info-panel transparent-panel w-full">
               <div v-if="selectedSenator" :key="selectedSenator.id" class="senator-details">
                 <div class="senator-photo-container">
                   <div class="senator-photo-circle" :class="senateChamberStyles.senatorPhoto">
-                    <!-- ✅ FOTO CON REINTENTOS AUTOMÁTICOS -->
-                    <SafeImage
+                    <img 
                       :src="selectedSenator.photoUrl" 
                       :alt="selectedSenator.name"
-                      image-class="senator-photo-img w-full h-full object-cover"
-                      :max-retries="8"
-                      :persistent="true"
-                      loading-strategy="eager"
+                      class="senator-photo-img w-full h-full object-cover"
+                      @error="handleImageError"
+                      loading="eager"
                     />
+                    <div v-if="imageError" class="photo-placeholder" :style="{ backgroundColor: selectedSenator.partyColor }">
+                      {{ formatInitials(selectedSenator.name) }}
+                    </div>
                   </div>
                 </div>
 
@@ -212,7 +2138,7 @@ components\SenateChamber.vue
               </div>
 
               <div v-else class="empty-state">
-                <div class="empty-icon">👆</div>
+                <div class="empty-icon">🎯</div>
                 <h2 class="font-bold">Selecciona un Senador</h2>
                 <p class="font-bold">Haz click en cualquier círculo del hemiciclo para ver información detallada</p>
                 <div class="empty-tips">
@@ -269,7 +2195,6 @@ components\SenateChamber.vue
       </div>
     </main>
 
-    <!-- Footer -->
     <footer v-if="showFooter" class="chamber-footer">
       <div class="footer-content">
         <slot name="footer">
@@ -284,551 +2209,16 @@ components\SenateChamber.vue
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted, onUnmounted, watch } from 'vue'
-import { senateChamberStyles } from './data/senateChamberData'
-import SafeImage from '@/components/SafeImage.vue'
+import { watch, onMounted, onUnmounted } from 'vue'
+import { defaultSenators, defaultParties, senateChamberStyles } from './SenateChamber/data/senateChamberData'
+import { useSenateChamber } from '~/composables/useSenateChamber'
 
 // ============================================
-// POSICIONES SVG
-// ============================================
-const seatPositions = {
-  upperLeft: [
-    { x: 399, y: 303 }, // asiento 1
-    { x: 405, y: 343 }, // asiento 2
-    { x: 421, y: 380 }, // asiento 3
-    { x: 445, y: 412 }, // asiento 4
-    { x: 477, y: 436 }, // asiento 5
-    { x: 513, y: 455 }, // asiento 6
-    { x: 553, y: 465 }  // asiento 7
-  ],
-  upperRight: [
-    { x: 647, y: 465 }, // asiento 8
-    { x: 687, y: 455 }, // asiento 9
-    { x: 723, y: 436 }, // asiento 10
-    { x: 755, y: 412 }, // asiento 11
-    { x: 779, y: 380 }, // asiento 12
-    { x: 795, y: 343 }, // asiento 13
-    { x: 801, y: 303 }  // asiento 14
-  ],
-  lowerLeft: [
-    { x: 280, y: 252 }, // asiento 15
-    { x: 283, y: 301 }, // asiento 16
-    { x: 292, y: 349 }, // asiento 17
-    { x: 307, y: 395 }, // asiento 18
-    { x: 328, y: 438 }, // asiento 19
-    { x: 355, y: 477 }, // asiento 20
-    { x: 388, y: 511 }, // asiento 21
-    { x: 423, y: 538 }, // asiento 22
-    { x: 464, y: 559 }, // asiento 23
-    { x: 507, y: 573 }, // asiento 24
-    { x: 553, y: 580 }  // asiento 25
-  ],
-  lowerRight: [
-    { x: 647, y: 580 }, // asiento 26
-    { x: 693, y: 573 }, // asiento 27
-    { x: 736, y: 559 }, // asiento 28
-    { x: 777, y: 538 }, // asiento 29
-    { x: 812, y: 511 }, // asiento 30
-    { x: 845, y: 477 }, // asiento 31
-    { x: 872, y: 438 }, // asiento 32
-    { x: 893, y: 395 }, // asiento 33
-    { x: 908, y: 349 }, // asiento 34
-    { x: 917, y: 301 }, // asiento 35
-    { x: 920, y: 252 }  // asiento 36
-  ]
-}
-
-// ============================================
-// DATOS DE SENADORES
+// PROPS
 // ============================================
 const props = defineProps({
-  senators: {
-    type: Array,
-    required: false,
-    default: () => [
-      // ============ PDC - GOBIERNO (16 senadores) ============
-      { 
-        id: 1, seatNumber: 1, curve: 'upper', side: 'left', 
-        name: "Diego Esteban Mateo Ávila Navajas", 
-        party: "Partido Demócrata Cristiano", partyShort: "PDC", partyColor: "#016167", bancada: "Gobierno", 
-        department: "Tarija", age: 52, profession: "Abogado", 
-        email: "davila@senado.gob.bo", phone: "+591 71562341", office: "Edificio Presidente, Piso 10",
-        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
-        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/new/titulares/g2/DIEGO ESTEBAN MATEO ÁVILA NAVAJAS.png",
-        comision:"Directiva Legislatura 2025-2026",
-        comite:"",
-        cargo:"Presidente"
-      },
-      { 
-        id: 2, seatNumber: 2, curve: 'upper', side: 'left', 
-        name: "Bertha Cartagena Sánchez", 
-        party: "Partido Demócrata Cristiano", partyShort: "PDC", partyColor: "#016167", bancada: "Gobierno", 
-        department: "Chuquisaca", age: 58, profession: "Socióloga", 
-        email: "bcartagena@senado.gob.bo", phone: "+591 71456982", office: "Edificio Presidente, Piso 9",
-        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
-        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/new/titulares/g1/BERTHA CARTAGENA SANCHEZ.png",
-        comision:"",
-        comite:"Comité de Culturas, Interculturalidad y Patrimonio Cultural",
-        cargo:"Secretaria de Comite"
-      },
-      { 
-        id: 3, seatNumber: 3, curve: 'upper', side: 'left', 
-        name: "Daniel Antonio Ortiz Velásquez", 
-        party: "Partido Demócrata Cristiano", partyShort: "PDC", partyColor: "#016167", bancada: "Gobierno", 
-        department: "Chuquisaca", age: 55, profession: "Abogado", 
-        email: "dortiz@senado.gob.bo", phone: "+591 71234567", office: "Edificio Presidente, Piso 9",
-        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
-        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/new/titulares/g1/DANIEL ANTONIO ORTIZ VELASQUEZ.png",
-        comision:"Comisión de Constitución, Derechos Humanos, Legislación y Sistema Electoral",
-        comite:"",
-        cargo:"Presidente de Comisión"
-      },
-      { 
-        id: 4, seatNumber: 4, curve: 'upper', side: 'left', 
-        name: "Nicanor Gonzalo Cochi Condorí", 
-        party: "Partido Demócrata Cristiano", partyShort: "PDC", partyColor: "#016167", bancada: "Gobierno", 
-        department: "La Paz", age: 53, profession: "Ingeniero", 
-        email: "ncochi@senado.gob.bo", phone: "+591 72567890", office: "Edificio Presidente, Piso 8",
-        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
-        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/new/titulares/g1/NICANOR GONZALO COCHI CONDORI.png",
-        comision:"Comisión de Política Internacional y Protección al Migrante",
-        comite:"",
-        cargo:"Presidente de Comisión"
-      },
-      {
-        id: 5, seatNumber: 5, curve: 'upper', side: 'left', 
-        name: "Ana María Crispin Choque", 
-        party: "Partido Demócrata Cristiano", partyShort: "PDC", partyColor: "#016167", bancada: "Gobierno", 
-        department: "La Paz", age: 49, profession: "Educadora", 
-        email: "acrispin@senado.gob.bo", phone: "+591 73456789", office: "Edificio Presidente, Piso 8",
-        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
-        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/new/titulares/g1/ANA MARIA CRISPIN CHOQUE.png",
-        comision:"Comisión de Economía Plural, Producción e Industria",
-        comite:"",
-        cargo:"Presidente de Comisión"
-      },
-      { 
-        id: 6, seatNumber: 6, curve: 'upper', side: 'left', 
-        name: "Wilder Véliz Armas", 
-        party: "Partido Demócrata Cristiano", partyShort: "PDC", partyColor: "#016167", bancada: "Gobierno", 
-        department: "Cochabamba", age: 51, profession: "Médico", 
-        email: "wveliz@senado.gob.bo", phone: "+591 74567891", office: "Edificio Presidente, Piso 7",
-        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
-        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/new/titulares/g1/WILDER VELIZ ARMAS.png",
-        comision:"",
-        comite:"Comité de Justicia Plural y Consejo de la Magistratura.",
-        cargo:"Secretario de Comite"
-      },
-      { 
-        id: 7, seatNumber: 7, curve: 'upper', side: 'left', 
-        name: "Judith Rosario García Coca", 
-        party: "Partido Demócrata Cristiano", partyShort: "PDC", partyColor: "#016167", bancada: "Gobierno", 
-        department: "Cochabamba", age: 47, profession: "Abogada", 
-        email: "jgarcia@senado.gob.bo", phone: "+591 75678912", office: "Edificio Presidente, Piso 7",
-        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
-        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/new/titulares/g1/JUDITH ROSARIO GARCIA COCA.png",
-        comision:"Comisión de Seguridad del Estado",
-        comite:"",
-        cargo:"Presidente de Comisión"
-      },
-      { 
-        id: 8, seatNumber: 15, curve: 'lower', side: 'left', 
-        name: "Yasmín Estivariz Villarroel", 
-        party: "Partido Demócrata Cristiano", partyShort: "PDC", partyColor: "#016167", bancada: "Gobierno", 
-        department: "Oruro", age: 48, profession: "Ingeniera", 
-        email: "yestivariz@senado.gob.bo", phone: "+591 76789123", office: "Edificio Presidente, Piso 6",
-        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
-        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/new/titulares/g2/YASMIN ESTIVARIZ VILLARROEL.png",
-        comision:"Directiva Legislatura 2025-2026",
-        comite:"",
-        cargo:"Primera Secretaria"
-      },
-      { 
-        id: 9, seatNumber: 16, curve: 'lower', side: 'left', 
-        name: "Freddy Castillo Chávez", 
-        party: "Partido Demócrata Cristiano", partyShort: "PDC", partyColor: "#016167", bancada: "Gobierno", 
-        department: "Oruro", age: 56, profession: "Economista", 
-        email: "fcastillo@senado.gob.bo", phone: "+591 77891234", office: "Edificio Presidente, Piso 6",
-        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
-        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/new/titulares/g2/FREDDY CASTILLO CHAVEZ.png",
-        comision:"",
-        comite:"Comité de Constitución, Legislación e Interpretación Legislativa y Constitucional.",
-        cargo:"Secretario de Comite"
-      },
-      { 
-        id: 10, seatNumber: 17, curve: 'lower', side: 'left', 
-        name: "Maria Antonieta Alcón Sánchez", 
-        party: "Partido Demócrata Cristiano", partyShort: "PDC", partyColor: "#016167", bancada: "Gobierno", 
-        department: "Oruro", age: 54, profession: "Administradora", 
-        email: "malcon@senado.gob.bo", phone: "+591 78912345", office: "Edificio Presidente, Piso 5",
-        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
-        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/new/titulares/g2/MARIA ANTONIETA ALCON SANCHEZ.png",
-        comision:"",
-        comite:"Comité de Educación, Salud, Ciencia, Tecnología y Deporte",
-        cargo:"Secretaria de Comite"
-      },
-      { 
-        id: 11, seatNumber: 18, curve: 'lower', side: 'left', 
-        name: "Bertha Nurmy Gutiérrez Meneces", 
-        party: "Partido Demócrata Cristiano", partyShort: "PDC", partyColor: "#016167", bancada: "Gobierno", 
-        department: "Potosí", age: 59, profession: "Trabajadora Social", 
-        email: "bgutierrez@senado.gob.bo", phone: "+591 79123456", office: "Edificio Presidente, Piso 5",
-        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
-        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/new/titulares/g2/BERTHA NURMY GUTIERREZ MENESES.png",
-        comision:"",
-        comite:"Comité de Naciones y Pueblos Indígena Originario Campesinos",
-        cargo:"Secretaria de Comite"
-      },
-      { 
-        id: 12, seatNumber: 19, curve: 'lower', side: 'left', 
-        name: "Marcelino Flores Ordoñez", 
-        party: "Partido Demócrata Cristiano", partyShort: "PDC", partyColor: "#016167", bancada: "Gobierno", 
-        department: "Potosí", age: 62, profession: "Minero", 
-        email: "mflores@senado.gob.bo", phone: "+591 70234567", office: "Edificio Presidente, Piso 4",
-        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
-        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/new/titulares/g2/MARCELINO FLORES ORDOÑEZ.png",
-        comision:"",
-        comite:"Comité de Energía, Hidrocarburos, Minería y Metalurgia",
-        cargo:"Secretario de Comite"
-      },
-      { 
-        id: 13, seatNumber: 20, curve: 'lower', side: 'left', 
-        name: "Paola Limbania López Zeballos", 
-        party: "Partido Demócrata Cristiano", partyShort: "PDC", partyColor: "#016167", bancada: "Gobierno", 
-        department: "Santa Cruz", age: 45, profession: "Abogada", 
-        email: "plopez@senado.gob.bo", phone: "+591 71345678", office: "Edificio Presidente, Piso 4",
-        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
-        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/new/titulares/g3/PAOLA LIMBANIA LOPEZ ZEBALLOS.png",
-        comision:"",
-        comite:"Comité de Seguridad del Estado y Lucha Contra el Narcotráfico",
-        cargo:"Secretaria de Comite"
-      },
-      { 
-        id: 14, seatNumber: 21, curve: 'lower', side: 'left', 
-        name: "Erick Nelson Soruco Alpire", 
-        party: "Partido Demócrata Cristiano", partyShort: "PDC", partyColor: "#016167", bancada: "Gobierno", 
-        department: "Beni", age: 50, profession: "Ganadero", 
-        email: "esoruco@senado.gob.bo", phone: "+591 72456789", office: "Edificio Presidente, Piso 3",
-        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
-        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/new/titulares/g3/ERICK NELSON SORUCO ALPIRE.png",
-        comision:"Comisión de Justicia Plural, Ministerio Público y Defensa del Estado",
-        comite:"",
-        cargo:"Presidente de Comisión"
-      },
-      { 
-        id: 15, seatNumber: 22, curve: 'lower', side: 'left', 
-        name: "Cinthia Mónica Puerta Campos", 
-        party: "Partido Demócrata Cristiano", partyShort: "PDC", partyColor: "#016167", bancada: "Gobierno", 
-        department: "Pando", age: 43, profession: "Empresaria", 
-        email: "cpuerta@senado.gob.bo", phone: "+591 73567890", office: "Edificio Presidente, Piso 3",
-        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
-        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/new/titulares/g3/CINTIA MONICA PUERTA CAMPOS.png",
-        comision:"",
-        comite:"Comité de Medio Ambiente, Biodiversidad, Amazonía, Áreas Protegidas y Cambio Climático",
-        cargo:"Secretaria de Comite"
-      },
-      { 
-        id: 16, seatNumber: 23, curve: 'lower', side: 'left', 
-        name: "José Sánchez Aguilar", 
-        party: "Partido Demócrata Cristiano", partyShort: "PDC", partyColor: "#016167", bancada: "Gobierno", 
-        department: "Oruro", age: 57, profession: "Ingeniero", 
-        email: "jsanchez@senado.gob.bo", phone: "+591 74678901", office: "Edificio Presidente, Piso 2",
-        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
-        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/new/titulares/g2/JOSE SANCHEZ AGUILAR.png",
-        comision:"Comisión de Política Social",
-        comite:"",
-        cargo:"Presidente de Comisión"
-      },
-      // ============ UNIDAD - ALIADOS (7 senadores) ============
-      { 
-        id: 17, seatNumber: 8, curve: 'upper', side: 'right', 
-        name: "Carmen Soledad Chapeton Tancara", 
-        party: "Unidad", partyShort: "UNIDAD", partyColor: "#FFB848", bancada: "Aliados", 
-        department: "La Paz", age: 52, profession: "Abogada", 
-        email: "schapeton@senado.gob.bo", phone: "+591 75789012", office: "Edificio Aliados, Piso 10",
-        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
-        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/new/titulares/g1/CARMEN SOLEDAD CHAPETÓN TANCARA.png",
-        comision:"Directiva Legislatura 2025-2026",
-        comite:"",
-        cargo:"Primera Vicepresidencia"
-      },
-      { 
-        id: 18, seatNumber: 9, curve: 'upper', side: 'right', 
-        name: "César Mentasti Padilla", 
-        party: "Unidad", partyShort: "UNIDAD", partyColor: "#FFB848", bancada: "Aliados", 
-        department: "Tarija", age: 58, profession: "Empresario", 
-        email: "cmentasti@senado.gob.bo", phone: "+591 76890123", office: "Edificio Aliados, Piso 10",
-        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
-        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/new/titulares/g2/CESAR MENTASTI PADILLA.png",
-        comision:"Comisión de Organización Territorial del Estado y Autonomías",
-        comite:"",
-        cargo:"Presidente de Comisión"
-      },
-      { 
-        id: 19, seatNumber: 10, curve: 'upper', side: 'right', 
-        name: "Leonor Rosalva Romero Gutiérrez", 
-        party: "Unidad", partyShort: "UNIDAD", partyColor: "#FFB848", bancada: "Aliados", 
-        department: "Tarija", age: 55, profession: "Médica", 
-        email: "lromero@senado.gob.bo", phone: "+591 77901234", office: "Edificio Aliados, Piso 9",
-        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
-        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/new/titulares/g2/LEONOR ROSALVA ROMERO GUTIERREZ.png",
-        comision:"",
-        comite:"Comité de Planificación, Presupuesto, Inversión Pública y Contraloría General del Estado",
-        cargo:"Secretaria de Comite"
-      },
-      { 
-        id: 20, seatNumber: 14, curve: 'lower', side: 'right', 
-        name: "Rosa Tatiana Áñez Carrasco", 
-        party: "Unidad", partyShort: "UNIDAD", partyColor: "#FFB848", bancada: "Aliados", 
-        department: "Santa Cruz", age: 49, profession: "Abogada", 
-        email: "tanez@senado.gob.bo", phone: "+591 78123456", office: "Edificio Aliados, Piso 9",
-        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
-        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/new/titulares/g3/ROSA TATIANA AÑEZ CARRASCO.png",
-        comision:"Directiva Legislatura 2025-2026",
-        comite:"",
-        cargo:"Tercera Secretaria"
-      },
-      { 
-        id: 21, seatNumber: 13, curve: 'lower', side: 'right', 
-        name: "José Roca Haensel", 
-        party: "Unidad", partyShort: "UNIDAD", partyColor: "#FFB848", bancada: "Aliados", 
-        department: "Beni", age: 61, profession: "Ganadero", 
-        email: "jroca@senado.gob.bo", phone: "+591 79234567", office: "Edificio Aliados, Piso 8",
-        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
-        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/new/titulares/g3/JOSE ROCA HAENSEL.png",
-        comision:"",
-        comite:"Comité de Autonomías Municipales, Indigena Originario Campesinas y Regionales",
-        cargo:"Secretario de Comite"
-      },
-      { 
-        id: 22, seatNumber: 11, curve: 'lower', side: 'right', 
-        name: "Ana Karina Velasco Añez", 
-        party: "Unidad", partyShort: "UNIDAD", partyColor: "#FFB848", bancada: "Aliados", 
-        department: "Beni", age: 47, profession: "Abogada", 
-        email: "avelasco@senado.gob.bo", phone: "+591 70345678", office: "Edificio Aliados, Piso 8",
-        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
-        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/new/titulares/g3/ANA KARINA VELASCO ÁÑEZ.png",
-        comision:"",
-        comite:"Comité de Fuerzas Armadas y Policía Boliviana",
-        cargo:"Secretaria de comite"
-      },
-      { 
-        id: 23, seatNumber: 12, curve: 'lower', side: 'right', 
-        name: "Eliana Rina Acosta Quispe", 
-        party: "Unidad", partyShort: "UNIDAD", partyColor: "#FFB848", bancada: "Aliados", 
-        department: "Pando", age: 44, profession: "Administradora", 
-        email: "eacosta@senado.gob.bo", phone: "+591 71456789", office: "Edificio Aliados, Piso 7",
-        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
-        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/new/titulares/g3/ELIANA RINA ACOSTA QUISPE.png",
-        comision:"Comisión de Planificación, Política Económica y Finanzas",
-        comite:"",
-        cargo:"Presidente de Comisión"
-      },
-      // ============ APB SÚMATE - ALIADOS (1 senador) ============
-      { 
-        id: 24, seatNumber: 36, curve: 'upper', side: 'right', 
-        name: "Claudia Mallón Vargas", 
-        party: "Autonomía para Bolivia Súmate", partyShort: "APB", partyColor: "#511966", bancada: "Aliados", 
-        department: "Cochabamba", age: 46, profession: "Abogada", 
-        email: "cmallon@senado.gob.bo", phone: "+591 72567890", office: "Edificio Aliados, Piso 7",
-        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
-        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/new/titulares/g1/CLAUDIA MALLON VARGAS.png",
-        comision:"",
-        comite:"Comité de Vivienda, Regimen Laboral, Seguridad Industrial y Seguridad Social",
-        cargo:"Secretaria de Comite"
-      },
-      // ============ LIBRE - OPOSICIÓN (12 senadores) ============
-      { 
-        id: 25, seatNumber: 29, curve: 'upper', side: 'right', 
-        name: "José Manuel Ormachea Mendieta", 
-        party: "Libre", partyShort: "LIBRE", partyColor: "#FF0000", bancada: "Oposición", 
-        department: "La Paz", age: 59, profession: "Abogado", 
-        email: "jormachea@senado.gob.bo", phone: "+591 73678901", office: "Edificio Oposición, Piso 10",
-        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
-        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/new/titulares/g1/JOSE MANUEL ORMACHEA MENDIETA.png",
-        comision:"Comisión de Naciones y Pueblos Indígena Originario Campesinos, Culturas e Interculturalidad",
-        comite:"",
-        cargo:"Presidente de Comisión"
-      },
-      { 
-        id: 26, seatNumber: 27, curve: 'upper', side: 'right', 
-        name: "Wanda Ximena Medrano Hervas", 
-        party: "Libre", partyShort: "LIBRE", partyColor: "#FF0000", bancada: "Oposición", 
-        department: "Cochabamba", age: 48, profession: "Abogada", 
-        email: "wmedrano@senado.gob.bo", phone: "+591 74789012", office: "Edificio Oposición, Piso 10",
-        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
-        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/new/titulares/g1/WANDA XIMENA MEDRANO HERVAS.png",
-        comision:"",
-        comite:"Comité de Relaciones Económicas Internacionales",
-        cargo:"Secretaria de Comite"
-      },
-      { 
-        id: 27, seatNumber: 26, curve: 'upper', side: 'right', 
-        name: "Branko Goran Marinković Jovicevic", 
-        party: "Libre", partyShort: "LIBRE", partyColor: "#FF0000", bancada: "Oposición", 
-        department: "Santa Cruz", age: 54, profession: "Empresario", 
-        email: "bmarinkovic@senado.gob.bo", phone: "+591 75890123", office: "Edificio Oposición, Piso 9",
-        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
-        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/new/titulares/g3/BRANKO GORAN MARINKOVIC JOVICEVIC.png",
-        comision:"Comisión de Tierra y Territorio / Región Amazónica",
-        comite:"",
-        cargo:"Presidente de Comisión"
-      },
-      { 
-        id: 28, seatNumber: 30, curve: 'lower', side: 'right', 
-        name: "Kathia Lizbeth Quiroga Fernández", 
-        party: "Libre", partyShort: "LIBRE", partyColor: "#FF0000", bancada: "Oposición", 
-        department: "Santa Cruz", age: 45, profession: "Abogada", 
-        email: "kquiroga@senado.gob.bo", phone: "+591 76901234", office: "Edificio Oposición, Piso 9",
-        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
-        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/new/titulares/g3/KATHIA LISBETH QUIROGA FERNÁNDEZ.png",
-        comision:"Directiva Legislatura 2025-2026",
-        comite:"",
-        cargo:"Segunda Vicepresidencia"
-      },
-      { 
-        id: 29, seatNumber: 31, curve: 'lower', side: 'right', 
-        name: "Tomasa Yarhui Jacome", 
-        party: "Libre", partyShort: "LIBRE", partyColor: "#FF0000", bancada: "Oposición", 
-        department: "Chuquisaca", age: 62, profession: "Abogada", 
-        email: "tyarhui@senado.gob.bo", phone: "+591 77123456", office: "Edificio Oposición, Piso 8",
-        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
-        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/new/titulares/g1/TOMASA YARHUI JACOME.png",
-        comision:"",
-        comite:"Comité de Sistema Electoral, Derechos Humanos y Equidad Social",
-        cargo:"Secretaria de Comite"
-      },
-      { 
-        id: 30, seatNumber: 32, curve: 'lower', side: 'right', 
-        name: "Abdon Porcel Arancibia", 
-        party: "Libre", partyShort: "LIBRE", partyColor: "#FF0000", bancada: "Oposición", 
-        department: "Chuquisaca", age: 57, profession: "Abogado", 
-        email: "aporcel@senado.gob.bo", phone: "+591 78234567", office: "Edificio Oposición, Piso 8",
-        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
-        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/new/titulares/g1/ABDON PORCEL ARANCIBIA.png",
-        comision:"",
-        comite:"Comité de Políticas Financiera, Monetaria, Tributaria y Seguros",
-        cargo:"Secretario de Comite"
-      },
-      { 
-        id: 31, seatNumber: 33, curve: 'lower', side: 'right', 
-        name: "Teresa Alarcón Arana", 
-        party: "Libre", partyShort: "LIBRE", partyColor: "#FF0000", bancada: "Oposición", 
-        department: "Potosí", age: 56, profession: "Docente", 
-        email: "talarcon@senado.gob.bo", phone: "+591 79345678", office: "Edificio Oposición, Piso 7",
-        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
-        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/new/titulares/g2/TERESA ALARCON ARANA.png",
-        comision:"",
-        comite:"Comité de Asuntos Exteriores Interpelatorios y Organismos Internacionales",
-        cargo:"Secretaria de Comite"
-      },
-      { 
-        id: 32, seatNumber: 34, curve: 'lower', side: 'right', 
-        name: "Betty Canaviri Villanueva", 
-        party: "Libre", partyShort: "LIBRE", partyColor: "#FF0000", bancada: "Oposición", 
-        department: "Potosí", age: 53, profession: "Educadora", 
-        email: "bcanaviri@senado.gob.bo", phone: "+591 70456789", office: "Edificio Oposición, Piso 7",
-        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
-        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/new/titulares/g2/BETTY CANAVIRI VILLANUEVA.png",
-        comision:"",
-        comite:"Comité de Economía Plural, Desarrollo Productivo, Obras Públicas e Infraestructura",
-        cargo:"Secretaria de Comite"
-      },
-      { 
-        id: 33, seatNumber: 35, curve: 'lower', side: 'right', 
-        name: "María Isabel Moreno Cortez", 
-        party: "Libre", partyShort: "LIBRE", partyColor: "#FF0000", bancada: "Oposición", 
-        department: "Tarija", age: 50, profession: "Abogada", 
-        email: "mimoreno@senado.gob.bo", phone: "+591 71567890", office: "Edificio Oposición, Piso 6",
-        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
-        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/new/titulares/g2/MARIA ISABEL MORENO CORTEZ.png",
-        comision:"",
-        comite:"Comité de Ministerio Público y Defensa Legal del Estado",
-        cargo:"Secretaria de Comite"
-      },
-      { 
-        id: 34, seatNumber: 24, curve: 'lower', side: 'right', 
-        name: "Ernesto Suarez Sattori", 
-        party: "Libre", partyShort: "LIBRE", partyColor: "#FF0000", bancada: "Oposición", 
-        department: "Beni", age: 55, profession: "Empresario", 
-        email: "esuarez@senado.gob.bo", phone: "+591 72678901", office: "Edificio Oposición, Piso 6",
-        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
-        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/new/titulares/g3/ERNESTO SUAREZ SATTORI.png",
-        comision:"",
-        comite:"Comité de Autonomías Departamentales",
-        cargo:"Secretario de Comite"
-      },
-      { 
-        id: 35, seatNumber: 28, curve: 'lower', side: 'left', 
-        name: "Carol Carlo Durán", 
-        party: "Libre", partyShort: "LIBRE", partyColor: "#FF0000", bancada: "Oposición", 
-        department: "Pando", age: 49, profession: "Abogado", 
-        email: "ccarlo@senado.gob.bo", phone: "+591 73789012", office: "Edificio Oposición, Piso 5",
-        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
-        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/new/titulares/g3/CAROL CARLO DURAN.png",
-        comision:"",
-        comite:"Comité de Tierra y Territorio, Recursos Naturales y Hoja de la Coca",
-        cargo:"Secretaria de Comite"
-      },
-      { 
-        id: 36, seatNumber: 25, curve: 'lower', side: 'left', 
-        name: "Julio Diego Romaña Galindo", 
-        party: "Libre", partyShort: "LIBRE", partyColor: "#FF0000", bancada: "Oposición", 
-        department: "Pando", age: 52, profession: "Abogado", 
-        email: "jromana@senado.gob.bo", phone: "+591 74890123", office: "Edificio Oposición, Piso 5",
-        twitter: "https://twitter.com/", instagram: "https://instagram.com/", 
-        youtube: "https://youtube.com/", linkedin: "https://linkedin.com/",
-        photoUrl: "/new/titulares/g3/JULIO DIEGO ROMAÑA GALINDO.png",
-        comision:"Directiva Legislatura 2025-2026",
-        comite:"",
-        cargo:"Segunda Secretaria"
-      }
-    ]
-  },
-  parties: {
-    type: Array,
-    default: () => [
-      { id: 'Partido Demócrata Cristiano', name: 'Partido Demócrata Cristiano', shortName: 'PDC', symbol: '', color: '#016167', count: 16 },
-      { id: 'Unidad', name: 'Unidad', shortName: 'UNIDAD', symbol: '', color: '#FFB848', count: 7 },
-      { id: 'Autonomía para Bolivia Súmate', name: 'Autonomía para Bolivia Súmate', shortName: 'APB', symbol: '', color: '#511966', count: 1 },
-      { id: 'Libre', name: 'Libre', shortName: 'LIBRE', symbol: '', color: '#FF0000', count: 12 }
-    ]
-  },
+  senators: { type: Array, required: false, default: () => defaultSenators },
+  parties: { type: Array, required: false, default: () => defaultParties },
   showHeader: { type: Boolean, default: true },
   showFooter: { type: Boolean, default: true },
   showControls: { type: Boolean, default: true },
@@ -837,273 +2227,64 @@ const props = defineProps({
   viewBox: { type: String, default: '250 200 700 400' }
 })
 
-const emit = defineEmits([
-  'senator-selected',
-  'senator-deselected',
-  'party-filter-changed',
-  'view-reset'
-])
-
-// Estado reactivo
-const selectedSenator = ref(null)
-const hoveredSeat = ref(null)
-const activeFilters = ref([])
-const showLabels = ref(props.initialShowLabels)
-const tooltipStyle = reactive({ left: '0px', top: '0px' })
-const svgElement = ref(null)
-
-// Cache
-const partyCountCache = reactive({})
-const textColorCache = reactive({})
+const emit = defineEmits(['senator-selected', 'senator-deselected', 'party-filter-changed', 'view-reset'])
 
 // ============================================
-// COMPUTED - ASIGNACIÓN DIRECTA POR seatNumber
+// COMPOSABLE
 // ============================================
-const allSeats = computed(() => {
-  const seats = props.senators.map(senator => {
-    let position = { x: 0, y: 0 }
-    
-    if (senator.seatNumber >= 1 && senator.seatNumber <= 7) {
-      position = seatPositions.upperLeft[senator.seatNumber - 1]
-    }
-    else if (senator.seatNumber >= 8 && senator.seatNumber <= 14) {
-      position = seatPositions.upperRight[senator.seatNumber - 8]
-    }
-    else if (senator.seatNumber >= 15 && senator.seatNumber <= 25) {
-      position = seatPositions.lowerLeft[senator.seatNumber - 15]
-    }
-    else if (senator.seatNumber >= 26 && senator.seatNumber <= 36) {
-      position = seatPositions.lowerRight[senator.seatNumber - 26]
-    }
-    
-    return {
-      ...senator,
-      x: position.x,
-      y: position.y
-    }
-  })
-  
-  if (activeFilters.value.length === 0) return seats
-  
-  const filterSet = new Set(activeFilters.value)
-  return seats.filter(seat => filterSet.has(seat.party))
-})
+const {
+  selectedSenator,
+  hoveredSeat,
+  activeFilters,
+  showLabels,
+  tooltipStyle,
+  svgElement,
+  imageError,
+  isSelecting,
+  seat1,
+  otherSeats,
+  getFilteredCount,
+  getSeatColor,
+  getTextColor,
+  formatInitials,
+  handleImageError,
+  selectSenator,
+  togglePartyFilter,
+  resetView,
+  handleMouseEnter,
+  handleMouseLeave,
+  onMouseMove,
+  cleanup
+} = useSenateChamber(props, emit)
 
 // ============================================
-// MÉTODOS
+// LIFECYCLE
 // ============================================
-const getFilteredCount = (partyId) => {
-  if (activeFilters.value.length === 0) {
-    if (!partyCountCache[partyId]) {
-      partyCountCache[partyId] = props.parties.find(p => p.id === partyId)?.count || 
-        props.senators.filter(s => s.party === partyId).length
-    }
-    return partyCountCache[partyId]
-  }
-  if (activeFilters.value.includes(partyId)) {
-    return props.senators.filter(s => s.party === partyId).length
-  }
-  return 0
-}
-
-const getSeatColor = (seat) => {
-  if (activeFilters.value.length > 0 && !activeFilters.value.includes(seat.party)) {
-    return '#f3f4f6'
-  }
-  return seat.partyColor
-}
-
-const getTextColor = (bg) => {
-  if (!textColorCache[bg]) {
-    const hex = bg.replace('#', '')
-    const r = parseInt(hex.substr(0, 2), 16)
-    const g = parseInt(hex.substr(2, 2), 16)
-    const b = parseInt(hex.substr(4, 2), 16)
-    const lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255
-    textColorCache[bg] = lum > 0.5 ? '#000000' : '#ffffff'
-  }
-  return textColorCache[bg]
-}
-
-const formatInitials = (name) => {
-  const parts = name.split(' ')
-  if (parts.length >= 3) {
-    return `${parts[0][0]}${parts[parts.length-2][0]}${parts[parts.length-1][0]}`.toUpperCase()
-  }
-  if (parts.length === 2) {
-    return `${parts[0][0]}${parts[1][0]}`.toUpperCase()
-  }
-  return name.substring(0, 2).toUpperCase()
-}
-
-// ========== MANEJADOR DE ERRORES DE IMAGEN ==========
-const handleImageError = (e) => {
-  e.target.style.display = 'none'
-  const parent = e.target.parentElement
-  const fallback = document.createElement('div')
-  fallback.className = 'photo-placeholder'
-  fallback.style.backgroundColor = selectedSenator.value?.partyColor || '#575756'
-  fallback.innerText = formatInitials(selectedSenator.value?.name || '')
-  parent.appendChild(fallback)
-}
-
-const selectSenator = (senator) => {
-  selectedSenator.value = senator
-  emit('senator-selected', senator)
-}
-
-const togglePartyFilter = (partyId) => {
-  const index = activeFilters.value.indexOf(partyId)
-  if (index > -1) {
-    activeFilters.value.splice(index, 1)
-  } else {
-    activeFilters.value = [partyId]
-  }
-  Object.keys(partyCountCache).forEach(key => delete partyCountCache[key])
-  emit('party-filter-changed', activeFilters.value)
-}
-
-const resetView = () => {
-  selectedSenator.value = null
-  activeFilters.value = []
-  hoveredSeat.value = null
-  Object.keys(partyCountCache).forEach(key => delete partyCountCache[key])
-  Object.keys(textColorCache).forEach(key => delete textColorCache[key])
-  emit('view-reset')
-}
-
-// ========== TOOLTIP HANDLERS ==========
-let hoverTimeout = null
-let mouseMoveTimeout = null
-let lastHoveredSeatId = null
-let isUpdatingTooltip = false
-
-const handleMouseEnter = (seat) => {
-  if (!seat || selectedSenator.value?.id === seat.id) return
-  
-  hoveredSeat.value = seat
-  lastHoveredSeatId = seat.id
-  positionTooltipFromSeat()
-}
-
-const handleMouseLeave = () => {
-  if (hoveredSeat.value?.id !== selectedSenator.value?.id) {
-    hoveredSeat.value = null
-    lastHoveredSeatId = null
-  }
-  if (hoverTimeout) clearTimeout(hoverTimeout)
-}
-
-const onMouseMove = (event) => {
-  if (!mouseMoveTimeout && !isUpdatingTooltip) {
-    mouseMoveTimeout = setTimeout(() => {
-      if (hoveredSeat.value && hoveredSeat.value.id !== selectedSenator.value?.id) {
-        updateHoverTooltip(event)
-      }
-      mouseMoveTimeout = null
-    }, 16)
-  }
-}
-
-const updateHoverTooltip = (event) => {
-  if (!hoveredSeat.value || !svgElement.value || hoveredSeat.value.id !== lastHoveredSeatId) {
-    return
-  }
-  
-  if (isUpdatingTooltip) return
-  isUpdatingTooltip = true
-  
-  requestAnimationFrame(() => {
-    try {
-      if (!hoveredSeat.value || !svgElement.value) {
-        isUpdatingTooltip = false
-        return
-      }
-      
-      const container = document.querySelector('.hemicycle-svg-container')
-      if (!container) {
-        isUpdatingTooltip = false
-        return
-      }
-      
-      const seat = hoveredSeat.value
-      const svg = svgElement.value
-      
-      if (typeof seat.x !== 'number' || typeof seat.y !== 'number') {
-        isUpdatingTooltip = false
-        return
-      }
-      
-      const rect = container.getBoundingClientRect()
-      
-      if (!svg.viewBox || !svg.viewBox.baseVal) {
-        isUpdatingTooltip = false
-        return
-      }
-      
-      const viewBox = svg.viewBox.baseVal
-      const svgRect = svg.getBoundingClientRect()
-      
-      if (viewBox.width === 0 || viewBox.height === 0) {
-        isUpdatingTooltip = false
-        return
-      }
-      
-      const xPercent = (seat.x - viewBox.x) / viewBox.width
-      const yPercent = (seat.y - viewBox.y) / viewBox.height
-      
-      let x = xPercent * svgRect.width + (svgRect.left - rect.left) + 25
-      let y = yPercent * svgRect.height + (svgRect.top - rect.top) - 100
-      
-      const tooltipWidth = 260
-      const tooltipHeight = 180
-      
-      if (x + tooltipWidth > rect.width) x = rect.width - tooltipWidth - 10
-      if (y + tooltipHeight > rect.height) y = rect.height - tooltipHeight - 10
-      if (x < 10) x = 10
-      if (y < 10) y = 10
-      
-      tooltipStyle.left = `${x}px`
-      tooltipStyle.top = `${y}px`
-    } catch (error) {
-      console.warn('Error actualizando tooltip:', error)
-    } finally {
-      isUpdatingTooltip = false
-    }
-  })
-}
-
-const positionTooltipFromSeat = () => {
-  const syntheticEvent = {
-    clientX: 0,
-    clientY: 0
-  }
-  updateHoverTooltip(syntheticEvent)
-}
-
-defineExpose({ 
-  resetView, 
-  selectSenator, 
-  deselectSenator: () => selectedSenator.value = null 
+onMounted(() => {
+  // console.log('SenateChamber montado')
 })
 
 onUnmounted(() => {
-  if (hoverTimeout) clearTimeout(hoverTimeout)
-  if (mouseMoveTimeout) clearTimeout(mouseMoveTimeout)
+  cleanup()
 })
 
 watch(() => props.senators, () => {
-  Object.keys(partyCountCache).forEach(key => delete partyCountCache[key])
+  // cleanup cache when senators change
 }, { deep: false })
+
+// ============================================
+// EXPOSE
+// ============================================
+defineExpose({ resetView, selectSenator, deselectSenator: () => selectedSenator.value = null })
 </script>
 
 <style scoped>
-/* ========== ESTILOS ========== */
 .senate-chamber {
   font-family: 'Montserrat';
   background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
   display: flex;
   flex-direction: column;
+  height: 100%;
 }
 
 .chamber-header {
@@ -1125,22 +2306,16 @@ watch(() => props.senators, () => {
   font-size: 0.9rem;
 }
 
-.main-content {
-  flex: 1 1 auto;
-  min-height: 0;
-}
-
 .background-container {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   overflow: hidden;
-  margin-bottom: 1rem;
   position: relative;
-  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex: 1;
 }
 
 .columns-container {
@@ -1148,6 +2323,11 @@ watch(() => props.senators, () => {
   position: relative;
   z-index: 1;
   width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 2fr 1.2fr;
+  gap: 1rem;
+  box-sizing: border-box;
 }
 
 .column {
@@ -1155,12 +2335,11 @@ watch(() => props.senators, () => {
 }
 
 @media (max-width: 767px) {
-  .left-column {
-    display: none;
-  }
+  .left-column { display: none; }
 }
-.center-column { flex: 1; min-width: 0; z-index: 11}
-.right-column { z-index: 10 }
+
+.center-column { flex: 1; min-width: 0; z-index: 11; }
+.right-column { z-index: 10; }
 
 .transparent-panel {
   background: rgba(255, 255, 255, 0.1) !important;
@@ -1179,19 +2358,33 @@ watch(() => props.senators, () => {
   -webkit-backdrop-filter: blur(4px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .controls-panel {
   padding: 1rem;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   gap: 1.5rem;
   overflow-y: auto;
+  width: 100%;
+  flex: 1;
+}
+
+.controls-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   width: 100%;
 }
 
 .controls-section h4 {
-  display: no;
+  display: none;
   margin: 0 0 1em 0;
   color: white;
   font-size: 1.2em;
@@ -1267,11 +2460,13 @@ watch(() => props.senators, () => {
   justify-content: center;
   overflow: visible !important;
   width: 100%;
+  height: 100%;
 }
 
 .hemicycle-svg-container {
   position: relative;
   width: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1281,16 +2476,18 @@ watch(() => props.senators, () => {
 .hemicycle-svg {
   width: 100%;
   max-width: 100%;
+  height: 100%;
   overflow: visible !important;
 }
 
 .info-panel {
   display: flex;
   flex-direction: column;
+  flex: 1;
 }
 
 .senator-details {
-  padding: 1.5em;
+  padding: 0.8em 1.2em;
   overflow-y: auto;
   flex: 1;
   display: flex;
@@ -1298,13 +2495,15 @@ watch(() => props.senators, () => {
   align-items: center;
   text-align: center;
   width: 100%;
+  gap: 0.2em;
 }
 
 .senator-photo-container {
-  margin-bottom: 1rem;
+  margin-bottom: 0.3rem;
   width: 100%;
   display: flex;
   justify-content: center;
+  position: relative;
 }
 
 .senator-photo-circle {
@@ -1312,6 +2511,7 @@ watch(() => props.senators, () => {
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   position: relative;
+  flex-shrink: 0;
 }
 
 .senator-photo-img {
@@ -1321,122 +2521,112 @@ watch(() => props.senators, () => {
 }
 
 .photo-placeholder {
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 2.5em;
   font-weight: 700;
   color: white;
+  border-radius: 50%;
 }
 
 .senator-name {
   color: #575756;
   font-weight: 600;
-  margin-bottom: .2em;
-  line-height: 1.3;
+  line-height: 1.2;
   width: 100%;
   text-align: center;
+  font-size: 0.85em;
+}
+
+@media (min-width: 1024px) {
+  .senator-name { font-size: 1em; }
+}
+
+@media (min-width: 1280px) {
+  .senator-name { font-size: 1.1em; }
 }
 
 .info-row-first {
-  display: grid;
-  gap: 1em;
   width: 100%;
-  margin-bottom: .4em;
+  margin-bottom: 0.1em;
 }
 
-.info-item-red { text-align: left; width: 100%; }
 .value-red {
   display: block;
   color: #E03636;
-  font-size: 1.0em;
   font-weight: 700;
   text-align: center;
+  font-size: 0.8em;
+}
+
+@media (min-width: 1024px) {
+  .value-red { font-size: 0.9em; }
+}
+
+@media (min-width: 1280px) {
+  .value-red { font-size: 1em; }
 }
 
 .info-row-second {
-  margin-bottom: 1em;
+  margin-bottom: 0.3em;
+  width: 100%;
 }
 
 .pill-red {
   background-color: rgba(224, 54, 54, 0.85);
   color: white;
   border-radius: 1em;
-  font-size: 0.8em;
   font-weight: 600;
   text-align: center;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  margin-bottom: .5em;
+  padding: 0.15em 0.5em;
+  font-size: 0.7em;
 }
 
-.pill-purple {
-  background-color: rgba(81, 25, 102, 0.85);
-  color: white;
-  padding: 0.2rem 0.25rem;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  text-align: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  margin-bottom: 1rem;
+@media (min-width: 1024px) {
+  .pill-red { font-size: 0.8em; }
 }
 
-.bancada-row { width: 100%; margin-bottom: 1em; }
-.contact-section { width: 100%; margin-bottom: 1.5rem; }
-.contact-item-white { text-align: left; margin-bottom: 0.75rem; width: 100%; }
+@media (min-width: 1280px) {
+  .pill-red { font-size: 0.9em; }
+}
+
+.bancada-row {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2em;
+  margin-top: 0.2em;
+}
 
 .pill-white {
   background-color: white;
   color: #575756;
-  padding: 0.15em 0.75em;
+  padding: 0.1em 0.5em;
   border-radius: 7px;
-  font-size: 0.8em;
+  font-size: 0.6em;
   border: 1px solid #e5e7eb;
   font-weight: 500;
   width: 100%;
   text-align: center;
 }
 
-.social-media-section { width: 100%; margin-top: auto; }
-.social-icons {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  width: 100%;
+@media (min-width: 1024px) {
+  .pill-white { font-size: 0.7em; }
 }
 
-.social-icon {
-  font-size: 1.5rem;
-  color: white;
-  backdrop-filter: blur(8px);
-  cursor: pointer;
-  transition: all 0.2s ease;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  flex-shrink: 0;
-  text-decoration: none;
-}
-
-.social-icon:hover {
-  transform: scale(1.1);
-  background-color: #b32b2b;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  color: white;
+@media (min-width: 1280px) {
+  .pill-white { font-size: 0.8em; }
 }
 
 .senator-circle {
   cursor: pointer;
   transition: r 0.2s ease, stroke-width 0.2s ease;
   pointer-events: all !important;
+  filter: drop-shadow(1px 2px 2px rgba(0,0,0,0.1));
 }
 
 .senator-circle:hover { r: 21 !important; stroke-width: 2px; }
@@ -1518,7 +2708,7 @@ watch(() => props.senators, () => {
 }
 
 .empty-state {
-  padding: 2em 1.5rem;
+  padding: 1.5em;
   text-align: center;
   color: #6b7280;
   flex: 1;
@@ -1531,29 +2721,28 @@ watch(() => props.senators, () => {
   border-radius: 12px;
   width: 100%;
   height: 100%;
-  font-size: 1.0em;
 }
 
-.empty-icon { font-size: 2.5em; margin-bottom: 1em; width: 100%; }
-.empty-state h4 { margin: 0 0 0.5rem 0; color: #4b5563; font-size: 1.1em; width: 100%; }
-.empty-state p { margin: 0 0 1rem 0; font-size: 0.9em; width: 100%; }
+.empty-icon { font-size: 2.5em; margin-bottom: 0.5em; width: 100%; }
+.empty-state h2 { margin: 0 0 0.3rem 0; color: #4b5563; font-size: 1.1em; width: 100%; }
+.empty-state p { margin: 0 0 0.5rem 0; font-size: 0.8em; width: 100%; }
 
 .empty-tips {
   text-align: left;
   background: #f9fafb;
-  padding: 0.75em;
+  padding: 0.5em;
   border-radius: 6px;
   border-left: 3px solid #3b82f6;
   width: 100%;
 }
 
-.empty-tips p { margin: 0.4rem 0; font-size: 0.85em; width: 100%; }
+.empty-tips p { margin: 0.2rem 0; font-size: 0.75em; width: 100%; }
 .empty-tips p {
   display: flex;
   align-items: center;
   gap: 0.5em;
-  margin: 0.4em 0;
-  font-size: 0.85em;
+  margin: 0.2em 0;
+  font-size: 0.75em;
   width: 100%;
 }
 
@@ -1578,24 +2767,21 @@ watch(() => props.senators, () => {
   filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.2));
 }
 
-.empty-tips p strong {
-  color: #1f2937;
-}
+.empty-tips p strong { color: #1f2937; }
 
 .chamber-footer {
   background: #1f2937;
   color: white;
-  padding: 1rem 1.5rem;
+  padding: 0.5rem 1.5rem;
   text-align: center;
-  margin-top: 1rem;
   border-radius: 8px;
   flex-shrink: 0;
 }
 
-.footer-content { display: flex; flex-direction: column; align-items: center; gap: 0.75rem; }
-.footer-info p { margin: 0.25rem 0; font-size: 0.9rem; }
+.footer-content { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
+.footer-info p { margin: 0.1rem 0; font-size: 0.8rem; }
 .footer-main { font-weight: 600; }
-.footer-sub { font-size: 0.8rem; opacity: 0.8; }
+.footer-sub { font-size: 0.7rem; opacity: 0.8; }
 </style> 
 ================================= 
 components\SenateDirectors.vue 
@@ -1784,1181 +2970,4 @@ const colorMap = {
 }
 
 const iconColor = computed(() => colorMap[props.color])
-</script> 
-================================= 
-components\StatCard.vue 
-================================= 
- 
-<!-- components/StatCard.vue - CORREGIDO -->
-<template>
-  <div class="text-center p-6 rounded-xl transition-transform hover:scale-105" :class="cardColor">
-    <div class="text-5xl font-bold mb-4" :class="textColor">{{ number }}</div>
-    <div class="flex justify-center mb-4">
-      <i :class="`pi ${icon} text-3xl ${textColor}`"></i>
-    </div>
-    <p class="text-sm font-medium" :class="textColor + ' opacity-90'">{{ label }}</p>
-  </div>
-</template>
-
-<script setup>
-import { computed } from 'vue'
-
-const props = defineProps({
-  number: String,
-  label: String,
-  icon: String,
-  color: {
-    type: String,
-    default: 'blue'
-  }
-})
-
-const colorMap = {
-  blue: {
-    bg: 'bg-blue-50',
-    text: 'text-blue-700'
-  },
-  green: {
-    bg: 'bg-green-50', 
-    text: 'text-green-700'
-  },
-  purple: {
-    bg: 'bg-purple-50',
-    text: 'text-purple-700'
-  },
-  orange: {
-    bg: 'bg-orange-50',
-    text: 'text-orange-700'
-  }
-}
-
-const cardColor = computed(() => colorMap[props.color].bg)
-const textColor = computed(() => colorMap[props.color].text)
-</script> 
-================================= 
-components\data\senateChamberData.js 
-================================= 
- 
-// components/data/senateChamberStyles.js
-export const senateChamberStyles = {
-  senator:`text-[6px] 
-        sm:text-[8px]
-        md:text-[10px]
-        lg:text-[13px]
-        xl:text-[16px]
-        2xl:text-[19px]
-        3xl:text-[22px]
-        4xl:text-[32px]
-        5xl:text-[55px]
-        xs:mx-[2em]
-        md:mx-[2.3em]
-        lg:mx-[2.5em]
-        xl:mx-[3em]
-        2xl:mx-[3.2em]
-        3xl:mx-[3.5em]
-        4xl:mx-[3em]
-        5xl:mx-[2.5em]
-        grid
-        gap-1.5
-        grid-cols-[320px_1fr]
-        sm:grid-cols-[440px_1fr]
-        md:grid-cols-[150px_1fr_260px]
-        lg:grid-cols-[160px_1fr_320px]
-        xl:grid-cols-[230px_1fr_370px]
-        2xl:grid-cols-[260px_1fr_440px]
-        3xl:grid-cols-[280px_1fr_540px]
-        4xl:grid-cols-[380px_1fr_780px]
-        5xl:grid-cols-[520px_1fr_1350px]`,
-  senatorPhoto:'w-[14em] h-[14em]',
-  // Sección principal
-  section: 'relative min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 py-8 sm:py-12 lg:py-16 overflow-hidden',
-  
-  // Elementos decorativos
-  decorTop: 'absolute top-0 right-0 w-64 h-64 bg-[#8B1A1A]/10 rounded-full blur-3xl',
-  decorBottom: 'absolute bottom-0 left-0 w-64 h-64 bg-[#F9E076]/10 rounded-full blur-3xl',
-  
-  // Contenedor
-  container: 'container mx-auto px-4 sm:px-6 lg:px-8 relative z-10',
-  
-  // Header
-  header: 'text-center mb-8 sm:mb-12 lg:mb-16',
-  title: 'text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-white mb-2',
-  titleHighlight: 'text-[#F9E076]',
-  subtitle: 'text-sm sm:text-base lg:text-lg text-gray-300 max-w-2xl mx-auto',
-  
-  // Estadísticas
-  statsContainer: 'flex flex-wrap justify-center gap-4 sm:gap-6 mt-6',
-  statItem: 'bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2 border border-white/20',
-  statNumber: 'text-white font-bold text-lg sm:text-xl',
-  statLabel: 'text-gray-300 text-xs sm:text-sm ml-2',
-  statGreen: 'text-green-400 font-bold text-lg sm:text-xl',
-  
-  // Leyenda
-  legendContainer: 'flex flex-wrap justify-center gap-4 sm:gap-6 mb-8 lg:mb-12',
-  legendItem: 'flex items-center gap-2 px-3 py-1.5 rounded-full backdrop-blur-sm',
-  legendDot: 'w-4 h-4 rounded-full',
-  legendName: 'text-white font-medium text-xs sm:text-sm',
-  legendCount: 'text-white font-bold text-xs sm:text-sm bg-white/20 px-2 py-0.5 rounded-full',
-  
-  // Mapa
-  mapContainer: 'relative max-w-5xl mx-auto',
-  mapBackground: 'absolute inset-0 bg-gradient-to-b from-gray-800/50 to-gray-900/50 rounded-3xl border border-white/10 backdrop-blur-sm',
-  mapContent: 'relative p-4 sm:p-6 lg:p-8',
-  
-  // Filas
-  rowBase: 'flex justify-center gap-2 sm:gap-3 lg:gap-4 mb-2 sm:mb-3 lg:mb-4',
-  row1: 'px-4 sm:px-8',
-  row2: 'px-2 sm:px-4',
-  row3: 'px-2 sm:px-4',
-  row4: 'px-4 sm:px-8',
-  
-  // Escaños
-  seatContainer: 'relative group cursor-pointer transition-all duration-300 hover:z-10',
-  seatNumber: 'absolute inset-0 flex items-center justify-center text-white font-bold text-[10px] sm:text-xs opacity-50 group-hover:opacity-100',
-  seatGlow: 'absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-300',
-  
-  // Estrado
-  platform: 'mt-8 sm:mt-10 lg:mt-12 text-center',
-  platformInner: 'inline-block bg-gradient-to-r from-[#8B1A1A] to-[#E03636] px-6 sm:px-8 lg:px-12 py-3 sm:py-4 rounded-t-2xl',
-  platformText: 'text-white font-bold text-sm sm:text-base lg:text-lg',
-  platformLine: 'h-2 bg-gradient-to-r from-[#8B1A1A] via-[#F9E076] to-[#007934] rounded-full',
-  
-  // Panel de información
-  infoPanel: 'fixed bottom-4 right-4 sm:bottom-6 sm:right-6 lg:bottom-8 lg:right-8 max-w-xs bg-gray-800 rounded-xl shadow-2xl border border-white/20 backdrop-blur-sm overflow-hidden transition-all duration-300 z-50',
-  infoBar: 'h-1',
-  infoContent: 'p-4',
-  infoHeader: 'flex items-center gap-3 mb-3',
-  infoAvatar: 'w-8 h-8 rounded-full',
-  infoName: 'text-white font-bold text-sm sm:text-base',
-  infoParty: 'text-gray-400 text-xs',
-  infoGrid: 'grid grid-cols-2 gap-2 text-xs',
-  infoItem: 'bg-white/10 rounded p-2',
-  infoLabel: 'text-gray-400 block',
-  infoValue: 'text-white font-medium',
-  closeButton: 'absolute top-2 right-2 text-gray-400 hover:text-white transition-colors',
-  
-  // Regiones
-  regionsContainer: 'mt-12 lg:mt-16',
-  regionsTitle: 'text-white text-lg sm:text-xl lg:text-2xl font-bold text-center mb-6',
-  regionsGrid: 'grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4',
-  regionCard: 'bg-white/5 backdrop-blur-sm rounded-lg p-3 border border-white/10 hover:bg-white/10 transition-all duration-300',
-  regionName: 'text-white font-bold text-xs sm:text-sm mb-2',
-  partyBadge: 'text-[10px] px-2 py-0.5 rounded-full',
-  regionTotal: 'mt-2 text-right text-white font-bold text-xs'
-} 
-================================= 
-components\data\senateChamberStyles.js 
-================================= 
- 
-// components/data/senateChamberStyles.js
-// Este archivo contiene SOLO los estilos responsivos (media queries)
-
- 
-================================= 
-components\HeroSection\HeroCarousel.vue 
-================================= 
- 
-<!-- components/HeroSection/HeroCarousel.vue -->
-<template>
-  <div class="absolute inset-0 z-0 overflow-hidden">
-    <!-- Overlay de gradiente dinámico -->
-    <div 
-      class="absolute inset-0 transition-all duration-500 z-10"
-      :class="scrolled 
-        ? 'bg-gradient-to-b from-black/80 via-black/50 to-black/30' 
-        : 'bg-gradient-to-r from-black/70 via-black/40 to-transparent'"
-    ></div>
-    
-    <!-- Gradiente adicional -->
-    <div class="absolute inset-0 bg-gradient-to-r from-[#E03636]/20 to-[#E4D294]/10 z-10"></div>
-    
-    <!-- Contenedor del carrusel -->
-    <div class="relative w-full h-full">
-      <!-- Elementos del carrusel (imágenes y videos) -->
-      <div 
-        v-for="(media, index) in filteredHeroMedia" 
-        :key="index"
-        class="absolute inset-0 transition-all duration-1000 ease-in-out"
-        :class="{
-          'opacity-100 z-10': currentMediaIndex === index,
-          'opacity-0 z-0': currentMediaIndex !== index
-        }"
-      >
-        <!-- Si es imagen -->
-        <img 
-          v-if="media.type === 'image'"
-          :src="media.url"
-          :alt="media.alt"
-          class="w-full h-full object-cover object-center transition-transform duration-700"
-          :class="{ 'scale-105 brightness-75': scrolled }"
-          loading="lazy"
-        />
-        
-        <!-- Si es video -->
-        <video 
-          v-else-if="media.type === 'video'"
-          :ref="el => setVideoRef(el, index)"
-          :src="media.url"
-          class="w-full h-full object-cover object-center"
-          :class="{ 'scale-105 brightness-75': scrolled }"
-          muted
-          loop
-          playsinline
-          autoplay
-          preload="auto"
-        ></video>
-      </div>
-    </div>
-    
-    <!-- Escudo Nacional que aparece al hacer scroll -->
-    <PatrioticSeal :scrolled="scrolled" />
-  </div>
-</template>
-
-<script setup>
-import { ref, watch, onMounted, onUnmounted, nextTick } from 'vue'
-import PatrioticSeal from './PatrioticSeal.vue'
-
-const props = defineProps({
-  scrolled: {
-    type: Boolean,
-    default: false
-  },
-  currentMediaIndex: {
-    type: Number,
-    default: 0
-  },
-  filteredHeroMedia: {
-    type: Array,
-    default: () => []
-  }
-})
-
-// Usar un objeto para almacenar referencias de video por índice
-const videoRefs = ref({})
-let activeVideo = null
-
-// Función para establecer la referencia del video
-const setVideoRef = (el, index) => {
-  if (el) {
-    videoRefs.value[index] = el
-  }
-}
-
-// Función para obtener el video actual
-const getCurrentVideo = () => {
-  const currentMedia = props.filteredHeroMedia?.[props.currentMediaIndex]
-  if (currentMedia?.type === 'video') {
-    return videoRefs.value[props.currentMediaIndex]
-  }
-  return null
-}
-
-// Función para pausar el video activo
-const pauseActiveVideo = () => {
-  if (activeVideo && typeof activeVideo.pause === 'function') {
-    try {
-      activeVideo.pause()
-    } catch (error) {
-      console.log('Error al pausar video:', error)
-    }
-  }
-  activeVideo = null
-}
-
-// Función para forzar la reproducción del video actual
-const forceVideoPlay = async () => {
-  await nextTick()
-  
-  const video = getCurrentVideo()
-  
-  if (!video) {
-    return
-  }
-  
-  // Guardar referencia del video activo
-  activeVideo = video
-  
-  // Verificar si el video está pausado
-  if (video.paused) {
-    try {
-      // Asegurar que está muteado (requisito para autoplay)
-      video.muted = true
-      
-      // Intentar reproducir
-      const playPromise = video.play()
-      
-      if (playPromise !== undefined) {
-        await playPromise
-        console.log('Video reproduciéndose correctamente')
-      }
-    } catch (error) {
-      console.log('Error al reproducir video automáticamente:', error)
-    }
-  }
-}
-
-// Función para reiniciar y reproducir el video
-const restartAndPlayVideo = async () => {
-  await nextTick()
-  
-  const video = getCurrentVideo()
-  if (!video) return
-  
-  // Guardar referencia del video activo
-  activeVideo = video
-  
-  // Reiniciar el video al principio
-  video.currentTime = 0
-  
-  // Forzar reproducción
-  try {
-    video.muted = true
-    await video.play()
-    console.log('Video reiniciado y reproduciéndose')
-  } catch (error) {
-    console.log('Error al reiniciar video:', error)
-  }
-}
-
-// Observar cambios en el índice del slide actual
-watch(() => props.currentMediaIndex, async (newIndex, oldIndex) => {
-  // Pausar el video anterior si existe
-  if (oldIndex !== undefined && videoRefs.value[oldIndex]) {
-    const oldVideo = videoRefs.value[oldIndex]
-    if (oldVideo && typeof oldVideo.pause === 'function' && !oldVideo.paused) {
-      oldVideo.pause()
-    }
-  }
-  
-  // Verificar si el slide actual contiene un video
-  const currentMedia = props.filteredHeroMedia?.[newIndex]
-  
-  if (currentMedia?.type === 'video') {
-    await nextTick()
-    forceVideoPlay()
-  }
-}, { immediate: true })
-
-// Observar cambios en filteredHeroMedia
-watch(() => props.filteredHeroMedia, async () => {
-  await nextTick()
-  forceVideoPlay()
-}, { deep: true })
-
-// Al montar el componente
-onMounted(() => {
-  const attempts = [100, 500, 1000, 2000]
-  
-  attempts.forEach(delay => {
-    setTimeout(() => {
-      forceVideoPlay()
-    }, delay)
-  })
-  
-  window.addEventListener('load', () => {
-    setTimeout(() => {
-      forceVideoPlay()
-    }, 100)
-  })
-})
-
-// Al desmontar
-onUnmounted(() => {
-  pauseActiveVideo()
-  
-  Object.values(videoRefs.value).forEach(video => {
-    if (video && typeof video.pause === 'function' && !video.paused) {
-      video.pause()
-    }
-  })
-})
-
-// Exponer métodos para uso del padre
-defineExpose({
-  forceVideoPlay,
-  restartAndPlayVideo,
-  pauseActiveVideo
-})
 </script>
-
-<style scoped>
-/* Estilos adicionales si son necesarios */
-.absolute {
-  position: absolute;
-}
-
-.inset-0 {
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-}
-
-.z-0 {
-  z-index: 0;
-}
-
-.z-10 {
-  z-index: 10;
-}
-
-.overflow-hidden {
-  overflow: hidden;
-}
-
-.w-full {
-  width: 100%;
-}
-
-.h-full {
-  height: 100%;
-}
-
-.object-cover {
-  object-fit: cover;
-}
-
-.object-center {
-  object-position: center;
-}
-
-.transition-all {
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
-}
-
-.duration-700 {
-  transition-duration: 700ms;
-}
-
-.duration-1000 {
-  transition-duration: 1000ms;
-}
-
-.ease-in-out {
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.opacity-0 {
-  opacity: 0;
-}
-
-.opacity-100 {
-  opacity: 1;
-}
-
-.scale-105 {
-  transform: scale(1.05);
-}
-
-.brightness-75 {
-  --tw-brightness: brightness(.75);
-  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
-}
-
-/* Gradientes */
-.bg-gradient-to-r {
-  background-image: linear-gradient(to right, var(--tw-gradient-stops));
-}
-
-.bg-gradient-to-b {
-  background-image: linear-gradient(to bottom, var(--tw-gradient-stops));
-}
-
-.from-black\/70 {
-  --tw-gradient-from: rgb(0 0 0 / 0.7);
-  --tw-gradient-to: rgb(0 0 0 / 0);
-  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
-}
-
-.from-black\/80 {
-  --tw-gradient-from: rgb(0 0 0 / 0.8);
-  --tw-gradient-to: rgb(0 0 0 / 0);
-  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
-}
-
-.via-black\/40 {
-  --tw-gradient-via-position: 50%;
-  --tw-gradient-to: rgb(0 0 0 / 0);
-  --tw-gradient-stops: var(--tw-gradient-from), rgb(0 0 0 / 0.4) var(--tw-gradient-via-position), var(--tw-gradient-to);
-}
-
-.via-black\/50 {
-  --tw-gradient-via-position: 50%;
-  --tw-gradient-to: rgb(0 0 0 / 0);
-  --tw-gradient-stops: var(--tw-gradient-from), rgb(0 0 0 / 0.5) var(--tw-gradient-via-position), var(--tw-gradient-to);
-}
-
-.to-black\/30 {
-  --tw-gradient-to: rgb(0 0 0 / 0.3);
-}
-
-.to-transparent {
-  --tw-gradient-to: transparent;
-}
-
-.bg-\[--E03636\]\/20 {
-  background-color: rgba(224, 54, 54, 0.2);
-}
-
-.bg-\[--E4D294\]\/10 {
-  background-color: rgba(228, 210, 148, 0.1);
-}
-</style> 
-================================= 
-components\HeroSection\HeroCarousel2.vue 
-================================= 
- 
-<!-- components/HeroSection/HeroCarousel.vue -->
-<template>
-  <div class="absolute inset-0 z-0 overflow-hidden">
-    <!-- Overlay de gradiente dinámico -->
-    <div 
-      class="absolute inset-0 transition-all duration-500 z-10"
-      :class="scrolled 
-        ? 'bg-gradient-to-b from-black/80 via-black/50 to-black/30' 
-        : 'bg-gradient-to-r from-black/70 via-black/40 to-transparent'"
-    ></div>
-    
-    <!-- Gradiente adicional -->
-    <div class="absolute inset-0 bg-gradient-to-r from-[#E03636]/20 to-[#E4D294]/10 z-10"></div>
-    
-    <!-- Contenedor del carrusel -->
-    <div class="relative w-full h-full">
-      <!-- Imágenes del carrusel -->
-      <div 
-        v-for="(media, index) in filteredHeroMedia" 
-        :key="index"
-        class="absolute inset-0 transition-all duration-1000 ease-in-out"
-        :class="{
-          'opacity-100 z-10': currentMediaIndex === index,
-          'opacity-0 z-0': currentMediaIndex !== index
-        }"
-      >
-        <!-- Si es imagen -->
-        <img 
-          v-if="media.type === 'image'"
-          :src="media.url"
-          :alt="media.alt"
-          class="w-full h-full object-cover object-center transition-transform duration-700"
-          :class="{ 'scale-105 brightness-75': scrolled }"
-        />
-        
-        <!-- Si es video -->
-        <video 
-          v-else-if="media.type === 'video'"
-          :src="media.url"
-          class="w-full h-full object-cover object-center"
-          :class="{ 'scale-105 brightness-75': scrolled }"
-          autoplay
-          muted
-          loop
-          playsinline
-        ></video>
-      </div>
-    </div>
-    
-    <!-- Escudo Nacional que aparece al hacer scroll -->
-    <PatrioticSeal2 :scrolled="scrolled" />
-  </div>
-</template>
-
-<script setup>
-import PatrioticSeal2 from './PatrioticSeal2.vue'
-
-const props = defineProps({
-  scrolled: Boolean,
-  currentMediaIndex: Number,
-  filteredHeroMedia: Array
-})
-</script> 
-================================= 
-components\HeroSection\HeroContent.vue 
-================================= 
- 
-<template>  
-  <!-- Contenedor principal con flex column -->
-  <div class="relative z-10 mx-auto min-h-screen flex flex-col justify-end">
-    <!-- Contenido superior que empuja los botones hacia abajo -->
-    <div class="flex-grow"></div>
-    
-    <!-- Botones del hero -->
-    
-
-    <!-- ESPACIADOR ENTRE BOTONES Y FRANJA -->
-    <div :class="spacerClasses"></div>
-
-    <!-- FRANJA ROJA DE ANCHO COMPLETO -->
-    <div class="relative w-screen left-1/2 right-1/2 -mx-[50vw]">
-      <div class="relative bg-gradient-to-r from-red-700/70 via-red-800/70 to-red-900/70 pb-0 pt-2 sm:pt-2 shadow-2xl overflow-hidden group full-width-franja">
-        
-        <!-- Patrón de fondo sutil -->
-        <div class="absolute inset-0 opacity-5">
-          <div class="absolute top-0 left-0 w-32 h-32 border-t-4 border-l-4 border-yellow-300 rounded-tl-xl"></div>
-          <div class="absolute bottom-0 right-0 w-32 h-32 border-b-4 border-r-4 border-yellow-300 rounded-br-xl"></div>
-        </div>
-
-        <!-- Líneas decorativas animadas -->
-        <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-yellow-400 to-transparent animate-pulse"></div>
-        <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-yellow-400 to-transparent animate-pulse"></div>
-
-        <!-- Contenido principal centrado -->
-        <div class="container mx-auto px-4 md:px-12 relative z-10 text-center">
-          <!-- Texto principal con efecto de gradiente -->
-          <p class="font-bold text-white" :class="bannerTextClasses">
-            <span class="bg-clip-text text-transparent bg-gradient-to-r from-white via-yellow-100 to-yellow-200">
-              <span class="inline-flex items-center justify-center text-white" :class="bannerCircleClasses">⚪</span> 
-              PRIMERA LEGISLATURA DEL TRICENTENARIO
-              <span class="inline-flex items-center justify-center text-white" :class="bannerCircleClasses">⚪</span>
-            </span>
-          </p>
-
-          <!-- Línea decorativa central -->
-          <div class="inline-block w-[clamp(3rem,15vw,6rem)] h-1 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-400 rounded-full sm:my-0 md:my-4"></div>
-        </div>
-
-        <!-- Elementos decorativos en las esquinas -->
-        <div class="absolute top-4 left-4 w-3 h-3 border-2 border-yellow-300/50 rounded-full animate-ping"></div>
-        <div class="absolute top-4 right-4 w-3 h-3 border-2 border-yellow-300/50 rounded-full animate-ping" style="animation-delay: 0.5s;"></div>
-        <div class="absolute bottom-4 left-4 w-3 h-3 border-2 border-yellow-300/50 rounded-full animate-ping" style="animation-delay: 1s;"></div>
-        <div class="absolute bottom-4 right-4 w-3 h-3 border-2 border-yellow-300/50 rounded-full animate-ping" style="animation-delay: 1.5s;"></div>
-      </div>
-    </div>
-  </div>
-</template>
-
-<script setup>
-import { ref, computed } from 'vue'
-import { heroButtons as heroButtonsData } from './data/heroData'
-import { 
-  svgSizeClasses,
-  tooltipTextClasses,
-  tooltipPaddingClasses,
-  triangleSize,
-  spacerClasses,
-  bannerTextClasses,
-  bannerCircleClasses
-} from './config/heroStyles'
-
-// ✅ Ref para el elemento del DOM (necesaria para :class="{ 'opacity-0 h-0 overflow-hidden': scrolled }")
-const heroButtonsRef = ref(null)
-
-const props = defineProps({
-  scrolled: Boolean,
-  heroLinks: {
-    type: Array,
-    default: () => [
-      {
-        to: '/la-institucion',
-        title: 'Información Institucional del Senado',
-        ariaLabel: 'Información Institucional del Senado Nacional'
-      }
-    ]
-  }
-})
-
-const hasIconSlot = computed(() => {
-  return true
-})
-</script>
-
-<style scoped>
-.ghost {
-  background-color: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.ghost:hover {
-  background-color: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.3);
-  transform: translateY(-0.25rem);
-}
-
-/* Animaciones personalizadas para la franja */
-@keyframes gentleGlow {
-  0%, 100% {
-    box-shadow: 0 0 20px rgba(224, 54, 54, 0.3);
-  }
-  50% {
-    box-shadow: 0 0 30px rgba(224, 54, 54, 0.5);
-  }
-}
-
-.full-width-franja {
-  animation: gentleGlow 3s ease-in-out infinite;
-}
-
-/* Asegurar que la franja ocupe todo el ancho */
-.w-screen {
-  width: 100vw;
-}
-
-.left-1\/2 {
-  left: 50%;
-}
-
-.right-1\/2 {
-  right: 50%;
-}
-
-.-mx-\[50vw\] {
-  margin-left: -50vw;
-  margin-right: -50vw;
-}
-
-/* Responsive adjustments */
-@media (max-width: 640px) {
-  .grid-cols-2 {
-    gap: 0.75rem;
-  }
-}
-</style> 
-================================= 
-components\HeroSection\HeroContent2.vue 
-================================= 
- 
-<!-- components/HeroSection/HeroContent.vue - VERSIÓN CORREGIDA -->
-<template>
-  <!-- Imagen en la derecha -->
-  <div class="absolute top-4 right-6 md:right-4 z-30">
-    <img 
-      src="/senadores2.png"
-      alt="Logo del Senado" 
-      class="w-12 h-12 md:w-16 md:h-16 object-contain"
-    />
-  </div>
-  
-  <!-- Contenedor principal con la franja incluida -->
-  <div class="relative z-10 mx-auto md:pt-20 md:mt-32 md:mt-53">
-    <!-- Primera parte: contenido centrado -->
-    <div class="container px-6 md:px-12">
-      <div class="max-w-4xl mx-auto">
-        <!-- Logo/Texto que se transforma -->
-        <div class="mb-8 md:mb-12 transition-all duration-500" :class="{ 'transform scale-90 md:scale-95': scrolled }">
-          <!-- Versión compacta (al hacer scroll) -->
-          <div 
-            class="transition-all duration-500 flex items-center gap-4"
-            :class="scrolled ? 'opacity-100' : 'opacity-0 h-0 overflow-hidden'"
-          >
-            <div>
-              <br>
-              <br>
-              <br>
-              <br>
-              <br><br><br><br>
-
-              <h2 class="text-2xl md:text-3xl font-bold text-white">Camara de senadores</h2>
-              <p class="text-sm text-white/80">Estado Plurinacional de Bolivia</p>
-            </div>
-          </div>
-        </div>
-
-        <br>
-        <br>
-        <br><br><br>
-      </div>
-    </div>
-
-    <!-- FRANJA ROJA DE ANCHO COMPLETO (dentro del mismo contenedor principal) -->
-    <!-- Usamos posición absoluta para que salga del container pero esté dentro del mismo div padre -->
-    <div class="absolute left-0 right-0 -bottom-[20%] md:-bottom-[35%] lg:-bottom-[50%] xl:-bottom-[62%] 2xl:-bottom-[85%] 3xl:-bottom-[110%] 4xl:-bottom-[160%] 5xl:-bottom-[230%] z-20">
-      <div class="relative bg-gradient-to-r from-red-700/70 via-red-800/70 to-red-900/70 py-0 md:py-4 lg:py-8 xl:py-14 2xl:py-24 3xl:py-28 4xl:py-32 5xl:py-32 shadow-2xl overflow-hidden group full-width-franja">
-        
-        <!-- Patrón de fondo sutil -->
-        <div class="absolute inset-0 opacity-5">
-          <div class="absolute top-0 left-0 w-32 h-32 border-t-4 border-l-4 border-yellow-300 rounded-tl-xl"></div>
-          <div class="absolute bottom-0 right-0 w-32 h-32 border-b-4 border-r-4 border-yellow-300 rounded-br-xl"></div>
-        </div>
-
-        <!-- Líneas decorativas animadas -->
-        <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-yellow-400 to-transparent animate-pulse"></div>
-        <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-yellow-400 to-transparent animate-pulse"></div>
-
-        <!-- Contenido principal centrado -->
-        <div class="container mx-auto px-4 md:px-12 relative z-10 text-center">
-          <!-- Texto principal con efecto de gradiente -->
-          <p class="text-2xl md:text-3xl font-bold text-white">
-            <span class="bg-clip-text text-transparent bg-gradient-to-r from-white via-yellow-100 to-yellow-200">
-              <span class="inline-flex items-center justify-center text-base -translate-y-1 text-white">⚪</span> 
-              PRIMERA LEGISLATURA DEL TRICENTENARIO 
-              <span class="inline-flex items-center justify-center text-base -translate-y-1 text-white">⚪</span>
-            </span>
-          </p>
-
-          <!-- Línea decorativa central -->
-          <div class="inline-block w-24 h-1 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-400 rounded-full my-4"></div>
-        </div>
-
-        <!-- Elementos decorativos en las esquinas -->
-        <div class="absolute top-4 left-4 w-3 h-3 border-2 border-yellow-300/50 rounded-full animate-ping"></div>
-        <div class="absolute top-4 right-4 w-3 h-3 border-2 border-yellow-300/50 rounded-full animate-ping" style="animation-delay: 0.5s;"></div>
-        <div class="absolute bottom-4 left-4 w-3 h-3 border-2 border-yellow-300/50 rounded-full animate-ping" style="animation-delay: 1s;"></div>
-        <div class="absolute bottom-4 right-4 w-3 h-3 border-2 border-yellow-300/50 rounded-full animate-ping" style="animation-delay: 1.5s;"></div>
-      </div>
-    </div>
-  </div>
-</template>
-
-<script setup>
-import { computed } from 'vue'
-
-const props = defineProps({
-  scrolled: Boolean,
-  heroLinks: {
-    type: Array,
-    default: () => [
-      {
-        to: '/la-institucion',
-        title: 'Información Institucional del Senado',
-        ariaLabel: 'Información Institucional del Senado Nacional'
-      }
-    ]
-  }
-})
-
-const hasIconSlot = computed(() => {
-  return true
-})
-</script>
-
-<style scoped>
-.ghost {
-  background-color: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.ghost:hover {
-  background-color: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.3);
-  transform: translateY(-0.25rem);
-}
-
-/* Animaciones personalizadas para la franja */
-@keyframes gentleGlow {
-  0%, 100% {
-    box-shadow: 0 0 20px rgba(224, 54, 54, 0.3);
-  }
-  50% {
-    box-shadow: 0 0 30px rgba(224, 54, 54, 0.5);
-  }
-}
-
-/* Aplicar animación a la franja */
-.full-width-franja {
-  animation: gentleGlow 3s ease-in-out infinite;
-}
-
-/* Estilos para que la franja ocupe ancho completo */
-.absolute.left-0.right-0 {
-  width: 100vw;
-  left: 50%;
-  right: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .grid.grid-cols-2 {
-    gap: 1rem;
-  }
-  
-  .px-8.py-4 {
-    padding: 0.75rem;
-  }
-  
-  svg {
-    width: 80px;
-    height: 80px;
-  }
-  
-  /* Ajustar imagen en móviles */
-  .absolute.top-4.right-6 {
-    right: 1.5rem;
-  }
-  
-  img.w-12 {
-    width: 3rem;
-    height: 3rem;
-  }
-  
-  /* Ajustar franja en móviles */
-  .absolute.left-0.right-0 {
-    margin-left: -50vw;
-    margin-right: -50vw;
-  }
-}
-
-/* Asegurar que el contenido tenga espacio para la franja */
-.relative.z-10.mx-auto {
-  padding-bottom: 6rem; /* Espacio para que la franja no tape contenido */
-}
-</style> 
-================================= 
-components\HeroSection\PatrioticSeal.vue 
-================================= 
- 
-<!-- components/HeroSection/PatrioticSeal.vue -->
-<template>
-  <div 
-    v-if="scrolled"
-    class="absolute inset-0 flex items-center justify-center transition-all duration-700 z-20 opacity-20"
-  >
-    <div class="relative w-64 h-64 md:w-80 md:h-80">
-      <!-- Banda tricolor animada -->
-      <!-- <div class="absolute inset-0 flex flex-col rounded-full overflow-hidden shadow-2xl">
-        <div class="flex-1 bg-[#D52B1E] animate-color-pulse-red"></div>
-        <div class="flex-1 bg-[#F9E076] animate-color-pulse-yellow"></div>
-        <div class="flex-1 bg-[#007934] animate-color-pulse-green"></div>
-      </div> -->
-      <!-- Escudo central -->
-      <!-- <div class="absolute inset-8 bg-white rounded-full flex items-center justify-center shadow-inner">
-        <div class="text-center">
-          <div class="text-2xl md:text-3xl font-bold text-[#8B1A1A]">SN</div>
-          <div class="text-xs md:text-sm font-semibold text-gray-700 mt-1">SENADO NACIONAL</div>
-        </div>
-      </div> -->
-        <div class="absolute inset-0 flex items-center justify-center overflow-hidden rounded-full shadow-2xl top-28">
-          <img 
-              src="/senadores.svg" 
-              alt="Escudo Senado Nacional" 
-              class="w-full h-full object-cover"
-          />
-        </div>
-    </div>
-  </div>
-</template>
-
-<script setup>
-const props = defineProps({
-  scrolled: Boolean
-})
-</script>
-
-<style scoped>
-@keyframes color-pulse-red {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.8; }
-}
-
-@keyframes color-pulse-yellow {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.9; }
-}
-
-@keyframes color-pulse-green {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.8; }
-}
-
-.animate-color-pulse-red {
-  animation: color-pulse-red 4s ease-in-out infinite;
-}
-
-.animate-color-pulse-yellow {
-  animation: color-pulse-yellow 4s ease-in-out infinite 1s;
-}
-
-.animate-color-pulse-green {
-  animation: color-pulse-green 4s ease-in-out infinite 2s;
-}
-</style> 
-================================= 
-components\HeroSection\PatrioticSeal2.vue 
-================================= 
- 
-<!-- components/HeroSection/PatrioticSeal.vue -->
-<template>
-  <div 
-    v-if="scrolled"
-    class="absolute inset-0 flex items-center justify-center transition-all duration-700 z-20 opacity-20"
-  >
-    <div class="relative w-64 h-64 md:w-80 md:h-80">
-      <!-- Banda tricolor animada -->
-      <!-- <div class="absolute inset-0 flex flex-col rounded-full overflow-hidden shadow-2xl">
-        <div class="flex-1 bg-[#D52B1E] animate-color-pulse-red"></div>
-        <div class="flex-1 bg-[#F9E076] animate-color-pulse-yellow"></div>
-        <div class="flex-1 bg-[#007934] animate-color-pulse-green"></div>
-      </div> -->
-      <!-- Escudo central -->
-      <!-- <div class="absolute inset-8 bg-white rounded-full flex items-center justify-center shadow-inner">
-        <div class="text-center">
-          <div class="text-2xl md:text-3xl font-bold text-[#8B1A1A]">SN</div>
-          <div class="text-xs md:text-sm font-semibold text-gray-700 mt-1">SENADO NACIONAL</div>
-        </div>
-      </div> -->
-        <div class="absolute flex items-center justify-center overflow-hidden rounded-full shadow-2xl top-40">
-          <img 
-              src="/senadores.svg" 
-              alt="Escudo Senado Nacional" 
-              class="w-full h-full object-cover"
-          />
-        </div>
-    </div>
-  </div>
-</template>
-
-<script setup>
-const props = defineProps({
-  scrolled: Boolean
-})
-</script>
-
-<style scoped>
-@keyframes color-pulse-red {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.8; }
-}
-
-@keyframes color-pulse-yellow {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.9; }
-}
-
-@keyframes color-pulse-green {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.8; }
-}
-
-.animate-color-pulse-red {
-  animation: color-pulse-red 4s ease-in-out infinite;
-}
-
-.animate-color-pulse-yellow {
-  animation: color-pulse-yellow 4s ease-in-out infinite 1s;
-}
-
-.animate-color-pulse-green {
-  animation: color-pulse-green 4s ease-in-out infinite 2s;
-}
-</style> 
-================================= 
-components\HeroSection\config\heroStyles.js 
-================================= 
- 
-// components/HeroSection/config/heroStyles.js
-
-// Clases para el tooltip (texto que aparece al hacer hover)
-export const tooltipTextClasses = `
-  text-[clamp(0.4rem,.8vw,1rem)] 
-  sm:text-[clamp(0.4rem,1.3vw,0.9rem)] 
-  md:text-[clamp(0.5rem,1.4vw,1.0rem)] 
-  lg:text-[clamp(0.9rem,1.4vw,1.5rem)] 
-  xl:text-[clamp(0.9rem,1.4vw,1.6rem)] 
-  2xl:text-[clamp(1.1rem,1.4vw,1.8rem)] 
-  3xl:text-[clamp(1.2rem,1.5vw,1.8rem)] 
-  4xl:text-[clamp(1.3rem,1.8vw,2.5rem)] 
-  5xl:text-[clamp(1.5rem,1.2vw,3rem)]
-`
-
-// Clases para los SVGs (tamaños responsivos)
-export const svgSizeClasses = `
-  w-[25px] h-[25px] 
-  sm:w-[35px] sm:h-[35px] 
-  md:w-[45px] md:h-[45px] 
-  lg:w-[65px] lg:h-[65px] 
-  xl:w-[73px] xl:h-[73px] 
-  2xl:w-[100px] 2xl:h-[100px] 
-  3xl:w-[120px] 3xl:h-[120px] 
-  4xl:w-[180px] 4xl:h-[180px] 
-  5xl:w-[250px] 5xl:h-[250px]
-`
-
-// Clases para el espaciador entre botones y franja
-export const spacerClasses = `
-  h-2 sm:h-2.5 md:h-5 lg:h-8 xl:h-10 2xl:h-12 3xl:h-16 4xl:h-20 5xl:h-32
-`
-
-// Clases para el padding del tooltip
-export const tooltipPaddingClasses = `
-  px-2 py-1 sm:px-1 sm:py-0.5 md:px-2 md:py-1 
-  lg:px-3 lg:py-1.5 xl:px-3 xl:py-1.5 
-  2xl:px-3 2xl:py-2 3xl:px-4 3xl:py-2.5 
-  4xl:px-6 4xl:py-2.5 5xl:px-8 5xl:py-4
-`
-
-// Tamaño del triángulo del tooltip
-export const triangleSize = 'border-8 4xl:border-[20px]'
-
-// Clases para el texto de la franja
-export const bannerTextClasses = `
-  text-[clamp(.4rem,1.8vw,.9rem)] 
-  sm:text-[clamp(1rem,2.6vw,1.8rem)] 
-  md:text-[clamp(1.3rem,2.5vw,2rem)] 
-  lg:text-[clamp(1.8rem,2.8vw,3rem)] 
-  xl:text-[clamp(2rem,2.8vw,3.5rem)] 
-  2xl:text-[clamp(2.5rem,2.5vw,4rem)] 
-  3xl:text-[clamp(3.0rem,2.8vw,4.1rem)] 
-  4xl:text-[clamp(3.5rem,2.5vw,5rem)] 
-  5xl:text-[clamp(5rem,2.5vw,7rem)]
-`
-
-// Clases para los círculos decorativos de la franja
-export const bannerCircleClasses = `
-  text-[clamp(0.4rem,1.2vw,.9rem)] 
-  sm:-translate-y-1 
-  md:text-[clamp(0.4rem,1.2vw,1.1rem)] md:-translate-y-1 
-  lg:text-[clamp(0.8rem,3vw,1.2rem)] lg:-translate-y-1 
-  xl:-translate-y-2 
-  2xl:-translate-y-1 2xl:text-[clamp(1.1rem,1.7vw,1.8rem)] 
-  3xl:text-[clamp(1.1rem,1.5vw,3.4rem)] 
-  5xl:text-[clamp(2rem,1.3vw,4.5rem)] 5xl:-translate-y-4
-` 
-================================= 
-components\HeroSection\data\heroData.js 
-================================= 
- 
-// components/HeroSection/data/heroData.js
-
-// SVG del botón 1: La Institución
-export const institutionSvg = `<svg class="w-full h-full" width="280" height="280" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 53 55"><title>Recurso 6</title><g style="isolation:isolate"><g id="eb2627b4-d7ea-4544-86ef-cfca25636fe5" data-name="Capa 2"><g id="efeb26d4-af66-4b93-8a98-af6b74a5d151" data-name="Capa 1"><image width="53" height="55" xlink:href="data:image/png;base64,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" style="opacity:0.35000000000000003;mix-blend-mode:multiply"/><path d="M45.7052,47.7014V22.9267a1.8982,1.8982,0,0,0-.8744-.8744H38.127V13.0169c0-.4862-.8179-.8253-1.2594-.878-1.5463-.1844-9.8892.2825-10.4116-.0813-.2755-.4339-.3767-2.2461.1367-2.4141,2.9536-.5149,9.6807,1.71,5.5353-3.3915.3759-.6643,2.5148-2.9493,1.0048-3.3971-1.6373.0726-6.9324-.7532-8.1015-.0191a1.9135,1.9135,0,0,0-.5061.66v8.6468H13.3524c-.3025,0-.8744.79-.8744,1.0688v8.8411H5.9685c-.5362,0-1.0675.7217-1.0775,1.2551l.01,24.3949c-1.1356-.214-3.1758.3132-1.9438,1.651l44.8851,0C49.1015,47.6761,47.0061,47.5605,45.7052,47.7014ZM26.4674,4.3688l4.6644.1975L30.1545,6.23l.9773,1.6378H26.2741ZM14.4211,13.8913H36.1839v7.87c0,.0591.2461.1492.1943.2914H14.4211Zm10.1041,33.81-2.6355-.182-.0577-8.4377c.2-.6115,2.1216-.2056,2.6932-.3186Zm4.4692,0h-2.72V39.0545c.673-.5951,1.8575-.17,2.72-.2914Zm14.962,0H30.7432V37.5a1.4659,1.4659,0,0,0-1.0648-.49,58.5558,58.5558,0,0,0-8.5631-.0057c-.4209.0575-1.0592.4918-1.0592.884v9.8127H6.8429L6.7353,23.9873l14.2924.0081v5.9265c0,.9341,1.7488.7742,1.7488.1943V24.0926a1.2958,1.2958,0,0,1,1.7487,0v7.9668c0,.5419,1.7489.5419,1.7489,0V24.0926c.4138-.508,1.1628-.237,1.7487-.2915v6.3151c0,.5633,1.4514.6272,1.7489,0V23.8011H43.6649l.2915.2915Z" style="fill:#fff"/><path d="M17.4411,27.0966a53.011,53.011,0,0,0-7.59.0039,1.4654,1.4654,0,0,0-1.0647.49V44.4953c1.4139.9266,3.2389.2908,4.7513.2822.91-.0052,1.8273-.012,2.7373,0,.8277.0114,1.65.5223,2.4212-.2826V27.7845C18.6959,27.2157,17.86,27.1324,17.4411,27.0966ZM12.8676,43.0389H10.5338V40.9h2.3338Zm0-3.8862H10.5338V36.819h2.3338Zm0-4.0805H10.5338v-2.14h2.3338ZM12.6846,31.1l-2.1508.0858V28.8522h2.3338C12.787,29.3577,13.0612,30.8378,12.6846,31.1Zm4.2606,12.132a5.9077,5.9077,0,0,0-2.3308-.1932V40.9h2.3337Zm.0029-4.0794H14.6144V36.819h2.3337Zm0-4.0805H14.6144v-2.14h2.3337Zm0-3.8863H14.6144V28.8522h2.3337Z" style="fill:#fff"/><path d="M42.0226,28.5524c-.0166-.7819-.2555-1.348-1.0685-1.4576-2.4772-.3341-5.7583.2336-8.3238.0507l-.7313,1.0176c.3514,4.9608-.4326,10.4778.0009,15.37.0616.6949.0635,1.1723.8726,1.2649a77.8713,77.8713,0,0,0,8.8543-.1059c.3308-.1955.3641-.8066.3956-1.159C42.4484,38.769,41.6781,33.3847,42.0226,28.5524Zm-8.0461,8.2947c.3312-.1081,1.9431-.1035,2.1227.1549l-.0972,2.065L33.7426,38.97C33.6408,38.48,33.4438,37.0209,33.9765,36.8471Zm2.2084,6.1918h-2.528V40.9h2.528Zm0-7.9668H33.6569v-2.14l2.305.0281A4.8014,4.8014,0,0,1,36.1848,35.0721ZM33.7427,31.003l-.0858-2.1508,2.3232.0113C36.574,31.1891,36.0514,31.6149,33.7427,31.003ZM38.0571,28.88c.3311-.108,1.943-.1034,2.1226.1549L40.0825,31.1l-2.2593-.0973C37.7213,30.5135,37.5244,29.0541,38.0571,28.88Zm0,7.9668c.3336-.1089,1.9452-.1046,2.1225.1608l.0017,1.9629L37.92,39.067C37.6294,38.8647,37.56,37.0093,38.0571,36.8471Zm2.2084,6.1918-2.3122-.0223L37.7376,40.9h2.5279Zm-2.5281-7.9667c.0837-.51-.2008-1.9678.19-2.2479l2.3377.1084v2.14Z" style="fill:#fff"/><path d="M27.7314,15.2514H23.0679c-.0642,0-.295.2574-.4857.1944v4.9549l.2914.2915h4.8578c.6821-.62.6683-4.4454.3857-5.0492A1.7347,1.7347,0,0,0,27.7314,15.2514Zm-1.262,3.693H24.33V16.9993h2.14Z" style="fill:#fff"/><path d="M34.5323,15.2514H29.8688a1.0948,1.0948,0,0,0-.4807.6851,24.451,24.451,0,0,0,.095,4.3641,1.7389,1.7389,0,0,0,.3857.3916h4.6635c.1453,0,.44-.4721.4807-.6852a24.46,24.46,0,0,0-.095-4.364A1.7368,1.7368,0,0,0,34.5323,15.2514Zm-1.262,3.693H31.1308V16.9993H33.27Z" style="fill:#fff"/><path d="M20.7362,15.2514H16.0727c-.6374,0-.55,3.5868-.495,4.1869a1.5682,1.5682,0,0,0,.495,1.2539h4.6635c.1453,0,.44-.4721.4807-.6852a24.46,24.46,0,0,0-.095-4.364A1.7368,1.7368,0,0,0,20.7362,15.2514Zm-1.262,3.693H17.3347V16.9993h2.1395Z" style="fill:#fff"/></g></g></g></svg>`
-
-// SVG del botón 2: Legisladores
-export const legislatorsSvg = `<svg class="w-full h-full" width="40" height="40" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 55 53"><title>Recurso 10</title><g style="isolation:isolate"><g id="ed755407-0094-4f2a-ab18-e90623f92802" data-name="Capa 2"><g id="b0efe305-295f-44cb-9c70-c670db777704" data-name="Capa 1"><image width="55" height="53" xlink:href="data:image/png;base64,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" style="opacity:0.35000000000000003;mix-blend-mode:multiply"/><path d="M43.9022,13.9806c2.9613-3.2582,2.4993-8.1139-1.4255-10.3285C36.113.0613,29.6958,8.422,34.7655,13.692l-2.52,1.2621c-1.9679-5.5121-9.7948-4.9417-11.7563.3871l-2.4307-1.1666c.3-.79.9266-1.3154,1.2611-2.1363C22.5073,4.2158,11.3975-.536,7.7248,6.4669a6.47,6.47,0,0,0,1.2017,7.61c-3.74,1.8417-6.9628,6.6065-5.8188,10.8735.5023,1.8734,2.4914,2.7522,2.6688,3.3548a17.82,17.82,0,0,1,.0653,2.0721c3.1543,22.8791,37.3814,23.0437,41.47,1.1037.1813-.9728.1229-3.2133.3133-3.7673.0615-.1787,1.2892-1.051,1.6076-1.5013C52.009,22.2863,48.1486,15.3362,43.9022,13.9806Zm-5.1-9.2741c6.1781-.7512,7.0085,8.3,1.4874,9.0652C33.76,14.6769,32.767,5.4405,38.8026,4.7065ZM26.179,12.8577c6.5665-.5859,6.4709,10.4851-.7479,9.0061C20.5219,20.858,21.0187,13.3181,26.179,12.8577Zm5.0925,17.9332v4.6634l-.2915.2915H21.9445V30.9852c0-.9823-1.943-.675-1.943,0v4.7606c-.7833.0833-2.4178-.014-2.68-.9152a23.4081,23.4081,0,0,1-.0389-4.0379,9.0859,9.0859,0,0,1,5.1756-6.8717c2.1058-.924,2.2183-.0878,4.0524-.0695,1.2286.0122,1.9441-.6386,3.2445-.2909,4.5524,1.217,6.8493,6.5146,6.1679,10.9106-.1978,1.2766-1.9763,1.6622-2.9031.9831V30.7909C33.02,30.1757,31.2715,30.1757,31.2715,30.7909ZM12.7653,4.9012a4.8264,4.8264,0,0,1,4.7166,2.3714,4.6172,4.6172,0,1,1-4.7166-2.3714ZM9.3061,16.0148c2.215-1.1072,2.4057.0613,4.5822-.0827.856-.0566,1.7594-.6,2.3231-.6013a15.94,15.94,0,0,1,3.8867,1.9559c.1984.34.2413,1.9424.583,2.72.3308.7529,1.3169,1.5116,1.4561,1.8482.1349.326-.1292.2623-.2461.3312-2.2092,1.3031-4.2206,2.4176-5.193,5.01H10.0916V22.2412c0-.6478-1.7488-.3815-1.7488.1943v4.5663C1.8723,25.8037,5.087,18.1237,9.3061,16.0148ZM22.3686,45.7174c-7.8078-1.711-14.7025-8.755-14.8011-16.9667.0694-.0964.248.1942.29.1942h7.87c-.0174,3.4551-1.7035,8.1958,3.1977,8.5581a121.3208,121.3208,0,0,0,15.5612-.0005c4.4576-.3979,3.2723-5.462,2.81-8.5576,2.3028-.2,5.0389.27,7.2867,0,.2053-.0247,1.1486-.5189,1.2617-.3879C45.2542,40.1958,33.5507,48.1679,22.3686,45.7174Zm22.5061-18.91c-.5051-.9911.2441-4.7547-.5849-5.1568-.4706-.2283-1.36.0786-1.36.59v4.9549H36.5179a9.7151,9.7151,0,0,0-5.44-5.055c.5309-1.2234,1.4481-2.0593,1.7021-3.4438.1155-.63-.1319-1.4426.2425-1.8949l3.43-1.8046a10.7438,10.7438,0,0,0,2.697.7365c1.8176.079,2.3124-.974,4.1775-.1077C47.7667,17.6885,51.325,25.1357,44.8747,26.8078Z" style="fill:#fff"/><path d="M40.765,33.6778a16.2641,16.2641,0,0,1-8.81,7.7062A15.789,15.789,0,0,1,11.3482,30.7013c-2.3065-1.2025-1.2735,1.7845-.8219,2.9582,5.1095,13.28,25.3017,13.8337,31.6614,1.0524.356-.7154,1.663-3.5926,1.0829-4.1641C41.8579,29.1556,41.17,32.821,40.765,33.6778Z" style="fill:#fff"/><path d="M27.2393,25.107c-.8144.8213,1.2788,4.405.83,5.3859a5.7223,5.7223,0,0,1-1.5318,1.3526l-1.5744-1.5317,1.2586-4.3983c-.2051-1.14-1.2849-1.3991-1.8526-.2782-.1793.3542-1.4369,4.6955-1.4344,4.9632.0058.6218,3.2283,3.5779,3.5711,3.5874.4375.0121,3.1733-2.5777,3.4153-2.9974a1.1683,1.1683,0,0,0,.2018-.5909,33.1034,33.1034,0,0,0-1.3978-5.2284A1.0243,1.0243,0,0,0,27.2393,25.107Z" style="fill:#fff"/></g></g></g></svg>`
-
-// SVG del botón 3: Gestión Legislativa
-export const managementSvg = `<svg class="w-full h-full" width="80" height="80" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 49 49"><title>Recurso 9</title><g style="isolation:isolate"><g id="b666654d-2ec6-45c6-a2a8-33e37d148692" data-name="Capa 2"><g id="b8d63f1e-1736-49e4-abd3-4015ed2e5ac4" data-name="Capa 1"><image width="49" height="49" xlink:href="data:image/png;base64,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" style="opacity:0.35000000000000003;mix-blend-mode:multiply"/><path d="M42.1162,27.3c-1.9928-1.3915-4.5575-2.3761-6.598-3.7411L35.51,6.315a4.0041,4.0041,0,0,0-2.7017-3.1276L8.5067,3.1786c-3.4048.911-5.025,3.5963-5.2451,6.9964-.6093,9.4106.472,19.4786.0124,28.9583a4.812,4.812,0,0,0,3.3871,4.3854l29.1288.1564c1.0638-1.0335-.4667-1.4748-1.0083-2.2392a4.148,4.148,0,0,1-.3782-4.005c.232-.6493,1.0489-1.6222,1.1191-1.99a21.87,21.87,0,0,0,0-3.49c-.1237-.6458-1.1279-1.0663-1.7448-1.0728v3.3033H7.6428a5.4806,5.4806,0,0,0-2.4289,1.1659V8.4355c0-1.0442,2.6862-3.719,3.9783-3.6H31.9359c.7665-.1009,1.8417,1.0038,1.8417,1.6568V22.523l-6.6056-3.8c.1387-.1979.5614-1.178.6184-1.2155.1428-.0939,1.3441-.1746,1.8458-.3887A2.6962,2.6962,0,0,0,30.7574,13.01a63.68,63.68,0,0,0-6.5625-4.319,2.517,2.517,0,0,0-2.6388-.2346,2.75,2.75,0,0,0-1.564,2.873c.094.9525.5254.6059-.0486,1.73-1.2522,2.4531-3.6042,4.765-4.8593,7.2848-2.633-.1921-4.4943,2.7473-2.3884,4.7034a56.6485,56.6485,0,0,0,6.6565,4.2238c1.5224.5283,3.4534-.0746,3.7248-1.8056.1921-1.2257-.7792-2.8048.6575-3.3585,3.4164,1.9694,6.887,3.8574,10.2966,5.8369,1.436.8337,4.028,2.89,5.4352,3.3087a2.8627,2.8627,0,0,0,2.6565-.3447,15.72,15.72,0,0,0,1.52-2.56C43.9976,28.6608,43.3479,28.16,42.1162,27.3ZM6.0593,36.7764a6.6026,6.6026,0,0,1,1.5835-.8459H32.7089l.2145.4019A6.9412,6.9412,0,0,0,33,41.9542H7.2541a8.3577,8.3577,0,0,1-.9715-.583A3.1525,3.1525,0,0,1,6.0593,36.7764Zm17.1742-26.54,6.0172,3.7912a1.0011,1.0011,0,0,1,.0772,1.2256.8067.8067,0,0,1-.5172.2792C27.57,15.7,23.5879,12.195,22.1287,11.73,21.2129,10.7351,21.9987,9.6748,23.2335,10.2367Zm-3.2543,17.454c-.9431-.8713-5.9376-3.4-6.3152-4.1989-.2884-.61.1066-1.0241.6268-1.3305.224-.0783.3882.0416.58.1214,1.9343.803,4.1765,3.011,6.1836,3.926C21.854,26.9333,20.8562,27.9358,19.9792,27.6907Zm1.2677-3.4573c-1.18-.926-3.2032-1.7225-4.2524-2.7078-.1341-.126-.3574-.1669-.2967-.4269l5.126-7.4667,4.555,2.9887Zm4.6625-.9371-1.2646-.5809,1.6513-2.5209,1.069.5826Zm11.363,6.4161-.2618-.0228-9.4317-5.6784c.4018-.2978,1.0692-2.1063,1.5438-1.9915l9.5128,5.3645ZM40.67,31.6662c-2.7137-.2928-1.8213-1.9439-.3853-3.26.46.2565,1.6413.6059,1.65,1.2034C41.94,29.9113,41.1228,31.6162,40.67,31.6662Z" style="fill:#fff"/><path d="M10.08,8.4272c-.0255-.3029-.0325-.7963-.2487-1.0129A.9559.9559,0,0,0,8.42,7.5616c-.18,4.6062-.0971,9.2721-.0887,13.9008.0015.9047-.0034,1.7965,0,2.7042.0088,2.3882-.0174,4.778-.0159,7.1652.6479.569,1.75.456,1.7656-.5415C9.6058,23.5526,10.6816,15.5762,10.08,8.4272Z" style="fill:#fff"/><path d="M22.41,39.6224h8.9383c.8018,0,.8406-1.515,0-1.7488H22.41C21.7952,37.8736,21.7952,39.6224,22.41,39.6224Z" style="fill:#fff"/></g></g></g></svg>`
-
-// SVG del botón 4: Cultura
-export const cultureSvg = `<svg class="w-full h-full" width="80" height="80" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 49 47"><title>Recurso 7</title><g style="isolation:isolate"><g id="a183c4f2-cf0d-4f71-a4e4-39f69db0fd30" data-name="Capa 2"><g id="a75b72a7-7272-4391-aa94-0dbd43c98def" data-name="Capa 1"><image width="49" height="47" xlink:href="data:image/png;base64,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" style="opacity:0.35000000000000003;mix-blend-mode:multiply"/><path d="M32.4328,22.6363c-1.5884-.2471-.4412,1.5805-.6931,1.9236-.764.5146-4.0685,1.9445-4.3518,2.5527a.9817.9817,0,0,0,1.1178,1.3257c.7555-.1237,4.0757-2.4973,4.3252-2.4915A2.9454,2.9454,0,0,1,32.869,29.77L18.9383,37.7953a7.2183,7.2183,0,0,0-1.1293-4.4086c-3.3575-5.9313-8.7985-11.77-11.972-17.7576-.6965-1.3141-1.1322-2.21-.0213-3.4874,2.9424-3.384,6.9968,3.2292,2.0457,4.2829-.1525.2037.83,2,1.4105,1.72l13.8805-6.9313a4.5292,4.5292,0,0,0-3.4491-8.307C15.34,5.3973,9.5485,7.2756,5.43,10.0072c-2.3023,1.5271-2.7306,3.74-1.53,6.1981L14.6253,32.1062l.029.4345c-1.7443.7111-4.0585,1.7783-4.4145,3.8449-.7161,4.1578,3.1172,6.4635,6.7622,4.819,5.4406-2.4547,10.8835-6.8878,16.377-9.4664a4.6708,4.6708,0,0,0,2.0571-4.7092C35.3117,26.1411,33.2608,22.7651,32.4328,22.6363ZM19.9028,4.855a2.6542,2.6542,0,0,1,3.0231,4.1885l-10.9819,5.63L11.65,11.9539,9.8061,9.8179ZM15.77,39.5838a2.5148,2.5148,0,0,1-3.5465-3.1584c.33-1.0688,2.7653-2.1634,3.7816-2.5037C16.9846,35.5106,17.8743,38.4946,15.77,39.5838Z" style="fill:#fff"/><path d="M43.8162,4.0839c-.06-.7376-1.5752-.3688-2.2188-.2692a21.16,21.16,0,0,0-4.84,1.378c-.6961.4423-1.0012,2.6322-1.3059,3.4557l-.5608-2.06-.312-.274A21.3654,21.3654,0,0,0,30.4016,9.33v3.2061l-1.0687-2.1335c-2.3289,2.1811-4.3828,5.3925-2.5261,8.542,2.4471-2.6639,4.7126-5.5667,7.7737-7.573.1309-.0428.1409.1838.0943.2876-.2191.489-2.62,2.5421-3.2073,3.2059-1.0026,1.1332-7.2944,9.402-7.28,10.2079.0139.7864,1.0484.7945,1.627.4594.9808-.568,2.8682-4.7639,3.6145-5.1279a9.4737,9.4737,0,0,1,2.2142-.1176c1.9954-.2522,4.0179-1.9654,5.3642-3.38L34.483,15.8411a15.5822,15.5822,0,0,0,3.1472-.4486c1.5087-.4464,2.1291-2.552,3.0652-3.7322l-2.7147-.7751c.7927-.7009,2.92-.43,3.5883-1.0751A28.86,28.86,0,0,0,43.8162,4.0839Z" style="fill:#fff"/><path d="M22.237,17.8671,13.5208,22.47a1.6649,1.6649,0,0,0,.8911,1.6988L23.4092,19.63C23.9517,19.0392,23.2038,17.3511,22.237,17.8671Z" style="fill:#fff"/><path d="M17.2721,28.2713l4.1409-1.99,1.41-3.0574-6.4141,3.2045C15.8769,26.8288,16.877,28.2578,17.2721,28.2713Z" style="fill:#fff"/></g></g></g></svg>`
-
-// SVG del botón 5: Participación
-export const participationSvg = `<svg class="w-full h-full" height="80" width="80" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 49 57"><title>Recurso 8</title><g style="isolation:isolate"><g id="fc820b60-4ec9-40f9-905c-3b46dde037db" data-name="Capa 2"><g id="b9dea7ff-0b98-4d18-86f8-c781d409a0fe" data-name="Capa 1"><image width="49" height="57" xlink:href="data:image/png;base64,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" style="opacity:0.35000000000000003;mix-blend-mode:multiply"/><path d="M19.0348,29.9751l-1.1806,1.8312V23.1594a2.3339,2.3339,0,0,0-3.4078-1.8771c-.2578-.0267-.297-.7681-.4706-1.0453-.9011-1.4386-3.6543-1.1573-3.8968.6878-2.1739-1.0917-3.9784.3826-3.6911,2.72-2.062-.6745-3.14.6574-3.3083,2.6164A98.9742,98.9742,0,0,0,3.0781,38.907C3.2558,41.28,4.33,41.39,5.0638,43.1393a5.2084,5.2084,0,0,1,.3578,2.7145c-.0581.2144-1.0278.488-1.1647,1.21a16.6128,16.6128,0,0,0,0,2.9054c.1444.766.9787,1.0228,1.6376,1.0828a88.9133,88.9133,0,0,0,12.0656,0c.5766-.0531,1.416-.2872,1.6023-.9238a13.57,13.57,0,0,0,.0287-2.8631A1.5882,1.5882,0,0,0,17.66,45.99c-.5044-2.6766,1.7508-3.8053,2.7552-6.0851.8-1.8147,2.0048-4.875,2.5828-6.7438C23.8973,30.2546,21.5586,28.603,19.0348,29.9751ZM17.8542,47.74v1.5545H6.0012V47.74Zm3.3639-14.9969a61.4153,61.4153,0,0,1-2.6845,7.0295c-.9354,1.9737-3.2541,3.2912-2.9011,6.0372L7.36,45.9922a11.3151,11.3151,0,0,0-.4282-3.1668C6.6867,42.1365,5.03,40.0459,5.03,39.87V25.394l.65-.1555a.7533.7533,0,0,1,.4761.4876c.3259,1.0985-.4847,5.6941.5577,6.05.8053.1429,1.32.0473,1.4338-.8348.3118-2.4152-.2507-5.4846-.01-7.9754a.6975.6975,0,0,1,1.12-.4419l.28,8.758a1.0637,1.0637,0,0,0,1.71.2333V21.9935c.2339-1.0881,1.5545-1.0376,1.5545,0v9.327c0,.6152,1.7488.6152,1.7488,0V23.3537c0-.5492,1.15-1.0752,1.355.0058.2709,4.0245-.3417,8.4658-.0027,12.4384.0655.7676.1115,1.27,1.0355,1.2254.7152-.177,2.7343-4.7676,3.326-5.623C21.5238,30.8067,21.4505,31.7964,21.2181,32.7429Z" style="fill:#fff"/><path d="M42.4985,30.7717a2.3787,2.3787,0,0,0-2.9657,1.0473c-.2771.3673-.3209.9754-.693,1.1531V24.131a7.0916,7.0916,0,0,0-.5788-1.116c-.9838-1.14-2.6207-.331-2.7344-.4225-.639-2.3686-3.7-2.6211-4.2673-.1135a2.2614,2.2614,0,0,0-3.6886,2.333c-1.8079-.1455-2.9384.317-3.1174,2.2262a98.8006,98.8006,0,0,0-.0022,13.6189c.1766,1.8062,2.0507,2.7214,2.1523,4.4637.0847,1.4532-.4945.8061-1.249,1.278-.6846.4283-.6134,2.7953-.4927,3.5633.1479.9412.9882,1.2057,1.8238,1.2851a81.85,81.85,0,0,0,11.6731-.0052c.6432-.0759,1.4488-.41,1.6054-1.115a18.767,18.767,0,0,0,.1511-2.5913c-.1972-1.5072-1.8355-1.3951-1.8622-1.6565.1815-1.6626,1.4472-2.4422,2.3-3.7134a44.7731,44.7731,0,0,0,3.439-8.2188C44.2865,32.5718,43.9882,31.2048,42.4985,30.7717ZM38.2569,47.74l.0009,1.5555a108.71,108.71,0,0,1-11.4777.1085l-.1819-1.664Zm3.9885-13.9834a62.28,62.28,0,0,1-2.5908,6.54c-.9626,1.973-3.0528,3.2324-3.1651,5.6755l-8.1434.02a4.9146,4.9146,0,0,0-.3831-2.4345c-.248-.6308-1.7534-2.5541-1.7534-2.7157v-13.99c0-.3857,1.1658-.386,1.1658,0v5.6349c0,.7287,1.9432.7289,1.9432,0v-8.55l.3118-.2737.6745.0651a5.9286,5.9286,0,0,1,.3738.9858v8.0639c.6743.2218,1.5663.4448,1.7433-.4912.1944-2.7673-.238-5.8225-.0023-8.5525.0978-1.1339.7479-1.8484,1.3628-.5689.2864,2.782-.362,6.2473-.0037,8.9415.1157.8705.6065.98,1.4337.8348a.7842.7842,0,0,0,.4309-.5424c.5753-1.763-.2845-5.6782.0929-7.68a.8105.8105,0,0,1,.5123-.6575c.2117-.1468.6481.1321.6481.2634V37.5384c.1182.4215.9521.6452,1.3636.3919.626-.3854,2.2268-4.7364,3.1084-5.4554l.9781.2389A2.8023,2.8023,0,0,1,42.2454,33.7564Z" style="fill:#fff"/><path d="M24.5593,15.8737a12.65,12.65,0,0,0,.288-1.8491c.138-1.7209-.3527-5.4154.0421-6.7587a.8517.8517,0,0,1,.3454-.436c.682-.3532.9141.4134.9785.9751.4521,3.943-.5262,8.966-.0127,12.8374a.8836.8836,0,0,0,1.4807.6839c1.4317-.9536,3.2512-6.4261,5.1411-4.0022l-2.5276,3.8933c.7431.7949.7314-.0485,1.0832-.2657a13.7086,13.7086,0,0,0,1.8322-.8958,7.1526,7.1526,0,0,0,1.5476-3.0948c-.12-1.2431-2.0348-2.27-3.1561-2.2068-2.0086.1134-2.333,1.97-3.6433,3.0616V6.8373c0-1.2152-2.4392-2.6248-3.4009-1.4611-.3548-.3019-.3294-.7786-.59-1.1544a2.1682,2.1682,0,0,0-3.9781.7681c-.2766.05-.1906-.3348-.5038-.5578C17.55,3.0535,15.5992,5.0538,15.91,7.1279a2.3021,2.3021,0,0,0-3.4793,1.864c-.3379,2.4812-.1166,5.9512-.2012,8.5425a8.2774,8.2774,0,0,1-.2051,1.0573l1.9417.5842a10.56,10.56,0,0,1,.2043-2.4207c.103-2.0267-.1685-4.22-.0054-6.2233.0632-.7757.1608-2.5148,1.1789-1.5726l.4693,6.9144c.31.6335,1.6861.4746,1.8468-.0981V6.8373c0-.138.26-.5732.2376-.8257.5679-.4286.9811-.0819,1.2763.4781.3346,2.7928-.3169,6.1663.0587,8.8863a.9882.9882,0,0,0,1.8795.3541,10.8473,10.8473,0,0,0,.2566-1.7043c.0178-.8378-.0291-1.6376-.0079-2.5174.048-1.999-.0778-4.0057.018-6.0044.1379-.4164.7517-.37,1.1136-.2918.5123.3177.0419,8.7633.2378,10.1638A1.0123,1.0123,0,0,0,24.5593,15.8737Z" style="fill:#fff"/></g></g></g></svg>`
-
-// Array de botones para el hero
-export const heroButtons = [
-  {
-    to: '/la-institucion',
-    title: 'Información Institucional del Senado',
-    text: 'La Institución',
-    svg: institutionSvg
-  },
-  {
-    to: '/la-institucion',
-    title: 'Información Institucional del Senado',
-    text: 'Legisladores y Representación',
-    svg: legislatorsSvg
-  },
-  {
-    to: '/la-institucion',
-    title: 'Información Institucional del Senado',
-    text: 'Gestión Legislativa',
-    svg: managementSvg
-  },
-  {
-    to: '/la-institucion',
-    title: 'Información Institucional del Senado',
-    text: 'Cultura y Patrimonio Legislativo',
-    svg: cultureSvg
-  },
-  {
-    to: '/la-institucion',
-    title: 'Información Institucional del Senado',
-    text: 'Participación y Transparencia',
-    svg: participationSvg
-  }
-]

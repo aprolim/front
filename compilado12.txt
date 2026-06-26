@@ -2,2355 +2,2411 @@ COMPILADO DE ARCHIVOS - Parte 12
  
  
 ================================= 
-pages\noticias\[slug].vue 
+pages\legisladores-nacionales.vue 
 ================================= 
  
 <template>
-  <div class="min-h-screen bg-gray-50 py-12">
-    <div class="container mx-auto px-4 max-w-6xl">
-
-      <!-- Estado de carga -->
-      <div v-if="pending && !noticiaData?.noticia" class="flex justify-center items-center py-20">
-        <div class="inline-block w-12 h-12 border-4 border-[#E03636] border-t-transparent rounded-full animate-spin"></div>
-        <p class="ml-3 text-gray-500">Cargando noticia...</p>
+  <div class="min-h-screen text-style">
+    <!-- Fondos fijos para cada sección -->
+    <div class="global-fixed-background seccion1-fondo" :class="{ 'show-fixed': isSeccion1Visible }"></div>
+    <div class="global-fixed-background seccion3-fondo" :class="{ 'show-fixed': isSeccion3Visible }"></div>
+    <div class="global-fixed-background seccion4-fondo" :class="{ 'show-fixed': isSeccion4Visible }"></div>
+    
+    <!-- ==================== SECCIÓN 1 - DIRECTIVA CAMARAL ==================== -->
+    <section 
+      id="directiva-camaral"
+      class="relative h-screen overflow-y-auto transition-all duration-500"
+      ref="seccion1Ref"
+    >
+      <div class="text-[3vw] w-full text-center mt-[4.1vw] bg-white relative py-[.08vw]">
+        <div class="absolute top-0 left-0 h-[2px] bg-[#E4D294] animate-slide-right"></div>
+        <div class="absolute bottom-0 right-0 h-[2px] bg-[#E4D294] animate-slide-left"></div>
+        <div class="absolute top-0 right-0 w-[2px] bg-[#E4D294] animate-slide-down"></div>
+        <div class="absolute bottom-0 left-0 w-[2px] bg-[#E4D294] animate-slide-up"></div>
+        
+        <h2 class="text-[#E03636] font-semibold py-[-1.3vw]">
+          Directiva Camaral
+        </h2>
+        <p class="text-gray-500 translate-y-[-.5vw] text-[.35em]">Selecciona un senador para ver detalles</p>
       </div>
-
-      <!-- Estado de error -->
-      <div v-else-if="errorMsg || error" class="text-center py-12 bg-white rounded-xl">
-        <p class="text-red-600 mb-4">{{ errorMsg || error?.message || 'Error al cargar la noticia' }}</p>
-        <button @click="recargar" class="bg-[#E03636] text-white px-4 py-2 rounded-lg hover:bg-[#C12F2F] transition">Reintentar</button>
-      </div>
-
-      <!-- Estado de contenido vacío -->
-      <div v-else-if="noticiaData?.noticia && !noticiaValida" class="text-center py-12 bg-white rounded-xl">
-        <p class="text-red-600 mb-4">⚠️ El contenido de esta noticia no está disponible</p>
-        <p class="text-gray-500 mb-6">Puede que la noticia haya sido eliminada o esté incompleta.</p>
-        <button @click="volverAtras" class="bg-[#E03636] text-white px-6 py-2 rounded-lg hover:bg-[#C12F2F] transition">Volver</button>
-      </div>
-
-      <!-- Noticia encontrada y su contenido -->
-      <template v-else-if="noticiaData?.noticia && noticiaValida">
-        <article class="bg-white rounded-xl shadow-lg overflow-hidden">
-          <!-- TITULO -->
-          <div class="p-6 md:p-8 pb-0">
-            <div class="flex flex-wrap gap-2 mb-4">
-              <span class="tag-noticia">{{ noticiaData.noticia.category || noticiaData.noticia.categoria || 'Noticia' }}</span>
-              <span v-if="noticiaData.noticia.category === 'legislacion'" class="tag-importante">★ Importante</span>
-            </div>
-            <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight title-main">
-              <span v-html="formatTitleWithColors(noticiaData.noticia.title)"></span>
-            </h1>
-            <p class="text-gray-600 text-base md:text-lg mt-4 leading-relaxed excerpt-text">
-              {{ noticiaData.noticia.excerpt }}
-            </p>
-          </div>
-
-          <!-- CARRUSEL -->
-          <div class="px-6 md:px-8 mt-6 mb-4">
-            <div class="relative">
-              <div class="relative overflow-hidden rounded-2xl bg-gray-900 shadow-2xl" style="height: 500px;">
-                <div class="flex h-full">
-                  <!-- Imagen izquierda (peek) -->
-                  <div class="flex-shrink-0 transition-all duration-500 ease-out overflow-hidden h-full cursor-pointer"
-                       :style="{ width: `${peekLeftWidth}%` }"
-                       @click="anteriorImagen">
-                    <div class="relative w-full h-full">
-                      <img 
-                        :src="imagenAnterior?.url || imagenActual?.url"
-                        :alt="imagenAnterior?.alt || 'Imagen anterior'"
-                        class="w-full h-full object-cover"
-                      />
-                      <div class="absolute inset-0 bg-black/30"></div>
-                    </div>
-                  </div>
-
-                  <!-- Imagen central -->
-                  <div class="flex-shrink-0 transition-all duration-500 h-full"
-                       :style="{ width: `${imagenActualWidth}%` }">
-                    <div class="relative w-full h-full overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900">
-                      <img 
-                        :src="imagenActual?.url"
-                        :alt="imagenActual?.alt"
-                        class="w-full h-full object-contain"
-                      />
-                    </div>
-                  </div>
-
-                  <!-- Imagen derecha (peek) -->
-                  <div class="flex-shrink-0 transition-all duration-500 overflow-hidden h-full cursor-pointer"
-                       :style="{ width: `${peekRightWidth}%` }"
-                       @click="siguienteImagen">
-                    <div class="relative w-full h-full">
-                      <img 
-                        :src="imagenSiguiente?.url || imagenActual?.url"
-                        :alt="imagenSiguiente?.alt || 'Imagen siguiente'"
-                        class="w-full h-full object-cover"
-                      />
-                      <div class="absolute inset-0 bg-black/30"></div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Botones de navegación -->
-                <button 
-                  v-if="imagenesCarrusel.length > 1"
-                  @click="anteriorImagen"
-                  class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-[#E03636] text-white rounded-full p-3 transition-all duration-300 backdrop-blur-sm z-10 group"
-                >
-                  <svg class="w-6 h-6 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path>
-                  </svg>
-                </button>
-
-                <button 
-                  v-if="imagenesCarrusel.length > 1"
-                  @click="siguienteImagen"
-                  class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-[#E03636] text-white rounded-full p-3 transition-all duration-300 backdrop-blur-sm z-10 group"
-                >
-                  <svg class="w-6 h-6 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path>
-                  </svg>
-                </button>
-
-                <!-- Contador de imágenes -->
-                <div v-if="imagenesCarrusel.length > 1" class="absolute top-4 right-4 bg-black/70 text-white text-sm px-3 py-1.5 rounded-full backdrop-blur-sm font-medium z-10">
-                  {{ String(currentIndex + 1).padStart(2, '0') }} / {{ String(imagenesCarrusel.length).padStart(2, '0') }}
-                </div>
-              </div>
-
-              <!-- TEXTO DEBAJO DE LA IMAGEN -->
-              <div class="text-center mt-3">
-                <p class="carousel-caption">
-                  {{ imagenActual?.caption || imagenActual?.alt || 'Sin descripción' }}
-                </p>
-              </div>
-
-              <!-- Miniaturas -->
-              <div v-if="imagenesCarrusel.length > 1" class="flex justify-center gap-2 mt-4 overflow-x-auto pb-2">
-                <button
-                  v-for="(img, idx) in imagenesCarrusel"
-                  :key="idx"
-                  @click="currentIndex = idx"
-                  class="relative flex-shrink-0 transition-all duration-300 rounded-lg overflow-hidden"
-                  :class="currentIndex === idx ? 'ring-2 ring-[#E03636] scale-105' : 'opacity-60 hover:opacity-100'"
-                  style="width: 80px; height: 60px;"
-                >
-                  <img 
-                    :src="img.url" 
-                    :alt="`Miniatura ${idx + 1}`"
-                    class="w-full h-full object-cover"
-                  />
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- REDES SOCIALES -->
-          <div class="px-6 md:px-8 mb-6">
-            <div class="flex justify-end items-center gap-3 py-2 border-b border-gray-200">
-              <span class="compartir-texto">Compartir:</span>
-              
-              <a 
-                :href="`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(windowLocation)}`"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="social-icon"
-                aria-label="Compartir en Facebook"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#000000">
-                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                </svg>
-              </a>
-
-              <a 
-                :href="`https://twitter.com/intent/tweet?text=${encodeURIComponent(noticiaData.noticia.title)}&url=${encodeURIComponent(windowLocation)}`"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="social-icon"
-                aria-label="Compartir en X"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#000000">
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                </svg>
-              </a>
-
-              <a 
-                :href="`https://www.instagram.com/`"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="social-icon"
-                aria-label="Instagram"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#000000">
-                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 7c-2.761 0-5 2.239-5 5s2.239 5 5 5 5-2.239 5-5-2.239-5-5-5z"/>
-                  <circle cx="17.5" cy="6.5" r="1.5"/>
-                </svg>
-              </a>
-
-              <a 
-                :href="`https://www.youtube.com/results?search_query=${encodeURIComponent(noticiaData.noticia.title)}`"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="social-icon"
-                aria-label="Buscar en YouTube"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#000000">
-                  <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                </svg>
-              </a>
-            </div>
-          </div>
-
-          <!-- CONTENIDO VARIABLE DE LA NOTICIA -->
-          <div class="p-6 md:p-8 pt-0">
-            <div 
-              v-for="(block, index) in noticiaData.noticia.blocks" 
-              :key="index"
-              class="block-item"
-            >
-              <div v-if="block.type === 'paragraph'" class="prose prose-lg max-w-none text-gray-700 mb-6 text-justify">
-                <p v-html="block.content"></p>
-              </div>
-
-              <div v-else-if="block.type === 'quote'" class="quote-block mt-[3vw] mb-[5vw]">
-                <div class="quote-badge">
-                  <div class="badge-name">{{ block.author || 'Senado de Bolivia' }}</div>
-                  <div class="badge-role">{{ block.role || 'Cámara de Senadores' }}</div>
-                </div>
-                <div class="quote-container">
-                  <div class="quote-content-wrapper">
-                    <span class="quote-mark quote-open">“</span>
-                    <p class="quote-text">{{ block.content }}</p>
-                    <span class="quote-mark quote-close">”</span>
-                  </div>
-                </div>
-              </div>
-
-              <div v-else-if="block.type === 'video'" class="video-block my-8">
-                <div class="relative aspect-video rounded-xl overflow-hidden shadow-lg">
-                  <iframe 
-                    :src="block.url" 
-                    :title="block.title || 'Video'"
-                    class="absolute inset-0 w-full h-full"
-                    frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen
-                  ></iframe>
-                </div>
-                <p v-if="block.caption" class="video-caption">{{ block.caption }}</p>
-              </div>
-            </div>
-          </div>
-        </article>
-
-        <!-- SECCIÓN NOTICIAS RELACIONADAS -->
-        <div class="mt-16 bg-slate-200">
-          <h2 class="text-[1.5vw] font-bold text-gray-800 border-l-4 border-[#E03636] pl-4 text-center">            
-            <span class="text-[#E03636]">Artículos Relacionados</span>
-          </h2>
-          <hr class="border-black border-t-2 mx-[5vw]">
+      <div class="mx-[5vw] px-4 z-10 relative mt-[2.3vh]">
+        <div class="flex flex-row gap-[2vw] h-full items-center">
           
-          <div v-if="loadingRelacionadas" class="flex justify-center py-8">
-            <div class="inline-block w-8 h-8 border-4 border-[#E03636] border-t-transparent rounded-full animate-spin"></div>
-          </div>
-
-          <div v-else-if="noticiasRelacionadas.length > 0" class="relative">
-            <button 
-              v-if="noticiasRelacionadas.length > 2"
-              @click="anteriorRelacionada"
-              :disabled="relacionadaCurrentIndex === 0"
-              class="absolute left-0 top-1/2 -translate-y-1/2 z-10 py-2 hover:bg-[#E03636] hover:text-white text-[#E03636] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <svg class="w-[3vw] h-[4vw]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7"></path>
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 19l-7-7 7-7"></path>
-              </svg>
-            </button>
-
-            <div class="overflow-hidden mx-8">
-              <div 
-                class="flex transition-transform duration-500 ease-in-out gap-6"
-                :style="{ transform: `translateX(-${relacionadaCurrentIndex * (100 / noticiasPorPagina)}%)` }"
+          <div class="w-[60%] p-[0.8vw] rounded-2xl shadow-left-column" 
+              :style="{ backgroundColor: 'rgba(190, 0, 0, 0.60)' }">
+            
+            <!-- FILA 1 -->
+            <div class="grid grid-cols-3 gap-[.6vh] mb-[1.8vh]">
+              <div v-for="persona in fila1" :key="persona.id" 
+                class="text-center cursor-pointer group"
+                @click="selectedImage = { 
+                  img: persona.imagen, 
+                  text: persona.textoCompleto, 
+                  nombre: persona.nombre, 
+                  apellido: persona.apellido, 
+                  cargo: persona.cargo 
+                }"
               >
-                <div 
-                  v-for="(relacionada, idx) in noticiasRelacionadas"
-                  :key="idx"
-                  class="flex-shrink-0 w-full md:w-[calc(50%-12px)] transition-all cursor-pointer overflow-hidden"
-                  @click="verNoticiaRelacionada(relacionada)"
-                >
-                  <div class="p-5">
-                    <h3 class="text-xl font-bold text-gray-900 mb-3 leading-tight">
-                      <span v-html="formatTitleWithColors(relacionada.title)"></span>
-                    </h3>
-                    <p class="text-gray-600 line-clamp-3">{{ relacionada.excerpt }}</p>
+                <div class="relative w-[16vh] h-[16vh] mx-auto">
+                  <div class="w-full h-full rounded-full overflow-hidden border-4 circle-shadow transition-all duration-300 group-hover:scale-[1.3] group-hover:relative group-hover:z-50" 
+                      style="border-color: #E4D294;">
+                    <SafeImage 
+                      :src="persona.imagen" 
+                      :alt="persona.nombre"
+                      image-class="w-full h-full object-cover"
+                      :max-retries="8"
+                      :persistent="true"
+                      loading-strategy="lazy"
+                    />
                   </div>
                 </div>
+                <p class="mt-2 text-white font-semibold drop-shadow text-[2.3vh]">{{ persona.nombre }}</p>
+                <p class="text-white font-semibold drop-shadow text-[2.3vh]">{{ persona.apellido }}</p>
+                <p class="text-gray-200 drop-shadow text-[1.8vh]">{{ persona.cargoPartido.toUpperCase() }}</p>
+                <p class="text-gray-200 drop-shadow text-[1.8vh]">{{ persona.partido.toUpperCase() }}</p>
               </div>
             </div>
 
-            <button 
-              v-if="noticiasRelacionadas.length > 2"
-              @click="siguienteRelacionada"
-              :disabled="relacionadaCurrentIndex >= maxRelacionadaIndex"
-              class="absolute right-0 top-1/2 -translate-y-1/2 z-10 py-2 hover:bg-[#E03636] hover:text-white text-[#E03636] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <svg class="w-[3vw] h-[4vw]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7"></path>
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 5l7 7-7 7"></path>
-              </svg>
-            </button>
+            <!-- FILA 2 -->
+            <div class="grid grid-cols-3 gap-[.6vh]">
+              <div v-for="persona in fila2" :key="persona.id" 
+                class="text-center cursor-pointer group"
+                @click="selectedImage = { 
+                  img: persona.imagen, 
+                  text: persona.textoCompleto, 
+                  nombre: persona.nombre, 
+                  apellido: persona.apellido, 
+                  cargo: persona.cargo 
+                }"
+              >
+                <div class="relative w-[16vh] h-[16vh] mx-auto">
+                  <div class="w-full h-full rounded-full overflow-hidden border-4 circle-shadow transition-all duration-300 group-hover:scale-[1.3] group-hover:relative group-hover:z-50" 
+                      style="border-color: #E4D294;">
+                    <SafeImage 
+                      :src="persona.imagen" 
+                      :alt="persona.nombre"
+                      image-class="w-full h-full object-cover"
+                      :max-retries="8"
+                      :persistent="true"
+                      loading-strategy="lazy"
+                    />
+                  </div>
+                </div>
+                <p class="mt-2 text-white font-semibold drop-shadow text-[2.3vh]">{{ persona.nombre }}</p>
+                <p class="text-white font-semibold drop-shadow text-[2.3vh]">{{ persona.apellido }}</p>
+                <p class="text-gray-200 drop-shadow text-[1.8vh]">{{ persona.cargoPartido.toUpperCase() }}</p>
+                <p class="text-gray-200 drop-shadow text-[1.8vh]">{{ persona.partido.toUpperCase() }}</p>
+              </div>
+            </div>
           </div>
-
-          <div v-else class="text-center py-8 bg-gray-50 rounded-xl">
-            <p class="text-gray-500">No hay noticias relacionadas disponibles en este momento.</p>
+          
+          <!-- PANEL DERECHO - SENADOR SELECCIONADO -->
+          <div class="w-[40%] flex flex-col items-center justify-center px-[3.0vh] py-[1.0vh] rounded-2xl shadow-right-column"
+              :style="{ backgroundColor: 'rgba(0, 0, 0, 0.0)' }">
+            <div class="w-[29vh] h-[29vh] rounded-full overflow-hidden mb-[.9vh] transition-all duration-300 circle-shadow-large border-[.4vh]" 
+                style="border-color: #E4D294;">
+              <SafeImage 
+                :src="selectedImage.img" 
+                :alt="selectedImage.nombre"
+                image-class="w-full h-full object-cover"
+                :max-retries="8"
+                :persistent="true"
+                loading-strategy="eager"
+              />
+            </div>
+            <h3 class="text-[2.9vh] font-bold text-white drop-shadow-lg text-center">
+              {{ selectedImage.nombre }}
+            </h3>
+            <h3 class="text-[2.9vh] font-bold text-white drop-shadow-lg mb-[.8vh] text-center">
+              {{ selectedImage.apellido }}
+            </h3>
+            <p class="text-gray-100 drop-shadow-lg mb-[.8vh] text-center text-[2.0vh]">
+              {{ selectedImage.cargo }}
+            </p>
+            <div class="text-center">
+              <p class="text-white drop-shadow-lg leading-relaxed text-[1.9vh] text-justify" v-html="selectedImage.text">
+              </p>
+            </div>
           </div>
         </div>
-      </template>
+      </div>
+      <ScrollProgress
+        :scrolled="scrolled"
+        :scroll-progress="scrollProgress"
+      />
+    </section>
+    <!-- SECCIÓN 2 - COMISIONES Y COMITES (VERSIÓN ORIGINAL) -->
+    <div 
+      id="comisiones-y-comites"
+      ref="seccion2Ref" 
+      class="scroll-section opacity-0 transition-all duration-800 ease-out z-10 pt-[4.2vw]"
+      :class="{ 'animate-in': isSeccion2Visible }"
+      style="height: 100vh; position: relative; background: white; overflow-y: auto;"
+    >
+      <div class="mx-[5vw] px-4 h-full flex flex-col">
+        <div class="bg-[#E03636] rounded-lg flex-shrink-0">
+          <h2 class="text-[2.2vw] font-bold text-center text-white py-[0.5vw] tracking-wide">
+            COMISIONES Y COMITÉS
+          </h2>
+        </div>
 
-      <!-- Noticia no encontrada -->
-      <div v-else-if="!pending && !noticiaData?.noticia && !error" class="text-center py-12 bg-white rounded-xl">
-        <h1 class="text-2xl font-bold text-gray-800 mb-4">Noticia no encontrada</h1>
-        <p class="text-gray-500 mb-6">Lo sentimos, la noticia que buscas no existe o ha sido removida.</p>
-        <NuxtLink to="/centro-de-noticias" class="inline-block bg-[#E03636] text-white px-6 py-3 rounded-lg hover:bg-[#C12F2F] transition">
-          Ver todas las noticias
-        </NuxtLink>
+        <div class="flex flex-col md:flex-row gap-6 flex-1 items-center">
+          
+          <!-- COLUMNA IZQUIERDA: Lista de comisiones -->
+          <div class="w-full md:w-[40%]">
+            <button
+              v-for="comision in comisionesList"
+              :key="comision.id"
+              @click="seleccionarComision(comision)"
+              :class="[
+                'w-full py-[0.3vw] px-4 rounded-lg font-semibold transition-all duration-300 text-left',
+                comisionSeleccionada?.id === comision.id 
+                  ? 'bg-[#E03636] text-white' 
+                  : 'bg-white text-[#E03636] border border-[#E03636] hover:bg-[#E03636] hover:text-white'
+              ]"
+              class="text-[0.9vw]"
+            >
+              {{ comision.nombre }}
+            </button>
+          </div>
+
+          <!-- COLUMNA DERECHA: Detalle de la comisión -->
+          <div class="w-full md:w-[60%] bg-gray-400/90 rounded-lg text-[0.98vw]">
+            <div v-if="comisionSeleccionada">
+              <h3 class="text-[1.56vw] font-bold text-white drop-shadow-md text-center">
+                {{ comisionSeleccionada.nombre }}
+              </h3>
+
+              <!-- GRUPO 1 -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-0">
+                <div v-for="(miembro, idx) in comisionSeleccionada.miembrosGrupo1" :key="'g1-'+idx" 
+                    class="flex items-center gap-0 p-[0.8vw] rounded-lg pl-[1.8vw] overflow-visible">
+                  <div class="w-[6.8vw] h-[6.8vw] flex-shrink-0 rounded-full overflow-visible transition-all duration-700 hover:scale-[2.5] hover:z-50">
+                    <img 
+                      :src="miembro.foto" 
+                      :alt="miembro.nombre"
+                      class="w-full h-full rounded-full object-cover"
+                    />
+                  </div>
+                  <div class="text-white text-center text-[0.98vw] flex-1">
+                    <p class="font-bold drop-shadow-md">{{ miembro.cargo }}</p>
+                    <p class="drop-shadow-md">{{ miembro.nombre }} {{ miembro.apellido }}</p>
+                    <p class="drop-shadow-md">{{ miembro.partido }}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="py-[0.39vw] bg-[#E03636]">
+                <h4 class="font-semibold text-white text-[0.93vw] text-center">{{ comisionSeleccionada.tituloLinea1 }}</h4>
+              </div>
+
+              <!-- GRUPO 2 -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-0">
+                <div v-for="(miembro, idx) in comisionSeleccionada.miembrosGrupo2" :key="'g2-'+idx" 
+                    class="flex items-center gap-0 p-[0.8vw] rounded-lg pl-[1.8vw] overflow-visible">
+                  <div class="w-[6.8vw] h-[6.8vw] flex-shrink-0 rounded-full overflow-visible transition-all duration-700 hover:scale-[2.5] hover:z-50">
+                    <img 
+                      :src="miembro.foto" 
+                      :alt="miembro.nombre"
+                      class="w-full h-full rounded-full object-cover"
+                    />
+                  </div>
+                  <div class="text-white text-center text-[0.98vw] flex-1">
+                    <p class="font-bold drop-shadow-md">{{ miembro.cargo }}</p>
+                    <p class="drop-shadow-md">{{ miembro.nombre }} {{ miembro.apellido }}</p>
+                    <p class="drop-shadow-md">{{ miembro.partido }}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="py-[0.39vw] bg-[#E03636]">
+                <h4 class="text-[0.93vw] font-semibold text-white text-center">{{ comisionSeleccionada.tituloLinea2 }}</h4>
+              </div>
+
+              <!-- GRUPO 3 -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-0">
+                <div v-for="(miembro, idx) in comisionSeleccionada.miembrosGrupo3" :key="'g3-'+idx" 
+                    class="flex items-center gap-0 p-[0.8vw] rounded-lg pl-[1.8vw] overflow-visible">
+                  <div class="w-[6.8vw] h-[6.8vw] flex-shrink-0 rounded-full overflow-visible transition-all duration-700 hover:scale-[2.5] hover:z-50">
+                    <img 
+                      :src="miembro.foto" 
+                      :alt="miembro.nombre"
+                      class="w-full h-full rounded-full object-cover"
+                    />
+                  </div>
+                  <div class="text-white text-center text-[0.98vw] flex-1">
+                    <p class="font-bold drop-shadow-md">{{ miembro.cargo }}</p>
+                    <p class="drop-shadow-md">{{ miembro.nombre }} {{ miembro.apellido }}</p>
+                    <p class="drop-shadow-md">{{ miembro.partido }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div v-else class="flex items-center justify-center h-96">
+              <p class="text-gray-500 text-lg">Seleccione una comisión o comité para ver sus miembros</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== SECCIÓN 3 - BRIGADAS PARLAMENTARIAS ==================== -->
+    <div 
+      id="brigadas-parlamentarias"
+      ref="seccion3Ref" 
+      class="scroll-section opacity-0 transition-all duration-800 ease-out delay-200 z-10"
+      :class="{ 'animate-in': isSeccion3Visible }"
+      style="height: 100vh; position: relative; background: transparent; display: flex; flex-direction: column; overflow-y: auto;"
+    >
+      <div class="w-full text-center mt-[4.1vw] mb-0 relative py-[.2em] flex-shrink-0">
+        <div class="absolute top-0 left-0 h-[2px] bg-[#E4D294] animate-slide-right"></div>
+        <div class="absolute bottom-0 right-0 h-[2px] bg-[#E4D294] animate-slide-left"></div>
+        <div class="absolute top-0 right-0 w-[2px] bg-[#E4D294] animate-slide-down"></div>
+        <div class="absolute bottom-0 left-0 w-[2px] bg-[#E4D294] animate-slide-up"></div>
+        
+        <h2 class="text-[3vw] text-white font-semibold bg-[#E03636]">
+          Brigadas Parlamentarias
+        </h2>
+      </div>
+      
+      <div class="mx-auto px-4 z-10 relative w-full flex-1 flex flex-col justify-center">
+        <!-- SKELETON LOADER -->
+        <div v-if="!departamentosLoaded" class="flex flex-col items-center justify-center" style="min-height: 60vh;">
+          <div class="animate-spin rounded-full h-16 w-16 border-4 border-[#E03636] border-t-transparent mb-4"></div>
+          <p class="text-white text-lg">Cargando brigadas parlamentarias...</p>
+        </div>
+        
+        <!-- CONTENIDO REAL -->
+        <template v-else>
+          <div v-if="!departamentoSeleccionado" class="flex flex-col items-center justify-center">
+            <div class="grid grid-cols-5 gap-8 mb-8">
+              <div v-for="dep in departamentos.slice(0,5)" :key="dep.id" 
+                  @click="seleccionarDepartamento(dep)"
+                  class="cursor-pointer transition-all duration-300 hover:scale-[1.5] text-center group relative hover:z-50">
+                <div v-html="dep.escudoDorado" 
+                    class="w-[15vw] h-[15vw] mx-auto transition-all duration-300 group-hover:opacity-0"></div>
+                <div v-html="dep.escudoReal" 
+                    class="w-[15vw] h-[15vw] mx-auto absolute top-0 left-0 right-0 transition-all duration-300 opacity-0 group-hover:opacity-100 group-hover:z-10"></div>
+                <p class="text-center text-white mt-2 text-[2.4vh] font-semibold relative z-0">{{ dep.nombre }}</p>
+              </div>
+            </div>
+            <div class="grid grid-cols-4 gap-8">
+              <div v-for="dep in departamentos.slice(5,9)" :key="dep.id" 
+                  @click="seleccionarDepartamento(dep)"
+                  class="cursor-pointer transition-all duration-300 hover:scale-[1.5] text-center group relative hover:z-50">
+                <div v-html="dep.escudoDorado" 
+                    class="w-[15vw] h-[15vw] mx-auto transition-all duration-300 group-hover:opacity-0"></div>
+                <div v-html="dep.escudoReal" 
+                    class="w-[15vw] h-[15vw] mx-auto absolute top-0 left-0 right-0 transition-all duration-300 opacity-0 group-hover:opacity-100 group-hover:z-10"></div>
+                <p class="text-center text-white mt-2 text-[2.4vh] font-semibold relative z-0">{{ dep.nombre }}</p>
+              </div>
+            </div>
+          </div>
+          
+          <transition name="fade-fast" mode="out-in">
+            <div v-if="departamentoSeleccionado" :key="departamentoSeleccionado?.id" class="w-full flex flex-col justify-center items-center px-[5vw]">
+              <div class="grid grid-cols-9 gap-5">
+                <div v-for="dep in departamentos" :key="dep.id" 
+                    @click="seleccionarDepartamento(dep)"
+                    class="cursor-pointer text-center group relative">
+                  <div v-html="departamentoSeleccionado?.id === dep.id ? dep.escudoReal : dep.escudoDorado" 
+                      class="w-[7.5vw] h-[7.5vw] mx-auto transition-all duration-500 group-hover:opacity-0 group-hover:scale-[2.0] group-hover:translate-y-[2vw]"></div>
+                  <div v-html="dep.escudoReal" 
+                      class="w-[5.5vw] h-[5.5vw] mx-auto absolute top-0 left-0 right-0 transition-all duration-500 opacity-0 group-hover:opacity-100 group-hover:scale-[2.0] group-hover:translate-y-[2vw] group-hover:z-50"></div>
+                  <p class="text-center text-white text-[2.0vh] mt-1 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,1)]">{{ dep.nombre }}</p>
+                </div>
+              </div>
+              
+              <div class="bg-[rgba(190,0,0,0.6)] pt-[2vw] px-[2vw] pb-[1vw] rounded-lg w-full">
+                <div class="grid grid-cols-5 gap-2 mb-[1vw]">
+                  <div class="text-center">
+                    <div class="text-[1.5vh] mt-[4vw] inline-block px-1 py-2 rounded-full text-white font-semibold w-[12vw]" 
+                        :style="{ backgroundColor: 'rgba(224, 54, 54, 0.8)' }">
+                        TITULARES
+                    </div>
+                  </div>
+                  <div v-for="(titular, index) in titulares" :key="'titular-'+index" class="text-center">
+                    <div class="w-[12vh] h-[12vh] mx-auto rounded-full overflow-hidden mb-2 transition-all duration-300 hover:scale-[2.6]">
+                      <SafeImage 
+                        :src="titular.imagen" 
+                        :alt="titular.nombre"
+                        image-class="w-full h-full object-cover"
+                        :max-retries="8"
+                        :persistent="true"
+                        loading-strategy="lazy"
+                      />
+                    </div>
+                    <p class="text-[1.4vh] text-white font-semibold">{{ titular.nombre }}</p>
+                    <p class="text-[1.4vh] text-white font-semibold">{{ titular.apellido }}</p>
+                    <p v-if="titular.nombre" class="text-gray-300 text-[1.4vh]">{{ titular.partido.toUpperCase() }}</p>
+                  </div>
+                </div>
+                
+                <div class="grid grid-cols-5 gap-2">
+                  <div class="text-center">
+                    <div class="text-[1.5vh] mt-[5vw] inline-block px-6 py-2 rounded-full text-white font-semibold w-[12vw]" 
+                        :style="{ backgroundColor: 'rgba(224, 54, 54, 0.8)' }">
+                        SUPLENTES
+                    </div>
+                  </div>
+                  <div v-for="(suplente, index) in suplentes" :key="'suplente-'+index" class="text-center">
+                    <div v-if="suplente.nombre" class="w-[12vh] h-[12vh] mx-auto rounded-full overflow-hidden mb-2 transition-all duration-300 hover:scale-[2.6]">
+                      <SafeImage 
+                        :src="suplente.imagen" 
+                        :alt="suplente.nombre"
+                        image-class="w-full h-full object-cover"
+                        :max-retries="8"
+                        :persistent="true"
+                        loading-strategy="lazy"
+                      />
+                    </div>
+                    <p class="text-white font-semibold text-[1.4vh]">{{ suplente.nombre }}</p>
+                    <p class="text-white font-semibold text-[1.4vh]">{{ suplente.apellido }}</p>
+                    <p v-if="suplente.nombre" class="text-gray-300 text-[1.4vh]">{{ suplente.partido.toUpperCase() }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </transition>
+        </template>
+      </div>
+    </div>
+
+    <!-- ==================== SECCIÓN 4 - BANCADAS POLÍTICAS ==================== -->
+    <div 
+      id="bancadas-politicas"
+      ref="seccion4Ref" 
+      class="scroll-section opacity-0 transition-all duration-800 ease-out delay-400 z-10"
+      :class="{ 'animate-in': isSeccion4Visible }"
+      style="height: 100vh; position: relative; background: transparent; overflow-y: auto;"
+    >
+      <div class="w-full text-center mt-[4.1vw] bg-white relative flex-shrink-0">
+        <div class="absolute top-0 left-0 h-[1px] bg-[#E4D294] animate-slide-right"></div>
+        <div class="absolute bottom-0 right-0 h-[1px] bg-[#E4D294] animate-slide-left"></div>
+        <div class="absolute top-0 right-0 w-[1px] bg-[#E4D294] animate-slide-down"></div>
+        <div class="absolute bottom-0 left-0 w-[1px] bg-[#E4D294] animate-slide-up"></div>
+        
+        <h2 class="text-[3vw] text-[#E03636] font-semibold bg-white">
+          Bancadas Políticas
+        </h2>
+      </div>
+
+      <div class="mx-[5vw] px-4 z-10 relative pb-8">
+        <transition name="fade-scale" mode="out-in">
+          <div v-if="!partidoSeleccionado" key="initial" class="flex flex-col items-center justify-center" style="min-height: 80vh;">
+            <div class="flex justify-center gap-12">
+              <div v-for="partido in partidos" :key="partido.id" 
+                  @click="seleccionarPartido(partido)"
+                  class="cursor-pointer transition-all duration-300 hover:scale-105 text-center items-center">
+                <div v-html="partido.iconoBlanco" class="w-[18vw] h-[18vw] mx-auto"></div>
+                <p class="text-center text-white mt-3 text-[2.5vh] font-semibold">{{ partido.nombre }}</p>
+              </div>
+            </div>
+          </div>
+        </transition>
+
+        <transition name="fade-scale" mode="out-in">
+          <div v-if="partidoSeleccionado" key="selected" class="w-full">
+            <div class="flex justify-center gap-8 mb-2">
+              <div v-for="partido in partidos" :key="partido.id" 
+                  @click="seleccionarPartido(partido)"
+                  class="cursor-pointer transition-all duration-300 text-center"
+                  :class="{ 'transform scale-90': partidoSeleccionado?.id === partido.id }">
+                <div class="w-[12vh] h-[12vh] rounded-full flex items-center justify-center mx-auto transition-all duration-300 hover:scale-[1.6] hover:translate-y-[1vw]"
+                    :style="{ backgroundColor: partidoSeleccionado?.id === partido.id ? 'rgba(228,210,148,0.2)' : 'rgba(255,255,255,0.1)' }">
+                  <div v-html="partidoSeleccionado?.id === partido.id ? partido.iconoDorado : partido.iconoBlanco" 
+                      class="w-full h-full"></div>
+                </div>
+                <p class="text-center text-white text-xs mt-1">{{ partido.nombreCorto }}</p>
+              </div>
+            </div>
+
+            <div class="bg-red-700 rounded-lg px-6 py-1 flex items-center justify-between">
+              <button 
+                @click="toggleTipoMiembros"
+                class="bg-[#E03636] hover:bg-red-900 text-white font-semibold px-[1.5vw] py-[.1vw] rounded-lg transition-colors">
+                {{ mostrarSuplentes ? 'VER TITULARES' : 'VER SUPLENTES' }}
+              </button>
+              <h3 class="text-white font-bold text-[2vw]">{{ partidoSeleccionado?.nombre }}</h3>
+              <div class="w-[15vw]"></div>
+            </div>
+
+            <transition name="fade-scale" mode="out-in">
+              <div :key="mostrarSuplentes ? 'suplentes' : 'titulares'" class="-mt-1 bg-[rgba(190,0,0,0.6)] ">
+                
+                <!-- PDC -->
+                <div v-if="partidoSeleccionado?.id === 'pdc'" class="group pt-2 rounded-lg aspect-[3000/800] w-100 m-auto">
+                  <div class="grid grid-cols-6 mb-[.5vw]">
+                    <div v-for="(persona, index) in miembrosMostrar.slice(0,6)" :key="persona.nombre" class="text-center">
+                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40">
+                        <SafeImage 
+                          :src="persona.imagen" 
+                          :alt="persona.nombre"
+                          image-class="w-full h-full object-cover"
+                          :max-retries="8"
+                          :persistent="true"
+                          loading-strategy="lazy"
+                        />
+                      </div>
+                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre }}</p>
+                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido }}</p>
+                      <p class="text-gray-200 text-[1.4vh] drop-shadow-lg">{{ persona.departamento }}</p>
+                    </div>
+                  </div>
+                  <div class="grid grid-cols-5 mb-[.5vw]">
+                    <div v-for="(persona, index) in miembrosMostrar.slice(6,11)" :key="persona.nombre" class="text-center">
+                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40">
+                        <SafeImage 
+                          :src="persona.imagen" 
+                          :alt="persona.nombre"
+                          image-class="w-full h-full object-cover"
+                          :max-retries="8"
+                          :persistent="true"
+                          loading-strategy="lazy"
+                        />
+                      </div>
+                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre }}</p>
+                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido }}</p>
+                      <p class="text-gray-200 text-[1.4vh] drop-shadow-lg">{{ persona.departamento }}</p>
+                    </div>
+                  </div>
+                  <div class="grid grid-cols-5">
+                    <div v-for="(persona, index) in miembrosMostrar.slice(11,16)" :key="persona.nombre" class="text-center">
+                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40 hover:translate-y-[-2vw]">
+                        <SafeImage 
+                          :src="persona.imagen" 
+                          :alt="persona.nombre"
+                          image-class="w-full h-full object-cover"
+                          :max-retries="8"
+                          :persistent="true"
+                          loading-strategy="lazy"
+                        />
+                      </div>
+                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre }}</p>
+                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido }}</p>
+                      <p class="text-gray-200 text-[1.4vh] drop-shadow-lg">{{ persona.departamento }}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- LIBRE -->
+                <div v-else-if="partidoSeleccionado?.id === 'libre'" class="group pt-2 rounded-lg aspect-[3000/800] w-100 m-auto">
+                  <div class="grid grid-cols-4 mb-[.5vw]">
+                    <div v-for="(persona, index) in miembrosMostrar.slice(0,4)" :key="persona.nombre" class="text-center">
+                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40">
+                        <SafeImage 
+                          :src="persona.imagen" 
+                          :alt="persona.nombre"
+                          image-class="w-full h-full object-cover"
+                          :max-retries="8"
+                          :persistent="true"
+                          loading-strategy="lazy"
+                        />
+                      </div>
+                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre }}</p>
+                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido }}</p>
+                      <p class="text-gray-200 text-[1.4vh] drop-shadow-lg">{{ persona.departamento }}</p>
+                    </div>
+                  </div>
+                  <div class="grid grid-cols-4 mb-[.5vw]">
+                    <div v-for="(persona, index) in miembrosMostrar.slice(4,8)" :key="persona.nombre" class="text-center">
+                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40">
+                        <SafeImage 
+                          :src="persona.imagen" 
+                          :alt="persona.nombre"
+                          image-class="w-full h-full object-cover"
+                          :max-retries="8"
+                          :persistent="true"
+                          loading-strategy="lazy"
+                        />
+                      </div>
+                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre }}</p>
+                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido }}</p>
+                      <p class="text-gray-200 text-[1.4vh] drop-shadow-lg">{{ persona.departamento }}</p>
+                    </div>
+                  </div>
+                  <div class="grid grid-cols-4">
+                    <div v-for="(persona, index) in miembrosMostrar.slice(8,12)" :key="persona.nombre" class="text-center">
+                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40 hover:translate-y-[-2vw]">
+                        <SafeImage 
+                          :src="persona.imagen" 
+                          :alt="persona.nombre"
+                          image-class="w-full h-full object-cover"
+                          :max-retries="8"
+                          :persistent="true"
+                          loading-strategy="lazy"
+                        />
+                      </div>
+                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre }}</p>
+                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido }}</p>
+                      <p class="text-gray-200 text-[1.4vh] drop-shadow-lg">{{ persona.departamento }}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- ALIANZA -->
+                <div v-else-if="partidoSeleccionado?.id === 'alianza'" class="group pt-2 rounded-lg aspect-[3000/800] w-100 m-auto">
+                  <div class="grid grid-cols-3 mb-[.5vw]">
+                    <div v-for="(persona, index) in miembrosMostrar.slice(0,3)" :key="persona.nombre" class="text-center">
+                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40">
+                        <SafeImage 
+                          :src="persona.imagen" 
+                          :alt="persona.nombre"
+                          image-class="w-full h-full object-cover"
+                          :max-retries="8"
+                          :persistent="true"
+                          loading-strategy="lazy"
+                        />
+                      </div>
+                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre }}</p>
+                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido }}</p>
+                      <p class="text-gray-200 text-[1.4vh] drop-shadow-lg">{{ persona.departamento }}</p>
+                    </div>
+                  </div>
+                  <div class="grid grid-cols-3 mb-[.5vw]">
+                    <div v-for="(persona, index) in miembrosMostrar.slice(3,6)" :key="persona.nombre" class="text-center">
+                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40">
+                        <SafeImage 
+                          :src="persona.imagen" 
+                          :alt="persona.nombre"
+                          image-class="w-full h-full object-cover"
+                          :max-retries="8"
+                          :persistent="true"
+                          loading-strategy="lazy"
+                        />
+                      </div>
+                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre }}</p>
+                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido }}</p>
+                      <p class="text-gray-200 text-[1.4vh] drop-shadow-lg">{{ persona.departamento }}</p>
+                    </div>
+                  </div>
+                  <div class="grid grid-cols-3">
+                    <div v-if="miembrosMostrar[6]" class="text-center">
+                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40 hover:translate-y-[-2vw]">
+                        <SafeImage 
+                          :src="miembrosMostrar[6].imagen" 
+                          :alt="miembrosMostrar[6].nombre"
+                          image-class="w-full h-full object-cover"
+                          :max-retries="8"
+                          :persistent="true"
+                          loading-strategy="lazy"
+                        />
+                      </div>
+                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ miembrosMostrar[6].nombre }}</p>
+                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ miembrosMostrar[6].apellido }}</p>
+                      <p class="text-gray-200 text-[1.4vh] drop-shadow-lg">{{ miembrosMostrar[6].departamento }}</p>
+                    </div>
+                    <div></div>
+                    <div></div>
+                  </div>
+                </div>
+
+                <!-- SUMATE -->
+                <div v-else-if="partidoSeleccionado?.id === 'sumate'" class="group pt-2 rounded-lg aspect-[3000/800] w-100 m-auto">
+                  <div class="flex justify-center">
+                    <div v-if="miembrosMostrar[0]" class="text-center">
+                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40">
+                        <SafeImage 
+                          :src="miembrosMostrar[0].imagen" 
+                          :alt="miembrosMostrar[0].nombre"
+                          image-class="w-full h-full object-cover"
+                          :max-retries="8"
+                          :persistent="true"
+                          loading-strategy="lazy"
+                        />
+                      </div>
+                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ miembrosMostrar[0].nombre }}</p>
+                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ miembrosMostrar[0].apellido }}</p>
+                      <p class="text-gray-200 text-[1.4vh] drop-shadow-lg">{{ miembrosMostrar[0].departamento }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </transition>
+          </div>
+        </transition>
       </div>
     </div>
   </div>
 </template>
-
 <script setup>
-import { ref, computed, onMounted, onUnmounted, watch, nextTick, onActivated } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { ref, onMounted, onUnmounted, nextTick, watch, computed } from 'vue'
+import { useRoute } from 'vue-router'
+import { useDepartamentosStore } from '@/stores/departamentosStore'
+import { useScrollEffects } from '@/composables/useScrollEffects'
+import ScrollProgress from '@/components/UI/ScrollProgress.vue'
+import { partidosData } from '~/data/partidos'
+import SafeImage from '@/components/SafeImage.vue'
 
+// ==================== STORE ====================
+const departamentosStore = useDepartamentosStore()
+const departamentos = computed(() => departamentosStore.getDepartamentos || [])
+const departamentosLoaded = computed(() => departamentosStore.isLoaded)
+
+// ==================== DATOS SECCIÓN 1 ====================
+const { scrolled, scrollProgress, initScrollListener, removeScrollListener } = useScrollEffects()
 const route = useRoute()
-const router = useRouter()
 
-const API_BASE_URL = 'http://demoback.senado.gob.bo/api'
+const seccion1Ref = ref(null)
+const seccion2Ref = ref(null)
+const seccion3Ref = ref(null)
+const seccion4Ref = ref(null)
 
-const windowLocation = ref('')
-const currentIndex = ref(0)
-const imagenesCarrusel = ref([])
-const errorMsg = ref(null)
+const isSeccion1Visible = ref(true)
+const isSeccion2Visible = ref(false)
+const isSeccion3Visible = ref(false)
+const isSeccion4Visible = ref(false)
 
-const noticiasRelacionadas = ref([])
-const relacionadaCurrentIndex = ref(0)
-const loadingRelacionadas = ref(true)
-
-const noticiasPorPagina = 2
-const maxRelacionadaIndex = computed(() => Math.max(0, Math.ceil(noticiasRelacionadas.value.length / noticiasPorPagina) - 1))
-
-// ============================================
-// 🔥 PRIMERO: useAsyncData - OBTENER LOS DATOS
-// ============================================
-const { data: noticiaData, pending, error, refresh } = await useAsyncData(
-  `noticia-${route.params.slug}`,
-  async () => {
-    console.log(`🚀 Buscando noticia por slug: ${route.params.slug}`)
-    
-    try {
-      const response = await fetch(`${API_BASE_URL}/content/slug/${route.params.slug}`)
-      
-      if (!response.ok) {
-        if (response.status === 404) {
-          return { noticia: null, imagenes: [] }
-        }
-        throw new Error(`Error ${response.status}: ${response.statusText}`)
-      }
-      
-      const result = await response.json()
-      const noticia = result.data
-      
-      console.log(`✅ Noticia encontrada: ${noticia.title}`)
-      
-      const imagenes = []
-      
-      if (noticia.featuredImage?.url) {
-        imagenes.push({
-          url: noticia.featuredImage.url,
-          alt: noticia.featuredImage.alt || noticia.title,
-          caption: noticia.featuredImage.caption || noticia.featuredImage.name || noticia.title,
-          orientation: 'horizontal'
-        })
-      }
-      
-      if (noticia.gallery && Array.isArray(noticia.gallery)) {
-        noticia.gallery.forEach((img, idx) => {
-          imagenes.push({
-            url: img.url,
-            alt: img.alt || noticia.title,
-            caption: img.caption || img.name || `Imagen ${idx + 1}`,
-            orientation: 'horizontal'
-          })
-        })
-      }
-      
-      if (imagenes.length === 0) {
-        imagenes.push(
-          { url: 'https://picsum.photos/id/1015/1920/1080', alt: 'Paisaje montañoso', caption: 'Vista panorámica del Senado', orientation: 'horizontal' },
-          { url: 'https://picsum.photos/id/104/1080/1920', alt: 'Edificio institucional', caption: 'Fachada principal del Senado', orientation: 'vertical' },
-          { url: 'https://picsum.photos/id/15/1920/1080', alt: 'Naturaleza boliviana', caption: 'Sala de sesiones', orientation: 'horizontal' }
-        )
-      }
-      
-      let blocks = noticia.blocks || []
-      if (blocks.length === 0 && noticia.content) {
-        blocks = convertirHTMLaBloques(noticia.content)
-      }
-      
-      const noticiaEnriquecida = {
-        ...noticia,
-        blocks: blocks,
-        categoria: noticia.category
-      }
-      
-      return { noticia: noticiaEnriquecida, imagenes }
-      
-    } catch (err) {
-      console.error(`❌ Error: ${err.message}`)
-      return { noticia: null, imagenes: [], error: err.message }
-    }
+const fila1 = ref([
+  {
+    id: 1,
+    nombre: 'Diego Esteban Mateo',
+    apellido: 'Ávila Navajas',
+    cargoPartido: 'Presidencia',
+    partido: 'PDC',
+    cargo: 'Presidente del Senado',
+    imagen: '/new/titulares/g2/DIEGO ESTEBAN MATEO ÁVILA NAVAJAS.png',
+    textoCompleto: 'Diego Esteban Mateo Ávila Navajas es economista y docente nacido en Tarija, con amplia experiencia en gestión pública y cooperación internacional. Como actual Presidente del Senado (2025–2026), lidera una gestión enfocada en la transparencia, el diálogo político y el desarrollo productivo, buscando fortalecer la institucionalidad legislativa y la estabilidad democrática de Bolivia.'
   },
   {
-    lazy: false,
-    server: true,
-    default: () => ({ noticia: null, imagenes: [] })
+    id: 2,
+    nombre: 'Carmen Soledad',
+    apellido:'Chapetón Tancara',
+    cargoPartido: 'Primera Vicepresidencia',
+    partido: 'Unidad',
+    cargo: 'Vicepresidente',
+    imagen: '/new/titulares/g1/CARMEN SOLEDAD CHAPETÓN TANCARA.png',
+    textoCompleto: 'C. Soledad Chapetón Tancara, nació en El Alto, es Licenciada en Cs. de la Educación de la UMSA. Fue asambleísta Constituyente y la primera mujer Alcaldesa de El Alto. Su gestión destacó por la Construcción de la Terminal Metropolitana, el Jach\'a Uta, la Estación de bomberos, la revolución del pavimento, impulso más de 80 centros infantiles entre otros proyectos y programas. Actualmente es Senadora, con trayectoria en liderazgo y servicio público.'
+  },
+  {
+    id: 3,
+    nombre: 'Khatia Lisbeth',
+    apellido: 'Quiroga Fernández',
+    cargoPartido: 'Segunda Vicepresidencia',
+    partido: 'Libre',
+    cargo: 'Secretario General',
+    imagen: '/new/titulares/g3/KATHIA LISBETH QUIROGA FERNÁNDEZ.png',
+    textoCompleto: `Kathia Quiroga Fernández, ingeniera en Sistemas y abogada, es Segunda Vicepresidenta de la Cámara de Senadores para el periodo <strong>2025-2026</strong>. Su gestión impulsa la autonomía mediante un nuevo pacto fiscal, la aprobación urgente de la ley 50/50, reformas al sistema de justicia y un medio ambiente libre de contaminación minera.`
   }
-)
+])
 
-// ============================================
-// 🔥 SEGUNDO: Computed que DEPENDEN de noticiaData
-// ============================================
+const fila2 = ref([
+  {
+    id: 4,
+    nombre: 'Yasmin',
+    apellido:'Estívariz Villarroel',
+    cargoPartido: 'Primera Secretaria',
+    partido: 'PDC',
+    cargo: 'Directora de Comunicación',
+    imagen: '/new/titulares/g2/YASMIN ESTIVARIZ VILLARROEL.png',
+    textoCompleto: `Yasmin Estívariz Villarroel, licenciada en Psicología del departamento de Oruro, destaca por su labor en favor de niños con discapacidad. Actualmente ejerce el cargo de Primera Secretaria del Senado, gestión <strong>2025-2026</strong>, donde promueve alianzas estratégicas institucionales para beneficiar a este sector vulnerable. Asimismo, impulsa iniciativas legislativas orientadas a la protección del medio ambiente frente a la minería ilegal, desarrollando una gestión comprometida con el progreso de Oruro y el bienestar de su población.`
+  },
+  {
+    id: 5,
+    nombre: 'Julio',
+    apellido:'Diego Romaña',
+    cargoPartido: 'Segunda Secretaria',
+    partido: 'Libre',
+    cargo: 'Jefe de Protocolo',
+    imagen: '/new/titulares/g3/JULIO DIEGO ROMAÑA GALINDO.png',
+    textoCompleto: `Julio Diego Romaña Galindo es Ingeniero Agrónomo y docente de la Universidad Amazónica de Pando, a sus 33 años fue Vicerrector en la universidad, Senador titular en la gestión <strong>2020-2025</strong> desempeñó funciones como Segundo Secretario y Presidente de la Comisión. Actualmente es el Segundo Secretario de la Cámara de Senadores, su gestión, fiscalización y legislación están enfocada en la incorporación a la red vial fundamental y tramo carreteros buscando transparencia, el dialogo y una democracia participativa.`
+  },
+  {
+    id: 6,
+    nombre: 'Rosa Tatiana',
+    apellido:'Áñez Carrasco',
+    cargoPartido: 'Tercera Secretaria',
+    partido: 'Unidad',
+    cargo: 'Coordinadora Legislativa',
+    imagen: '/new/titulares/g3/ROSA TATIANA AÑEZ CARRASCO.png',
+    textoCompleto: 'Rosa Tatiana Añez Carrasco, abogada de profesión con especialidad en Derecho Procesal Penal, destacando en los diferentes cargos desempeñados, docente universitaria, dos veces Diputada uninominal, proyectista de importantes Leyes para su región, en la actualidad enfocada en el ejercicio de la Tercera Secretaria del Senado, buscando fortalecer la democracia.'
+  }
+])
 
-// Verificar si la noticia tiene contenido válido
-const noticiaValida = computed(() => {
-  const noticia = noticiaData.value?.noticia
-  if (!noticia) return false
-  const tieneTitulo = noticia.title && noticia.title.trim().length > 0
-  const tieneContenido = noticia.blocks?.length > 0 || noticia.content?.length > 0
-  return tieneTitulo && tieneContenido
+const selectedImage = ref({
+  img: fila1.value[0].imagen,
+  text: fila1.value[0].textoCompleto,
+  nombre: fila1.value[0].nombre,
+  apellido: fila1.value[0].apellido,
+  cargo: fila1.value[0].cargo
 })
 
-// SEO dinámico basado en la noticia
-const seoData = computed(() => {
-  const noticia = noticiaData.value?.noticia
-  if (!noticia) {
-    return {
-      title: 'Noticia | Senado de Bolivia',
-      description: 'Noticias del Senado de Bolivia',
-      image: '/images/default-news.jpg'
-    }
-  }
-  
-  const tituloLimpio = noticia.title?.replace(/\*/g, '') || 'Noticia'
-  const descripcion = noticia.excerpt || noticia.description || noticia.content?.substring(0, 160) || 'Noticias del Senado de Bolivia'
-  const imagen = noticia.featuredImage?.url || noticia.gallery?.[0]?.url || '/images/default-news.jpg'
-  
-  return {
-    title: `${tituloLimpio} | Senado de Bolivia`,
-    description: descripcion.substring(0, 160),
-    image: imagen,
-    url: `https://senado.gob.bo/noticias/${route.params.slug}`
-  }
-})
+// ==================== DATOS SECCIÓN 2 - COMISIONES ====================
+const comisionesList = ref([
+  { id: 1, nombre: 'Comisión de Constitución, Derechos Humanos, Legislación y Sistema Electoral' },
+  { id: 2, nombre: 'Comisión de Justicia Plural, Ministerio Público y Defensa Legal del Estado' },
+  { id: 3, nombre: 'Comisión de Seguridad del Estado, Fuerzas Armadas y Policía Boliviana' },
+  { id: 4, nombre: 'Comisión de Organización Territorial del Estado y Autonomías' },
+  { id: 5, nombre: 'Comisión de Planificación, Política Económica y Finanzas' },
+  { id: 6, nombre: 'Comisión de Economía Plural, Producción,Industria e Industrialización' },
+  { id: 7, nombre: 'Comisión de Naciones y Pueblos Indígena Originario Campesinos e Interculturalidad' },
+  { id: 8, nombre: 'Comisión de Política Social, Educación y Salud' },
+  { id: 9, nombre: 'Comisión de Política Internacional' },
+  { id: 10, nombre: 'Comisión de Tierra y Territorio, Recursos Naturales y Medio Ambiente' }
+])
 
-// ============================================
-// 🔥 TERCERO: useHead - SEO (depende de seoData)
-// ============================================
-useHead({
-  title: () => seoData.value.title,
-  meta: [
-    { name: 'description', content: () => seoData.value.description },
-    { property: 'og:title', content: () => seoData.value.title },
-    { property: 'og:description', content: () => seoData.value.description },
-    { property: 'og:image', content: () => seoData.value.image },
-    { property: 'og:url', content: () => seoData.value.url },
-    { property: 'og:type', content: 'article' },
-    { property: 'og:site_name', content: 'Senado de Bolivia' },
-    { name: 'twitter:card', content: 'summary_large_image' },
-    { name: 'twitter:title', content: () => seoData.value.title },
-    { name: 'twitter:description', content: () => seoData.value.description },
-    { name: 'twitter:image', content: () => seoData.value.image }
-  ],
-  link: [
-    { rel: 'canonical', href: () => `https://senado.gob.bo/noticias/${route.params.slug}` }
-  ],
-  script: [
-    {
-      type: 'application/ld+json',
-      children: () => JSON.stringify({
-        '@context': 'https://schema.org',
-        '@type': 'NewsArticle',
-        'headline': seoData.value.title,
-        'description': seoData.value.description,
-        'image': seoData.value.image,
-        'url': seoData.value.url,
-        'publisher': {
-          '@type': 'Organization',
-          'name': 'Senado de Bolivia'
-        },
-        'datePublished': noticiaData.value?.noticia?.publishedAt || new Date().toISOString(),
-        'dateModified': noticiaData.value?.noticia?.updatedAt || new Date().toISOString()
-      })
-    }
-  ]
-})
+const comisionSeleccionada = ref(null)
 
-// ============================================
-// 🔥 CUARTO: RESTO DE FUNCIONES
-// ============================================
-
-const cargarNoticiasRelacionadas = async (noticiaId, categoria, tags) => {
-  loadingRelacionadas.value = true
-  try {
-    const response = await fetch(`${API_BASE_URL}/content/${noticiaId}/related?limit=6`)
-    const result = await response.json()
-    
-    if (result.success && result.data && result.data.length > 0) {
-      noticiasRelacionadas.value = result.data
-    } else {
-      const fallbackResponse = await fetch(`${API_BASE_URL}/content?category=${categoria}&limit=6`)
-      const fallbackResult = await fallbackResponse.json()
-      if (fallbackResult.success && fallbackResult.data?.contents) {
-        noticiasRelacionadas.value = fallbackResult.data.contents.filter(n => n._id !== noticiaId)
-      } else {
-        noticiasRelacionadas.value = []
-      }
-    }
-    relacionadaCurrentIndex.value = 0
-  } catch (err) {
-    console.error('Error cargando noticias relacionadas:', err)
-    noticiasRelacionadas.value = []
-  } finally {
-    loadingRelacionadas.value = false
+const comisionesData = {
+  1: {
+    miembrosGrupo1: [
+      { foto: '/new/titulares/g1/DANIEL ANTONIO ORTIZ VELASQUEZ.png', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Daniel Antonio', apellido:'Ortiz Velasquez', partido: 'PDC' },
+      { foto: '/new/suplentes/g1/REINA ISABEL PALLARES MORALES.png', cargo: 'SENADORA SUPLENTE', nombre: 'Reina Isabel', apellido:'Pallares Morales', partido: 'PDC' }
+    ],
+    tituloLinea1: 'COMITE DE CONSTITUCIÓN, LEGISLACIÓN E INTERPRETACIÓN LEGISLATIVA Y CONSTITUCIONAL',
+    miembrosGrupo2: [
+      { foto: '/new/titulares/g2/FREDDY CASTILLO CHAVEZ.png', cargo: 'SECRETARIO DE COMITÉ', nombre: 'Freddy', apellido:'Castillo Chavez', partido: 'PDC' },
+      { foto: '/new/suplentes/g2/VILLMA COLQUE CAMACHO.png', cargo: 'SENADORA SUPLENTE', nombre: 'Villma ', apellido:'Colque Camacho', partido: 'PDC' }
+    ],
+    tituloLinea2: 'COMITE DE SISTEMA ELECTORAL, DERECHOS HUMANOS Y EQUIDAD SOCIAL',
+    miembrosGrupo3: [
+      { foto: '/new/titulares/g1/TOMASA YARHUI JACOME.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Tomasa', apellido:'Yarhui Jacome', partido: 'PDC' },
+      { foto: '/new/suplentes/g1/HUGO MARCELO CORTEZ CALVIMONTES.png', cargo: 'SENADOR SUPLENTE', nombre: 'Hugo Marcelo', apellido:'Cortez Calvimontes', partido: 'PDC' }
+    ]
+  },
+  2: {
+    miembrosGrupo1: [
+      { foto: '/new/titulares/g3/ERICK NELSON SORUCO ALPIRE.png', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Erick Nelson', apellido:'Soruco Alpire', partido: 'PDC' },
+      { foto: '/new/suplentes/g3/CESIA ROCA ESCALANTE.png', cargo: 'SENADORA SUPLENTE', nombre: 'Cesia', apellido:'Roca Escalante', partido: 'PDC' }
+    ],
+    tituloLinea1: 'COMITÉ DE JUSTICIA PLURAL Y CONSEJO DE LA MAGISTRATURA',
+    miembrosGrupo2: [
+      { foto: '/new/titulares/g1/WILDER VELIZ ARMAS.png', cargo: 'SECRETARIO DE COMITÉ', nombre: 'Wilder', apellido:'Veliz Armas', partido: 'PDC' },
+      { foto: '/new/suplentes/g1/LENNY MAYRA AYALA JUSTINIANO.png', cargo: 'SENADORA SUPLENTE', nombre: 'Lenny Mayra', apellido:'Ayala Justiniano', partido: 'PDC' }
+    ],
+    tituloLinea2: 'COMITÉ DE MINISTERIO PÚBLICO Y DEFENSA LEGAL DEL ESTADO',
+    miembrosGrupo3: [
+      { foto: '/new/titulares/g2/MARIA ISABEL MORENO CORTEZ.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Maria Isabel', apellido:'Moreno Cortez', partido: 'LIBRE' },
+      { foto: '/new/suplentes/g2/ROLANDO VACAFLOR GABRIEL ARANA.png', cargo: 'SENADOR SUPLENTE', nombre: 'Rolando Vacaflor', apellido:'Gabriel Arana', partido: 'LIBRE' }
+    ]
+  },
+  3: {
+    miembrosGrupo1: [
+      { foto: '/new/titulares/g1/JUDITH ROSARIO GARCIA COCA.png', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Judith Rosario', apellido:'Garcia Coca', partido: 'PDC' },
+      { foto: '/new/suplentes/g1/ROYER IVAN MAMANI GARCIA.png', cargo: 'SENADOR SUPLENTE', nombre: 'Royer Ivan', apellido:'Mamani Garcia', partido: 'PDC' }
+    ],
+    tituloLinea1: 'COMITÉ DE FUERZAS ARMADAS Y POLICÍA BOLIVIANA',
+    miembrosGrupo2: [
+      { foto: '/new/titulares/g3/ANA KARINA VELASCO ÁÑEZ.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Ana Karina', apellido:'Velasco Áñez', partido: 'UNIDAD' },
+      { foto: '/new/suplentes/g3/MARCELO MATIAS CARDONA IBAÑEZ.png', cargo: 'SENADOR SUPLENTE', nombre: 'Marcelo Matias', apellido:'Cardona Ibañez', partido: 'UNIDAD' }
+    ],
+    tituloLinea2: 'COMITÉ DE SEGURIDAD DEL ESTADO Y LUCHA CONTRA EL NARCOTRÁFICO',
+    miembrosGrupo3: [
+      { foto: '/new/titulares/g3/PAOLA LIMBANIA LOPEZ ZEBALLOS.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Paola Limbania', apellido:'Lopez Zeballos', partido: 'PDC' },
+      { foto: '/new/suplentes/g3/RICHARD ESPADA UGARTE.png', cargo: 'SENADOR SUPLENTE', nombre: 'Richard', apellido:'Espada Ugarte', partido: 'PDC' }
+    ]
+  },
+  4: {
+    miembrosGrupo1: [
+      { foto: '/new/titulares/g2/CESAR MENTASTI PADILLA.png', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Cesar', apellido:'Mentasti Padilla', partido: 'UNIDAD' },
+      { foto: '/new/suplentes/g2/MARCELA GUERRERO VILCA.png', cargo: 'SENADORA SUPLENTE', nombre: 'Marcela', apellido:'Guerrero Vilca', partido: 'UNIDAD' }
+    ],
+    tituloLinea1: 'COMITÉ DE AUTONOMÍAS MUNICIPALES, INDÍGENA ORIGINARIO CAMPESINAS Y REGIONALES',
+    miembrosGrupo2: [
+      { foto: '/new/titulares/g3/JOSE ROCA HAENSEL.png', cargo: 'SECRETARIO DE COMITÉ', nombre: 'Jose', apellido:'Roca Haensel', partido: 'UNIDAD' },
+      { foto: '/new/suplentes/g3/MABEL GIORDANO SONNENSCHEIN.png', cargo: 'SENADORA SUPLENTE', nombre: 'Mabel', apellido:'Giordano Sonnenschein', partido: 'UNIDAD' }
+    ],
+    tituloLinea2: 'COMITÉ DE AUTONOMÍAS DEPARTAMENTALES',
+    miembrosGrupo3: [
+      { foto: '/new/titulares/g3/ERNESTO SUAREZ SATTORI.png', cargo: 'SECRETARIO DE COMITÉ', nombre: 'Ernesto', apellido:'Suarez Sattori', partido: 'LIBRE' },
+      { foto: '/new/suplentes/g3/CLAUDIA CARDENAS VELASQUEZ.png', cargo: 'SENADORA SUPLENTE', nombre: 'Claudia', apellido:'Cardenas Velasquez', partido: 'LIBRE' }
+    ]
+  },
+  5: {
+    miembrosGrupo1: [
+      { foto: '/new/titulares/g3/ELIANA RINA ACOSTA QUISPE.png', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Eliana Rina', apellido:'Acosta Quispe', partido: 'UNIDAD' },
+      { foto: '/new/suplentes/g3/SICHARD HANS SORAIDE CASTEDO.png', cargo: 'SENADOR SUPLENTE', nombre: 'Sichard Hans', apellido:'Soraide Castedo', partido: 'UNIDAD' }
+    ],
+    tituloLinea1: 'COMITÉ DE PLANIFICACIÓN, PRESUPUESTO, INVERSIÓN PÚBLICA Y CONTRALORÍA GENERAL DEL ESTADO',
+    miembrosGrupo2: [
+      { foto: '/new/titulares/g2/LEONOR ROSALVA ROMERO GUTIERREZ.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Leonor Rosalva', apellido:'Romero Gutierrez', partido: 'UNIDAD' },
+      { foto: '/new/suplentes/g2/MARCO ANTONIO SEGOVIA VARGAS.png', cargo: 'SENADOR SUPLENTE', nombre: 'Marco Antonio', apellido:'Segovia Vargas', partido: 'UNIDAD' }
+    ],
+    tituloLinea2: 'COMITÉ DE POLÍTICAS FINANCIERA, MONETARIA, TRIBUTARIA Y SEGUROS',
+    miembrosGrupo3: [
+      { foto: '/new/titulares/g1/ABDON PORCEL ARANCIBIA.png', cargo: 'SECRETARIO DE COMITÉ', nombre: 'Abdon', apellido:'Porcel Arancibia', partido: 'LIBRE' },
+      { foto: '/new/suplentes/g1/ILSE FATIMA DAVILA ARANCIBIA.png', cargo: 'SENADORA SUPLENTE', nombre: 'Ilse Fatima', apellido:'Davila Arancibia', partido: 'LIBRE' }
+    ]
+  },
+  6: {
+    miembrosGrupo1: [
+      { foto: '/new/titulares/g1/ANA MARIA CRISPIN CHOQUE.png', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Ana Maria', apellido:'Crispin Choque', partido: 'PDC' },
+      { foto: '/new/suplentes/g1/VICTOR SEVERO QUISPE SANTANDER.png', cargo: 'SENADOR SUPLENTE', nombre: 'Victor Severo', apellido:'Quispe Santander', partido: 'PDC' }
+    ],
+    tituloLinea1: 'COMITÉ DE ENERGÍA, HIDROCARBUROS, MINERÍA Y METALURGIA',
+    miembrosGrupo2: [
+      { foto: '/new/titulares/g2/MARCELINO FLORES ORDOÑEZ.png', cargo: 'SECRETARIODE COMITÉ', nombre: 'Marcelino', apellido:'Flores Ordoñez', partido: 'PDC' },
+      { foto: '/new/suplentes/g2/SUSANA GABRIELA RUIZ ZULETA.png', cargo: 'SENADORA SUPLENTE', nombre: 'Susana Gabriela', apellido:'Ruiz Zuleta', partido: 'PDC' }
+    ],
+    tituloLinea2: 'COMITÉ DE ECONOMÍA PLURAL, DESARROLLO PRODUCTIVO, OBRAS PÚBLICAS E INFRAESTRUCTURA',
+    miembrosGrupo3: [
+      { foto: '/new/titulares/g2/BETTY CANAVIRI VILLANUEVA.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Betty', apellido:'Canaviri Villanueva', partido: 'LIBRE' },
+      { foto: '/new/suplentes/g2/ROGER MAMANI CORONADO.png', cargo: 'SENADOR SUPLENTE', nombre: 'Roger', apellido:'Mamani Coronado', partido: 'LIBRE' }
+    ]
+  },
+  7: {
+    miembrosGrupo1: [
+      { foto: '/new/titulares/g1/JOSE MANUEL ORMACHEA MENDIETA.png', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Jose Manuel', apellido:'Ormachea Mendieta', partido: 'LIBRE' },
+      { foto: '/new/suplentes/g1/MARIA ELENA PACHACUTE TICONA.png', cargo: 'SENADORA SUPLENTE', nombre: 'Maria Elena', apellido:'Pachacute Ticona', partido: 'LIBRE' }
+    ],
+    tituloLinea1: 'COMITÉ DE NACIONES Y PUEBLOS INDÍGENA ORIGINARIO CAMPESINOS',
+    miembrosGrupo2: [
+      { foto: '/new/titulares/g2/BERTHA NURMY GUTIERREZ MENESES.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Bertha Nurmy', apellido:'Gutierrez Meneses', partido: 'PDC' },
+      { foto: '/new/suplentes/g2/FREDDY RIOJA MELGAR.png', cargo: 'SENADOR SUPLENTE', nombre: 'Freddy', apellido:'Rioja Melgar', partido: 'PDC' }
+    ],
+    tituloLinea2: 'COMITÉ DE CULTURAS, INTERCULTURALIDAD Y PATRIMONIO CULTURAL',
+    miembrosGrupo3: [
+      { foto: '/new/titulares/g1/BERTHA CARTAGENA SANCHEZ.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Bertha', apellido:'Cartagena Sanchez', partido: 'PDC' },
+      { foto: '/new/suplentes/g1/MANFRED LEO PEREZ HASSENTEUFEL.png', cargo: 'SENADOR SUPLENTE', nombre: 'Manfred Leo', apellido:'Perez Hassenteufel', partido: 'PDC' }
+    ]
+  },
+  8: {
+    miembrosGrupo1: [
+      { foto: '/new/titulares/g2/JOSE SANCHEZ AGUILAR.png', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Jose', apellido:'Sanchez Aguilar', partido: 'LIBRE' },
+      { foto: '/new/suplentes/g2/CINTHYA INGA GUTIERREZ GUZMAN.png', cargo: 'SENADORA SUPLENTE', nombre: 'Cinthya Inga', apellido:'Gutierrez Guzman', partido: 'LIBRE' }
+    ],
+    tituloLinea1: 'COMITÉ DE EDUCACIÓN, SALUD, CIENCIA, TECNOLOGÍA Y DEPORTES',
+    miembrosGrupo2: [
+      { foto: '/new/titulares/g2/MARIA ANTONIETA ALCON SANCHEZ.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Maria Antonieta', apellido:'Alcon Sanchez', partido: 'PDC' },
+      { foto: '/new/suplentes/g2/EDWIN LOPEZ QUIROGA.png', cargo: 'SENADOR SUPLENTE', nombre: 'Edwin', apellido:'Lopez Quiroga', partido: 'PDC' }
+    ],
+    tituloLinea2: 'COMITÉ DE VIVIENDA, RÉGIMEN LABORAL, SEGURIDAD INDUSTRIAL Y SEGURIDAD SOCIAL',
+    miembrosGrupo3: [
+      { foto: '/new/titulares/g1/CLAUDIA MALLON VARGAS.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Claudia', apellido:'Mallon Vargas', partido: 'APB SUMATE' },
+      { foto: '/new/suplentes/g1/APOLINAR RIVERA MUÑOZ.png', cargo: 'SENADOR SUPLENTE', nombre: 'Apolinar', apellido:'Rivera Muñoz', partido: 'APB SUMATE' }
+    ]
+  },
+  9: {
+    miembrosGrupo1: [
+      { foto: '/new/titulares/g1/NICANOR GONZALO COCHI CONDORI.png', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Nicanor Gonzalo', apellido:'Cochi Condori', partido: 'PDC' },
+      { foto: '/new/suplentes/g1/ROXANA MAMANI COLQUEHUANCA.png', cargo: 'SENADORA SUPLENTE', nombre: 'Roxana', apellido:'Mamani Colquehuanca', partido: 'PDC' }
+    ],
+    tituloLinea1: 'COMITÉ DE ASUNTOS EXTERIORES, INTERPARLAMENTARIOS Y ORGANISMOS INTERNACIONALES',
+    miembrosGrupo2: [
+      { foto: '/new/titulares/g2/TERESA ALARCON ARANA.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Teresa', apellido:'Alarcon Arana', partido: 'PDC' },
+    ],
+    tituloLinea2: 'COMITÉ DE RELACIONES ECONÓMICAS INTERNACIONALES',
+    miembrosGrupo3: [
+      { foto: '/new/titulares/g1/WANDA XIMENA MEDRANO HERVAS.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Wanda Ximena', apellido:'Medrano Hervas', partido: 'LIBRE' },
+      { foto: '/new/suplentes/g1/ALDO SERGIO VILLEGAS MORA.png', cargo: 'SENADOR SUPLENTE', nombre: 'Aldo Sergio', apellido:'Villegas Mora', partido: 'LIBRE' }
+    ]
+  },
+  10: {
+    miembrosGrupo1: [
+      { foto: '/new/titulares/g3/BRANKO GORAN MARINKOVIC JOVICEVIC.png', cargo: 'PRESIDENTE DE COMISIÓN', nombre: 'Branko Goran', apellido:'Marinkovic Jovicevic', partido: 'LIBRE' },
+      { foto: '/new/suplentes/g3/KATHIA NATALIA MISERENDINO ROMERO.png', cargo: 'SENADORA SUPLENTE', nombre: 'Kathia Natalia', apellido:'Miserendino Romero', partido: 'LIBRE' }
+    ],
+    tituloLinea1: 'COMITÉ DE TIERRA Y TERRITORIO, RECURSOS NATURALES Y HOJA DE LA COCA',
+    miembrosGrupo2: [
+      { foto: '/new/titulares/g3/CAROL CARLO DURAN.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Carol', apellido:'Carlo Duran', partido: 'LIBRE' },
+      { foto: '/new/suplentes/g3/JORGE ANTONIO QUISPE FLORES.png', cargo: 'SENADOR SUPLENTE', nombre: 'Jorge Antonio', apellido:'Quispe Flores', partido: 'LIBRE' }
+    ],
+    tituloLinea2: 'COMITÉ DE MEDIO AMBIENTE, BIODIVERSIDAD, AMAZONÍA, ÁREAS PROTEGIDAS Y CAMBIO CLIMÁTICO',
+    miembrosGrupo3: [
+      { foto: '/new/titulares/g3/CINTIA MONICA PUERTA CAMPOS.png', cargo: 'SECRETARIA DE COMITÉ', nombre: 'Cintia Monica', apellido:'Puerta Campos', partido: 'PDC' },
+      { foto: '/new/suplentes/g3/JESUS HUMBERTO SUAREZ EGUEZ.png', cargo: 'SENADOR SUPLENTE', nombre: 'Jesus Humberto', apellido:'Suarez Eguez', partido: 'PDC' }
+    ]
   }
 }
 
-const convertirHTMLaBloques = (htmlContent) => {
-  if (!htmlContent) return []
-  
-  const bloques = []
-  const tempDiv = document.createElement('div')
-  tempDiv.innerHTML = htmlContent
-  
-  tempDiv.childNodes.forEach(node => {
-    if (node.nodeType === Node.TEXT_NODE && node.textContent.trim()) {
-      bloques.push({
-        type: 'paragraph',
-        content: node.textContent
-      })
-    } else if (node.nodeType === Node.ELEMENT_NODE) {
-      const element = node
-      const tagName = element.tagName.toLowerCase()
-      
-      if (tagName === 'p') {
-        bloques.push({
-          type: 'paragraph',
-          content: element.innerHTML
-        })
-      } else if (tagName === 'blockquote') {
-        const author = element.getAttribute('data-author') || 'Senado de Bolivia'
-        const role = element.getAttribute('data-role') || 'Cámara de Senadores'
-        const text = element.textContent || ''
-        const cleanText = text.replace(/—.*$/, '').trim()
-        bloques.push({
-          type: 'quote',
-          content: cleanText,
-          author: author,
-          role: role
-        })
-      } else if (tagName === 'div' && element.getAttribute('data-type') === 'video') {
-        const iframe = element.querySelector('iframe')
-        const captionEl = element.querySelector('.video-caption')
-        if (iframe) {
-          bloques.push({
-            type: 'video',
-            url: iframe.getAttribute('src') || '',
-            title: iframe.getAttribute('title') || '',
-            caption: captionEl?.textContent || ''
-          })
-        }
-      } else if (tagName === 'iframe') {
-        const src = element.src || ''
-        bloques.push({
-          type: 'video',
-          url: src,
-          title: element.title || 'Video institucional',
-          caption: ''
-        })
-      } else {
-        bloques.push({
-          type: 'paragraph',
-          content: element.outerHTML
-        })
-      }
-    }
+const seleccionarComision = (comision) => {
+  comisionSeleccionada.value = {
+    ...comision,
+    ...comisionesData[comision.id]
+  }
+}
+seleccionarComision(comisionesList.value[0])
+
+// ==================== DATOS SECCIÓN 3 - DEPARTAMENTOS ====================
+const departamentoSeleccionado = ref(null)
+
+const titularesPorDepartamento = {
+  'LA PAZ': [],
+  'SANTA CRUZ': [],
+  'COCHABAMBA': [],
+  'POTOSÍ': [],
+  'CHUQUISACA': [],
+  'ORURO': [],
+  'TARIJA': [],
+  'BENI': [],
+  'PANDO': []
+}
+
+const suplentesPorDepartamento = {
+  'LA PAZ': [],
+  'SANTA CRUZ': [],
+  'COCHABAMBA': [],
+  'POTOSÍ': [],
+  'CHUQUISACA': [],
+  'ORURO': [],
+  'TARIJA': [],
+  'BENI': [],
+  'PANDO': []
+}
+
+const titulares = ref([])
+const suplentes = ref([])
+
+const seleccionarDepartamento = (dep) => {
+  departamentoSeleccionado.value = dep
+  titulares.value = titularesPorDepartamento[dep.nombre] || []
+  suplentes.value = suplentesPorDepartamento[dep.nombre] || []
+}
+
+// ==================== DATOS SECCIÓN 4 - PARTIDOS ====================
+const partidoSeleccionado = ref(null)
+const mostrarSuplentes = ref(false)
+const partidos = ref(partidosData)
+
+const senadoresData = [
+  { tnombre: 'Cintia Monica', tapellido:'Puerta Campos', snombre: 'Jesus Humberto', sapellido:'Suarez Eguez', partido: 'pdc', departamento:'Pando', imagen:'new/titulares/g3/CINTIA MONICA PUERTA CAMPOS.png', imagensu:'new/suplentes/g3/JESUS HUMBERTO SUAREZ EGUEZ.png', pos:116 },
+  { tnombre: 'Paola Limbania', tapellido:'Lopez Zeballos', snombre: 'Richard', sapellido:'Espada Ugarte', partido: 'pdc', departamento:'Santa Cruz', imagen:'new/titulares/g3/PAOLA LIMBANIA LOPEZ ZEBALLOS.png', imagensu:'new/suplentes/g3/RICHARD ESPADA UGARTE.png', pos:114 },
+  { tnombre: 'Diego Esteban Mateo', tapellido:'Avila Navajas', snombre: 'Luzmaya', sapellido:'Zelaya Vega', partido: 'pdc', departamento:'Tarija', imagen:'new/titulares/g2/DIEGO ESTEBAN MATEO ÁVILA NAVAJAS.png', imagensu:'new/suplentes/g2/LUZMAYA ZELAYA VEGA.png', pos:113 },
+  { tnombre: 'Maria Isabel', tapellido:'Moreno Cortez', snombre: 'Rolando Vacaflor', sapellido:'Gabriel Arana', partido: 'libre', departamento:'Tarija', imagen:'new/titulares/g2/MARIA ISABEL MORENO CORTEZ.png', imagensu:'new/suplentes/g2/ROLANDO VACAFLOR GABRIEL ARANA.png', pos:207 },
+  { tnombre: 'Yasmin', tapellido:'Estivariz Villarroel', snombre: 'Ramiro', sapellido:'Mamani Ramirez', partido: 'pdc', departamento:'Oruro', imagen:'new/titulares/g2/YASMIN ESTIVARIZ VILLARROEL.png', imagensu:'new/suplentes/g2/RAMIRO MAMANI RAMIREZ.png', pos:107},
+  { tnombre: 'Wilder', tapellido:'Veliz Armas', snombre: 'Lenny Mayra', sapellido:'Ayala Justiniano', partido: 'pdc', departamento:'Cochabamba', imagen:'new/titulares/g1/WILDER VELIZ ARMAS.png', imagensu:'new/suplentes/g1/LENNY MAYRA AYALA JUSTINIANO.png', pos:105 },
+  { tnombre: 'Judith Rosario', tapellido:'Garcia Coca', snombre: 'Royer Ivan', sapellido:'Mamani Garcia', partido: 'pdc', departamento:'Cochabamba', imagen:'new/titulares/g1/JUDITH ROSARIO GARCIA COCA.png', imagensu:'new/suplentes/g1/ROYER IVAN MAMANI GARCIA.png', pos:106 },
+  { tnombre: 'Nicanor Gonzalo', tapellido:'Cochi Condori', snombre: 'Roxana', sapellido:'Mamani Colquehuanca', partido: 'pdc', departamento:'La Paz', imagen:'new/titulares/g1/NICANOR GONZALO COCHI CONDORI.png', imagensu:'new/suplentes/g1/ROXANA MAMANI COLQUEHUANCA.png', pos:103 },
+  { tnombre: 'Bertha', tapellido:'Cartagena Sanchez', snombre: 'Manfred Leo', sapellido:'Perez Hassenteufel', partido: 'pdc', departamento:'Chuquisaca', imagen:'new/titulares/g1/BERTHA CARTAGENA SANCHEZ.png', imagensu:'new/suplentes/g1/MANFRED LEO PEREZ HASSENTEUFEL.png', pos:101 },
+  { tnombre: 'Bertha Nurmy', tapellido:'Gutierrez Meneses De Mamani', snombre: 'Freddy', sapellido:'Rioja Melgar', partido: 'pdc', departamento:'Potosí', imagen:'new/titulares/g2/BERTHA NURMY GUTIERREZ MENESES.png', imagensu:'new/suplentes/g2/FREDDY RIOJA MELGAR.png', pos:110 },
+  { tnombre: 'Marcelino', tapellido:'Flores Ordoñez', snombre: 'Susana Gabriela', sapellido:'Ruiz Zuleta', partido: 'pdc', departamento:'Potosí', imagen:'new/titulares/g2/MARCELINO FLORES ORDOÑEZ.png', imagensu:'new/suplentes/g2/SUSANA GABRIELA RUIZ ZULETA.png', pos:111 },
+  { tnombre: 'Branko Goran', tapellido:'Marinkovic Jovicevic', snombre: 'Kathia Natalia', sapellido:'Miserendino Romero', partido: 'libre', departamento:'Santa Cruz', imagen:'new/titulares/g3/BRANKO GORAN MARINKOVIC JOVICEVIC.png', imagensu:'new/suplentes/g3/KATHIA NATALIA MISERENDINO ROMERO.png', pos:208 },
+  { tnombre: 'Carol', tapellido:'Carlo Duran', snombre: 'Jorge Antonio', sapellido:'Quispe Flores', partido: 'libre', departamento:'Pando', imagen:'new/titulares/g3/CAROL CARLO DURAN.png', imagensu:'new/suplentes/g3/JORGE ANTONIO QUISPE FLORES.png', pos:211 },
+  { tnombre: 'Cesar', tapellido:'Mentasti Padilla', snombre: 'Marcela', sapellido:'Guerrero Vilca', partido: 'alianza', departamento:'Tarija', imagen:'new/titulares/g2/CESAR MENTASTI PADILLA.png', imagensu:'new/suplentes/g2/MARCELA GUERRERO VILCA.png', pos:302 },
+  { tnombre: 'Claudia', tapellido:'Mallon Vargas', snombre: 'Apolinar', sapellido:'Rivera Muñoz', partido: 'sumate', departamento:'Cochabamba', imagen:'new/titulares/g1/CLAUDIA MALLON VARGAS.png', imagensu:'new/suplentes/g1/APOLINAR RIVERA MUÑOZ.png', pos:401 },
+  { tnombre: 'Daniel Antonio', tapellido:'Ortiz Velasquez', snombre: 'Reina Isabel', sapellido:'Pallares Morales', partido: 'pdc', departamento:'Chuquisaca', imagen:'new/titulares/g1/DANIEL ANTONIO ORTIZ VELASQUEZ.png', imagensu:'new/suplentes/g1/REINA ISABEL PALLARES MORALES.png', pos:102 },
+  { tnombre: 'Erick Nelson', tapellido:'Soruco Alpire', snombre: 'Cesia', sapellido:'Roca Escalante', partido: 'pdc', departamento:'Beni', imagen:'new/titulares/g3/ERICK NELSON SORUCO ALPIRE.png', imagensu:'new/suplentes/g3/CESIA ROCA ESCALANTE.png', pos:115 },
+  { tnombre: 'Ernesto', tapellido:'Suarez Sattori', snombre: 'Claudia', sapellido:'Cardenas Velasquez', partido: 'libre', departamento:'Beni', imagen:'new/titulares/g3/ERNESTO SUAREZ SATTORI.png', imagensu:'new/suplentes/g3/CLAUDIA CARDENAS VELASQUEZ.png', pos:210 },
+  { tnombre: 'Freddy', tapellido:'Castillo Chavez', snombre: 'Villma', sapellido:'Colque Camacho', partido: 'pdc', departamento:'Oruro', imagen:'new/titulares/g2/FREDDY CASTILLO CHAVEZ.png', imagensu:'new/suplentes/g2/VILLMA COLQUE CAMACHO.png', pos:108 },
+  { tnombre: 'Jose', tapellido:'Roca Haensel', snombre: 'Mabel', sapellido:'Giordano Sonnenschein', partido: 'alianza', departamento:'Beni', imagen:'new/titulares/g3/JOSE ROCA HAENSEL.png', imagensu:'new/suplentes/g3/MABEL GIORDANO SONNENSCHEIN.png', pos:305 },
+  { tnombre: 'Leonor Rosalva', tapellido:'Romero Gutierrez', snombre: 'Marco Antonio', sapellido:'Segovia Vargas', partido: 'alianza', departamento:'Tarija', imagen:'new/titulares/g2/LEONOR ROSALVA ROMERO GUTIERREZ.png', imagensu:'new/suplentes/g2/MARCO ANTONIO SEGOVIA VARGAS.png', pos:303 },
+  { tnombre: 'Teresa', tapellido:'Alarcon Arana', snombre: '', sapellido:'', partido: 'pdc', departamento:'Potosí', imagen:'new/titulares/g2/TERESA ALARCON ARANA.png', imagensu:'', pos:112 },
+  { tnombre: 'Tomasa', tapellido:'Yarhui Jacome', snombre: 'Hugo Marcelo', sapellido:'Cortez Calvimontes', partido: 'libre', departamento:'Chuquisaca', imagen:'new/titulares/g1/TOMASA YARHUI JACOME.png', imagensu:'new/suplentes/g1/HUGO MARCELO CORTEZ CALVIMONTES.png', pos:201 },
+  { tnombre: 'Wanda Ximena', tapellido:'Medrano Hervas', snombre: 'Aldo Sergio', sapellido:'Villegas Mora', partido: 'libre', departamento:'Cochabamba', imagen:'new/titulares/g1/WANDA XIMENA MEDRANO HERVAS.png', imagensu:'new/suplentes/g1/ALDO SERGIO VILLEGAS MORA.png', pos:204 },
+  { tnombre: 'Ana Maria', tapellido:'Crispin Choque', snombre: 'Victor S.', sapellido:'Quispe Santander', partido: 'pdc', departamento:'La Paz', imagen:'new/titulares/g1/ANA MARIA CRISPIN CHOQUE.png', imagensu:'new/suplentes/g1/VICTOR SEVERO QUISPE SANTANDER.png', pos:104 },
+  { tnombre: 'Jose Manuel', tapellido:'Ormachea Mendienta', snombre: 'Maria Elena', sapellido:'Pachacute Ticona', partido: 'libre', departamento:'La Paz', imagen:'new/titulares/g1/JOSE MANUEL ORMACHEA MENDIETA.png', imagensu:'new/suplentes/g1/MARIA ELENA PACHACUTE TICONA.png', pos:203},
+  { tnombre: 'Maria Antonieta', tapellido:'Alcon Sanchez', snombre: 'Edwin', sapellido:'Lopez Quiroga', partido: 'pdc', departamento:'Oruro', imagen:'new/titulares/g2/MARIA ANTONIETA ALCON SANCHEZ.png', imagensu:'new/suplentes/g2/EDWIN LOPEZ QUIROGA.png', pos:109 },
+  { tnombre: 'Ana Karina', tapellido:'Velasco Añez', snombre: 'Marcelo Matias', sapellido:'Cardona Ibañez', partido: 'alianza', departamento:'Beni', imagen:'new/titulares/g3/ANA KARINA VELASCO ÁÑEZ.png', imagensu:'new/suplentes/g3/MARCELO MATIAS CARDONA IBAÑEZ.png', pos:306 },
+  { tnombre: 'Betty', tapellido:'Canaviri Villanueva', snombre: 'Roger', sapellido:'Mamani Coronado', partido: 'libre', departamento:'Potosí', imagen:'new/titulares/g2/BETTY CANAVIRI VILLANUEVA.png', imagensu:'new/suplentes/g2/ROGER MAMANI CORONADO.png', pos:206 },
+  { tnombre: 'Carmen Soledad', tapellido:'Chapeton Tancara', snombre: 'Nilton', sapellido:'Condori Alanoca', partido: 'alianza', departamento:'La Paz', imagen:'new/titulares/g1/CARMEN SOLEDAD CHAPETÓN TANCARA.png', imagensu:'new/suplentes/g1/NILTON CONDORI ALANOCA.png', pos:301 },
+  { tnombre: 'Julio Diego', tapellido:'Romaña Galindo', snombre: 'Carolina', sapellido:'Giese Urresti', partido: 'libre', departamento:'Pando', imagen:'new/titulares/g3/JULIO DIEGO ROMAÑA GALINDO.png', imagensu:'new/suplentes/g3/CAROLINA GIESE URRESTI.png', pos:212 },
+  { tnombre: 'Kathia Lisbeth', tapellido:'Quiroga Fernandez', snombre: 'Leonardo', sapellido:'Roca Eguez', partido: 'libre', departamento:'Santa Cruz', imagen:'new/titulares/g3/KATHIA LISBETH QUIROGA FERNÁNDEZ.png', imagensu:'new/suplentes/g3/LEONARDO ROCA EGUEZ.png', pos:209 },
+  { tnombre: 'Rosa Tatiana', tapellido:'Añez Carrasco', snombre: 'Lorgio Fernando', sapellido:'Pareja Saucedo', partido: 'alianza', departamento:'Santa Cruz', imagen:'new/titulares/g3/ROSA TATIANA AÑEZ CARRASCO.png', imagensu:'new/suplentes/g3/LORGIO FERNANDO PAREJA SAUCEDO.png', pos:304 },
+  { tnombre: 'Abdon', tapellido:'Porcel Arancibia', snombre: 'Ilse Fatima', sapellido:'Davila Arancibia', partido: 'libre', departamento:'Chuquisaca', imagen:'/new/titulares/g1/ABDON PORCEL ARANCIBIA.png', imagensu:'new/suplentes/g1/ILSE FATIMA DAVILA ARANCIBIA.png', pos:202},
+  { tnombre: 'Jose', tapellido:'Sanchez Aguilar', snombre: 'Cinthya Inga', sapellido:'Gutierrez Guzman', partido: 'libre', departamento:'Oruro', imagen:'new/titulares/g2/JOSE SANCHEZ AGUILAR.png', imagensu:'new/suplentes/g2/CINTHYA INGA GUTIERREZ GUZMAN.png', pos:205 },
+  { tnombre: 'Eliana Rina', tapellido:'Acosta Quispe', snombre: 'Sichard Hans', sapellido:'Soraide Castedo', partido: 'alianza', departamento:'Pando', imagen:'new/titulares/g3/ELIANA RINA ACOSTA QUISPE.png', imagensu:'new/suplentes/g3/SICHARD HANS SORAIDE CASTEDO.png', pos:307 },
+]
+
+const sorted = senadoresData.sort((a, b) => a.pos - b.pos)
+for (let i = 0; i < sorted.length; i++) {
+  const item = sorted[i]
+  const depto = item.departamento.toUpperCase()
+  titularesPorDepartamento[depto].push({ 
+    nombre: item.tnombre, 
+    partido: item.partido, 
+    imagen: item.imagen,
+    apellido: item.tapellido 
   })
+  suplentesPorDepartamento[depto].push({ 
+    nombre: item.snombre, 
+    partido: item.partido, 
+    imagen: item.imagensu,
+    apellido: item.sapellido 
+  })
+}
+
+const miembrosPorPartido = {
+  pdc: { titulares: [], suplentes: [] },
+  libre: { titulares: [], suplentes: [] },
+  alianza: { titulares: [], suplentes: [] },
+  sumate: { titulares: [], suplentes: [] }
+}
+
+const partidoMap = {
+  pdc: miembrosPorPartido.pdc,
+  libre: miembrosPorPartido.libre,
+  alianza: miembrosPorPartido.alianza,
+  sumate: miembrosPorPartido.sumate
+}
+
+for (let i = 0; i < senadoresData.length; i++) {
+  const s = senadoresData[i]
+  const target = partidoMap[s.partido]
+  if (target) {
+    target.titulares.push({
+      nombre: s.tnombre,
+      apellido: s.tapellido,
+      partido: s.partido,
+      departamento: s.departamento,
+      imagen: s.imagen
+    })
+    if (s.snombre) {
+      target.suplentes.push({
+        nombre: s.snombre,
+        apellido: s.sapellido,
+        partido: s.partido,
+        departamento: s.departamento,
+        imagen: s.imagensu
+      })
+    }
+  }
+}
+
+const miembrosMostrar = computed(() => {
+  if (!partidoSeleccionado.value) return []
+  const data = miembrosPorPartido[partidoSeleccionado.value.id]
+  return mostrarSuplentes.value ? data.suplentes : data.titulares
+})
+
+const seleccionarPartido = (partido) => {
+  partidoSeleccionado.value = partido
+  mostrarSuplentes.value = false
+}
+
+const toggleTipoMiembros = () => {
+  mostrarSuplentes.value = !mostrarSuplentes.value
+}
+
+// ==================== SCROLL OBSERVER ====================
+const sections = {
+  'directiva-camaral': seccion1Ref,
+  'comisiones-y-comites': seccion2Ref,
+  'brigadas-parlamentarias': seccion3Ref,
+  'bancadas-politicas': seccion4Ref
+}
+
+const scrollToSection = (id) => {
+  const sectionRef = sections[id]
+  if (sectionRef?.value) {
+    sectionRef.value.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+}
+
+let scrollObserver = null
+
+const initScrollObserver = () => {
+  scrollObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          if (entry.target === seccion1Ref.value) {
+            isSeccion1Visible.value = true
+            isSeccion2Visible.value = false
+            isSeccion3Visible.value = false
+            isSeccion4Visible.value = false
+          } else if (entry.target === seccion2Ref.value) {
+            isSeccion1Visible.value = false
+            isSeccion2Visible.value = true
+            isSeccion3Visible.value = false
+            isSeccion4Visible.value = false
+          } else if (entry.target === seccion3Ref.value) {
+            isSeccion1Visible.value = false
+            isSeccion2Visible.value = false
+            isSeccion3Visible.value = true
+            isSeccion4Visible.value = false
+          } else if (entry.target === seccion4Ref.value) {
+            isSeccion1Visible.value = false
+            isSeccion2Visible.value = false
+            isSeccion3Visible.value = false
+            isSeccion4Visible.value = true
+          }
+          entry.target.classList.add('animate-in')
+        }
+      })
+    },
+    { threshold: 0.3, rootMargin: '0px 0px 0px 0px' }
+  )
   
-  return bloques
+  ;[seccion1Ref.value, seccion2Ref.value, seccion3Ref.value, seccion4Ref.value].forEach(section => {
+    if (section) scrollObserver.observe(section)
+  })
 }
 
-const formatTitleWithColors = (title) => {
-  if (!title) return ''
-  return title.replace(/\*(.*?)\*/g, '<span class="text-[#E03636]">$1</span>')
-}
-
-const anteriorRelacionada = () => {
-  if (relacionadaCurrentIndex.value > 0) relacionadaCurrentIndex.value--
-}
-
-const siguienteRelacionada = () => {
-  if (relacionadaCurrentIndex.value < maxRelacionadaIndex.value) relacionadaCurrentIndex.value++
-}
-
-const verNoticiaRelacionada = (noticia) => {
-  if (noticia && noticia.slug) {
-    router.push(`/noticias/${noticia.slug}`)
-  }
-}
-
-// ============================================
-// 🔥 QUINTO: WATCHERS Y LIFECYCLE
-// ============================================
-
-// Forzar scroll al inicio
-const forceScrollToTop = () => {
-  if (process.client) {
-    window.scrollTo(0, 0)
-    const container = document.querySelector('.snap-container')
-    if (container) container.scrollTo(0, 0)
-    document.body.scrollTop = 0
-    document.documentElement.scrollTop = 0
-    const mainContent = document.querySelector('main')
-    if (mainContent) mainContent.scrollTop = 0
-  }
-}
-
-// Watchers
-watch(noticiaData, (newData) => {
-  if (newData?.noticia) {
-    cargarNoticiasRelacionadas(newData.noticia._id, newData.noticia.category, newData.noticia.tags)
-  }
-}, { immediate: true })
-
-if (noticiaData.value?.imagenes) {
-  imagenesCarrusel.value = noticiaData.value.imagenes
-}
-
-watch(noticiaData, (newData) => {
-  if (newData?.imagenes) {
-    imagenesCarrusel.value = newData.imagenes
-  }
-}, { immediate: true })
-
-if (error.value) {
-  errorMsg.value = error.value.message
-}
-
-const imagenActual = computed(() => {
-  if (imagenesCarrusel.value.length === 0) return null
-  return imagenesCarrusel.value[currentIndex.value]
-})
-
-const imagenAnterior = computed(() => {
-  if (imagenesCarrusel.value.length === 0) return null
-  if (imagenesCarrusel.value.length === 1) return imagenActual.value
-  const prevIndex = currentIndex.value === 0 
-    ? imagenesCarrusel.value.length - 1 
-    : currentIndex.value - 1
-  return imagenesCarrusel.value[prevIndex]
-})
-
-const imagenSiguiente = computed(() => {
-  if (imagenesCarrusel.value.length === 0) return null
-  if (imagenesCarrusel.value.length === 1) return imagenActual.value
-  const nextIndex = currentIndex.value === imagenesCarrusel.value.length - 1 
-    ? 0 
-    : currentIndex.value + 1
-  return imagenesCarrusel.value[nextIndex]
-})
-
-const peekWidth = computed(() => {
-  if (imagenActual.value?.orientation === 'vertical') return 22
-  return 12
-})
-
-const imagenActualWidth = computed(() => {
-  return 100 - (peekWidth.value * 2)
-})
-
-const peekLeftWidth = computed(() => peekWidth.value)
-const peekRightWidth = computed(() => peekWidth.value)
-
-const siguienteImagen = () => {
-  if (imagenesCarrusel.value.length <= 1) return
-  currentIndex.value = (currentIndex.value + 1) % imagenesCarrusel.value.length
-}
-
-const anteriorImagen = () => {
-  if (imagenesCarrusel.value.length <= 1) return
-  currentIndex.value = currentIndex.value === 0 
-    ? imagenesCarrusel.value.length - 1 
-    : currentIndex.value - 1
-}
-
-const volverAtras = () => {
-  router.back()
-}
-
-const recargar = () => {
-  refresh()
-  if (noticiaData.value?.noticia) {
-    cargarNoticiasRelacionadas(noticiaData.value.noticia._id, noticiaData.value.noticia.category, noticiaData.value.noticia.tags)
-  }
-}
-
-const handleKeydown = (e) => {
-  if (e.key === 'ArrowLeft') anteriorImagen()
-  else if (e.key === 'ArrowRight') siguienteImagen()
-}
-
-// ============================================
-// 🔥 SEXTO: LIFECYCLE
-// ============================================
-onMounted(() => {
-  windowLocation.value = window.location.href
-  window.addEventListener('keydown', handleKeydown)
-  console.log('✅ Frontend conectado a la API real en:', API_BASE_URL)
+// ==================== LIFECYCLE ====================
+onMounted(async () => {
+  initScrollListener()
+  departamentosStore.preload()
+  await nextTick()
+  initScrollObserver()
   
-  forceScrollToTop()
-  setTimeout(forceScrollToTop, 100)
-  setTimeout(forceScrollToTop, 300)
-  setTimeout(forceScrollToTop, 500)
-  setTimeout(forceScrollToTop, 1000)
+  setTimeout(() => {
+    if (seccion1Ref.value) {
+      isSeccion1Visible.value = true
+      seccion1Ref.value.classList.add('animate-in')
+    }
+  }, 100)
+  
+  if (route.hash) {
+    const id = route.hash.replace('#', '')
+    setTimeout(() => scrollToSection(id), 500)
+  }
 })
 
-onActivated(() => {
-  forceScrollToTop()
-})
-
-watch(() => route.params.slug, () => {
-  forceScrollToTop()
-}, { immediate: true })
-
-watch(() => route.fullPath, () => {
-  forceScrollToTop()
+watch(() => route.hash, (newHash) => {
+  if (newHash) {
+    const id = newHash.replace('#', '')
+    scrollToSection(id)
+  }
 })
 
 onUnmounted(() => {
-  window.removeEventListener('keydown', handleKeydown)
+  removeScrollListener()
+  if (scrollObserver) scrollObserver.disconnect()
 })
 
 definePageMeta({ layout: 'alter8' })
 </script>
 
 <style scoped>
-/* ========== FONTS ========== */
-@font-face {
-  font-family: 'Capitolium News';
-  src: url('/fonts/Capitolium News W01 2 Regular/Capitolium News W01 2 Regular.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
+.text-style {
+  font-family: 'Montserrat', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-@font-face {
-  font-family: 'Capitolium News';
-  src: url('/fonts/Capitolium News W01 2 Bold/Capitolium News W01 2 Bold.woff2') format('woff2');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
+html, body {
+  scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
 }
 
-@font-face {
-  font-family: 'Capitolium News';
-  src: url('/fonts/Capitolium News W01 2 Italic/Capitolium News W01 2 Italic.woff2') format('woff2');
-  font-weight: 400;
-  font-style: italic;
-  font-display: swap;
+section, .scroll-section {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.3, 1.2);
 }
 
-@font-face {
-  font-family: 'Capitolium News';
-  src: url('/fonts/Capitolium News W01 2 SemiBold/Capitolium News W01 2 SemiBold.woff2') format('woff2');
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
+.shadow-left-column {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 15px rgba(224, 54, 54, 0.3);
 }
 
-@font-face {
-  font-family: 'Montserrat';
-  src: url('/fonts/Montserrat-Regular.otf') format('opentype');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
+.shadow-right-column {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 0, 0, 0.5);
 }
 
-@font-face {
-  font-family: 'Montserrat';
-  src: url('/fonts/Montserrat-Bold.otf') format('opentype');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
+.circle-shadow {
+  box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.4), 0 0 0 2px rgba(228, 210, 148, 0.3);
 }
 
-@font-face {
-  font-family: 'Montserrat';
-  src: url('/fonts/Montserrat-Light.otf') format('opentype');
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
+.circle-shadow-large {
+  box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.5), 0 0 0 3px rgba(228, 210, 148, 0.3);
 }
 
-.prose,
-.prose p,
-article,
-p,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-div,
-section {
-  font-family: 'Capitolium News', 'Montserrat', sans-serif !important;
-}
-
-.tag-noticia,
-.tag-importante {
-  font-family: 'Montserrat', sans-serif !important;
-  font-weight: 600 !important;
-  display: inline-block;
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  font-size: 0.875rem;
-}
-
-.tag-noticia {
-  background-color: #E03636;
-  color: white;
-}
-
-.tag-importante {
-  background-color: #eab308;
-  color: white;
-}
-
-.compartir-texto {
-  font-family: 'Montserrat', sans-serif !important;
-  font-weight: 500 !important;
-  color: #6b7280;
-  font-size: 0.875rem;
-}
-
-.title-main,
-.title-main span,
-h1.title-main {
-  font-family: 'Montserrat', sans-serif !important;
-  font-weight: 700 !important;
-}
-
-.excerpt-text {
-  font-family: 'Montserrat', sans-serif !important;
-  font-weight: 300 !important;
-}
-
-.carousel-caption,
-.video-caption {
-  font-family: 'Montserrat', sans-serif !important;
-  font-weight: 300 !important;
-  color: #6b7280 !important;
-  font-size: 0.9rem !important;
-}
-
-.video-caption {
-  text-align: center;
-  margin-top: 0.5rem;
-}
-
-.quote-badge .badge-name {
-  font-family: 'Montserrat', sans-serif !important;
-  font-weight: 700 !important;
-}
-
-.quote-badge .badge-role {
-  font-family: 'Montserrat', sans-serif !important;
-  font-weight: 300 !important;
-}
-
-.quote-text {
-  font-family: 'Montserrat', sans-serif !important;
-  font-weight: 300 !important;
-  font-style: italic !important;
-}
-
-.quote-block {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-}
-
-.quote-badge {
-  background-color: #1a1a1a;
-  color: white;
-  padding: 0.5rem 1.2rem;
-  display: inline-block;
-  text-align: right;
-  margin-bottom: 0;
-  width: auto;
-}
-
-.quote-container {
-  background-color: #f5f5f5;
-  width: 100%;
-  margin-top: 0;
-  padding: 2rem 2.5rem;
-  position: relative;
-}
-
-.quote-content-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
-
-.quote-mark {
-  position: absolute;
-  font-family: 'Times New Roman', Georgia, serif;
-  font-size: 15vw;
-  font-weight: 900;
-  color: #1a1a1a;
-  opacity: 0.12;
-  line-height: 1;
+.global-fixed-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.8s ease-in-out, visibility 0.8s ease-in-out;
 }
 
-.quote-open {
-  top: -6vw;
-  left: -2vw;
-}
-
-.quote-close {
-  bottom: -13vw;
-  right: -2vw;
-}
-
-.quote-text {
-  font-size: 1.15rem;
-  line-height: 1.7;
-  color: #333;
-  margin: 0;
-  flex: 1;
-  text-align: center;
-  position: relative;
+.global-fixed-background::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(circle at 50% 30%, transparent 0%, rgba(0, 0, 0, 0.3) 80%, rgba(0, 0, 0, 0.4) 100%);
+  pointer-events: none;
   z-index: 1;
-  max-width: 85%;
 }
 
-.video-block iframe {
-  transition: transform 0.3s ease;
+.global-fixed-background.show-fixed {
+  opacity: 1;
+  visibility: visible;
+}
+
+.seccion1-fondo {
+  background-image: url('/legisladores nacionales/fondo directiva.jpg');
+}
+
+.seccion3-fondo {
+  background-image: url('/legisladores nacionales/fondo departamentos.jpg');
+}
+
+.seccion4-fondo {
+  background-image: url('/legisladores nacionales/fondo partidos.jpg');
+}
+
+.scroll-section {
+  position: relative;
   width: 100%;
-  border-radius: 0.75rem;
-  aspect-ratio: 16 / 9;
+  z-index: 5;
 }
 
-.video-block:hover iframe {
-  transform: scale(1.01);
+section, .scroll-section {
+  position: relative;
+  z-index: 10;
 }
 
-.social-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  transition: all 0.3s ease;
-  border: 1px solid #e5e7eb;
-  border-radius: 0.5rem;
-  text-decoration: none;
-  background-color: white;
+.scroll-section > div {
+  position: relative;
+  z-index: 15;
 }
 
-.social-icon svg {
-  width: 20px;
-  height: 20px;
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.social-icon:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  border-color: #000000;
+.animate-fade-in-up {
+  animation: fade-in-up 0.8s ease-out forwards;
 }
 
-.block-item {
-  animation: fadeInUp 0.5s ease-out forwards;
+.animation-delay-200 {
+  animation-delay: 0.2s;
+  opacity: 0;
+  animation-fill-mode: forwards;
+}
+
+.drop-shadow-lg {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.drop-shadow {
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+@media (min-width: 1024px) {
+  .container { max-width: 1280px; }
+}
+
+/* ESTILOS GLOBALES - NO SCOPED */
+</style>
+
+<style>
+.scroll-section {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+.scroll-section.animate-in {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+.scroll-section.animate-in > * {
+  animation: fadeInUpChild 0.6s ease-out forwards;
+}
+
+@keyframes fadeInUpChild {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  background: transparent;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(224, 54, 54, 0.4);
+  border-radius: 10px;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(224, 54, 54, 0.7);
+}
+
+html { scroll-behavior: smooth; }
+
+footer {
+  display: block !important;
+  position: relative !important;
+  z-index: 100 !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-section,
+  .scroll-section.animate-in,
+  .scroll-section.animate-in > * {
+    transition: none !important;
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+.fade-fast-enter-active,
+.fade-fast-leave-active {
+  transition: opacity 0.6s ease-in;
+}
+
+.fade-fast-enter-from,
+.fade-fast-leave-to {
   opacity: 0;
 }
 
-.block-item:nth-child(1) { animation-delay: 0.05s; }
-.block-item:nth-child(2) { animation-delay: 0.1s; }
-.block-item:nth-child(3) { animation-delay: 0.15s; }
-.block-item:nth-child(4) { animation-delay: 0.2s; }
-.block-item:nth-child(5) { animation-delay: 0.25s; }
-.block-item:nth-child(6) { animation-delay: 0.3s; }
-.block-item:nth-child(7) { animation-delay: 0.35s; }
-.block-item:nth-child(8) { animation-delay: 0.4s; }
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.fade-scale-enter-active,
+.fade-scale-leave-active {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.line-clamp-3 {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+.fade-scale-enter-from {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+.fade-scale-leave-to {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+@keyframes slide-right {
+  0% { width: 0%; left: 0; }
+  50% { width: 100%; left: 0; }
+  100% { width: 0%; left: 100%; }
+}
+
+@keyframes slide-left {
+  0% { width: 0%; right: 0; }
+  50% { width: 100%; right: 0; }
+  100% { width: 0%; right: 100%; }
+}
+
+@keyframes slide-down {
+  0% { height: 0%; top: 0; }
+  50% { height: 100%; top: 0; }
+  100% { height: 0%; top: 100%; }
+}
+
+@keyframes slide-up {
+  0% { height: 0%; bottom: 0; }
+  50% { height: 100%; bottom: 0; }
+  100% { height: 0%; bottom: 100%; }
+}
+
+.animate-slide-right {
+  animation: slide-right 4s ease-in-out infinite;
+}
+
+.animate-slide-left {
+  animation: slide-left 4s ease-in-out infinite;
+}
+
+.animate-slide-down {
+  animation: slide-down 4s ease-in-out infinite;
+}
+
+.animate-slide-up {
+  animation: slide-up 4s ease-in-out infinite;
+}
+
+svg title {
+  display: none;
+}
+
+.group svg title {
+  display: none;
 }
 </style> 
 ================================= 
-plugins\adaptive-image-loader.client.ts 
+pages\proyectos.vue 
 ================================= 
  
-// plugins/adaptive-image-loader.client.ts
-export default defineNuxtPlugin(() => {
-  if (typeof window === 'undefined') return
-  
-  // Configuración de reintentos según calidad de red
-  const getConfig = () => {
-    if (navigator && 'connection' in navigator) {
-      const connection = (navigator as any).connection
-      const type = connection.effectiveType || '4g'
+<template>
+  <div class="p-8">
+    <h1 class="text-2xl font-bold mb-4">Demostración: Hash vs Query</h1>
+    
+    <div class="grid grid-cols-2 gap-8">
+      <!-- COLUMNA HASH -->
+      <div class="border p-4 rounded">
+        <h2 class="text-xl font-bold mb-4 text-blue-600">🔗 HASH (#)</h2>
+        <p class="text-sm text-gray-600 mb-4">NUNCA recarga la página</p>
+        
+        <div class="space-y-2">
+          <button @click="cambiarHash('departamento', 'lapaz')" 
+                  class="bg-blue-500 px-3 py-1 rounded block w-full">
+            #departamento=lapaz
+          </button>
+          <button @click="cambiarHash('comision', 'justicia')" 
+                  class="bg-blue-500 px-3 py-1 rounded block w-full">
+            #comision=justicia
+          </button>
+          <button @click="cambiarHashMultiple" 
+                  class="bg-blue-500 px-3 py-1 rounded block w-full">
+            #departamento=lapaz&comision=justicia
+          </button>
+          <button @click="limpiarHash" 
+                  class="bg-gray-500 px-3 py-1 rounded block w-full">
+            Limpiar Hash
+          </button>
+        </div>
+        
+        <div class="mt-4 p-2 bg-gray-100 rounded">
+          <p><strong>Hash actual:</strong> {{ hashActual }}</p>
+          <p><strong>Parámetros:</strong> {{ JSON.stringify(hashParams) }}</p>
+        </div>
+      </div>
       
-      switch (type) {
-        case 'slow-2g':
-        case '2g':
-          return { timeout: 45000, maxRetries: 2, retryDelay: 5000 }
-        case '3g':
-          return { timeout: 25000, maxRetries: 3, retryDelay: 2000 }
-        case '4g':
-          return { timeout: 12000, maxRetries: 3, retryDelay: 1000 }
-        default:
-          return { timeout: 15000, maxRetries: 3, retryDelay: 1000 }
-      }
-    }
-    return { timeout: 15000, maxRetries: 3, retryDelay: 1000 }
-  }
-  
-  // Monitorear errores de imágenes
-  document.addEventListener('error', (e) => {
-    const target = e.target as HTMLElement
-    if (target.tagName === 'IMG') {
-      const img = target as HTMLImageElement
-      // Ya manejado por AppImage
-      console.debug(`[Image] Error cargando: ${img.src}`)
-    }
-  }, true)
-  
-  // Observer para imágenes nuevas
-  const observer = new MutationObserver((mutations) => {
-    mutations.forEach((mutation) => {
-      mutation.addedNodes.forEach((node) => {
-        if (node.nodeType === Node.ELEMENT_NODE) {
-          const element = node as Element
-          if (element.tagName === 'IMG') {
-            const img = element as HTMLImageElement
-            // Verificar si la imagen se carga correctamente
-            const config = getConfig()
-            
-            const timeoutId = setTimeout(() => {
-              if (!img.complete || img.naturalHeight === 0) {
-                // Disparar evento de error manualmente
-                img.dispatchEvent(new Event('error'))
-              }
-            }, config.timeout)
-            
-            img.addEventListener('load', () => clearTimeout(timeoutId), { once: true })
-          }
-        }
-      })
-    })
-  })
-  
-  observer.observe(document.body, { childList: true, subtree: true })
-  
-  console.log('📸 [ImageLoader] Plugin cargado correctamente')
-}) 
-================================= 
-plugins\clean-console.client.ts 
-================================= 
- 
-// plugins/clean-console.client.ts
-export default defineNuxtPlugin(() => {
-  
-  // const originalError = console.error
-  // const originalWarn = console.warn
-  // const originalLog = console.log
-  
-  // // Lista de mensajes a silenciar completamente
-  // const silentMessages: string[] = [
-  //   // WebSocket / Vite HMR
-  //   'WebSocket', 'websocket', 'failed to connect', 'vite', 'hmr',
-  //   // Permissions Policy
-  //   'Permissions policy', 'compute-pressure', 'is not allowed',
-  //   // Passive event listeners
-  //   'Added non-passive event listener', 'scroll-blocking', 'touchstart', 'touchmove',
-  //   // Timeout violations
-  //   'setTimeout', 'handler took', 'Violation',
-  //   // YouTube específico (esto es clave)
-  //   'base.js', 'm=r78Drb', 'dQw4w9WgXcQ', 'youtube.com', 'ytimg',
-  //   'loadNewVideoConfig', 'player', '_.YC', '_.FD', '_.qc',
-  //   // Imágenes 404 (el AdaptiveImageLoader ya los maneja)
-  //   '404', '.png', '.jpg', '.jpeg', '.webp'
-  // ]
-  
-  // const shouldSilence = (message: string): boolean => {
-  //   if (!message) return false
-  //   const msg = message.toString().toLowerCase()
-  //   return silentMessages.some(silent => msg.includes(silent.toLowerCase()))
-  // }
-  
-  // // Silenciar console.error
-  // console.error = (...args: any[]) => {
-  //   const firstArg = args[0]?.toString() || ''
-  //   if (shouldSilence(firstArg)) return
-  //   originalError.apply(console, args)
-  // }
-  
-  // // Silenciar console.warn
-  // console.warn = (...args: any[]) => {
-  //   const firstArg = args[0]?.toString() || ''
-  //   if (shouldSilence(firstArg)) return
-  //   originalWarn.apply(console, args)
-  // }
-  
-  // // En producción, silenciar todo
-  // if (typeof window !== 'undefined' && window.location?.hostname !== 'localhost') {
-  //   console.log = () => {}
-  //   console.info = () => {}
-  //   console.debug = () => {}
-  //   console.warn = () => {}
-  //   console.error = () => {}
-  // } else {
-  //   // En desarrollo, mantener logs útiles
-  //   console.log = (...args: any[]) => {
-  //     const firstArg = args[0]?.toString() || ''
-  //     if (firstArg.includes('[SW]') ||
-  //         firstArg.includes('✅') ||
-  //         firstArg.includes('📦') ||
-  //         firstArg.includes('🚀') ||
-  //         firstArg.includes('Cargadas')) {
-  //       originalLog.apply(console, args)
-  //     }
-  //   }
-  // }
-  console.log('🔧 [clean-console] DESACTIVADO TEMPORALMENTE para diagnóstico')
-}) 
-================================= 
-plugins\preload.client.js 
-================================= 
- 
-// plugins/preload.client.js
-export default defineNuxtPlugin(() => {
-  if (typeof window === 'undefined') return
-  
-  // Precargar imágenes prioritarias
-  const priorityImages = [
-    '/Mandato Constitucional Senado/6.png',
-    '/Mandato Constitucional Senado/15.png',
-    '/Mandato Constitucional Senado/27.JPG',
-    '/Reseña Histórica del Senado/17.webp',
-    '/Reseña Histórica del Senado/63.webp',
-    '/Reseña Histórica del Senado/118.webp',
-    '/2R.png',
-    '/senadores2.png'
-  ]
-  
-  // Usar requestIdleCallback para no bloquear
-  const idleCallback = window.requestIdleCallback || ((cb) => setTimeout(cb, 100))
-  
-  idleCallback(() => {
-    priorityImages.forEach(src => {
-      // Preload con alta prioridad
-      const link = document.createElement('link')
-      link.rel = 'preload'
-      link.as = 'image'
-      link.href = src
-      link.fetchPriority = 'high'
-      document.head.appendChild(link)
-      
-      // Precargar en caché
-      const img = new Image()
-      img.fetchPriority = 'high'
-      img.src = src
-    })
-  })
-  
-  // Precargar video del hero
-  const videoSrc = '/video/video web.mp4'
-  const link = document.createElement('link')
-  link.rel = 'preload'
-  link.as = 'video'
-  link.href = videoSrc
-  link.fetchPriority = 'high'
-  document.head.appendChild(link)
-}) 
-================================= 
-plugins\sw-register.client.ts 
-================================= 
- 
-// plugins/sw-register.client.ts
-export default defineNuxtPlugin(() => {
-  // ✅ COMENTAR esta condición para activar SW en desarrollo
-  // const isDevelopment = window.location.hostname === 'localhost' || 
-  //                       window.location.hostname === '127.0.0.1' ||
-  //                       window.location.hostname.includes('.local')
-  
-  // if (isDevelopment) {
-  //   console.log('🧹 [SW] Modo desarrollo - Service Worker desactivado')
-  //   if ('serviceWorker' in navigator) {
-  //     navigator.serviceWorker.getRegistrations().then(registrations => {
-  //       registrations.forEach(registration => {
-  //         registration.unregister()
-  //         console.log('✅ [SW] Service Worker desregistrado')
-  //       })
-  //     })
-  //     if ('caches' in window) {
-  //       caches.keys().then(cacheNames => {
-  //         cacheNames.forEach(cacheName => {
-  //           caches.delete(cacheName)
-  //           console.log(`✅ [SW] Caché eliminada: ${cacheName}`)
-  //         })
-  //       })
-  //     }
-  //   }
-  //   return
-  // }
+      <!-- COLUMNA QUERY -->
+      <div class="border p-4 rounded">
+        <h2 class="text-xl font-bold mb-4 text-green-600">❓ QUERY (?)</h2>
+        <p class="text-sm text-gray-600 mb-4">Con router.push() NO recarga</p>
+        
+        <div class="space-y-2">
+          <button @click="cambiarQuery('departamento', 'lapaz')" 
+                  class="bg-green-500 text-white px-3 py-1 rounded block w-full">
+            ?departamento=lapaz
+          </button>
+          <button @click="cambiarQuery('comision', 'justicia')" 
+                  class="bg-green-500 text-white px-3 py-1 rounded block w-full">
+            ?comision=justicia
+          </button>
+          <button @click="cambiarQueryMultiple" 
+                  class="bg-green-500 text-white px-3 py-1 rounded block w-full">
+            ?departamento=lapaz&comision=justicia
+          </button>
+          <button @click="limpiarQuery" 
+                  class="bg-gray-500 text-white px-3 py-1 rounded block w-full">
+            Limpiar Query
+          </button>
+        </div>
+        
+        <div class="mt-4 p-2 bg-gray-100 rounded">
+          <p><strong>Query actual:</strong> {{ JSON.stringify($route.query) }}</p>
+        </div>
+        
+        <!-- Botón que SÍ recarga -->
+        <div class="mt-4 pt-4 border-t">
+          <p class="text-sm text-red-600 mb-2">⚠️ Esto SÍ recarga:</p>
+          <a :href="`/proyectos?departamento=lapaz`" 
+             class="bg-red-500 text-white px-3 py-1 rounded block w-full text-center">
+            Link normal ?departamento=lapaz (RECARGA)
+          </a>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Contador de recargas -->
+    <div class="mt-8 p-4 bg-yellow-100 rounded">
+      <p><strong>Recargas de página:</strong> {{ recargas }}</p>
+      <p><strong>Cambios de hash:</strong> {{ cambiosHash }}</p>
+      <p><strong>Cambios de query (con router):</strong> {{ cambiosQuery }}</p>
+    </div>
+    
+    <!-- Elementos para scroll (hash) -->
+    <div class="mt-96">
+      <div id="departamento=lapaz" class="bg-blue-100 p-8 m-4">
+        🟦 Sección: departamento-lapaz (scroll automático con hash)
+      </div>
+      <div id="comision=justicia" class="bg-green-100 p-8 m-4">
+        🟩 Sección: comision-justicia
+      </div>
+    </div>
+  </div>
+</template>
 
-  // ✅ ACTIVAR SW SIEMPRE (incluso en desarrollo)
-  if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js')
-        .then((registration) => {
-          console.log('✅ [SW] Service Worker registrado correctamente')
-          
-          // Forzar actualización cada hora
-          setInterval(() => registration.update(), 60 * 60 * 1000)
-        })
-        .catch((error) => {
-          console.log('❌ [SW] No se pudo registrar:', error.message)
-        })
-    })
-  }
-}) 
-================================= 
-public\robots.txt 
-================================= 
- 
-User-Agent: *
-Disallow:
- 
-================================= 
-public\sw.js 
-================================= 
- 
-// public/sw.js
-const CACHE_VERSION = 'v2'
-const CACHE_NAME = `senado-cache-${CACHE_VERSION}`
-const IMAGE_CACHE_NAME = `senado-images-${CACHE_VERSION}`
-const VIDEO_CACHE_NAME = `senado-videos-${CACHE_VERSION}`
+<script setup>
+import { ref, computed, watch, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
-const isDevelopment = self.location.hostname === 'localhost' || 
-                      self.location.hostname === '127.0.0.1'
+const route = useRoute()
+const router = useRouter()
 
-if (isDevelopment) {
-  console.log('[SW] Modo desarrollo - Service Worker inactivo')
-  self.addEventListener('install', () => self.skipWaiting())
-  self.addEventListener('activate', (event) => {
-    event.waitUntil(
-      caches.keys().then(keys => Promise.all(keys.map(key => caches.delete(key))))
-    )
-  })
-  self.addEventListener('fetch', (event) => {
-    event.respondWith(fetch(event.request))
-  })
-  return
-}
+// Contadores
+const recargas = ref(0)
+const cambiosHash = ref(0)
+const cambiosQuery = ref(0)
 
-// ============================================
-// INSTALACIÓN - Precargar recursos críticos
-// ============================================
-const STATIC_ASSETS = [
-  '/',
-  '/favicon.ico',
-  '/2R.png',
-  '/senadores2.png',
-  '/images/placeholder.jpg',
-  '/images/default-news.jpg'
-]
-
-self.addEventListener('install', (event) => {
-  console.log('[SW] Instalando...')
-  event.waitUntil(
-    Promise.all([
-      caches.open(CACHE_NAME).then((cache) => {
-        return cache.addAll(STATIC_ASSETS)
-      }),
-      self.skipWaiting()
-    ])
-  )
+// Detectar recarga
+onMounted(() => {
+  recargas.value++
+  console.log('🔄 Página recargada #', recargas.value)
 })
 
-self.addEventListener('activate', (event) => {
-  console.log('[SW] Activando...')
-  event.waitUntil(
-    Promise.all([
-      // Limpiar cachés antiguas
-      caches.keys().then((cacheNames) => {
-        return Promise.all(
-          cacheNames.map((cacheName) => {
-            if (cacheName !== CACHE_NAME && 
-                cacheName !== IMAGE_CACHE_NAME && 
-                cacheName !== VIDEO_CACHE_NAME) {
-              console.log('[SW] Eliminando cache antiguo:', cacheName)
-              return caches.delete(cacheName)
-            }
-          })
-        )
-      }),
-      self.clients.claim()
-    ])
-  )
+// ===== FUNCIONES PARA HASH =====
+const hashActual = computed(() => route.hash)
+const hashParams = computed(() => {
+  const hash = route.hash
+  if (!hash) return {}
+  
+  const params = {}
+  const pairs = hash.substring(1).split('&')
+  pairs.forEach(pair => {
+    const [key, value] = pair.split('=')
+    if (key) params[key] = value || true
+  })
+  return params
 })
 
-// ============================================
-// ESTRATEGIA PARA VIDEO - Cache First con verificación
-// ============================================
-const handleVideoRequest = async (request) => {
-  const cache = await caches.open(VIDEO_CACHE_NAME)
+const cambiarHash = (key, value) => {
+  const nuevosParams = { ...hashParams.value, [key]: value }
+  const hashString = Object.entries(nuevosParams)
+    .map(([k, v]) => v === true ? k : `${k}=${v}`)
+    .join('&')
   
-  try {
-    // 1. Intentar obtener del caché
-    const cachedResponse = await cache.match(request)
-    if (cachedResponse) {
-      console.log('[SW] Video desde caché:', request.url)
-      // Revalidar en segundo plano
-      fetch(request).then(response => {
-        if (response.ok) {
-          cache.put(request, response)
-        }
-      }).catch(() => {})
-      return cachedResponse
-    }
-    
-    // 2. Si no está en caché, descargar
-    console.log('[SW] Video descargando:', request.url)
-    const response = await fetch(request)
-    if (response.ok) {
-      cache.put(request, response.clone())
-    }
-    return response
-  } catch (error) {
-    console.log('[SW] Error con video:', error)
-    // Si falla, intentar de nuevo después
-    return fetch(request)
-  }
+  router.push({ hash: `#${hashString}` })
+  cambiosHash.value++
 }
 
-// ============================================
-// ESTRATEGIA PARA IMÁGENES - Cache First con prioridad
-// ============================================
-const handleImageRequest = async (request, fetchEvent) => {
-  const cache = await caches.open(IMAGE_CACHE_NAME)
-  const url = new URL(request.url)
-  
-  // Verificar si la imagen es prioritaria (visible en viewport)
-  const isPriority = request.headers.get('Priority') === 'high' || 
-                     request.headers.get('Sec-Fetch-Dest') === 'image'
-  
-  try {
-    // 1. Intentar obtener del caché
-    const cachedResponse = await cache.match(request)
-    if (cachedResponse) {
-      // Revalidar en segundo plano solo si no es prioritaria
-      if (!isPriority) {
-        fetch(request).then(response => {
-          if (response.ok && response.status !== 206) {
-            cache.put(request, response)
-          }
-        }).catch(() => {})
-      }
-      return cachedResponse
+const cambiarHashMultiple = () => {
+  router.push({ hash: '#departamento=lapaz&comision=justicia' })
+  cambiosHash.value++
+}
+
+const limpiarHash = () => {
+  router.push({ hash: '' })
+  cambiosHash.value++
+}
+
+// ===== FUNCIONES PARA QUERY =====
+const cambiarQuery = (key, value) => {
+  router.push({
+    query: {
+      ...route.query,
+      [key]: value
     }
+  })
+  cambiosQuery.value++
+}
+
+const cambiarQueryMultiple = () => {
+  router.push({
+    query: {
+      departamento: 'lapaz',
+      comision: 'justicia'
+    }
+  })
+  cambiosQuery.value++
+}
+
+const limpiarQuery = () => {
+  router.push({ query: {} })
+  cambiosQuery.value++
+}
+
+// Watches
+watch(() => route.hash, (newHash, oldHash) => {
+  console.log('📍 Hash cambió:', oldHash, '→', newHash)
+})
+
+watch(() => route.query, (newQuery, oldQuery) => {
+  console.log('📊 Query cambió:', oldQuery, '→', newQuery)
+}, { deep: true })
+</script> 
+================================= 
+pages\test.vue 
+================================= 
+ 
+<!-- pages/detalle-proyecto/[id].vue -->
+<template>
+  <div class="proyecto-detalle">
+    <!-- Header -->
+    <h1>{{ proyecto.titulo }}</h1>
     
-    // 2. Si es prioritaria, cargar con timeout
-    if (isPriority) {
-      console.log('[SW] Imagen prioritaria:', url.pathname)
+    <!-- Barra de navegación de secciones -->
+    <div class="secciones-nav bg-gray-100 p-4 sticky top-0">
+      <button @click="scrollToSection('info')">Información</button>
+      <button @click="scrollToSection('debates')">Debates</button>
+      <button @click="scrollToSection('votaciones')">Votaciones</button>
+      <button @click="scrollToSection('comentarios')">Comentarios</button>
+      <button @click="scrollToSection('documentos')">Documentos</button>
+    </div>
+    
+    <!-- Secciones con IDs -->
+    <section id="info" class="seccion">
+      <h2>Información General</h2>
+      <p>{{ proyecto.descripcion }}</p>
+    </section>
+    
+    <section id="debates" class="seccion">
+      <h2>Debates</h2>
+      <div v-for="debate in proyecto.debates" :key="debate.id">
+        {{ debate.titulo }}
+      </div>
+    </section>
+    
+    <section id="votaciones" class="seccion">
+      <h2>Votaciones</h2>
+      <!-- contenido -->
+    </section>
+    
+    <section id="comentarios" class="seccion">
+      <h2>Comentarios</h2>
+      <div v-for="comentario in proyecto.comentarios" :key="comentario.id">
+        {{ comentario.texto }}
+      </div>
+    </section>
+    
+    <section id="documentos" class="seccion">
+      <h2>Documentos</h2>
+      <!-- contenido -->
+    </section>
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+
+const route = useRoute()
+const router = useRouter()
+
+// Datos del proyecto (simulados)
+const proyecto = ref({})
+
+// Cargar datos del proyecto
+const { id } = route.params
+const { seccion } = route.query // Leer el query parameter
+
+// Función para hacer scroll a una sección
+const scrollToSection = (sectionId, options = { behavior: 'smooth' }) => {
+  console.log(`📜 Haciendo scroll a: #${sectionId}`)
+  
+  // Esperar a que el DOM esté listo
+  setTimeout(() => {
+    const element = document.getElementById(sectionId)
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
       
-      // Crear una promesa con timeout
-      const fetchPromise = fetch(request)
-      const timeoutPromise = new Promise((_, reject) => {
-        setTimeout(() => reject(new Error('Timeout')), 8000)
-      })
+      // Opcional: Resaltar la sección
+      element.classList.add('highlight-section')
+      setTimeout(() => {
+        element.classList.remove('highlight-section')
+      }, 2000)
+    } else {
+      console.warn(`⚠️ No se encontró el elemento con id: ${sectionId}`)
+    }
+  }, 300) // Pequeño delay para asegurar que el DOM cargó
+}
+
+// Cuando el componente se monta
+onMounted(async () => {
+  // Cargar datos del proyecto
+  await cargarProyecto(id)
+  
+  // Si hay una sección en el query, hacer scroll
+  if (route.query.seccion) {
+    scrollToSection(route.query.seccion)
+  }
+  
+  // Si hay un hash, también hacer scroll (por si acaso)
+  if (route.hash) {
+    const hashId = route.hash.substring(1) // quitar el #
+    scrollToSection(hashId)
+  }
+})
+
+// Watch para cuando cambia la ruta (por si navegas dentro de la misma página)
+watch(() => route.query.seccion, (nuevaSeccion, viejaSeccion) => {
+  if (nuevaSeccion && nuevaSeccion !== viejaSeccion) {
+    scrollToSection(nuevaSeccion)
+  }
+})
+
+// Función para actualizar la URL sin recargar
+const cambiarSeccion = (seccionId) => {
+  router.push({
+    query: { ...route.query, seccion: seccionId },
+    hash: `#${seccionId}`
+  })
+  // El scroll se hará automáticamente por el watch
+}
+</script>
+
+<style scoped>
+.seccion {
+  min-height: 500px;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #eee;
+  transition: background-color 0.3s;
+}
+
+.highlight-section {
+  background-color: #fff3cd;
+  box-shadow: 0 0 10px rgba(255, 193, 7, 0.5);
+}
+
+.secciones-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.secciones-nav button {
+  padding: 8px 16px;
+  background-color: #e0e0e0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.secciones-nav button:hover {
+  background-color: #d0d0d0;
+  transform: translateY(-2px);
+}
+</style> 
+================================= 
+pages\museo\galeria.vue 
+================================= 
+ 
+<template>
+  <div class="min-h-screen bg-gray-100">
+    <!-- ============================================ -->
+    <!-- TÍTULO CON ESTILO SENADO -->
+    <!-- ============================================ -->
+    <div class="relative w-full pt-[4.4vw]" ref="topSection">
+      <div class="relative w-full">
+        <!-- Líneas animadas estilo Senado -->
+        <div class="absolute top-0 left-0 h-[2px] bg-[#E4D294] animate-slide-right" style="width: 100%;"></div>
+        <div class="absolute bottom-0 right-0 h-[2px] bg-[#E4D294] animate-slide-left" style="width: 100%;"></div>
+        <div class="absolute top-0 right-0 w-[2px] bg-[#E4D294] animate-slide-down" style="height: 100%;"></div>
+        <div class="absolute bottom-0 left-0 w-[2px] bg-[#E4D294] animate-slide-up" style="height: 100%;"></div>
+        
+        <div class="bg-[#E03636] py-[0.8vw] text-center">
+          <h1 class="text-[3vw] text-white font-semibold">
+            Galería Institucional
+          </h1>
+        </div>
+      </div>
       
-      try {
-        const response = await Promise.race([fetchPromise, timeoutPromise])
-        if (response && response.ok && response.status !== 206) {
-          cache.put(request, response.clone())
-        }
-        return response
-      } catch (error) {
-        console.log('[SW] Timeout en imagen prioritaria, usando fallback')
-        // Intentar una vez más sin timeout
-        const retryResponse = await fetch(request)
-        if (retryResponse && retryResponse.ok && retryResponse.status !== 206) {
-          cache.put(request, retryResponse.clone())
-        }
-        return retryResponse
-      }
+      <p class="text-gray-600 text-lg text-center max-w-2xl mx-auto mt-6 px-4">
+        Conoce la historia y el patrimonio del Senado de Bolivia
+      </p>
+      <p class="text-gray-500 text-sm text-center mt-2 px-4">
+        {{ totalImages }} imágenes | Página {{ currentPage }} de {{ totalPages }}
+        <span v-if="!useApi" class="ml-2 text-xs text-gray-400">(datos locales)</span>
+      </p>
+    </div>
+
+    <!-- Contenido principal -->
+    <div class="container mx-auto px-4 py-8">
+      <!-- Loading -->
+      <div v-if="loading" class="flex justify-center items-center py-20">
+        <div class="inline-block w-12 h-12 border-4 border-[#E03636] border-t-transparent rounded-full animate-spin"></div>
+        <p class="ml-3 text-gray-600">Cargando galería...</p>
+      </div>
+
+      <!-- Grid de imágenes -->
+      <div v-else class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 md:gap-6">
+        <div 
+          v-for="img in paginatedImages" 
+          :key="img.id"
+          class="gallery-item cursor-pointer group"
+          @click="openImageModal(img)"
+        >
+          <div class="relative overflow-hidden rounded-xl shadow-lg bg-gray-200" style="aspect-ratio: 4/3">
+            <img 
+              :src="`/G-Institucional/${img.id}.webp`"
+              :alt="img.description"
+              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              loading="lazy"
+              @error="handleImageError"
+            />
+            
+            <div class="absolute bottom-0 left-0 right-0 bg-[#E03636]/80 backdrop-blur-sm py-2 px-2">
+              <p class="text-white text-xs md:text-sm font-medium line-clamp-2 text-center">
+                {{ img.description }}
+              </p>
+            </div>
+
+            <div class="absolute inset-0 border-2 border-white rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+            <div class="absolute inset-[3px] border border-black/30 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Paginación -->
+      <div class="flex justify-center items-center gap-2 mt-10 flex-wrap">
+        <button 
+          @click="goToPage(currentPage - 1)"
+          :disabled="currentPage === 1"
+          class="px-4 py-2 bg-[#E03636] text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#C12F2F] transition-colors text-sm"
+        >
+          ← Anterior
+        </button>
+        
+        <div class="flex gap-1 mx-2">
+          <button
+            v-for="page in visiblePages"
+            :key="page"
+            @click="goToPage(page)"
+            class="w-8 h-8 md:w-10 md:h-10 rounded-full transition-all duration-300 text-sm font-medium"
+            :class="currentPage === page 
+              ? 'bg-[#E03636] text-white scale-105 shadow-md' 
+              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'"
+          >
+            {{ page }}
+          </button>
+        </div>
+        
+        <button 
+          @click="goToPage(currentPage + 1)"
+          :disabled="currentPage === totalPages"
+          class="px-4 py-2 bg-[#E03636] text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#C12F2F] transition-colors text-sm"
+        >
+          Siguiente →
+        </button>
+      </div>
+
+      <p class="text-center text-gray-500 text-sm mt-4">
+        Página {{ currentPage }} de {{ totalPages }}
+      </p>
+    </div>
+
+    <!-- Modal de imagen ampliada -->
+    <Teleport to="body">
+      <div v-if="showImageModal" class="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center" @click.self="closeImageViewer">
+        <div class="relative w-full h-full flex flex-col items-center justify-center p-4">
+          <button 
+            @click="closeImageViewer"
+            class="absolute top-4 right-4 text-white hover:text-[#E03636] transition-colors text-3xl z-10"
+          >
+            ✕
+          </button>
+
+          <button 
+            @click="prevImage"
+            class="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 text-white/60 hover:text-white transition-colors text-3xl md:text-5xl z-10"
+          >
+            ‹
+          </button>
+
+          <div class="relative max-w-[90vw] max-h-[70vh] flex items-center justify-center">
+            <img 
+              :src="`/G-Institucional/${currentImage?.id}.webp`"
+              :alt="currentImage?.description"
+              class="max-w-full max-h-[70vh] object-contain rounded-lg"
+            />
+          </div>
+
+          <div class="mt-6 text-center max-w-2xl px-4">
+            <p class="text-white text-base md:text-xl font-medium">{{ currentImage?.description }}</p>
+          </div>
+
+          <button 
+            @click="nextImage"
+            class="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 text-white/60 hover:text-white transition-colors text-3xl md:text-5xl z-10"
+          >
+            ›
+          </button>
+
+          <p class="text-white/50 text-sm mt-4">
+            {{ currentImageIndex + 1 }} / {{ totalImages }}
+          </p>
+        </div>
+      </div>
+    </Teleport>
+  </div>
+</template>
+
+<script setup>
+import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import { useGaleria } from '~/composables/useGaleria'
+
+definePageMeta({
+  layout: 'alter8'
+})
+
+const router = useRouter()
+const route = useRoute()
+const { images: allImages, loading, fetchImages, USE_API } = useGaleria()
+
+// Referencia a la sección superior
+const topSection = ref(null)
+
+// ============================================
+// 🔥 FUNCIÓN PARA FORZAR SCROLL AL INICIO
+// ============================================
+const forceScrollToTop = () => {
+  if (process.client) {
+    // Múltiples métodos para asegurar
+    window.scrollTo(0, 0)
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+    document.documentElement.scrollTop = 0
+    document.body.scrollTop = 0
+    document.body.scrollIntoView({ block: 'start', behavior: 'instant' })
+    
+    // Si existe la referencia, hacer scroll a ella
+    if (topSection.value) {
+      topSection.value.scrollIntoView({ block: 'start', behavior: 'instant' })
     }
-    
-    // 3. Carga normal
-    const response = await fetch(request)
-    if (response && response.ok && response.status !== 206) {
-      cache.put(request, response.clone())
-    }
-    return response
-    
-  } catch (error) {
-    console.log('[SW] Error con imagen:', url.pathname)
-    // Intentar recuperar del caché incluso si falló
-    const cached = await cache.match(request)
-    if (cached) return cached
-    
-    // Si no hay caché, devolver placeholder
-    return caches.match('/images/placeholder.jpg')
   }
 }
 
 // ============================================
-// ESTRATEGIA PARA ASSETS ESTÁTICOS
+// ESTADO
 // ============================================
-const handleStaticAsset = async (request) => {
-  const cache = await caches.open(CACHE_NAME)
-  const cached = await cache.match(request)
-  if (cached) return cached
+const totalImages = computed(() => allImages.value.length)
+const useApi = computed(() => USE_API)
+
+const itemsPerPage = 20
+const currentPage = ref(1)
+const totalPages = computed(() => Math.ceil(totalImages.value / itemsPerPage))
+
+const paginatedImages = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage
+  const end = start + itemsPerPage
+  return allImages.value.slice(start, end)
+})
+
+const visiblePages = computed(() => {
+  const maxVisible = 7
+  let start = Math.max(1, currentPage.value - Math.floor(maxVisible / 2))
+  let end = Math.min(totalPages.value, start + maxVisible - 1)
   
-  const response = await fetch(request)
-  if (response.ok && response.status !== 206) {
-    cache.put(request, response.clone())
+  if (end - start + 1 < maxVisible) {
+    start = Math.max(1, end - maxVisible + 1)
   }
-  return response
+  
+  const pages = []
+  for (let i = start; i <= end; i++) {
+    pages.push(i)
+  }
+  return pages
+})
+
+const goToPage = (page) => {
+  if (page < 1 || page > totalPages.value) return
+  currentPage.value = page
+  forceScrollToTop()
+}
+
+// Manejo de error de carga
+const handleImageError = (event) => {
+  const img = event.target
+  img.src = '/images/placeholder.jpg'
 }
 
 // ============================================
-// INTERCEPTOR PRINCIPAL
+// MODAL
 // ============================================
-self.addEventListener('fetch', (event) => {
-  const url = new URL(event.request.url)
-  
-  // 🔥 EXCLUIR Centro de Noticias del caché
-  if (url.pathname === '/centro-de-noticias' || 
-      url.pathname.startsWith('/centro-de-noticias/')) {
-    event.respondWith(fetch(event.request))
-    return
+const showImageModal = ref(false)
+const currentImage = ref(null)
+const currentImageIndex = ref(0)
+
+const openImageModal = (image) => {
+  currentImage.value = image
+  currentImageIndex.value = image.id - 1
+  showImageModal.value = true
+  document.body.style.overflow = 'hidden'
+}
+
+const closeImageViewer = () => {
+  showImageModal.value = false
+  currentImage.value = null
+  document.body.style.overflow = ''
+}
+
+const nextImage = () => {
+  if (currentImageIndex.value < totalImages.value - 1) {
+    currentImageIndex.value++
+    currentImage.value = allImages.value[currentImageIndex.value]
   }
-  
-  // Solo manejar peticiones HTTP
-  if (!url.protocol.startsWith('http')) return
-  
-  // ===== VIDEOS =====
-  if (url.pathname.match(/\.(mp4|webm|ogg|mov|avi|mkv)$/i)) {
-    event.respondWith(handleVideoRequest(event.request))
-    return
+}
+
+const prevImage = () => {
+  if (currentImageIndex.value > 0) {
+    currentImageIndex.value--
+    currentImage.value = allImages.value[currentImageIndex.value]
   }
-  
-  // ===== IMÁGENES =====
-  if (url.pathname.match(/\.(png|jpg|jpeg|webp|svg|gif|ico)$/i)) {
-    event.respondWith(handleImageRequest(event.request, event))
-    return
+}
+
+const handleKeydown = (e) => {
+  if (!showImageModal.value) return
+  switch(e.key) {
+    case 'ArrowLeft': prevImage(); break
+    case 'ArrowRight': nextImage(); break
+    case 'Escape': closeImageViewer(); break
   }
+}
+
+// ============================================
+// CICLO DE VIDA - FORZAR SCROLL AL INICIO
+// ============================================
+onMounted(async () => {
+  window.addEventListener('keydown', handleKeydown)
   
-  // ===== ASSETS ESTÁTICOS (CSS, JS, FONTS) =====
-  if (url.pathname.includes('/_nuxt/') || 
-      url.pathname.includes('/css/') || 
-      url.pathname.includes('/fonts/')) {
-    event.respondWith(handleStaticAsset(event.request))
-    return
-  }
+  // 🔥 FORZAR SCROLL INMEDIATAMENTE
+  forceScrollToTop()
   
-  // ===== NAVEGACIÓN (páginas HTML) =====
-  if (event.request.mode === 'navigate') {
-    event.respondWith(
-      fetch(event.request)
-        .then((response) => {
-          const responseClone = response.clone()
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseClone)
-          })
-          return response
-        })
-        .catch(() => {
-          return caches.match('/')
-        })
-    )
-    return
-  }
+  // Cargar datos
+  await fetchImages()
+  console.log(`📸 Galería cargada: ${totalImages.value} imágenes | Usando API: ${USE_API}`)
   
-  // ===== TODO LO DEMÁS =====
-  event.respondWith(
-    fetch(event.request)
-      .catch(() => {
-        return caches.match(event.request)
-      })
-  )
-}) 
-================================= 
-public\css\fonts.css 
-================================= 
- 
-/* MONTSERRAT REGULAR (para Montserrat Alternates usa 'Montserrat Alternates' como font-family) */
-@font-face {
-  font-family: 'Montserrat';
-  src: url('/fonts/Montserrat-Regular.otf') format('opentype');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Montserrat';
-  src: url('/fonts/Montserrat-Medium.otf') format('opentype');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Montserrat';
-  src: url('/fonts/Montserrat-SemiBold.otf') format('opentype');
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Montserrat';
-  src: url('/fonts/Montserrat-Bold.otf') format('opentype');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Montserrat';
-  src: url('/fonts/Montserrat-ExtraBold.otf') format('opentype');
-  font-weight: 800;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Montserrat';
-  src: url('/fonts/Montserrat-Italic.otf') format('opentype');
-  font-weight: 400;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Montserrat';
-  src: url('/fonts/Montserrat-BoldItalic.otf') format('opentype');
-  font-weight: 700;
-  font-style: italic;
-  font-display: swap;
-}
-
-/* MONTSERRAT ALTERNATES (si prefieres esta variante) */
-@font-face {
-  font-family: 'Montserrat Alternates';
-  src: url('/fonts/MontserratAlternates-Regular.otf') format('opentype');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Montserrat Alternates';
-  src: url('/fonts/MontserratAlternates-SemiBold.otf') format('opentype');
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Montserrat Alternates';
-  src: url('/fonts/MontserratAlternates-Bold.otf') format('opentype');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-} 
-================================= 
-public\css\main.css 
-================================= 
- 
-/* assets/css/main.css */
-@tailwind base;
-@tailwind components;
-@tailwind utilities; 
-================================= 
-public\fonts\fonts.css 
-================================= 
- 
-/* MONTSERRAT REGULAR (para Montserrat Alternates usa 'Montserrat Alternates' como font-family) */
-@font-face {
-  font-family: 'Montserrat';
-  src: url('/Montserrat-Regular.otf') format('opentype');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Montserrat';
-  src: url('/Montserrat-Medium.otf') format('opentype');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Montserrat';
-  src: url('/Montserrat-SemiBold.otf') format('opentype');
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Montserrat';
-  src: url('/Montserrat-Bold.otf') format('opentype');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Montserrat';
-  src: url('/Montserrat-ExtraBold.otf') format('opentype');
-  font-weight: 800;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Montserrat';
-  src: url('/Montserrat-Italic.otf') format('opentype');
-  font-weight: 400;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Montserrat';
-  src: url('/Montserrat-BoldItalic.otf') format('opentype');
-  font-weight: 700;
-  font-style: italic;
-  font-display: swap;
-}
-
-/* MONTSERRAT ALTERNATES (si prefieres esta variante) */
-@font-face {
-  font-family: 'Montserrat Alternates';
-  src: url('/MontserratAlternates-Regular.otf') format('opentype');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Montserrat Alternates';
-  src: url('/MontserratAlternates-SemiBold.otf') format('opentype');
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Montserrat Alternates';
-  src: url('/MontserratAlternates-Bold.otf') format('opentype');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-} 
-================================= 
-scripts\check-images.bat 
-================================= 
- 
-@echo off
-chcp 65001 >nul
-setlocal enabledelayedexpansion
-
-echo ========================================
-echo  🔍 VERIFICANDO IMAGENES NO MIGRADAS
-echo ========================================
-echo.
-
-set "encontrados=0"
-
-:: Buscar en components
-echo Buscando en components...
-for /r "components" %%f in (*.vue) do (
-    findstr /c:"<img " "%%f" >nul 2>&1
-    if not errorlevel 1 (
-        set /a encontrados+=1
-        echo ⚠️  %%f
-    )
-)
-
-:: Buscar en pages
-echo.
-echo Buscando en pages...
-for /r "pages" %%f in (*.vue) do (
-    findstr /c:"<img " "%%f" >nul 2>&1
-    if not errorlevel 1 (
-        set /a encontrados+=1
-        echo ⚠️  %%f
-    )
-)
-
-:: Buscar en layouts
-if exist "layouts" (
-    echo.
-    echo Buscando en layouts...
-    for /r "layouts" %%f in (*.vue) do (
-        findstr /c:"<img " "%%f" >nul 2>&1
-        if not errorlevel 1 (
-            set /a encontrados+=1
-            echo ⚠️  %%f
-        )
-    )
-)
-
-echo.
-echo ========================================
-if !encontrados!==0 (
-    echo  ✅ TODOS LOS ARCHIVOS ESTAN MIGRADOS!
-) else (
-    echo  ⚠️ HAY !encontrados! ARCHIVOS CON ^<img^> SIN MIGRAR
-)
-echo ========================================
-pause 
-================================= 
-scripts\check-images.cmd 
-================================= 
- 
-@echo off
-setlocal enabledelayedexpansion
-
-echo ========================================
-echo  🔍 VERIFICANDO IMAGENES NO MIGRADAS
-echo ========================================
-echo.
-
-set "encontrados=0"
-
-echo Buscando en components...
-for /r "components" %%f in (*.vue) do (
-    findstr /c:"<img " "%%f" >nul 2>&1
-    if not errorlevel 1 (
-        set /a encontrados+=1
-        echo ⚠️  %%f
-    )
-)
-
-echo.
-echo Buscando en pages...
-for /r "pages" %%f in (*.vue) do (
-    findstr /c:"<img " "%%f" >nul 2>&1
-    if not errorlevel 1 (
-        set /a encontrados+=1
-        echo ⚠️  %%f
-    )
-)
-
-echo.
-echo ========================================
-if !encontrados!==0 (
-    echo  ✅ TODOS LOS ARCHIVOS ESTAN MIGRADOS!
-) else (
-    echo  ⚠️ HAY !encontrados! ARCHIVOS CON ^<img^> SIN MIGRAR
-    echo.
-    echo  Para migrar manualmente, reemplaza:
-    echo  ^<img src="..." class="..." /^>
-    echo  por:
-    echo  ^<AppImage :src="..." image-class="..." /^>
-)
-echo ========================================
-pause 
-================================= 
-scripts\clean-backups.cmd 
-================================= 
- 
-@echo off
-echo ========================================
-echo  🗑️  ELIMINANDO ARCHIVOS DE BACKUP
-echo ========================================
-echo.
-
-echo Buscando archivos .bak...
-for /r "components" %%f in (*.bak) do (
-    echo Eliminando: %%f
-    del "%%f"
-)
-for /r "pages" %%f in (*.bak) do (
-    echo Eliminando: %%f
-    del "%%f"
-)
-
-echo.
-echo ✅ Backups eliminados!
-pause 
-================================= 
-scripts\migrate-images.bat 
-================================= 
- 
-@echo off
-chcp 65001 >nul
-setlocal enabledelayedexpansion
-
-echo ========================================
-echo  🔍 MIGRACION DE IMAGENES A APPIMAGE
-echo ========================================
-echo.
-
-set "contador=0"
-
-:: Procesar components
-echo Procesando archivos en components...
-for /r "components" %%f in (*.vue) do (
-    call :procesar "%%f"
-)
-
-:: Procesar pages
-echo.
-echo Procesando archivos en pages...
-for /r "pages" %%f in (*.vue) do (
-    call :procesar "%%f"
-)
-
-:: Procesar layouts (si existe)
-if exist "layouts" (
-    echo.
-    echo Procesando archivos en layouts...
-    for /r "layouts" %%f in (*.vue) do (
-        call :procesar "%%f"
-    )
-)
-
-echo.
-echo ========================================
-echo  ✅ MIGRACION COMPLETADA!
-echo  📝 Archivos procesados: %contador%
-echo  ⚠️ Revisa los archivos .bak si hay problemas
-echo ========================================
-pause
-exit /b
-
-:procesar
-set "file=%~1"
-set "filename=%~nx1"
-
-:: Verificar si el archivo contiene <img>
-findstr /c:"<img " "%file%" >nul 2>&1
-if errorlevel 1 goto :eof
-
-set /a contador+=1
-echo.
-echo 📝 [%contador%] Procesando: %filename%
-
-:: Crear backup
-copy "%file%" "%file%.bak" >nul
-
-:: Crear archivo temporal
-set "tempfile=%file%.tmp"
-
-:: Reemplazar usando findstr y un archivo temporal
-(
-    for /f "usebackq delims=" %%a in ("%file%") do (
-        set "line=%%a"
-        set "line=!line:<img =<AppImage !"
-        set "line=!line: loading="lazy"= loading-strategy="lazy"!"
-        set "line=!line: class="= image-class="!"
-        set "line=!line: src="= :src="!"
-        echo(!line!
-    )
-) > "%tempfile%"
-
-:: Reemplazar archivo original
-move "%tempfile%" "%file%" >nul
-
-echo ✅ Modificado: %filename%
-goto :eof 
-================================= 
-scripts\migrate-images.cmd 
-================================= 
- 
-@echo off
-setlocal enabledelayedexpansion
-
-echo ========================================
-echo  🔍 MIGRACION DE IMAGENES A APPIMAGE
-echo ========================================
-echo.
-
-set "contador=0"
-
-echo Procesando archivos en components...
-for /r "components" %%f in (*.vue) do (
-    call :procesar "%%f"
-)
-
-echo.
-echo Procesando archivos en pages...
-for /r "pages" %%f in (*.vue) do (
-    call :procesar "%%f"
-)
-
-echo.
-echo ========================================
-echo  ✅ MIGRACION COMPLETADA!
-echo  📝 Archivos procesados: %contador%
-echo  ⚠️ Revisa los archivos .bak si hay problemas
-echo ========================================
-pause
-exit /b
-
-:procesar
-set "file=%~1"
-set "filename=%~nx1"
-
-:: Verificar si el archivo contiene <img>
-findstr /c:"<img " "%file%" >nul 2>&1
-if errorlevel 1 goto :eof
-
-set /a contador+=1
-echo.
-echo 📝 [%contador%] Procesando: %filename%
-
-:: Crear backup
-copy "%file%" "%file%.bak" >nul
-
-:: Crear archivo temporal
-set "tempfile=%file%.tmp"
-
-:: Reemplazar usando PowerShell (más confiable)
-powershell -Command "
-  $content = Get-Content '%file%' -Raw;
-  $content = $content -replace '<img ', '<AppImage ';
-  $content = $content -replace ' loading=\"lazy\"', ' loading-strategy=\"lazy\"';
-  $content = $content -replace ' class=\"', ' image-class=\"';
-  $content = $content -replace ' src=\"', ' :src=\"';
-  [System.IO.File]::WriteAllText('%tempfile%', $content, [System.Text.UTF8Encoding]::new($false))
-"
-
-:: Reemplazar archivo original
-move "%tempfile%" "%file%" >nul
-
-echo ✅ Modificado: %filename%
-goto :eof 
-================================= 
-scripts\restore-backups.cmd 
-================================= 
- 
-@echo off
-echo ========================================
-echo  ↩️  RESTAURANDO BACKUPS
-echo ========================================
-echo.
-
-echo Restaurando archivos en components...
-for /r "components" %%f in (*.bak) do (
-    set "original=%%~dpnf"
-    set "original=!original!.vue"
-    echo Restaurando: !original!
-    copy "%%f" "!original!" >nul
-)
-
-echo.
-echo Restaurando archivos en pages...
-for /r "pages" %%f in (*.bak) do (
-    set "original=%%~dpnf"
-    set "original=!original!.vue"
-    echo Restaurando: !original!
-    copy "%%f" "!original!" >nul
-)
-
-echo.
-echo ✅ Backups restaurados!
-pause 
-================================= 
-scripts\rollback.bat 
-================================= 
- 
-@echo off
-chcp 65001 >nul
-setlocal enabledelayedexpansion
-
-echo ========================================
-echo  ↩️  ROLLBACK - RESTAURANDO BACKUPS
-echo ========================================
-echo.
-echo ⚠️  ADVERTENCIA: Esto restaurara TODOS los archivos
-echo    a su estado anterior a la migracion.
-echo.
-
-set /p confirm="¿Estas seguro de continuar? (S/N): "
-
-if /i not "%confirm%"=="S" (
-    echo ❌ Rollback cancelado
-    pause
-    exit /b
-)
-
-set "restaurados=0"
-set "errores=0"
-
-:: Restaurar components
-echo.
-echo Restaurando archivos en components...
-for /r "components" %%f in (*.bak) do (
-    set "original=%%~dpnf"
-    set "original=!original!.vue"
-    if exist "!original!" (
-        echo    Restaurando: %%~nxf
-        copy "%%f" "!original!" >nul
-        if errorlevel 1 (
-            echo       ❌ Error al restaurar
-            set /a errores+=1
-        ) else (
-            echo       ✅ Restaurado
-            set /a restaurados+=1
-        )
-    ) else (
-        echo    ⚠️  El archivo original no existe: %%~nxf
-        set /a errores+=1
-    )
-)
-
-:: Restaurar pages
-echo.
-echo Restaurando archivos en pages...
-for /r "pages" %%f in (*.bak) do (
-    set "original=%%~dpnf"
-    set "original=!original!.vue"
-    if exist "!original!" (
-        echo    Restaurando: %%~nxf
-        copy "%%f" "!original!" >nul
-        if errorlevel 1 (
-            echo       ❌ Error al restaurar
-            set /a errores+=1
-        ) else (
-            echo       ✅ Restaurado
-            set /a restaurados+=1
-        )
-    ) else (
-        echo    ⚠️  El archivo original no existe: %%~nxf
-        set /a errores+=1
-    )
-)
-
-:: Restaurar layouts
-if exist "layouts" (
-    echo.
-    echo Restaurando archivos en layouts...
-    for /r "layouts" %%f in (*.bak) do (
-        set "original=%%~dpnf"
-        set "original=!original!.vue"
-        if exist "!original!" (
-            echo    Restaurando: %%~nxf
-            copy "%%f" "!original!" >nul
-            if errorlevel 1 (
-                echo       ❌ Error al restaurar
-                set /a errores+=1
-            ) else (
-                echo       ✅ Restaurado
-                set /a restaurados+=1
-            )
-        ) else (
-            echo    ⚠️  El archivo original no existe: %%~nxf
-            set /a errores+=1
-        )
-    )
-)
-
-echo.
-echo ========================================
-if %errores%==0 (
-    echo  ✅ ROLLBACK COMPLETADO!
-    echo  📝 Archivos restaurados: %restaurados%
-) else (
-    echo  ⚠️ ROLLBACK COMPLETADO CON ERRORES
-    echo  📝 Archivos restaurados: %restaurados%
-    echo  ❌ Errores: %errores%
-)
-echo ========================================
-pause 
-================================= 
-stores\counter.ts 
-================================= 
- 
-// stores/counter.ts
-export const useCounterStore = defineStore('counter', {
-  state: () => ({
-    count: 0
-  }),
-  actions: {
-    increment() {
-      this.count++
+  // 🔥 FORZAR SCROLL NUEVAMENTE DESPUÉS DE CARGAR
+  nextTick(() => {
+    forceScrollToTop()
+  })
+  
+  // 🔥 FORZAR SCROLL CON DELAY (por si hay renderizado asíncrono)
+  setTimeout(() => {
+    forceScrollToTop()
+  }, 50)
+  
+  setTimeout(() => {
+    forceScrollToTop()
+  }, 200)
+})
+
+// 🔥 Escuchar cambios de ruta para forzar scroll
+if (process.client) {
+  // Cada vez que se complete la navegación
+  router.afterEach((to) => {
+    if (to.path === '/museo/galeria') {
+      forceScrollToTop()
     }
-  }
-}) 
-================================= 
-stores\departamentosStore.js 
-================================= 
- 
-// stores/departamentosStore.js
-import { defineStore } from 'pinia'
+  })
+}
 
-export const useDepartamentosStore = defineStore('departamentos', {
-  state: () => ({
-    departamentos: [],
-    isLoading: false,
-    loaded: false,
-    error: null
-  }),
-  
-  actions: {
-    async fetchDepartamentos() {
-      // Si ya están cargados, retornar inmediatamente
-      if (this.loaded && this.departamentos.length > 0) {
-        return this.departamentos
-      }
-      
-      // Evitar múltiples cargas simultáneas
-      if (this.isLoading) {
-        return new Promise((resolve) => {
-          const checkInterval = setInterval(() => {
-            if (this.loaded) {
-              clearInterval(checkInterval)
-              resolve(this.departamentos)
-            }
-          }, 50)
-        })
-      }
-      
-      this.isLoading = true
-      
-      try {
-        // Importación dinámica con manejo de errores
-        const { departamentosData } = await import('@/data/departamentos.js')
-        this.departamentos = departamentosData || []
-        this.loaded = true
-        return this.departamentos
-      } catch (error) {
-        console.error('Error cargando departamentos:', error)
-        this.error = error
-        // Cargar datos de respaldo para no romper la UI
-        this.departamentos = []
-        this.loaded = true
-        return []
-      } finally {
-        this.isLoading = false
-      }
-    },
-    
-    // Precargar en segundo plano (llamada segura)
-    preload() {
-      if (!this.loaded && !this.isLoading) {
-        return this.fetchDepartamentos().catch(() => null)
-      }
-      return Promise.resolve(null)
-    }
-  },
-  
-  getters: {
-    getDepartamentos: (state) => state.departamentos,
-    isLoaded: (state) => state.loaded
-  }
-}) 
-================================= 
-stores\modalStore.js 
-================================= 
- 
-// stores/modalStore.js
-import { defineStore } from 'pinia'
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleKeydown)
+  document.body.style.overflow = ''
+})
+</script>
 
-export const useModalStore = defineStore('modal', {
-  state: () => ({
-    activeModal: null,
-    modalProps: null
-  }),
-  
-  actions: {
-    openModal(modalName, props = {}) {
-      this.activeModal = modalName
-      this.modalProps = props
-      document.body.style.overflow = 'hidden'
-      document.body.classList.add('modal-open')
-    },
-    
-    closeModal() {
-      this.activeModal = null
-      this.modalProps = null
-      document.body.style.overflow = ''
-      document.body.classList.remove('modal-open')
-    }
-  }
-}) 
+<style scoped>
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.fixed {
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.gallery-item {
+  transition: transform 0.2s ease;
+}
+
+.gallery-item:hover {
+  transform: translateY(-3px);
+}
+
+/* ============================================ */
+/* ANIMACIONES DE BORDES ESTILO SENADO */
+/* ============================================ */
+@keyframes slide-right {
+  0% { width: 0%; left: 0; }
+  50% { width: 100%; left: 0; }
+  100% { width: 0%; left: 100%; }
+}
+
+@keyframes slide-left {
+  0% { width: 0%; right: 0; }
+  50% { width: 100%; right: 0; }
+  100% { width: 0%; right: 100%; }
+}
+
+@keyframes slide-down {
+  0% { height: 0%; top: 0; }
+  50% { height: 100%; top: 0; }
+  100% { height: 0%; top: 100%; }
+}
+
+@keyframes slide-up {
+  0% { height: 0%; bottom: 0; }
+  50% { height: 100%; bottom: 0; }
+  100% { height: 0%; bottom: 100%; }
+}
+
+.animate-slide-right {
+  animation: slide-right 4s ease-in-out infinite;
+}
+
+.animate-slide-left {
+  animation: slide-left 4s ease-in-out infinite;
+}
+
+.animate-slide-down {
+  animation: slide-down 4s ease-in-out infinite;
+}
+
+.animate-slide-up {
+  animation: slide-up 4s ease-in-out infinite;
+}
+</style> 
 ================================= 
-stores\videoStore.js 
+pages\noticias\index.vue 
 ================================= 
  
-// stores/videoStore.js
-import { defineStore } from 'pinia'
+<template>
+  <div class="min-h-screen bg-gray-50 pt-[5vw]">
+    <div class="container mx-auto px-4">
 
-const isClient = typeof window !== 'undefined'
+      <!-- Título -->
+      <div class="text-center">
+        <h1 class="text-4xl md:text-5xl font-bold text-gray-800">
+          Todas las <span class="text-[#E03636]">Noticias</span>
+        </h1>
+        <div class="w-24 h-1 bg-[#E03636] mx-auto mt-4"></div>
+        <p class="text-gray-600 mt-4">Explora todas las noticias del Senado de Bolivia</p>
+      </div>
 
-export const useVideoStore = defineStore('video', {
-  state: () => ({
-    videoUrl: null,
-    isLoaded: false,
-    isLoading: false,
-    error: null
-  }),
+      <!-- Estado de carga -->
+      <div v-if="loading" class="flex justify-center items-center py-20">
+        <div class="inline-block w-12 h-12 border-4 border-[#E03636] border-t-transparent rounded-full animate-spin"></div>
+        <p class="ml-3 text-gray-500">Cargando noticias...</p>
+      </div>
 
-  actions: {
-    async loadVideo(src) {
-      // ✅ En SSR, no hacer nada
-      if (!isClient) {
-        console.log('📹 [VIDEO STORE] SSR - Ignorando carga')
-        return null
-      }
+      <!-- Estado de error -->
+      <div v-else-if="error" class="text-center py-20">
+        <p class="text-red-600 mb-4">{{ error }}</p>
+        <button @click="recargar" class="bg-[#E03636] text-white px-4 py-2 rounded-lg hover:bg-[#C12F2F] transition">Reintentar</button>
+      </div>
 
-      // ✅ Si ya está en memoria, devolver inmediatamente
-      if (this.isLoaded && this.videoUrl) {
-        console.log('✅ [VIDEO STORE] Video YA ESTÁ EN MEMORIA, reutilizando')
-        return this.videoUrl
-      }
+      <!-- Grid de noticias -->
+      <div v-else-if="todasLasNoticias.length > 0">
+        <div 
+          v-for="(fila, filaIndex) in noticiasPorFilas" 
+          :key="filaIndex"
+          :class="['rounded-xl transition-all duration-300', filaIndex % 2 === 1 ? 'bg-gray-100' : '']"
+        >
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 p-4">
+            <div 
+              v-for="noticia in fila" 
+              :key="noticia.id"
+              class="group bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer"
+              @click="verNoticia(noticia)"
+            >
+              <div class="relative overflow-hidden aspect-[4/5]">
+                <img 
+                  :src="noticia.featuredImage?.url || noticia.imagen || '/images/default-news.jpg'" 
+                  :alt="noticia.titulo"
+                  class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  loading="lazy"
+                />
+                
+                <div class="absolute bottom-0 left-0 right-0 h-[40%] bg-[rgba(224,54,54,0.85)] backdrop-blur-sm p-4 flex flex-col justify-end">
+                  <p class="text-white text-[0.7rem] sm:text-[0.8rem] md:text-[0.9rem] lg:text-[1rem] mb-1 opacity-90">
+                    {{ formatearFecha(noticia.publishedAt || noticia.fecha) }}
+                  </p>
+                  <h3 class="font-bold text-white group-hover:text-red-200 transition-colors line-clamp-2 text-[0.8rem] sm:text-[0.9rem] md:text-[1rem] lg:text-[1.1rem] leading-tight">
+                    {{ noticia.titulo }}
+                  </h3>
+                  <div class="mt-2 flex justify-end">
+                    <span class="text-white text-[0.7rem] sm:text-[0.8rem] md:text-[0.9rem] font-semibold flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                      Leer más
+                      <svg class="w-3 h-3 sm:w-3 sm:h-3 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-      // ✅ Si está cargando, esperar
-      if (this.isLoading) {
-        console.log('⏳ [VIDEO STORE] Video ya está cargando, esperando...')
-        return new Promise((resolve) => {
-          const checkInterval = setInterval(() => {
-            if (this.isLoaded) {
-              clearInterval(checkInterval)
-              resolve(this.videoUrl)
-            }
-          }, 100)
-        })
-      }
+      <!-- Sin resultados -->
+      <div v-else-if="!loading && todasLasNoticias.length === 0" class="text-center py-20">
+        <p class="text-gray-500">No hay noticias disponibles</p>
+        <button 
+          @click="recargar"
+          class="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-[#E03636] text-white rounded-lg hover:bg-[#C12F2F] transition"
+        >
+          Reintentar
+        </button>
+      </div>
 
-      this.isLoading = true
-      this.error = null
+      <!-- Paginación -->
+      <div v-if="totalPaginas > 1 && !loading" class="flex justify-center gap-2 mt-12">
+        <button 
+          @click="cambiarPagina(paginaActual - 1)" 
+          :disabled="paginaActual === 1" 
+          class="px-4 py-2 rounded-lg border border-gray-300 bg-white hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition"
+        >
+          Anterior
+        </button>
+        <div class="flex gap-1">
+          <button 
+            v-for="p in paginasMostradas" 
+            :key="p" 
+            @click="cambiarPagina(p)" 
+            :class="['w-10 h-10 rounded-lg transition', paginaActual === p ? 'bg-[#E03636] text-white' : 'bg-white border border-gray-300 hover:bg-gray-100']"
+          >
+            {{ p }}
+          </button>
+        </div>
+        <button 
+          @click="cambiarPagina(paginaActual + 1)" 
+          :disabled="paginaActual === totalPaginas" 
+          class="px-4 py-2 rounded-lg border border-gray-300 bg-white hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition"
+        >
+          Siguiente
+        </button>
+      </div>
+    </div>
+  </div>
+</template>
 
-      try {
-        console.log('🔍 [VIDEO STORE] Buscando video en caché SW...')
+<script setup>
+import { ref, computed, onMounted, onActivated, onDeactivated, nextTick } from 'vue'
+import { useRouter } from 'vue-router'
+import { useNoticias } from '~/composables/useNoticias'
 
-        // ✅ 1. PRIMERO: Intentar desde caché del Service Worker
-        let response = null
-        if (typeof caches !== 'undefined') {
-          try {
-            const cache = await caches.open('senado-videos-v2')
-            const cached = await cache.match(src)
-            if (cached && cached.ok) {
-              console.log('📹 [VIDEO STORE] Video ENCONTRADO en caché SW ✅')
-              response = cached
-            }
-          } catch (cacheError) {
-            console.log('⚠️ [VIDEO STORE] Error accediendo a caché:', cacheError.message)
-          }
-        }
+definePageMeta({ layout: 'alter8', ssr: true })
 
-        // ✅ 2. Si NO está en caché, descargar desde red
-        if (!response) {
-          console.log('📹 [VIDEO STORE] Video NO está en caché, descargando desde red...')
-          response = await fetch(src, {
-            headers: {
-              'Cache-Control': 'no-cache'
-            }
-          })
+const router = useRouter()
 
-          if (!response.ok) {
-            throw new Error(`HTTP ${response.status}: ${response.statusText}`)
-          }
+const { 
+  todasLasNoticias,
+  loading, 
+  error,
+  fetchTodasLasNoticias
+} = useNoticias()
 
-          console.log('📹 [VIDEO STORE] Descarga completada, status:', response.status)
+// Paginación local
+const paginaActual = ref(1)
+const itemsPorPagina = ref(12)
 
-          // Guardar en caché del SW para futuras veces
-          if (typeof caches !== 'undefined') {
-            try {
-              const cache = await caches.open('senado-videos-v2')
-              await cache.put(src, response.clone())
-              console.log('📹 [VIDEO STORE] Video almacenado en caché SW')
-            } catch (cacheError) {
-              console.log('⚠️ [VIDEO STORE] No se pudo guardar en caché:', cacheError.message)
-            }
-          }
-        } else {
-          console.log('📹 [VIDEO STORE] Usando video DESDE CACHÉ SW (sin descarga)')
-        }
-
-        // ✅ 3. Convertir a blob para almacenar en memoria
-        const blob = await response.blob()
-        const url = URL.createObjectURL(blob)
-
-        // ✅ 4. Guardar en store
-        this.videoUrl = url
-        this.isLoaded = true
-
-        console.log('✅ [VIDEO STORE] Video cargado en memoria')
-        console.log('📹 [VIDEO STORE] Tamaño:', (blob.size / 1024 / 1024).toFixed(2), 'MB')
-        return url
-
-      } catch (err) {
-        console.error('❌ [VIDEO STORE] Error:', err.message)
-        this.error = err.message
-        return null
-      } finally {
-        this.isLoading = false
-      }
-    },
-
-    getVideoUrl() {
-      if (!isClient) return null
-      return this.videoUrl
-    },
-
-    isVideoLoaded() {
-      if (!isClient) return false
-      return this.isLoaded && !!this.videoUrl
-    },
-
-    clearVideo() {
-      if (!isClient) return
-      if (this.videoUrl) {
-        console.log('🗑️ [VIDEO STORE] Limpiando video del store')
-        URL.revokeObjectURL(this.videoUrl)
-        this.videoUrl = null
-        this.isLoaded = false
-        this.error = null
-      }
+// 🔥 FUNCIÓN PARA FORZAR SCROLL AL INICIO
+const scrollToTop = () => {
+  console.log('📍 [NoticiasPage] Forzando scroll al inicio')
+  
+  // Múltiples intentos para asegurar
+  const doScroll = () => {
+    // Intentar con el contenedor de scroll-snap
+    const container = document.querySelector('.snap-container')
+    if (container) {
+      container.scrollTop = 0
+      container.scrollTo({ top: 0, behavior: 'instant' })
     }
+    // También scroll normal
+    window.scrollTo(0, 0)
   }
-}) 
+  
+  doScroll()
+  setTimeout(doScroll, 50)
+  setTimeout(doScroll, 150)
+  setTimeout(doScroll, 300)
+  setTimeout(doScroll, 500)
+}
+
+// Noticias paginadas
+const noticiasPaginadas = computed(() => {
+  const start = (paginaActual.value - 1) * itemsPorPagina.value
+  const end = start + itemsPorPagina.value
+  return todasLasNoticias.value.slice(start, end)
+})
+
+// Agrupar noticias en filas de 4
+const noticiasPorFilas = computed(() => {
+  const filas = []
+  for (let i = 0; i < noticiasPaginadas.value.length; i += 4) {
+    filas.push(noticiasPaginadas.value.slice(i, i + 4))
+  }
+  return filas
+})
+
+// Total de páginas
+const totalPaginas = computed(() => {
+  return Math.ceil(todasLasNoticias.value.length / itemsPorPagina.value)
+})
+
+// Páginas mostradas en la paginación
+const paginasMostradas = computed(() => {
+  const total = totalPaginas.value
+  const actual = paginaActual.value
+  const rango = 5
+  
+  let start = Math.max(1, actual - Math.floor(rango / 2))
+  let end = Math.min(total, start + rango - 1)
+  
+  if (end - start + 1 < rango) {
+    start = Math.max(1, end - rango + 1)
+  }
+  
+  return Array.from({ length: end - start + 1 }, (_, i) => start + i)
+})
+
+// Formatear fecha
+const formatearFecha = (fecha) => {
+  if (!fecha) return ''
+  return new Date(fecha).toLocaleDateString('es-ES', { 
+    day: 'numeric', 
+    month: 'long', 
+    year: 'numeric' 
+  })
+}
+
+// Ver noticia
+const verNoticia = (noticia) => {
+  if (noticia && noticia.slug) {
+    router.push(`/noticias/${noticia.slug}`)
+  }
+}
+
+// Volver atrás
+const volverAtras = () => {
+  router.back()
+}
+
+// Cambiar página
+const cambiarPagina = (pagina) => {
+  if (pagina >= 1 && pagina <= totalPaginas.value) {
+    paginaActual.value = pagina
+    // Al cambiar de página, forzar scroll al inicio
+    setTimeout(scrollToTop, 100)
+  }
+}
+
+// Recargar
+const recargar = async () => {
+  await fetchTodasLasNoticias()
+  scrollToTop()
+}
+
+// 🔥 KeepAlive hook - cuando se reactiva la página
+onActivated(() => {
+  console.log('🔄 [NoticiasPage] Reactivada - Forzando scroll al inicio')
+  scrollToTop()
+})
+
+onDeactivated(() => {
+  console.log('💤 [NoticiasPage] Desactivada')
+})
+
+// Cargar noticias al montar
+onMounted(async () => {
+  console.log('🎬 [NoticiasPage] Montada')
+  await fetchTodasLasNoticias()
+  await nextTick()
+  scrollToTop()
+})
+
+useHead({ title: 'Todas las Noticias - Senado Bolivia' })
+</script>
+
+<style scoped>
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.aspect-\[4\/5\] {
+  aspect-ratio: 4 / 5;
+}
+</style>

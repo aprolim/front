@@ -1,20 +1,9 @@
 <template>
-  <div class="min-h-screen bg-gray-50 py-12">
+  <div class="min-h-screen bg-gray-50 pt-[5vw]">
     <div class="container mx-auto px-4">
-      
-      <!-- Botón volver -->
-      <button 
-        @click="volverAtras"
-        class="inline-flex items-center gap-2 text-[#E03636] hover:text-[#C12F2F] transition-colors mb-6 group"
-      >
-        <svg class="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-        </svg>
-        Volver
-      </button>
 
       <!-- Título -->
-      <div class="text-center mb-12">
+      <div class="text-center">
         <h1 class="text-4xl md:text-5xl font-bold text-gray-800">
           Todas las <span class="text-[#E03636]">Noticias</span>
         </h1>
