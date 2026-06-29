@@ -1,3 +1,5 @@
+// components/SenateChamber/data/senateChamberData.js
+
 // ============================================
 // POSICIONES SVG
 // ============================================
@@ -39,9 +41,9 @@ export const senateChamberStyles = {
 // ============================================
 export const defaultParties = [
   { id: 'Partido Demócrata Cristiano', name: 'Partido Demócrata Cristiano', shortName: 'PDC', color: '#016167', count: 16 },
+  { id: 'Libre', name: 'Libre', shortName: 'LIBRE', color: '#FF0000', count: 12 },
   { id: 'Unidad', name: 'Unidad', shortName: 'UNIDAD', color: '#FFB848', count: 7 },
-  { id: 'Autonomía para Bolivia Súmate', name: 'Autonomía para Bolivia Súmate', shortName: 'APB', color: '#511966', count: 1 },
-  { id: 'Libre', name: 'Libre', shortName: 'LIBRE', color: '#FF0000', count: 12 }
+  { id: 'Autonomía para Bolivia Súmate', name: 'Autonomía para Bolivia Súmate', shortName: 'APB', color: '#511966', count: 1 }
 ]
 
 // ============================================

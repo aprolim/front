@@ -59,8 +59,10 @@
           <div class="column center-column">
             <div class="hemicycle-container center-transparent-panel">
               <div class="hemicycle-svg-container" @mousemove="onMouseMove">
+                <!-- ✅ KEY DINÁMICA: Forzar recreación del SVG cuando cambia selectedSenator -->
                 <svg 
                   ref="svgElement"
+                  :key="`svg-${selectedSenator?.id || 'none'}-${renderCounter}`"
                   class="hemicycle-svg"
                   :viewBox="viewBox"
                   xmlns="http://www.w3.org/2000/svg"
@@ -81,39 +83,8 @@
                   </defs>
 
                   <g>
-                    <!-- ASIENTO #1 - RENDERIZADO INDEPENDIENTE -->
-                    <g v-if="seat1">
-                      <circle
-                        :cx="seat1.x"
-                        :cy="seat1.y"
-                        r="20" 
-                        :fill="getSeatColor(seat1)"
-                        :stroke-width="selectedSenator?.id === 1 ? '2' : '1.5'"
-                        :class="['senator-circle', { 
-                          'selected': selectedSenator?.id === 1, 
-                          'hovered': hoveredSeat?.id === 1 
-                        }]"
-                        @click="selectSenator(seat1)"
-                        @mouseenter="handleMouseEnter(seat1)"
-                        @mouseleave="handleMouseLeave()"
-                      />
-                      <text 
-                        v-if="showLabels"
-                        :x="seat1.x"
-                        :y="seat1.y"
-                        text-anchor="middle"
-                        :fill="getTextColor(seat1.partyColor)"
-                        font-size="12" 
-                        font-weight="bold"
-                        class="seat-number"
-                      >
-                        {{ seat1.seatNumber }}
-                      </text>
-                    </g>
-
-                    <!-- ASIENTOS #2 al #36 -->
                     <g 
-                      v-for="seat in otherSeats" 
+                      v-for="seat in allSeats" 
                       :key="`seat-${seat.id}`"
                     >
                       <circle
@@ -126,7 +97,7 @@
                           'selected': selectedSenator?.id === seat.id, 
                           'hovered': hoveredSeat?.id === seat.id 
                         }]"
-                        @click="selectSenator(seat)"
+                        @click="handleSeatClick(seat, $event)"
                         @mouseenter="handleMouseEnter(seat)"
                         @mouseleave="handleMouseLeave()"
                       />
@@ -180,7 +151,7 @@
           <!-- COLUMNA DERECHA -->
           <div class="column right-column w-full">
             <div class="info-panel transparent-panel w-full">
-              <div v-if="selectedSenator" :key="selectedSenator.id" class="senator-details">
+              <div v-if="selectedSenator" :key="`senator-${selectedSenator.id}-${renderCounter}`" class="senator-details">
                 <div class="senator-photo-container">
                   <div class="senator-photo-circle" :class="senateChamberStyles.senatorPhoto">
                     <img 
@@ -229,53 +200,6 @@
                 <div class="empty-icon">🎯</div>
                 <h2 class="font-bold">Selecciona un Senador</h2>
                 <p class="font-bold">Haz click en cualquier círculo del hemiciclo para ver información detallada</p>
-                <div class="empty-tips">
-                  <p class="party-indicator">
-                    <span class="color-dot">
-                      <svg width="28" height="28" viewBox="0 0 28 28">
-                        <circle cx="14" cy="14" r="12" fill="#016167"/>
-                        <circle cx="14" cy="14" r="8" fill="white"/>
-                        <circle cx="14" cy="14" r="7" fill="#016167"/>
-                        <circle cx="11" cy="11" r="2" fill="rgba(255,255,255,0.5)" opacity="0.7"/>
-                      </svg>
-                    </span>
-                    <strong>PDC:</strong> 16 senadores
-                  </p>
-                  <p class="party-indicator">
-                    <span class="color-dot">
-                      <svg width="28" height="28" viewBox="0 0 28 28">
-                        <circle cx="14" cy="14" r="12" fill="#FF0000"/>
-                        <circle cx="14" cy="14" r="8" fill="white"/>
-                        <circle cx="14" cy="14" r="7" fill="#FF0000"/>
-                        <circle cx="11" cy="11" r="2" fill="rgba(255,255,255,0.5)" opacity="0.7"/>
-                      </svg>
-                    </span>
-                    <strong>Libre:</strong> 12 senadores
-                  </p>
-                  <p class="party-indicator">
-                    <span class="color-dot">
-                      <svg width="28" height="28" viewBox="0 0 28 28">
-                        <circle cx="14" cy="14" r="12" fill="#FFB848"/>
-                        <circle cx="14" cy="14" r="8" fill="white"/>
-                        <circle cx="14" cy="14" r="7" fill="#FFB848"/>
-                        <circle cx="11" cy="11" r="2" fill="rgba(255,255,255,0.5)" opacity="0.7"/>
-                      </svg>
-                    </span>
-                    <strong>Unidad:</strong> 7 senadores
-                  </p>
-                  <p class="party-indicator">
-                    <span class="color-dot">
-                      <svg width="28" height="28" viewBox="0 0 28 28">
-                        <circle cx="14" cy="14" r="12" fill="#511966"/>
-                        <circle cx="14" cy="14" r="8" fill="white"/>
-                        <circle cx="14" cy="14" r="7" fill="#511966"/>
-                        <circle cx="11" cy="11" r="2" fill="rgba(255,255,255,0.5)" opacity="0.7"/>
-                      </svg>
-                    </span>
-                    <strong>APB:</strong> 1 senador
-                  </p>
-                  <p><strong>Total:</strong> 36 senadores</p>
-                </div>
               </div>
             </div>
           </div>
@@ -297,7 +221,7 @@
 </template>
 
 <script setup>
-import { watch, onMounted, onUnmounted } from 'vue'
+import { ref, watch, onMounted, onUnmounted } from 'vue'
 import { defaultSenators, defaultParties, senateChamberStyles } from './SenateChamber/data/senateChamberData'
 import { useSenateChamber } from '~/composables/useSenateChamber'
 
@@ -318,6 +242,11 @@ const props = defineProps({
 const emit = defineEmits(['senator-selected', 'senator-deselected', 'party-filter-changed', 'view-reset'])
 
 // ============================================
+// RENDER COUNTER - Para forzar recreación del SVG
+// ============================================
+const renderCounter = ref(0)
+
+// ============================================
 // COMPOSABLE
 // ============================================
 const {
@@ -329,14 +258,13 @@ const {
   svgElement,
   imageError,
   isSelecting,
-  seat1,
-  otherSeats,
+  allSeats,
   getFilteredCount,
   getSeatColor,
   getTextColor,
   formatInitials,
   handleImageError,
-  selectSenator,
+  selectSenator: selectSenatorFromComposable,
   togglePartyFilter,
   resetView,
   handleMouseEnter,
@@ -346,10 +274,55 @@ const {
 } = useSenateChamber(props, emit)
 
 // ============================================
+// HANDLER DE CLICK - CON PREVENCIÓN DE PROPAGACIÓN Y FORCE UPDATE
+// ============================================
+const handleSeatClick = (seat, event) => {
+  // Prevenir cualquier propagación
+  if (event) {
+    event.stopPropagation()
+    event.preventDefault()
+  }
+  
+  // Si está seleccionando, ignorar
+  if (isSelecting.value) {
+    console.log('⏳ [SenateChamber] Selección en proceso, click ignorado')
+    return
+  }
+  
+  // Ejecutar selección
+  selectSenatorFromComposable(seat)
+  
+  // ✅ FORZAR RECREACIÓN DEL SVG INCREMENTANDO EL COUNTER
+  renderCounter.value++
+}
+
+// ============================================
+// HANDLER GLOBAL - Capturar clicks fuera
+// ============================================
+const handleGlobalClick = (event) => {
+  if (!isSelecting.value && selectedSenator.value) {
+    const target = event.target
+    if (target && target.tagName === 'svg') {
+      selectedSenator.value = null
+      emit('senator-deselected')
+      renderCounter.value++
+    }
+  }
+}
+
+// ============================================
+// WRAPPER PARA selectSenator - Forzar actualización
+// ============================================
+const selectSenator = (seat) => {
+  selectSenatorFromComposable(seat)
+  renderCounter.value++
+}
+
+// ============================================
 // LIFECYCLE
 // ============================================
 onMounted(() => {
-  // console.log('SenateChamber montado')
+  console.log('✅ SenateChamber montado correctamente')
 })
 
 onUnmounted(() => {
@@ -357,16 +330,25 @@ onUnmounted(() => {
 })
 
 watch(() => props.senators, () => {
-  // cleanup cache when senators change
+  cleanup()
 }, { deep: false })
 
 // ============================================
 // EXPOSE
 // ============================================
-defineExpose({ resetView, selectSenator, deselectSenator: () => selectedSenator.value = null })
+defineExpose({ 
+  resetView, 
+  selectSenator, 
+  deselectSenator: () => { 
+    selectedSenator.value = null
+    renderCounter.value++
+  },
+  forceUpdate: () => { renderCounter.value++ }
+})
 </script>
 
 <style scoped>
+/* ... (todos los estilos existentes se mantienen igual) ... */
 .senate-chamber {
   font-family: 'Montserrat';
   background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
@@ -814,48 +796,6 @@ defineExpose({ resetView, selectSenator, deselectSenator: () => selectedSenator.
 .empty-icon { font-size: 2.5em; margin-bottom: 0.5em; width: 100%; }
 .empty-state h2 { margin: 0 0 0.3rem 0; color: #4b5563; font-size: 1.1em; width: 100%; }
 .empty-state p { margin: 0 0 0.5rem 0; font-size: 0.8em; width: 100%; }
-
-.empty-tips {
-  text-align: left;
-  background: #f9fafb;
-  padding: 0.5em;
-  border-radius: 6px;
-  border-left: 3px solid #3b82f6;
-  width: 100%;
-}
-
-.empty-tips p { margin: 0.2rem 0; font-size: 0.75em; width: 100%; }
-.empty-tips p {
-  display: flex;
-  align-items: center;
-  gap: 0.5em;
-  margin: 0.2em 0;
-  font-size: 0.75em;
-  width: 100%;
-}
-
-.party-indicator {
-  display: flex;
-  align-items: center;
-  gap: 0.5em;
-}
-
-.color-dot {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-  flex-shrink: 0;
-}
-
-.color-dot svg {
-  width: 20px;
-  height: 20px;
-  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.2));
-}
-
-.empty-tips p strong { color: #1f2937; }
 
 .chamber-footer {
   background: #1f2937;

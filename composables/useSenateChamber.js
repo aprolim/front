@@ -1,3 +1,4 @@
+// composables/useSenateChamber.js
 import { ref, reactive, computed, nextTick } from 'vue'
 import { seatPositions } from '~/components/SenateChamber/data/senateChamberData'
 
@@ -12,24 +13,29 @@ export function useSenateChamber(props, emit) {
   const tooltipStyle = reactive({ left: '0px', top: '0px' })
   const svgElement = ref(null)
   const imageError = ref(false)
+  
+  // ✅ BLOQUEO DE SELECCIÓN - Más robusto
   const isSelecting = ref(false)
+  let selectionLockTimer = null
+  let lastSelectedId = null
 
   // Cache
   const partyCountCache = reactive({})
   const textColorCache = reactive({})
 
-  // Timeouts
+  // Timeouts para tooltip
   let hoverTimeout = null
   let mouseMoveTimeout = null
   let lastHoveredSeatId = null
   let isUpdatingTooltip = false
 
   // ============================================
-  // COMPUTED
+  // COMPUTED - TODOS LOS ASIENTOS JUNTOS
   // ============================================
   const allSeats = computed(() => {
     const seats = props.senators.map(senator => {
       let position = { x: 0, y: 0 }
+      
       if (senator.seatNumber >= 1 && senator.seatNumber <= 7) {
         position = seatPositions.upperLeft[senator.seatNumber - 1]
       } else if (senator.seatNumber >= 8 && senator.seatNumber <= 14) {
@@ -39,15 +45,21 @@ export function useSenateChamber(props, emit) {
       } else if (senator.seatNumber >= 26 && senator.seatNumber <= 36) {
         position = seatPositions.lowerRight[senator.seatNumber - 26]
       }
-      return { ...senator, x: position.x, y: position.y }
+      
+      return { 
+        ...senator, 
+        x: position.x || 0, 
+        y: position.y || 0 
+      }
     })
-    if (activeFilters.value.length === 0) return seats
+    
+    if (activeFilters.value.length === 0) {
+      return seats
+    }
+    
     const filterSet = new Set(activeFilters.value)
     return seats.filter(seat => filterSet.has(seat.party))
   })
-
-  const seat1 = computed(() => allSeats.value.find(s => s.id === 1) || null)
-  const otherSeats = computed(() => allSeats.value.filter(s => s.id !== 1))
 
   // ============================================
   // MÉTODOS
@@ -55,11 +67,13 @@ export function useSenateChamber(props, emit) {
   const getFilteredCount = (partyId) => {
     if (activeFilters.value.length === 0) {
       if (!partyCountCache[partyId]) {
-        partyCountCache[partyId] = props.parties.find(p => p.id === partyId)?.count || 
+        const party = props.parties.find(p => p.id === partyId)
+        partyCountCache[partyId] = party?.count || 
           props.senators.filter(s => s.party === partyId).length
       }
       return partyCountCache[partyId]
     }
+    
     if (activeFilters.value.includes(partyId)) {
       return props.senators.filter(s => s.party === partyId).length
     }
@@ -71,7 +85,7 @@ export function useSenateChamber(props, emit) {
     if (activeFilters.value.length > 0 && !activeFilters.value.includes(seat.party)) {
       return '#f3f4f6'
     }
-    return seat.partyColor
+    return seat.partyColor || '#f3f4f6'
   }
 
   const getTextColor = (bg) => {
@@ -103,29 +117,81 @@ export function useSenateChamber(props, emit) {
     imageError.value = true
   }
 
+  // ============================================
+  // SELECT SENADOR - CON BLOQUEO ROBUSTO
+  // ============================================
   const selectSenator = async (senator) => {
     if (!senator) return
     
+    // ✅ BLOQUEO: Si ya está seleccionando, ignorar
+    if (isSelecting.value) {
+      console.log('⏳ [SenateChamber] Selección en proceso, ignorando click')
+      return
+    }
+    
+    // ✅ Si es el mismo senador, deseleccionar (con bloqueo)
+    if (selectedSenator.value?.id === senator.id) {
+      // Si ya está seleccionado, deseleccionar
+      if (selectionLockTimer) {
+        clearTimeout(selectionLockTimer)
+        selectionLockTimer = null
+      }
+      
+      isSelecting.value = true
+      selectedSenator.value = null
+      emit('senator-deselected')
+      
+      // Liberar bloqueo después de un tiempo
+      selectionLockTimer = setTimeout(() => {
+        isSelecting.value = false
+        selectionLockTimer = null
+      }, 300)
+      return
+    }
+    
+    // ✅ BLOQUEAR selección
+    isSelecting.value = true
+    
+    // Limpiar hover
     if (hoverTimeout) {
       clearTimeout(hoverTimeout)
       hoverTimeout = null
     }
     hoveredSeat.value = null
     lastHoveredSeatId = null
-    isSelecting.value = true
     
     try {
+      // Esperar al siguiente ciclo de renderizado
       await nextTick()
+      
+      // Resetear error de imagen
       imageError.value = false
+      
+      // Guardar el ID del senador seleccionado
+      lastSelectedId = senator.id
+      
+      // Actualizar el senador seleccionado
       selectedSenator.value = senator
       emit('senator-selected', senator)
+      
+      // Esperar otro ciclo para asegurar que el DOM se actualizó
       await nextTick()
-      setTimeout(() => {
-        isSelecting.value = false
-      }, 300)
+      
     } catch (error) {
       console.error('Error seleccionando senador:', error)
-      isSelecting.value = false
+      // En caso de error, resetear
+      selectedSenator.value = null
+    } finally {
+      // ✅ Liberar el bloqueo DESPUÉS de que todo se haya actualizado
+      if (selectionLockTimer) {
+        clearTimeout(selectionLockTimer)
+        selectionLockTimer = null
+      }
+      
+      selectionLockTimer = setTimeout(() => {
+        isSelecting.value = false
+        selectionLockTimer = null
+      }, 300)
     }
   }
 
@@ -141,11 +207,17 @@ export function useSenateChamber(props, emit) {
   }
 
   const resetView = () => {
+    if (selectionLockTimer) {
+      clearTimeout(selectionLockTimer)
+      selectionLockTimer = null
+    }
     selectedSenator.value = null
     activeFilters.value = []
     hoveredSeat.value = null
     imageError.value = false
     isSelecting.value = false
+    lastSelectedId = null
+    
     if (hoverTimeout) {
       clearTimeout(hoverTimeout)
       hoverTimeout = null
@@ -253,7 +325,7 @@ export function useSenateChamber(props, emit) {
         tooltipStyle.left = `${x}px`
         tooltipStyle.top = `${y}px`
       } catch (error) {
-        // console.warn('Error actualizando tooltip:', error)
+        // Silencioso
       } finally {
         isUpdatingTooltip = false
       }
@@ -275,6 +347,10 @@ export function useSenateChamber(props, emit) {
       clearTimeout(mouseMoveTimeout)
       mouseMoveTimeout = null
     }
+    if (selectionLockTimer) {
+      clearTimeout(selectionLockTimer)
+      selectionLockTimer = null
+    }
   }
 
   return {
@@ -289,8 +365,6 @@ export function useSenateChamber(props, emit) {
     isSelecting,
     // Computed
     allSeats,
-    seat1,
-    otherSeats,
     // Métodos
     getFilteredCount,
     getSeatColor,
