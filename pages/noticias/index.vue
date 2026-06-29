@@ -50,11 +50,12 @@
                     {{ formatearFecha(noticia.publishedAt || noticia.fecha) }}
                   </p>
                   
-                  <!-- ✅ TÍTULO CON ASTERISCOS EN ROJO CON SOMBRA NEGRA -->
+                  <!-- ✅ TÍTULO COMPLETAMENTE EN BLANCO - SIN RESALTADOS -->
                   <h3 
                     class="font-bold text-white transition-colors line-clamp-2 text-[0.8rem] sm:text-[0.9rem] md:text-[1rem] lg:text-[1.1rem] leading-tight"
-                    v-html="formatearTituloConAsteriscos(noticia.titulo)"
-                  ></h3>
+                  >
+                    {{ limpiarAsteriscos(noticia.titulo) }}
+                  </h3>
                   
                   <div class="mt-2 flex justify-end">
                     <span class="text-white text-[0.7rem] sm:text-[0.8rem] md:text-[0.9rem] font-semibold flex items-center gap-1 group-hover:translate-x-1 transition-transform">
@@ -134,27 +135,11 @@ const paginaActual = ref(1)
 const itemsPorPagina = ref(12)
 
 // ============================================
-// FUNCIÓN PARA LIMPIAR ASTERISCOS (para alt y otros)
+// FUNCIÓN PARA LIMPIAR ASTERISCOS (para alt y títulos)
 // ============================================
 const limpiarAsteriscos = (texto) => {
   if (!texto) return ''
   return texto.replace(/\*/g, '')
-}
-
-// ============================================
-// FUNCIÓN PARA FORMATEAR TÍTULO CON ASTERISCOS EN ROJO CON SOMBRA NEGRA
-// ============================================
-const formatearTituloConAsteriscos = (titulo) => {
-  if (!titulo) return ''
-  
-  // Reemplazar *texto* con un span con estilo inline
-  // Color rojo #E03636 con sombra negra para contraste
-  return titulo.replace(
-    /\*(.*?)\*/g, 
-    (match, contenido) => {
-      return `<span style="color: #E03636 !important; font-weight: 700 !important; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0 0 8px rgba(0,0,0,0.8) !important;">${contenido}</span>`
-    }
-  )
 }
 
 // ============================================

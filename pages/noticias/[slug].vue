@@ -48,10 +48,12 @@
                        :style="{ width: `${peekLeftWidth}%` }"
                        @click="anteriorImagen">
                     <div class="relative w-full h-full">
-                      <img 
+                      <SafeImage 
                         :src="imagenAnterior?.url || imagenActual?.url"
                         :alt="imagenAnterior?.alt || 'Imagen anterior'"
-                        class="w-full h-full object-cover"
+                        image-class="w-full h-full object-cover"
+                        :max-retries="5"
+                        :persistent="true"
                       />
                       <div class="absolute inset-0 bg-black/30"></div>
                     </div>
@@ -61,10 +63,13 @@
                   <div class="flex-shrink-0 transition-all duration-500 h-full"
                        :style="{ width: `${imagenActualWidth}%` }">
                     <div class="relative w-full h-full overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900">
-                      <img 
+                      <SafeImage 
                         :src="imagenActual?.url"
                         :alt="imagenActual?.alt"
-                        class="w-full h-full object-contain"
+                        image-class="w-full h-full object-contain"
+                        :max-retries="5"
+                        :persistent="true"
+                        priority="high"
                       />
                     </div>
                   </div>
@@ -74,10 +79,12 @@
                        :style="{ width: `${peekRightWidth}%` }"
                        @click="siguienteImagen">
                     <div class="relative w-full h-full">
-                      <img 
+                      <SafeImage 
                         :src="imagenSiguiente?.url || imagenActual?.url"
                         :alt="imagenSiguiente?.alt || 'Imagen siguiente'"
-                        class="w-full h-full object-cover"
+                        image-class="w-full h-full object-cover"
+                        :max-retries="5"
+                        :persistent="true"
                       />
                       <div class="absolute inset-0 bg-black/30"></div>
                     </div>
@@ -132,17 +139,19 @@
                     :src="img.url" 
                     :alt="`Miniatura ${idx + 1}`"
                     class="w-full h-full object-cover"
+                    loading="lazy"
                   />
                 </button>
               </div>
             </div>
           </div>
 
-          <!-- REDES SOCIALES -->
+          <!-- REDES SOCIALES - TODAS EN NEGRO CON MISMO COMPORTAMIENTO -->
           <div class="px-6 md:px-8 mb-6">
             <div class="flex justify-end items-center gap-3 py-2 border-b border-gray-200">
               <span class="compartir-texto">Compartir:</span>
               
+              <!-- Facebook -->
               <a 
                 :href="`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(windowLocation)}`"
                 target="_blank"
@@ -155,6 +164,7 @@
                 </svg>
               </a>
 
+              <!-- X (Twitter) -->
               <a 
                 :href="`https://twitter.com/intent/tweet?text=${encodeURIComponent(noticiaData.noticia.title)}&url=${encodeURIComponent(windowLocation)}`"
                 target="_blank"
@@ -167,6 +177,7 @@
                 </svg>
               </a>
 
+              <!-- Instagram -->
               <a 
                 :href="`https://www.instagram.com/`"
                 target="_blank"
@@ -180,6 +191,7 @@
                 </svg>
               </a>
 
+              <!-- YouTube -->
               <a 
                 :href="`https://www.youtube.com/results?search_query=${encodeURIComponent(noticiaData.noticia.title)}`"
                 target="_blank"
@@ -189,6 +201,19 @@
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#000000">
                   <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                </svg>
+              </a>
+
+              <!-- WhatsApp -->
+              <a 
+                :href="`https://api.whatsapp.com/send?text=${encodeURIComponent(noticiaData.noticia.title)}%0A%0A${encodeURIComponent(windowLocation)}`"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="social-icon"
+                aria-label="Compartir en WhatsApp"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#000000">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
                 </svg>
               </a>
             </div>
@@ -315,6 +340,7 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch, nextTick, onActivated } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import SafeImage from '@/components/SafeImage.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -334,7 +360,7 @@ const noticiasPorPagina = 2
 const maxRelacionadaIndex = computed(() => Math.max(0, Math.ceil(noticiasRelacionadas.value.length / noticiasPorPagina) - 1))
 
 // ============================================
-// 🔥 PRIMERO: useAsyncData - OBTENER LOS DATOS
+// useAsyncData - OBTENER LOS DATOS
 // ============================================
 const { data: noticiaData, pending, error, refresh } = await useAsyncData(
   `noticia-${route.params.slug}`,
@@ -378,14 +404,6 @@ const { data: noticiaData, pending, error, refresh } = await useAsyncData(
         })
       }
       
-      if (imagenes.length === 0) {
-        imagenes.push(
-          { url: 'https://picsum.photos/id/1015/1920/1080', alt: 'Paisaje montañoso', caption: 'Vista panorámica del Senado', orientation: 'horizontal' },
-          { url: 'https://picsum.photos/id/104/1080/1920', alt: 'Edificio institucional', caption: 'Fachada principal del Senado', orientation: 'vertical' },
-          { url: 'https://picsum.photos/id/15/1920/1080', alt: 'Naturaleza boliviana', caption: 'Sala de sesiones', orientation: 'horizontal' }
-        )
-      }
-      
       let blocks = noticia.blocks || []
       if (blocks.length === 0 && noticia.content) {
         blocks = convertirHTMLaBloques(noticia.content)
@@ -412,10 +430,8 @@ const { data: noticiaData, pending, error, refresh } = await useAsyncData(
 )
 
 // ============================================
-// 🔥 SEGUNDO: Computed que DEPENDEN de noticiaData
+// Computed - Verificar si la noticia es válida
 // ============================================
-
-// Verificar si la noticia tiene contenido válido
 const noticiaValida = computed(() => {
   const noticia = noticiaData.value?.noticia
   if (!noticia) return false
@@ -424,7 +440,30 @@ const noticiaValida = computed(() => {
   return tieneTitulo && tieneContenido
 })
 
-// SEO dinámico basado en la noticia
+// ============================================
+// OBTENER LA IMAGEN PARA OG (primera del carrusel)
+// ============================================
+const obtenerImagenOG = () => {
+  // Si hay imágenes en el carrusel, usar la primera
+  if (imagenesCarrusel.value && imagenesCarrusel.value.length > 0) {
+    return imagenesCarrusel.value[0].url
+  }
+  
+  const noticia = noticiaData.value?.noticia
+  if (noticia?.featuredImage?.url) {
+    return noticia.featuredImage.url
+  }
+  if (noticia?.gallery && noticia.gallery.length > 0) {
+    return noticia.gallery[0].url
+  }
+  
+  // Fallback: imagen por defecto local
+  return '/images/default-news.jpg'
+}
+
+// ============================================
+// SEO dinámico
+// ============================================
 const seoData = computed(() => {
   const noticia = noticiaData.value?.noticia
   if (!noticia) {
@@ -437,7 +476,7 @@ const seoData = computed(() => {
   
   const tituloLimpio = noticia.title?.replace(/\*/g, '') || 'Noticia'
   const descripcion = noticia.excerpt || noticia.description || noticia.content?.substring(0, 160) || 'Noticias del Senado de Bolivia'
-  const imagen = noticia.featuredImage?.url || noticia.gallery?.[0]?.url || '/images/default-news.jpg'
+  const imagen = obtenerImagenOG()
   
   return {
     title: `${tituloLimpio} | Senado de Bolivia`,
@@ -448,18 +487,23 @@ const seoData = computed(() => {
 })
 
 // ============================================
-// 🔥 TERCERO: useHead - SEO (depende de seoData)
+// useHead - SEO (se genera en el servidor con SSR)
 // ============================================
 useHead({
   title: () => seoData.value.title,
   meta: [
     { name: 'description', content: () => seoData.value.description },
+    // Open Graph
     { property: 'og:title', content: () => seoData.value.title },
     { property: 'og:description', content: () => seoData.value.description },
     { property: 'og:image', content: () => seoData.value.image },
+    { property: 'og:image:width', content: '1200' },
+    { property: 'og:image:height', content: '630' },
+    { property: 'og:image:type', content: 'image/jpeg' },
     { property: 'og:url', content: () => seoData.value.url },
     { property: 'og:type', content: 'article' },
     { property: 'og:site_name', content: 'Senado de Bolivia' },
+    // Twitter Cards
     { name: 'twitter:card', content: 'summary_large_image' },
     { name: 'twitter:title', content: () => seoData.value.title },
     { name: 'twitter:description', content: () => seoData.value.description },
@@ -490,7 +534,7 @@ useHead({
 })
 
 // ============================================
-// 🔥 CUARTO: RESTO DE FUNCIONES
+// RESTO DE FUNCIONES
 // ============================================
 
 const cargarNoticiasRelacionadas = async (noticiaId, categoria, tags) => {
@@ -603,10 +647,8 @@ const verNoticiaRelacionada = (noticia) => {
 }
 
 // ============================================
-// 🔥 QUINTO: WATCHERS Y LIFECYCLE
+// FORZAR SCROLL AL INICIO
 // ============================================
-
-// Forzar scroll al inicio
 const forceScrollToTop = () => {
   if (process.client) {
     window.scrollTo(0, 0)
@@ -619,7 +661,9 @@ const forceScrollToTop = () => {
   }
 }
 
-// Watchers
+// ============================================
+// WATCHERS
+// ============================================
 watch(noticiaData, (newData) => {
   if (newData?.noticia) {
     cargarNoticiasRelacionadas(newData.noticia._id, newData.noticia.category, newData.noticia.tags)
@@ -640,6 +684,9 @@ if (error.value) {
   errorMsg.value = error.value.message
 }
 
+// ============================================
+// COMPUTED DEL CARRUSEL
+// ============================================
 const imagenActual = computed(() => {
   if (imagenesCarrusel.value.length === 0) return null
   return imagenesCarrusel.value[currentIndex.value]
@@ -704,7 +751,7 @@ const handleKeydown = (e) => {
 }
 
 // ============================================
-// 🔥 SEXTO: LIFECYCLE
+// LIFECYCLE
 // ============================================
 onMounted(() => {
   windowLocation.value = window.location.href
@@ -953,6 +1000,10 @@ h1.title-main {
   transform: scale(1.01);
 }
 
+/* ============================================ */
+/* ESTILOS PARA ICONOS DE REDES SOCIALES - TODAS NEGRAS */
+/* ============================================ */
+
 .social-icon {
   display: inline-flex;
   align-items: center;
@@ -960,22 +1011,33 @@ h1.title-main {
   width: 36px;
   height: 36px;
   transition: all 0.3s ease;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #d1d5db;
   border-radius: 0.5rem;
   text-decoration: none;
-  background-color: white;
+  background-color: #ffffff;
 }
 
 .social-icon svg {
   width: 20px;
   height: 20px;
+  transition: all 0.3s ease;
+  fill: #000000;
 }
 
 .social-icon:hover {
+  background-color: #1a202c !important;
+  border-color: #000000 !important;
   transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  border-color: #000000;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
+
+.social-icon:hover svg {
+  fill: #ffffff !important;
+}
+
+/* ============================================ */
+/* BLOQUES DE CONTENIDO */
+/* ============================================ */
 
 .block-item {
   animation: fadeInUp 0.5s ease-out forwards;
