@@ -40,7 +40,7 @@
               <div class="relative overflow-hidden aspect-[4/5]">
                 <img 
                   :src="noticia.featuredImage?.url || noticia.imagen || '/images/default-news.jpg'" 
-                  :alt="noticia.titulo"
+                  :alt="limpiarAsteriscos(noticia.titulo)"
                   class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                   loading="lazy"
                 />
@@ -49,9 +49,13 @@
                   <p class="text-white text-[0.7rem] sm:text-[0.8rem] md:text-[0.9rem] lg:text-[1rem] mb-1 opacity-90">
                     {{ formatearFecha(noticia.publishedAt || noticia.fecha) }}
                   </p>
-                  <h3 class="font-bold text-white group-hover:text-red-200 transition-colors line-clamp-2 text-[0.8rem] sm:text-[0.9rem] md:text-[1rem] lg:text-[1.1rem] leading-tight">
-                    {{ noticia.titulo }}
-                  </h3>
+                  
+                  <!-- ✅ TÍTULO CON ASTERISCOS EN ROJO CON SOMBRA NEGRA -->
+                  <h3 
+                    class="font-bold text-white transition-colors line-clamp-2 text-[0.8rem] sm:text-[0.9rem] md:text-[1rem] lg:text-[1.1rem] leading-tight"
+                    v-html="formatearTituloConAsteriscos(noticia.titulo)"
+                  ></h3>
+                  
                   <div class="mt-2 flex justify-end">
                     <span class="text-white text-[0.7rem] sm:text-[0.8rem] md:text-[0.9rem] font-semibold flex items-center gap-1 group-hover:translate-x-1 transition-transform">
                       Leer más
@@ -129,19 +133,40 @@ const {
 const paginaActual = ref(1)
 const itemsPorPagina = ref(12)
 
-// 🔥 FUNCIÓN PARA FORZAR SCROLL AL INICIO
-const scrollToTop = () => {
-  console.log('📍 [NoticiasPage] Forzando scroll al inicio')
+// ============================================
+// FUNCIÓN PARA LIMPIAR ASTERISCOS (para alt y otros)
+// ============================================
+const limpiarAsteriscos = (texto) => {
+  if (!texto) return ''
+  return texto.replace(/\*/g, '')
+}
+
+// ============================================
+// FUNCIÓN PARA FORMATEAR TÍTULO CON ASTERISCOS EN ROJO CON SOMBRA NEGRA
+// ============================================
+const formatearTituloConAsteriscos = (titulo) => {
+  if (!titulo) return ''
   
-  // Múltiples intentos para asegurar
+  // Reemplazar *texto* con un span con estilo inline
+  // Color rojo #E03636 con sombra negra para contraste
+  return titulo.replace(
+    /\*(.*?)\*/g, 
+    (match, contenido) => {
+      return `<span style="color: #E03636 !important; font-weight: 700 !important; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0 0 8px rgba(0,0,0,0.8) !important;">${contenido}</span>`
+    }
+  )
+}
+
+// ============================================
+// FUNCIÓN PARA FORZAR SCROLL AL INICIO
+// ============================================
+const scrollToTop = () => {
   const doScroll = () => {
-    // Intentar con el contenedor de scroll-snap
     const container = document.querySelector('.snap-container')
     if (container) {
       container.scrollTop = 0
       container.scrollTo({ top: 0, behavior: 'instant' })
     }
-    // También scroll normal
     window.scrollTo(0, 0)
   }
   
@@ -206,16 +231,10 @@ const verNoticia = (noticia) => {
   }
 }
 
-// Volver atrás
-const volverAtras = () => {
-  router.back()
-}
-
 // Cambiar página
 const cambiarPagina = (pagina) => {
   if (pagina >= 1 && pagina <= totalPaginas.value) {
     paginaActual.value = pagina
-    // Al cambiar de página, forzar scroll al inicio
     setTimeout(scrollToTop, 100)
   }
 }
@@ -226,19 +245,15 @@ const recargar = async () => {
   scrollToTop()
 }
 
-// 🔥 KeepAlive hook - cuando se reactiva la página
+// KeepAlive hook
 onActivated(() => {
-  console.log('🔄 [NoticiasPage] Reactivada - Forzando scroll al inicio')
   scrollToTop()
 })
 
-onDeactivated(() => {
-  console.log('💤 [NoticiasPage] Desactivada')
-})
+onDeactivated(() => {})
 
 // Cargar noticias al montar
 onMounted(async () => {
-  console.log('🎬 [NoticiasPage] Montada')
   await fetchTodasLasNoticias()
   await nextTick()
   scrollToTop()
