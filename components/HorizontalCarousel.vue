@@ -2,7 +2,7 @@
   <div class="relative w-full h-full flex flex-col items-center justify-center px-[4vw]">
     <div class="h-[4.4vw]"></div>
     
-    <h2 v-if="title" class="text-[2.5vw] font-bold text-center mb-8 text-[#E03636] uppercase tracking-wide">
+    <h2 v-if="title" class="text-[2.5vw] font-bold text-center mb-8 text-[#A54A4A] uppercase tracking-wide">
       {{ title }}
     </h2>
 
@@ -61,7 +61,7 @@
     </div>
 
     <NuxtLink to="/museo/galeria">
-      <button class="text-[1.2vw] bg-[#E03636] hover:bg-[#E03636]/80 text-white font-bold py-[.5em] px-8 rounded-[.5vw] transition-all duration-300 transform hover:scale-105 uppercase tracking-wider shadow-lg mt-6">
+      <button class="text-[1.2vw] bg-[#A54A4A]/90 hover:bg-[#A54A4A] text-white font-bold py-[.5em] px-8 rounded-[.5vw] transition-all duration-300 transform hover:scale-105 uppercase tracking-wider shadow-lg mt-6">
         Ver más
       </button>
     </NuxtLink>

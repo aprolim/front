@@ -1,10 +1,7 @@
 <template>
   <div class="min-h-screen text-style">
-    <!-- Fondos fijos -->
-    <div class="global-fixed-background seccion1-fondo" :class="{ 'show-fixed': isSeccion1Visible }"></div>
-    <div class="global-fixed-background seccion2-fondo" :class="{ 'show-fixed': isSeccion2Visible }"></div>
-    <div class="global-fixed-background seccion3-fondo" :class="{ 'show-fixed': isSeccion3Visible }"></div>
-    <div class="global-fixed-background seccion4-fondo" :class="{ 'show-fixed': isSeccion4Visible }"></div>
+    <!-- 🔥 TODAS LAS SECCIONES USAN EL MISMO FONDO (seccion3-fondo) -->
+    <div class="global-fixed-background seccion3-fondo show-fixed"></div>
     
     <!-- SECCIÓN 1 - NOTICIAS IMPORTANTES -->
     <section 
@@ -25,7 +22,7 @@
           <div v-if="loadingImportantes" class="flex justify-center items-center">
             <div class="text-center">
               <div class="inline-block w-12 h-12 border-4 border-[#E03636] border-t-transparent rounded-full animate-spin"></div>
-              <p class="mt-4 text-gray-600">Cargando noticias importantes...</p>
+              <p class="mt-4 text-white drop-shadow-lg">Cargando noticias importantes...</p>
             </div>
           </div>
           
@@ -33,14 +30,14 @@
             
             <!-- COLUMNA IZQUIERDA - TEXTO -->
             <div class="flex flex-col items-center text-center px-4">
-              <div class="w-full">
-                <h2 class="text-[#E03636] text-[2.2vw] lg:text-[2vw] font-bold mb-[1.5vw] leading-tight">
+              <div class="w-full bg-[#8A1B19]/70 backdrop-blur-sm rounded-xl p-6">
+                <h2 class="text-white text-[2.2vw] lg:text-[2vw] font-bold mb-[1.5vw] leading-tight drop-shadow-lg">
                   {{ limpiarAsteriscos(noticiasCarousel[currentIndex].titulo) }}
                 </h2>
-                <div class="text-gray-800 text-[1.2vw] lg:text-[1.1vw] leading-relaxed my-[2vw] text-justify">
+                <div class="text-white/90 text-[1.2vw] lg:text-[1.1vw] leading-relaxed my-[2vw] text-justify drop-shadow-md">
                   <p>{{ noticiasCarousel[currentIndex].descripcion }}</p>
                   <p v-if="noticiasCarousel[currentIndex].descripcion2">{{ noticiasCarousel[currentIndex].descripcion2 }}</p>
-                  <p class="text-[#E03636] font-semibold text-right mt-4">
+                  <p class="text-[#E4D294] font-semibold text-right mt-4">
                     {{ formatearFecha(noticiasCarousel[currentIndex].publishedAt || noticiasCarousel[currentIndex].fecha) }}
                   </p>
                 </div>
@@ -53,20 +50,20 @@
                   @click="currentIndex = index"
                   class="rounded-full transition-all duration-300"
                   :class="currentIndex === index 
-                    ? 'w-[2vw] h-[2vw] bg-[#E03636] ring-[.2vw] ring-[#E03636] ring-offset-[.2vw] ring-offset-white' 
-                    : 'w-[2vw] h-[2vw] bg-[#E03636]/40 hover:bg-[#E03636]/70'"
+                    ? 'w-[2vw] h-[2vw] bg-[#A54A4A] ring-[.2vw] ring-[#A54A4A] ring-offset-[.2vw] ring-offset-white' 
+                    : 'w-[2vw] h-[2vw] bg-white/40 hover:bg-white/70'"
                 ></button>
               </div>
             </div>
             
             <!-- COLUMNA DERECHA - IMAGEN -->
             <div class="flex flex-col items-center justify-center px-4">
-              <div class="relative rounded-xl overflow-hidden shadow-lg w-[80%] mx-auto aspect-square">
+              <div class="relative rounded-xl overflow-hidden shadow-lg w-[80%] mx-auto aspect-square bg-black/20 backdrop-blur-sm p-2">
                 <div 
                   v-for="(noticia, index) in noticiasCarousel" 
                   :key="noticia.id"
                   ref="imageRefs"
-                  class="absolute inset-0 transition-opacity duration-700 ease-in-out"
+                  class="absolute inset-0 transition-opacity duration-700 ease-in-out rounded-lg overflow-hidden"
                   :class="[
                     currentIndex === index ? 'opacity-100 z-10' : 'opacity-0 z-0'
                   ]"
@@ -87,7 +84,7 @@
               <div class="flex justify-center mt-8">
                 <button 
                   @click="verNoticia(noticiasCarousel[currentIndex])"
-                  class="px-[1.5vw] py-[0.8vw] bg-[#E03636] hover:bg-[#C12F2F] text-white font-semibold rounded-[0.8vw] transition-all duration-300 flex items-center gap-2 group text-[1.1vw] lg:text-[1vw]"
+                  class="px-[1.5vw] py-[0.8vw] bg-[#A54A4A]/80 hover:bg-[#A54A4A] text-white font-semibold rounded-[0.8vw] transition-all duration-300 flex items-center gap-2 group text-[1.1vw] lg:text-[1vw] backdrop-blur-sm"
                 >
                   Ver noticia completa
                   <svg class="w-[1.2vw] h-[1.2vw] group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -100,7 +97,7 @@
           </div>
           
           <div v-else-if="!loadingImportantes" class="text-center py-12">
-            <p class="text-gray-600">No hay noticias importantes disponibles</p>
+            <p class="text-white drop-shadow-lg">No hay noticias importantes disponibles</p>
             <button @click="recargarDatos" class="mt-4 px-4 py-2 bg-[#E03636] text-white rounded-lg hover:bg-[#C12F2F] transition">Reintentar</button>
           </div>
           
@@ -114,7 +111,7 @@
       ref="seccion2Ref"
       class="scroll-section opacity-0 transition-all duration-800 ease-out delay-200"
       :class="{ 'animate-in': isSeccion2Visible }"
-      style="height: 100vh; position: relative; background: white; display: flex; flex-direction: column; justify-content: center; align-items: center;"
+      style="height: 100vh; position: relative; background: transparent; display: flex; flex-direction: column; justify-content: center; align-items: center;"
     >
       <MoreNewsGrid :limpiarAsteriscos="limpiarAsteriscos" targetRoute="/noticias"/>
     </div>
@@ -133,21 +130,21 @@
           <div class="absolute bottom-0 right-0 h-[.1vw] bg-[#E4D294] animate-slide-left" style="width: 100%;"></div>
           <div class="absolute top-0 right-0 w-[.1vw] bg-[#E4D294] animate-slide-down" style="height: 100%;"></div>
           <div class="absolute bottom-0 left-0 w-[.1vw] bg-[#E4D294] animate-slide-up" style="height: 100%;"></div>
-          <h2 class="text-[3vw] text-white font-semibold bg-[#E03636] py-[.3vw]">Sesiones</h2>
+          <h2 class="text-[3vw] text-white font-semibold bg-[#A54A4A] py-[.3vw]">Sesiones</h2>
         </div>
       </div>
 
       <div class="flex-1 flex flex-col justify-center">
         <div v-if="loadingSesiones" class="flex justify-center items-center py-12">
           <div class="inline-block w-12 h-12 border-4 border-[#E03636] border-t-transparent rounded-full animate-spin"></div>
-          <p class="ml-3 text-gray-600">Cargando videos...</p>
+          <p class="ml-3 text-white drop-shadow-lg">Cargando videos...</p>
         </div>
         
         <div v-else class="grid grid-cols-1 sm:grid-cols-3 gap-[2vw] mx-auto px-[6vw] w-full">
           <div v-for="video in sesionesVideos" :key="video.position" class="flex flex-col items-center">
-            <div class="w-full aspect-video rounded-[1vw] overflow-hidden border-[.6vw] border-white shadow-lg">
+            <div class="w-full aspect-video rounded-[1vw] overflow-hidden border-[.6vw] border-white/30 shadow-lg bg-black/20 backdrop-blur-sm p-2">
               <iframe 
-                class="w-full h-full" 
+                class="w-full h-full rounded-lg" 
                 :src="`https://www.youtube.com/embed/${video.youtubeId}?autoplay=0&rel=0&modestbranding=1`" 
                 :title="video.title"
                 frameborder="0" 
@@ -155,7 +152,7 @@
                 allowfullscreen
               ></iframe>
             </div>
-            <p class="text-[1.6vw] text-center font-semibold mt-3 text-[#E03636] line-clamp-2">
+            <p class="text-[1.6vw] text-center font-semibold mt-3 text-white drop-shadow-lg line-clamp-2">
               {{ video.title }}
             </p>
           </div>
@@ -169,30 +166,30 @@
       ref="seccion4Ref"
       class="scroll-section opacity-0 transition-all duration-800 ease-out delay-200"
       :class="{ 'animate-in': isSeccion4Visible }"
-      style="height: 100vh; position: relative; background: white; display: flex; flex-direction: column; justify-content: center"
+      style="height: 100vh; position: relative; background: transparent; display: flex; flex-direction: column; justify-content: center"
     >
-      <div class="relative w-full text-center pt-[4.4vw] pb-[1vw] flex-shrink-0">
+      <div class="relative w-full text-center pt-[4.4vw] flex-shrink-0">
         <div class="relative inline-block w-full">
           <div class="absolute top-0 left-0 h-[2px] bg-[#E4D294] animate-slide-right" style="width: 100%;"></div>
           <div class="absolute bottom-0 right-0 h-[2px] bg-[#E4D294] animate-slide-left" style="width: 100%;"></div>
           <div class="absolute top-0 right-0 w-[2px] bg-[#E4D294] animate-slide-down" style="height: 100%;"></div>
           <div class="absolute bottom-0 left-0 w-[2px] bg-[#E4D294] animate-slide-up" style="height: 100%;"></div>
-          <h2 class="text-[3vw] text-white font-semibold bg-[#E03636] py-2">Producción Audiovisual</h2>
+          <h2 class="text-[3vw] text-white font-semibold bg-[#A54A4A] py-2">Producción Audiovisual</h2>
         </div>
       </div>
 
-      <div class="text-center py-4 flex-shrink-0">
-        <h3 class="text-[#E03636] text-[2.3vw] font-semibold">Desde el Curul</h3>
+      <div class="text-center pt-4 flex-shrink-0">
+        <h3 class="text-white text-[2.3vw] font-semibold drop-shadow-lg">Desde el Curul</h3>
         <div class="w-16 h-0.5 bg-[#E4D294] mx-auto mt-2"></div>
       </div>
       
       <div class="flex-1 flex items-center justify-center px-4">
         <NuxtLink 
           to="https://www.youtube.com/watch?v=M4oGsn60dkE&list=PLa1BPhXlaW2fX3iN-hn6O5nPBHrSYEL5Y" 
-          class="image-link-wrapper block rounded-[1.8vw] overflow-hidden shadow-2xl w-[45%] transition-all duration-500 ease-out hover:shadow-2xl" 
+          class="image-link-wrapper block rounded-[1.8vw] overflow-hidden shadow-2xl w-[45%] transition-all duration-500 ease-out hover:shadow-2xl bg-black/20 backdrop-blur-sm p-2" 
           target="_blank"
         >
-          <div class="relative overflow-hidden">
+          <div class="relative overflow-hidden rounded-lg">
             <SafeImage 
               src="/images/curul/Recurso-1.jpg"
               alt="Producción Audiovisual - Desde el Curul"
@@ -458,6 +455,7 @@ if (error.value) {
   font-family: 'Montserrat', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* 🔥 FONDO FIJO ÚNICO PARA TODAS LAS SECCIONES */
 .global-fixed-background {
   position: fixed;
   top: 0;
@@ -469,20 +467,31 @@ if (error.value) {
   background-repeat: no-repeat;
   z-index: 0;
   pointer-events: none;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.8s ease-in-out, visibility 0.8s ease-in-out;
+  opacity: 1 !important;
+  visibility: visible !important;
 }
 
-.global-fixed-background.show-fixed {
-  opacity: 1;
-  visibility: visible;
+/* Overlay para dar efecto de profundidad */
+.global-fixed-background::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(
+    circle at 50% 30%,
+    transparent 0%,
+    rgba(0, 0, 0, 0.3) 80%,
+    rgba(0, 0, 0, 0.4) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
 }
 
-.seccion1-fondo { background-color: #d9d9d9; background-image: none; }
-.seccion2-fondo { background-color: #e0e0e0; background-image: none; }
-.seccion3-fondo { background-image: url('/Recurso 5.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat; }
-.seccion4-fondo { background-color: #ffffff; background-image: none; }
+.seccion3-fondo {
+  background-image: url('/Recurso 5.jpg');
+}
 
 html, body {
   scroll-behavior: smooth;
@@ -505,7 +514,7 @@ footer {
   position: relative;
   width: 100%;
   z-index: 5;
-  background: transparent;
+  background: transparent !important;
 }
 
 .scroll-section.animate-in {
@@ -579,6 +588,16 @@ iframe { pointer-events: auto; }
 .animate-slide-left { animation: slide-left 4s ease-in-out infinite; }
 .animate-slide-down { animation: slide-down 4s ease-in-out infinite; }
 .animate-slide-up { animation: slide-up 4s ease-in-out infinite; }
+
+/* 🔥 Forzar transparencia en MoreNewsGrid */
+:deep(.more-news-grid) {
+  background: transparent !important;
+}
+
+:deep(.more-news-grid .bg-white) {
+  background: rgba(255, 255, 255, 0.9) !important;
+  backdrop-filter: blur(4px);
+}
 </style>
 
 <style>
@@ -626,5 +645,10 @@ footer {
     opacity: 1 !important;
     transform: none !important;
   }
+}
+
+/* 🔥 Asegurar que el componente MoreNewsGrid sea transparente */
+.more-news-grid {
+  background: transparent !important;
 }
 </style>

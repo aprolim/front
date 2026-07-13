@@ -2,14 +2,14 @@
 <template>
   <div class="h-screen snap-container">
     <!-- Header rojo fijo -->
-    <header class="fixed top-0 left-0 right-0 z-50 bg-[#E03636] shadow-lg">
+    <header class="fixed top-0 left-0 right-0 z-50 bg-[#8A1B19]/80 shadow-lg">
       <div class="mx-auto px-[1px] py-[.3vw] text-[1.5vw]">
         <div class="flex items-center justify-between">
           <!-- Logo y botón hamburguesa -->
           <div class="flex items-center gap-4">
             <button 
               @click="toggleSidebar"
-              class="sm:hidden p-2 text-white hover:bg-[#C12F2F] rounded-lg transition-colors"
+              class="sm:hidden p-2 text-white hover:bg-[#8A1B19] rounded-lg transition-colors"
               aria-label="Toggle menu"
             >
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -19,10 +19,10 @@
 
             <button 
               @click="goToHome"
-              class="ml-[1em] w-[2.5em] h-[2.5em] rounded-lg overflow-hidden flex items-center justify-center bg-[#E03636]"
+              class="ml-[1em] w-[2.5em] h-[2.5em] rounded-lg overflow-visible flex items-center justify-center"
               aria-label="Ir al inicio"
             >
-              <img src="/senadores2.png" alt="Logo" class="w-full h-full object-cover" />
+              <img src="/senadores2.png" alt="Logo" class="w-full h-full object-cover translate-x-5 translate-y-8 scale-[2.5]" />
             </button>
           </div>
 
@@ -32,16 +32,16 @@
             <div class="relative group/menu">
               <NuxtLink 
                 to="/la-institucion#mandato" 
-                class="inline-block px-[1vw] py-2 text-white font-medium hover:bg-[#C12F2F] rounded-lg transition-colors cursor-pointer"
+                class="inline-block px-[1vw] py-2 text-white font-medium hover:bg-[#A54A4A] rounded-lg transition-colors cursor-pointer"
               >
                 La institución
               </NuxtLink>
               <div class="absolute right-0 mt-3 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible translate-y-[-1rem] group-hover/menu:opacity-100 group-hover/menu:visible group-hover/menu:translate-y-0 transition-all duration-700 ease-in-out z-50">
                 <div class="py-2">
-                  <NuxtLink to="/la-institucion#mandato" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Mandato constitucional</NuxtLink>
-                  <NuxtLink to="/la-institucion#directiva-camaral" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Directiva camaral</NuxtLink>
-                  <NuxtLink to="/la-institucion#resena-historica" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Reseña histórica</NuxtLink>
-                  <NuxtLink to="/la-institucion#museo" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Galería de imágenes</NuxtLink>
+                  <NuxtLink to="/la-institucion#mandato" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#8A1B19] transition-colors">Mandato constitucional</NuxtLink>
+                  <NuxtLink to="/la-institucion#directiva-camaral" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#8A1B19] transition-colors">Directiva camaral</NuxtLink>
+                  <NuxtLink to="/la-institucion#resena-historica" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#8A1B19] transition-colors">Reseña histórica</NuxtLink>
+                  <NuxtLink to="/la-institucion#museo" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#8A1B19] transition-colors">Galería de imágenes</NuxtLink>
                 </div>
               </div>
             </div>
@@ -50,15 +50,15 @@
             <div class="relative group/menu">
               <NuxtLink 
                 to="/gestion-legislativa#sesiones-pleno" 
-                class="inline-block px-[1vw] py-2 text-white font-medium hover:bg-[#C12F2F] rounded-lg transition-colors cursor-pointer"
+                class="inline-block px-[1vw] py-2 text-white font-medium hover:bg-[#A54A4A] rounded-lg transition-colors cursor-pointer"
               >
                 Gestión Legislativa
               </NuxtLink>
               <div class="absolute right-0 mt-3 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible translate-y-[-1rem] group-hover/menu:opacity-100 group-hover/menu:visible group-hover/menu:translate-y-0 transition-all duration-700 ease-in-out z-50">
                 <div class="py-2">
-                  <NuxtLink to="/gestion-legislativa#sesiones-pleno" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Sesiones del pleno</NuxtLink>
-                  <NuxtLink to="/gestion-legislativa#area-de-legislacion" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Gestión legislativa</NuxtLink>
-                  <NuxtLink to="/gestion-legislativa#gaceta-legislativa" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Gaceta legislativa</NuxtLink>
+                  <NuxtLink to="/gestion-legislativa#sesiones-pleno" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#8A1B19] transition-colors">Sesiones del pleno</NuxtLink>
+                  <NuxtLink to="/gestion-legislativa#area-de-legislacion" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#8A1B19] transition-colors">Gestión legislativa</NuxtLink>
+                  <NuxtLink to="/gestion-legislativa#gaceta-legislativa" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#8A1B19] transition-colors">Gaceta legislativa</NuxtLink>
                 </div>
               </div>
             </div>
@@ -67,16 +67,15 @@
             <div class="relative group/menu">
               <NuxtLink 
                 to="/legisladores-nacionales#directiva-camaral" 
-                class="inline-block px-[1vw] py-2 text-white font-medium hover:bg-[#C12F2F] rounded-lg transition-colors cursor-pointer"
+                class="inline-block px-[1vw] py-2 text-white font-medium hover:bg-[#A54A4A] rounded-lg transition-colors cursor-pointer"
               >
                 Legisladores Nacionales
               </NuxtLink>
               <div class="absolute right-0 mt-3 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible translate-y-[-1rem] group-hover/menu:opacity-100 group-hover/menu:visible group-hover/menu:translate-y-0 transition-all duration-700 ease-in-out z-50">
                 <div class="py-2">
-                  <NuxtLink to="/legisladores-nacionales#directiva-camaral" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Directiva Camaral</NuxtLink>
-                  <NuxtLink to="/legisladores-nacionales#comisiones-y-comites" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Comisiones y comités</NuxtLink>
-                  <NuxtLink to="/legisladores-nacionales#brigadas-parlamentarias" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Brigadas parlamentarias</NuxtLink>
-                  <NuxtLink to="/legisladores-nacionales#bancadas-politicas" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Bancadas políticas</NuxtLink>
+                  <NuxtLink to="/legisladores-nacionales#directiva-camaral" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#8A1B19] transition-colors">Directiva Camaral</NuxtLink>
+                  <NuxtLink to="/legisladores-nacionales#comisiones-y-comites" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#8A1B19] transition-colors">Comisiones y comités</NuxtLink>
+                  <NuxtLink to="/legisladores-nacionales#brigadas-parlamentarias" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#8A1B19] transition-colors">¿Quienes me representan?</NuxtLink>
                 </div>
               </div>
             </div>
@@ -85,18 +84,27 @@
             <div class="relative group/menu">
               <NuxtLink 
                 to="/centro-de-noticias#noticias-importantes" 
-                class="inline-block px-[1vw] py-2 text-white font-medium hover:bg-[#C12F2F] rounded-lg transition-colors cursor-pointer"
+                class="inline-block px-[1vw] py-2 text-white font-medium hover:bg-[#A54A4A] rounded-lg transition-colors cursor-pointer"
               >
                 Centro de Noticias
               </NuxtLink>
               <div class="absolute right-0 mt-3 w-[20vw] bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible translate-y-[-1rem] group-hover/menu:opacity-100 group-hover/menu:visible group-hover/menu:translate-y-0 transition-all duration-700 ease-in-out z-50">
                 <div class="py-2">
-                  <NuxtLink to="/centro-de-noticias#noticias-importantes" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Noticias Importantes</NuxtLink>
-                  <NuxtLink to="/centro-de-noticias#mas-noticias" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Más Noticias</NuxtLink>
-                  <NuxtLink to="/centro-de-noticias#sesiones" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Sesiones</NuxtLink>
-                  <NuxtLink to="/centro-de-noticias#produccion-audiovisual" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#E03636] transition-colors">Producción Audiovisual</NuxtLink>
+                  <NuxtLink to="/centro-de-noticias#noticias-importantes" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#8A1B19] transition-colors">Noticias Importantes</NuxtLink>
+                  <NuxtLink to="/centro-de-noticias#mas-noticias" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#8A1B19] transition-colors">Más Noticias</NuxtLink>
+                  <NuxtLink to="/centro-de-noticias#sesiones" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#8A1B19] transition-colors">Sesiones</NuxtLink>
+                  <NuxtLink to="/centro-de-noticias#produccion-audiovisual" class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-[#8A1B19] transition-colors">Producción Audiovisual</NuxtLink>
                 </div>
               </div>
+            </div>
+            <div class="relative group/menu">
+              <NuxtLink 
+                to="https://systemdemo.es/track-document" 
+                target="_blank"
+                class="inline-block px-[1vw] py-2 text-white font-medium hover:bg-[#A54A4A] rounded-lg transition-colors cursor-pointer"
+              >
+                Consultar Tramite
+              </NuxtLink>
             </div>
           </div>
 
@@ -204,7 +212,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="text-white back-image snap-footer text-[4px] sm:text-[6px] md:text-[7px] lg:text-[10px] xl:text-[14px] 2xl:text-[16px] 3xl:text-[21px] 4xl:text-[28px] 5xl:text-[40px]">
+    <footer class="text-white back-image snap-footer bg-[#8A1B19]/70">
       <div class="mx-auto">
         <div class="text-center">
           <div class="flex items-center justify-center gap-3 back-image">
@@ -213,7 +221,7 @@
             </div>
           </div>
           
-          <div class="sub-footer bg-gray-900 text-white py-8">
+          <div class="sub-footer bg-[#8A1B19]/70 text-white py-[2.5vw]">
             <div class="container mx-auto px-4">
               <div class="grid grid-cols-12 gap-6 items-center">
                 <div class="col-span-3 flex items-center justify-start space-x-3">
@@ -341,7 +349,6 @@ header {
   top: 0;
   left: 0;
   right: 0;
-  background-color: #E03636;
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   z-index: 50;
 }
@@ -363,12 +370,9 @@ header {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-color: rgba(224, 54, 54, 0.7);
 }
 
-.sub-footer {
-  background-color: rgba(198, 18, 16, 0.6);
-}
+
 
 .social-icon-wrapper {
   display: flex;

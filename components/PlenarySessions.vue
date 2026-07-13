@@ -1,47 +1,49 @@
+<!-- components/PlenarySessions.vue - MODIFICADO PARA FONDO TRANSPARENTE -->
 <template>
-  <div class="w-full min-h-screen flex flex-col bg-gray-50">
+  <!-- CAMBIO 1: Eliminar bg-gray-50 y agregar background transparent -->
+  <div class="w-full min-h-screen flex flex-col" style="background: transparent !important;">
     <!-- FRANJA ROJA DE ANCHO COMPLETO (superior) -->
-    <div class="relative w-screen left-1/2 right-1/2 -mx-[50vw] mt-[4.4vw]">
-      <div class="relative bg-[#E03636] py-2 sm:py-3 md:py-4 shadow-2xl overflow-hidden group full-width-franja">
+    <div class="relative w-screen left-1/2 right-1/2 -mx-[50vw] mt-[4.3vw]">
+      <div class="relative bg-[#A54A4A] py-2 sm:py-3 md:py-4 shadow-2xl overflow-hidden group full-width-franja">
         <div class="absolute inset-0 opacity-5">
-          <div class="absolute top-0 left-0 w-16 h-16 border-t-2 border-l-2 border-yellow-300 rounded-tl-lg"></div>
-          <div class="absolute bottom-0 right-0 w-16 h-16 border-b-2 border-r-2 border-yellow-300 rounded-br-lg"></div>
+          <div class="absolute top-0 left-0 w-16 h-16 border-t-2 border-l-2 border-white rounded-tl-lg"></div>
+          <div class="absolute bottom-0 right-0 w-16 h-16 border-b-2 border-r-2 border-white rounded-br-lg"></div>
         </div>
-        <div class="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-yellow-400 to-transparent animate-pulse"></div>
-        <div class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-yellow-400 to-transparent animate-pulse"></div>
+        <div class="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-white to-transparent animate-pulse"></div>
+        <div class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-white to-transparent animate-pulse"></div>
         <div class="container mx-auto px-4 relative z-10 text-center">
           <p class="font-bold text-white text-[clamp(0.8rem,2vw,1.5rem)]">
-            <span class="bg-clip-text text-transparent bg-gradient-to-r from-white via-yellow-100 to-yellow-200">
-              <span class="inline-flex items-center justify-center text-white text-[clamp(0.5rem,1vw,0.9rem)] mx-1">⚪</span> 
+            <span class="bg-clip-text text-transparent bg-gradient-to-r from-white via-[#F2CFCF] to-[#E8B5B5]">
+              <span class="inline-flex items-center justify-center text-white text-[1.1vw] mx-1 -translate-y-[.2vw]">⚪</span> 
               PRIMERA LEGISLATURA DEL TRICENTENARIO
-              <span class="inline-flex items-center justify-center text-white text-[clamp(0.5rem,1vw,0.9rem)] mx-1">⚪</span>
+              <span class="inline-flex items-center justify-center text-white text-[1.1vw] mx-1 -translate-y-[.2vw]">⚪</span>
             </span>
           </p>
         </div>
-        <div class="absolute top-2 left-2 w-2 h-2 border border-yellow-300/50 rounded-full animate-ping"></div>
-        <div class="absolute top-2 right-2 w-2 h-2 border border-yellow-300/50 rounded-full animate-ping" style="animation-delay: 0.5s;"></div>
-        <div class="absolute bottom-2 left-2 w-2 h-2 border border-yellow-300/50 rounded-full animate-ping" style="animation-delay: 1s;"></div>
-        <div class="absolute bottom-2 right-2 w-2 h-2 border border-yellow-300/50 rounded-full animate-ping" style="animation-delay: 1.5s;"></div>
+        <div class="absolute top-2 left-2 w-2 h-2 border border-white rounded-full animate-ping"></div>
+        <div class="absolute top-2 right-2 w-2 h-2 border border-white rounded-full animate-ping" style="animation-delay: 0.5s;"></div>
+        <div class="absolute bottom-2 left-2 w-2 h-2 border border-white rounded-full animate-ping" style="animation-delay: 1s;"></div>
+        <div class="absolute bottom-2 right-2 w-2 h-2 border border-white rounded-full animate-ping" style="animation-delay: 1.5s;"></div>
       </div>
     </div>
     
     <div class="text-center">
-      <h2 class="text-[#E03636] text-[clamp(1.2em,2.8vw,2.5em)]">
+      <h2 class="text-[#A54A4A] text-[clamp(1.2em,2.8vw,2.5em)]">
         Sesiones del Pleno
       </h2>
     </div>
 
     <!-- Contenedor de 3 columnas -->
-    <div class="flex-1 mx-auto px-[2vw] w-[90vw] text-[1.1vw] flex items-center">
+    <div class="flex-1 mx-auto px-[2vw] w-[90vw] text-[1.1vw] flex items-center" style="background: transparent !important;">
       <div class="grid grid-cols-3 gap-[2vw] w-full items-center pb-[2vw]">
         
         <!-- COLUMNA 1: CALENDARIO COMPLETO -->
-        <div class="bg-transparent rounded-xl overflow-visible flex flex-col">
-          <h3 class="text-[#E03636] text-[1.8em] md:text-[2em] text-center py-[0.8em] font-medium">Calendario de sesiones</h3>
+        <div class="rounded-xl overflow-visible flex flex-col" style="background: transparent !important;">
+          <h3 class="text-[#A54A4A] text-[1.8em] md:text-[2em] text-center py-[0.8em] font-medium">Calendario de sesiones</h3>
           
           <div class="flex-1 text-[1.2vw]">
             <div class="mx-[2.8vw] shadow-xl">
-              <div class="bg-[#E03636] text-white flex items-center justify-between">
+              <div class="bg-[#A54A4A] text-white flex items-center justify-between">
                 <button 
                   @click="previousMonth"
                   class="w-[2em] h-[2em] flex items-center justify-center hover:scale-125 rounded-full transition-colors"
@@ -63,7 +65,8 @@
                 </button>
               </div>
 
-              <div class="bg-white rounded-lg p-[1em]">
+              <!-- CAMBIO 2: El calendario mantiene fondo blanco con transparencia -->
+              <div class="bg-white/90 backdrop-blur-sm rounded-lg p-[1em]">
                 <div class="grid grid-cols-7 gap-[0.2em] text-center text-[0.8em] font-semibold text-gray-600 mb-[0.5em]">
                   <div>L</div>
                   <div>M</div>
@@ -103,12 +106,13 @@
         </div>
 
         <!-- COLUMNA 2: ORDEN DEL DÍA -->
-        <div class="bg-transparent rounded-xl overflow-hidden flex flex-col">
-          <h3 class="text-[#E03636] text-[1.8em] md:text-[2em] text-center py-[0.8em] font-medium">Orden del día</h3>
+        <div class="rounded-xl overflow-hidden flex flex-col" style="background: transparent !important;">
+          <h3 class="text-[#A54A4A] text-[1.8em] md:text-[2em] text-center py-[0.8em] font-medium">Orden del día</h3>
           
           <div class="px-[3em] flex-1">
             <NuxtLink to="/" class="block w-full h-[25vw]">
-              <div class="relative w-full h-full rounded-lg overflow-hidden group bg-white p-[0.6em] shadow-lg">
+              <!-- CAMBIO 3: La tarjeta mantiene fondo blanco con transparencia -->
+              <div class="relative w-full h-full rounded-lg overflow-hidden group bg-white/90 backdrop-blur-sm p-[0.6em] shadow-lg">
                 <img 
                   src="/images/orden-del-dia.jpg" 
                   alt="Orden del día" 
@@ -121,11 +125,12 @@
         </div>
 
         <!-- COLUMNA 3: ACTAS OFICIALES -->
-        <div class="bg-transparent rounded-xl overflow-visible flex flex-col">
-          <h3 class="text-[#E03636] text-[1.8em] md:text-[2em] text-center py-[0.8em] font-medium">Actas oficiales</h3>
+        <div class="rounded-xl overflow-visible flex flex-col" style="background: transparent !important;">
+          <h3 class="text-[#A54A4A] text-[1.8em] md:text-[2em] text-center py-[0.8em] font-medium">Actas oficiales</h3>
           
           <div class="px-[4em] flex-1">
-            <div class="relative px-[1vw] rounded-lg bg-white p-[0.6em] shadow-lg w-full h-[23vw] overflow-visible">
+            <!-- CAMBIO 4: La tarjeta mantiene fondo blanco con transparencia -->
+            <div class="relative px-[1vw] rounded-lg bg-white/90 backdrop-blur-sm p-[0.6em] shadow-lg w-full h-[23vw] overflow-visible">
               <img 
                 src="/images/actas-oficiales.jpg" 
                 alt="Actas oficiales" 
@@ -135,7 +140,7 @@
               <div class="absolute left-0 right-0 flex justify-center" style="top: 100%; transform: translateY(-50%);">
                 <NuxtLink 
                   to="/en-construccion" 
-                  class="bg-[#E03636] hover:bg-[#C12F2F] text-white font-bold py-[0.8em] px-[2em] rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg z-10 text-[1em]"
+                  class="bg-[#A54A4A] hover:bg-[#C12F2F] text-white font-bold py-[0.8em] px-[2em] rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg z-10 text-[1em]"
                 >
                   Ver más
                 </NuxtLink>
@@ -341,11 +346,6 @@ const calendarDays = computed(() => {
   
   return days
 })
-
-// 🔥 Verificar si un día es de sesión (basado en fechas del backend)
-const isSessionDay = (date) => {
-  return !!getInfoSesion(date)
-}
 
 // Cargar fechas al montar
 onMounted(() => {

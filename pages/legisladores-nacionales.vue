@@ -2,6 +2,8 @@
   <div class="min-h-screen text-style">
     <!-- Fondos fijos para cada sección -->
     <div class="global-fixed-background seccion1-fondo" :class="{ 'show-fixed': isSeccion1Visible }"></div>
+    <!-- 🔥 SECCIÓN 2 usa el mismo fondo que la sección 1 -->
+    <div class="global-fixed-background seccion1-fondo" :class="{ 'show-fixed': isSeccion2Visible }"></div>
     <div class="global-fixed-background seccion3-fondo" :class="{ 'show-fixed': isSeccion3Visible }"></div>
     <div class="global-fixed-background seccion4-fondo" :class="{ 'show-fixed': isSeccion4Visible }"></div>
     
@@ -11,22 +13,21 @@
       class="relative h-screen overflow-y-auto transition-all duration-500"
       ref="seccion1Ref"
     >
-      <div class="text-[3vw] w-full text-center mt-[4.1vw] bg-white relative py-[.08vw]">
+      <div class="text-[3vw] w-full text-center mt-[4.1vw] bg-[#A54A4A] relative py-[.08vw]">
         <div class="absolute top-0 left-0 h-[2px] bg-[#E4D294] animate-slide-right"></div>
         <div class="absolute bottom-0 right-0 h-[2px] bg-[#E4D294] animate-slide-left"></div>
         <div class="absolute top-0 right-0 w-[2px] bg-[#E4D294] animate-slide-down"></div>
         <div class="absolute bottom-0 left-0 w-[2px] bg-[#E4D294] animate-slide-up"></div>
         
-        <h2 class="text-[#E03636] font-semibold py-[-1.3vw]">
+        <h2 class="text-[#fff] bg-transparent font-semibold py-[-1.3vw]">
           Directiva Camaral
         </h2>
-        <p class="text-gray-500 translate-y-[-.5vw] text-[.35em]">Selecciona un senador para ver detalles</p>
+        <p class="text-[#fff] bg-[#A54A4A] translate-y-[-.5vw] text-[.35em]">Selecciona un senador para ver detalles</p>
       </div>
       <div class="mx-[5vw] px-4 z-10 relative mt-[2.3vh]">
         <div class="flex flex-row gap-[2vw] h-full items-center">
           
-          <div class="w-[60%] p-[0.8vw] rounded-2xl shadow-left-column" 
-              :style="{ backgroundColor: 'rgba(190, 0, 0, 0.60)' }">
+          <div class="w-[60%] p-[0.8vw] rounded-2xl shadow-left-column bg-[#8A1B19]/80 border-yellow-400/70 border-[.15vw]">
             
             <!-- FILA 1 -->
             <div class="grid grid-cols-3 gap-[.6vh] mb-[1.8vh]">
@@ -41,8 +42,7 @@
                 }"
               >
                 <div class="relative w-[16vh] h-[16vh] mx-auto">
-                  <div class="w-full h-full rounded-full overflow-hidden border-4 circle-shadow transition-all duration-300 group-hover:scale-[1.3] group-hover:relative group-hover:z-50" 
-                      style="border-color: #E4D294;">
+                  <div class="w-full h-full rounded-full overflow-hidden transition-all duration-300 group-hover:scale-[1.3] group-hover:relative group-hover:z-50">
                     <SafeImage 
                       :src="persona.imagen" 
                       :alt="persona.nombre"
@@ -73,8 +73,7 @@
                 }"
               >
                 <div class="relative w-[16vh] h-[16vh] mx-auto">
-                  <div class="w-full h-full rounded-full overflow-hidden border-4 circle-shadow transition-all duration-300 group-hover:scale-[1.3] group-hover:relative group-hover:z-50" 
-                      style="border-color: #E4D294;">
+                  <div class="w-full h-full rounded-full overflow-hidden transition-all duration-300 group-hover:scale-[1.3] group-hover:relative group-hover:z-50">
                     <SafeImage 
                       :src="persona.imagen" 
                       :alt="persona.nombre"
@@ -96,8 +95,8 @@
           <!-- PANEL DERECHO - SENADOR SELECCIONADO -->
           <div class="w-[40%] flex flex-col items-center justify-center px-[3.0vh] py-[1.0vh] rounded-2xl shadow-right-column"
               :style="{ backgroundColor: 'rgba(0, 0, 0, 0.0)' }">
-            <div class="w-[29vh] h-[29vh] rounded-full overflow-hidden mb-[.9vh] transition-all duration-300 circle-shadow-large border-[.4vh]" 
-                style="border-color: #E4D294;">
+            <div class="w-[29vh] h-[29vh] rounded-full overflow-hidden mb-[.9vh] transition-all duration-300" 
+>
               <SafeImage 
                 :src="selectedImage.img" 
                 :alt="selectedImage.nombre"
@@ -128,16 +127,17 @@
         :scroll-progress="scrollProgress"
       />
     </section>
-    <!-- SECCIÓN 2 - COMISIONES Y COMITES (VERSIÓN ORIGINAL) -->
+
+    <!-- ==================== SECCIÓN 2 - COMISIONES Y COMITES (CON FONDO DE SECCIÓN 1) ==================== -->
     <div 
       id="comisiones-y-comites"
       ref="seccion2Ref" 
       class="scroll-section opacity-0 transition-all duration-800 ease-out z-10 pt-[4.2vw]"
       :class="{ 'animate-in': isSeccion2Visible }"
-      style="height: 100vh; position: relative; background: white; overflow-y: auto;"
+      style="height: 100vh; position: relative; background: transparent !important; overflow-y: auto;"
     >
       <div class="mx-[5vw] px-4 h-full flex flex-col">
-        <div class="bg-[#E03636] rounded-lg flex-shrink-0">
+        <div class="bg-[#A54A4A] rounded-lg flex-shrink-0">
           <h2 class="text-[2.2vw] font-bold text-center text-white py-[0.5vw] tracking-wide">
             COMISIONES Y COMITÉS
           </h2>
@@ -154,8 +154,8 @@
               :class="[
                 'w-full py-[0.3vw] px-4 rounded-lg font-semibold transition-all duration-300 text-left',
                 comisionSeleccionada?.id === comision.id 
-                  ? 'bg-[#E03636] text-white' 
-                  : 'bg-white text-[#E03636] border border-[#E03636] hover:bg-[#E03636] hover:text-white'
+                  ? 'bg-[#A54A4A] text-white' 
+                  : 'bg-white/90 backdrop-blur-sm text-[#A54A4A] border border-[#A54A4A] hover:bg-[#A54A4A] hover:text-white'
               ]"
               class="text-[0.9vw]"
             >
@@ -164,7 +164,7 @@
           </div>
 
           <!-- COLUMNA DERECHA: Detalle de la comisión -->
-          <div class="w-full md:w-[60%] bg-gray-400/90 rounded-lg text-[0.98vw]">
+          <div class="w-full md:w-[60%] bg-[#8A1B19]/80 backdrop-blur-sm rounded-lg text-[0.98vw]">
             <div v-if="comisionSeleccionada">
               <h3 class="text-[1.56vw] font-bold text-white drop-shadow-md text-center">
                 {{ comisionSeleccionada.nombre }}
@@ -174,7 +174,7 @@
               <div class="grid grid-cols-1 md:grid-cols-2 gap-0">
                 <div v-for="(miembro, idx) in comisionSeleccionada.miembrosGrupo1" :key="'g1-'+idx" 
                     class="flex items-center gap-0 p-[0.8vw] rounded-lg pl-[1.8vw] overflow-visible">
-                  <div class="w-[6.8vw] h-[6.8vw] flex-shrink-0 rounded-full overflow-visible transition-all duration-700 hover:scale-[2.5] hover:z-50">
+                  <div class="w-[6.8vw] h-[6.8vw] flex-shrink-0 rounded-full overflow-visible transition-all duration-700 hover:scale-[2] hover:z-50">
                     <img 
                       :src="miembro.foto" 
                       :alt="miembro.nombre"
@@ -189,7 +189,7 @@
                 </div>
               </div>
 
-              <div class="py-[0.39vw] bg-[#E03636]">
+              <div class="py-[0.39vw] bg-[#A54A4A]">
                 <h4 class="font-semibold text-white text-[0.93vw] text-center">{{ comisionSeleccionada.tituloLinea1 }}</h4>
               </div>
 
@@ -197,7 +197,7 @@
               <div class="grid grid-cols-1 md:grid-cols-2 gap-0">
                 <div v-for="(miembro, idx) in comisionSeleccionada.miembrosGrupo2" :key="'g2-'+idx" 
                     class="flex items-center gap-0 p-[0.8vw] rounded-lg pl-[1.8vw] overflow-visible">
-                  <div class="w-[6.8vw] h-[6.8vw] flex-shrink-0 rounded-full overflow-visible transition-all duration-700 hover:scale-[2.5] hover:z-50">
+                  <div class="w-[6.8vw] h-[6.8vw] flex-shrink-0 rounded-full overflow-visible transition-all duration-700 hover:scale-[2] hover:z-50">
                     <img 
                       :src="miembro.foto" 
                       :alt="miembro.nombre"
@@ -212,7 +212,7 @@
                 </div>
               </div>
 
-              <div class="py-[0.39vw] bg-[#E03636]">
+              <div class="py-[0.39vw] bg-[#A54A4A]">
                 <h4 class="text-[0.93vw] font-semibold text-white text-center">{{ comisionSeleccionada.tituloLinea2 }}</h4>
               </div>
 
@@ -220,7 +220,7 @@
               <div class="grid grid-cols-1 md:grid-cols-2 gap-0">
                 <div v-for="(miembro, idx) in comisionSeleccionada.miembrosGrupo3" :key="'g3-'+idx" 
                     class="flex items-center gap-0 p-[0.8vw] rounded-lg pl-[1.8vw] overflow-visible">
-                  <div class="w-[6.8vw] h-[6.8vw] flex-shrink-0 rounded-full overflow-visible transition-all duration-700 hover:scale-[2.5] hover:z-50">
+                  <div class="w-[6.8vw] h-[6.8vw] flex-shrink-0 rounded-full overflow-visible transition-all duration-700 hover:scale-[2] hover:z-50">
                     <img 
                       :src="miembro.foto" 
                       :alt="miembro.nombre"
@@ -258,8 +258,8 @@
         <div class="absolute top-0 right-0 w-[2px] bg-[#E4D294] animate-slide-down"></div>
         <div class="absolute bottom-0 left-0 w-[2px] bg-[#E4D294] animate-slide-up"></div>
         
-        <h2 class="text-[3vw] text-white font-semibold bg-[#E03636]">
-          Brigadas Parlamentarias
+        <h2 class="text-[3vw] text-white font-semibold bg-[#A54A4A]">
+          ¿Quienes me representan?
         </h2>
       </div>
       
@@ -311,7 +311,7 @@
                 </div>
               </div>
               
-              <div class="bg-[rgba(190,0,0,0.6)] pt-[2vw] px-[2vw] pb-[1vw] rounded-lg w-full">
+              <div class="bg-[#8A1B19]/80 pt-[2vw] px-[2vw] pb-[1vw] rounded-lg w-full">
                 <div class="grid grid-cols-5 gap-2 mb-[1vw]">
                   <div class="text-center">
                     <div class="text-[1.5vh] mt-[4vw] inline-block px-1 py-2 rounded-full text-white font-semibold w-[12vw]" 
@@ -366,263 +366,10 @@
       </div>
     </div>
 
-    <!-- ==================== SECCIÓN 4 - BANCADAS POLÍTICAS ==================== -->
-    <div 
-      id="bancadas-politicas"
-      ref="seccion4Ref" 
-      class="scroll-section opacity-0 transition-all duration-800 ease-out delay-400 z-10"
-      :class="{ 'animate-in': isSeccion4Visible }"
-      style="height: 100vh; position: relative; background: transparent; overflow-y: auto;"
-    >
-      <div class="w-full text-center mt-[4.1vw] bg-white relative flex-shrink-0">
-        <div class="absolute top-0 left-0 h-[1px] bg-[#E4D294] animate-slide-right"></div>
-        <div class="absolute bottom-0 right-0 h-[1px] bg-[#E4D294] animate-slide-left"></div>
-        <div class="absolute top-0 right-0 w-[1px] bg-[#E4D294] animate-slide-down"></div>
-        <div class="absolute bottom-0 left-0 w-[1px] bg-[#E4D294] animate-slide-up"></div>
-        
-        <h2 class="text-[3vw] text-[#E03636] font-semibold bg-white">
-          Bancadas Políticas
-        </h2>
-      </div>
 
-      <div class="mx-[5vw] px-4 z-10 relative pb-8">
-        <transition name="fade-scale" mode="out-in">
-          <div v-if="!partidoSeleccionado" key="initial" class="flex flex-col items-center justify-center" style="min-height: 80vh;">
-            <div class="flex justify-center gap-12">
-              <div v-for="partido in partidos" :key="partido.id" 
-                  @click="seleccionarPartido(partido)"
-                  class="cursor-pointer transition-all duration-300 hover:scale-105 text-center items-center">
-                <div v-html="partido.iconoBlanco" class="w-[18vw] h-[18vw] mx-auto"></div>
-                <p class="text-center text-white mt-3 text-[2.5vh] font-semibold">{{ partido.nombre }}</p>
-              </div>
-            </div>
-          </div>
-        </transition>
-
-        <transition name="fade-scale" mode="out-in">
-          <div v-if="partidoSeleccionado" key="selected" class="w-full">
-            <div class="flex justify-center gap-8 mb-2">
-              <div v-for="partido in partidos" :key="partido.id" 
-                  @click="seleccionarPartido(partido)"
-                  class="cursor-pointer transition-all duration-300 text-center"
-                  :class="{ 'transform scale-90': partidoSeleccionado?.id === partido.id }">
-                <div class="w-[12vh] h-[12vh] rounded-full flex items-center justify-center mx-auto transition-all duration-300 hover:scale-[1.6] hover:translate-y-[1vw]"
-                    :style="{ backgroundColor: partidoSeleccionado?.id === partido.id ? 'rgba(228,210,148,0.2)' : 'rgba(255,255,255,0.1)' }">
-                  <div v-html="partidoSeleccionado?.id === partido.id ? partido.iconoDorado : partido.iconoBlanco" 
-                      class="w-full h-full"></div>
-                </div>
-                <p class="text-center text-white text-xs mt-1">{{ partido.nombreCorto }}</p>
-              </div>
-            </div>
-
-            <div class="bg-red-700 rounded-lg px-6 py-1 flex items-center justify-between">
-              <button 
-                @click="toggleTipoMiembros"
-                class="bg-[#E03636] hover:bg-red-900 text-white font-semibold px-[1.5vw] py-[.1vw] rounded-lg transition-colors">
-                {{ mostrarSuplentes ? 'VER TITULARES' : 'VER SUPLENTES' }}
-              </button>
-              <h3 class="text-white font-bold text-[2vw]">{{ partidoSeleccionado?.nombre }}</h3>
-              <div class="w-[15vw]"></div>
-            </div>
-
-            <transition name="fade-scale" mode="out-in">
-              <div :key="mostrarSuplentes ? 'suplentes' : 'titulares'" class="-mt-1 bg-[rgba(190,0,0,0.6)] ">
-                
-                <!-- PDC -->
-                <div v-if="partidoSeleccionado?.id === 'pdc'" class="group pt-2 rounded-lg aspect-[3000/800] w-100 m-auto">
-                  <div class="grid grid-cols-6 mb-[.5vw]">
-                    <div v-for="(persona, index) in miembrosMostrar.slice(0,6)" :key="persona.nombre" class="text-center">
-                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40">
-                        <SafeImage 
-                          :src="persona.imagen" 
-                          :alt="persona.nombre"
-                          image-class="w-full h-full object-cover"
-                          :max-retries="8"
-                          :persistent="true"
-                          loading-strategy="lazy"
-                        />
-                      </div>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre }}</p>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido }}</p>
-                      <p class="text-gray-200 text-[1.4vh] drop-shadow-lg">{{ persona.departamento }}</p>
-                    </div>
-                  </div>
-                  <div class="grid grid-cols-5 mb-[.5vw]">
-                    <div v-for="(persona, index) in miembrosMostrar.slice(6,11)" :key="persona.nombre" class="text-center">
-                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40">
-                        <SafeImage 
-                          :src="persona.imagen" 
-                          :alt="persona.nombre"
-                          image-class="w-full h-full object-cover"
-                          :max-retries="8"
-                          :persistent="true"
-                          loading-strategy="lazy"
-                        />
-                      </div>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre }}</p>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido }}</p>
-                      <p class="text-gray-200 text-[1.4vh] drop-shadow-lg">{{ persona.departamento }}</p>
-                    </div>
-                  </div>
-                  <div class="grid grid-cols-5">
-                    <div v-for="(persona, index) in miembrosMostrar.slice(11,16)" :key="persona.nombre" class="text-center">
-                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40 hover:translate-y-[-2vw]">
-                        <SafeImage 
-                          :src="persona.imagen" 
-                          :alt="persona.nombre"
-                          image-class="w-full h-full object-cover"
-                          :max-retries="8"
-                          :persistent="true"
-                          loading-strategy="lazy"
-                        />
-                      </div>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre }}</p>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido }}</p>
-                      <p class="text-gray-200 text-[1.4vh] drop-shadow-lg">{{ persona.departamento }}</p>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- LIBRE -->
-                <div v-else-if="partidoSeleccionado?.id === 'libre'" class="group pt-2 rounded-lg aspect-[3000/800] w-100 m-auto">
-                  <div class="grid grid-cols-4 mb-[.5vw]">
-                    <div v-for="(persona, index) in miembrosMostrar.slice(0,4)" :key="persona.nombre" class="text-center">
-                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40">
-                        <SafeImage 
-                          :src="persona.imagen" 
-                          :alt="persona.nombre"
-                          image-class="w-full h-full object-cover"
-                          :max-retries="8"
-                          :persistent="true"
-                          loading-strategy="lazy"
-                        />
-                      </div>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre }}</p>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido }}</p>
-                      <p class="text-gray-200 text-[1.4vh] drop-shadow-lg">{{ persona.departamento }}</p>
-                    </div>
-                  </div>
-                  <div class="grid grid-cols-4 mb-[.5vw]">
-                    <div v-for="(persona, index) in miembrosMostrar.slice(4,8)" :key="persona.nombre" class="text-center">
-                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40">
-                        <SafeImage 
-                          :src="persona.imagen" 
-                          :alt="persona.nombre"
-                          image-class="w-full h-full object-cover"
-                          :max-retries="8"
-                          :persistent="true"
-                          loading-strategy="lazy"
-                        />
-                      </div>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre }}</p>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido }}</p>
-                      <p class="text-gray-200 text-[1.4vh] drop-shadow-lg">{{ persona.departamento }}</p>
-                    </div>
-                  </div>
-                  <div class="grid grid-cols-4">
-                    <div v-for="(persona, index) in miembrosMostrar.slice(8,12)" :key="persona.nombre" class="text-center">
-                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40 hover:translate-y-[-2vw]">
-                        <SafeImage 
-                          :src="persona.imagen" 
-                          :alt="persona.nombre"
-                          image-class="w-full h-full object-cover"
-                          :max-retries="8"
-                          :persistent="true"
-                          loading-strategy="lazy"
-                        />
-                      </div>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre }}</p>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido }}</p>
-                      <p class="text-gray-200 text-[1.4vh] drop-shadow-lg">{{ persona.departamento }}</p>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- ALIANZA -->
-                <div v-else-if="partidoSeleccionado?.id === 'alianza'" class="group pt-2 rounded-lg aspect-[3000/800] w-100 m-auto">
-                  <div class="grid grid-cols-3 mb-[.5vw]">
-                    <div v-for="(persona, index) in miembrosMostrar.slice(0,3)" :key="persona.nombre" class="text-center">
-                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40">
-                        <SafeImage 
-                          :src="persona.imagen" 
-                          :alt="persona.nombre"
-                          image-class="w-full h-full object-cover"
-                          :max-retries="8"
-                          :persistent="true"
-                          loading-strategy="lazy"
-                        />
-                      </div>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre }}</p>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido }}</p>
-                      <p class="text-gray-200 text-[1.4vh] drop-shadow-lg">{{ persona.departamento }}</p>
-                    </div>
-                  </div>
-                  <div class="grid grid-cols-3 mb-[.5vw]">
-                    <div v-for="(persona, index) in miembrosMostrar.slice(3,6)" :key="persona.nombre" class="text-center">
-                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40">
-                        <SafeImage 
-                          :src="persona.imagen" 
-                          :alt="persona.nombre"
-                          image-class="w-full h-full object-cover"
-                          :max-retries="8"
-                          :persistent="true"
-                          loading-strategy="lazy"
-                        />
-                      </div>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ persona.nombre }}</p>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ persona.apellido }}</p>
-                      <p class="text-gray-200 text-[1.4vh] drop-shadow-lg">{{ persona.departamento }}</p>
-                    </div>
-                  </div>
-                  <div class="grid grid-cols-3">
-                    <div v-if="miembrosMostrar[6]" class="text-center">
-                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40 hover:translate-y-[-2vw]">
-                        <SafeImage 
-                          :src="miembrosMostrar[6].imagen" 
-                          :alt="miembrosMostrar[6].nombre"
-                          image-class="w-full h-full object-cover"
-                          :max-retries="8"
-                          :persistent="true"
-                          loading-strategy="lazy"
-                        />
-                      </div>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ miembrosMostrar[6].nombre }}</p>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ miembrosMostrar[6].apellido }}</p>
-                      <p class="text-gray-200 text-[1.4vh] drop-shadow-lg">{{ miembrosMostrar[6].departamento }}</p>
-                    </div>
-                    <div></div>
-                    <div></div>
-                  </div>
-                </div>
-
-                <!-- SUMATE -->
-                <div v-else-if="partidoSeleccionado?.id === 'sumate'" class="group pt-2 rounded-lg aspect-[3000/800] w-100 m-auto">
-                  <div class="flex justify-center">
-                    <div v-if="miembrosMostrar[0]" class="text-center">
-                      <div class="w-[10vh] h-[10vh] mx-auto rounded-full overflow-hidden mb-1 transition-all duration-300 hover:scale-[2] hover:relative hover:z-40">
-                        <SafeImage 
-                          :src="miembrosMostrar[0].imagen" 
-                          :alt="miembrosMostrar[0].nombre"
-                          image-class="w-full h-full object-cover"
-                          :max-retries="8"
-                          :persistent="true"
-                          loading-strategy="lazy"
-                        />
-                      </div>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.2vw]">{{ miembrosMostrar[0].nombre }}</p>
-                      <p class="text-white font-semibold text-[1.6vh] drop-shadow-lg mt-[-.3vw]">{{ miembrosMostrar[0].apellido }}</p>
-                      <p class="text-gray-200 text-[1.4vh] drop-shadow-lg">{{ miembrosMostrar[0].departamento }}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </transition>
-          </div>
-        </transition>
-      </div>
-    </div>
   </div>
 </template>
+
 <script setup>
 import { ref, onMounted, onUnmounted, nextTick, watch, computed } from 'vue'
 import { useRoute } from 'vue-router'

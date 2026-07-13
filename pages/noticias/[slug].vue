@@ -264,7 +264,7 @@
         <!-- SECCIÓN NOTICIAS RELACIONADAS -->
         <div class="mt-16 bg-slate-200">
           <h2 class="text-[1.5vw] font-bold text-gray-800 border-l-4 border-[#E03636] pl-4 text-center">            
-            <span class="text-[#E03636]">Artículos Relacionados</span>
+            <span class="text-[#8A1B19]">Artículos Relacionados</span>
           </h2>
           <hr class="border-black border-t-2 mx-[5vw]">
           
@@ -629,7 +629,7 @@ const convertirHTMLaBloques = (htmlContent) => {
 
 const formatTitleWithColors = (title) => {
   if (!title) return ''
-  return title.replace(/\*(.*?)\*/g, '<span class="text-[#E03636]">$1</span>')
+  return title.replace(/\*(.*?)\*/g, '<span class="text-[#8A1B19]">$1</span>')
 }
 
 const anteriorRelacionada = () => {
@@ -868,7 +868,7 @@ section {
 }
 
 .tag-noticia {
-  background-color: #E03636;
+  background-color: #A54A4A;
   color: white;
 }
 

@@ -16,7 +16,7 @@
                 <!-- IMAGEN IZQUIERDA -->
                 <div 
                   @click="prevImage"
-                  class="absolute left-0 top-0 w-[35%] h-[45%] rounded-[.8vw] overflow-hidden shadow-2xl border-3 border-[#E4D294]/50 z-10 cursor-pointer hover:scale-105 transition-all duration-500"
+                  class="absolute left-0 top-0 w-[35%] h-[45%] rounded-[.8vw] overflow-hidden shadow-2xl border-3 border-[#fff]/50 z-10 cursor-pointer hover:scale-105 transition-all duration-500"
                 >
                   <img 
                     :src="imageData[prevIndex].url" 
@@ -24,14 +24,14 @@
                     class="w-full h-full object-cover"
                   />
                   <div class="absolute inset-0 bg-gray-500/60"></div>
-                  <div class="absolute bottom-0 left-0 right-0 h-1/4 bg-[#E03636]/90 text-white p-2 flex items-center justify-center">
+                  <div class="absolute bottom-0 left-0 right-0 h-1/4 bg-[#8A1B19]/80 text-white p-2 flex items-center justify-center">
                     <p class="text-[0.8vw] text-center line-clamp-2">{{ truncateText(imageData[prevIndex].descripcion, 60) }}</p>
                   </div>
                 </div>
                 
                 <!-- IMAGEN CENTRAL -->
                 <div 
-                  class="absolute left-[20%] top-[15%] w-[60%] h-[80%] rounded-[.8vw] overflow-hidden shadow-2xl border-4 border-[#E4D294]/70 z-30 cursor-pointer"
+                  class="absolute left-[20%] top-[15%] w-[60%] h-[80%] rounded-[.8vw] overflow-hidden shadow-2xl border-4 border-[#fff]/70 z-30 cursor-pointer"
                 >
                   <!-- 🔥 USAMOS v-show para mantener la imagen en DOM -->
                   <img 
@@ -54,7 +54,7 @@
                   />
                   
                   <div 
-                    class="absolute bottom-0 left-0 right-0 bg-[#E03636]/90 text-white transition-all duration-500 overflow-hidden"
+                    class="absolute bottom-0 left-0 right-0 bg-[#8A1B19]/80 text-white transition-all duration-500 overflow-hidden"
                     :class="showFullText ? 'h-full' : 'h-1/4'"
                     @click="toggleFullText"
                   >
@@ -81,7 +81,7 @@
                 <!-- IMAGEN DERECHA -->
                 <div 
                   @click="nextImage"
-                  class="absolute right-0 top-0 w-[35%] h-[45%] rounded-[.8vw] overflow-hidden shadow-2xl border-3 border-[#E4D294]/50 z-10 cursor-pointer hover:scale-105 transition-all duration-500"
+                  class="absolute right-0 top-0 w-[35%] h-[45%] rounded-[.8vw] overflow-hidden shadow-2xl border-3 border-[#fff]/50 z-10 cursor-pointer hover:scale-105 transition-all duration-500"
                 >
                   <img 
                     :src="imageData[nextIndex].url" 
@@ -89,7 +89,7 @@
                     class="w-full h-full object-cover"
                   />
                   <div class="absolute inset-0 bg-gray-500/60"></div>
-                  <div class="absolute bottom-0 left-0 right-0 h-1/4 bg-[#E03636]/90 text-white p-2 flex items-center justify-center">
+                  <div class="absolute bottom-0 left-0 right-0 h-1/4 bg-[#8A1B19]/80 text-white p-2 flex items-center justify-center">
                     <p class="text-[0.8vw] text-center line-clamp-2">{{ truncateText(imageData[nextIndex].descripcion, 60) }}</p>
                   </div>
                 </div>
@@ -99,20 +99,20 @@
               <template v-else>
                 <!-- IMAGEN QUE SALE (el antiguo centro) - VIAJA A SU POSICIÓN FINAL LATERAL -->
                 <div 
-                  class="absolute rounded-[.8vw] overflow-hidden shadow-2xl border-4 border-[#E4D294]/70 z-40"
+                  class="absolute rounded-[.8vw] overflow-hidden shadow-2xl border-4 border-[#fff]/70 z-40"
                   :class="animationOutClass"
                 >
                   <img :src="imageData[oldIndexValue].url" class="w-full h-full object-cover" />
                   <!-- Capa gris que aparece al final -->
                   <div class="absolute inset-0 bg-gray-500/0" :class="grayOverlayClass"></div>
-                  <div class="absolute bottom-0 left-0 right-0 h-1/4 bg-[#E03636]/90 text-white p-2 flex items-center justify-center">
+                  <div class="absolute bottom-0 left-0 right-0 h-1/4 bg-[#A54A4A]/90 text-white p-2 flex items-center justify-center">
                     <p class="text-[0.8vw] text-center line-clamp-2">{{ truncateText(imageData[oldIndexValue].descripcion, 60) }}</p>
                   </div>
                 </div>
 
                 <!-- IMAGEN QUE ENTRA (la nueva central) - VIENE DESDE SU POSICIÓN LATERAL -->
                 <div 
-                  class="absolute rounded-[.8vw] overflow-hidden shadow-2xl border-4 border-[#E4D294]/70 z-50"
+                  class="absolute rounded-[.8vw] overflow-hidden shadow-2xl border-4 border-[#fff]/70 z-50"
                   :class="animationInClass"
                 >
                   <img :src="imageData[newIndexValue].url" class="w-full h-full object-cover" />
@@ -143,7 +143,7 @@
                   class="transition-all duration-300 focus:outline-none rounded-full"
                   :class="[
                     currentIndex === index 
-                      ? 'bg-[#E4D294] scale-125 ring-[.2vw] ring-white' 
+                      ? 'bg-[#A54A4A] scale-125 ring-[.2vw] ring-[#A54A4A]' 
                       : 'bg-white/50 hover:bg-[#E4D294]/50'
                   ]"
                   :style="{ width: '.8vw', height: '.8vw' }"
@@ -155,7 +155,7 @@
 
         <!-- COLUMNA DERECHA (35%) -->
         <div class="text-[1.3vw] w-[35%] bg-white/10 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-[1.5em] flex flex-col">
-          <h3 class="font-bold text-[1.0em] text-[#E03636] mb-[1.1em] tracking-wide border-b-[.10em] border-[#E03636]/30 pb-[0.5em]">
+          <h3 class="font-bold text-[1.0em] text-[#A54A4A] mb-[1.1em] tracking-wide border-b-[.10em] border-[#A54A4A]/30 pb-[0.5em]">
             Reseña Histórica del Senado
           </h3>
           <div class="custom-scroll flex-1">

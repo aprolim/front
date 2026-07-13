@@ -1,17 +1,17 @@
 <template>
   <div class="relative z-10 mx-auto min-h-screen flex flex-col w-full">
     <!-- FRANJA ROJA -->
-    <div class="relative w-screen left-1/2 right-1/2 -mx-[50vw] mt-[4.4vw]">
-      <div class="relative bg-[#E03636] py-[0.8vw] shadow-2xl overflow-hidden group full-width-franja">
+    <div class="relative w-screen left-1/2 right-1/2 -mx-[50vw] mt-[4.25vw]">
+      <div class="relative bg-[#A54A4A] py-[0.8vw] shadow-2xl overflow-hidden group full-width-franja">
         <div class="absolute inset-0 opacity-5">
           <div class="absolute top-0 left-0 w-16 h-16 border-t-2 border-l-2 border-yellow-300 rounded-tl-lg"></div>
           <div class="absolute bottom-0 right-0 w-16 h-16 border-b-2 border-r-2 border-yellow-300 rounded-br-lg"></div>
         </div>
-        <div class="absolute top-0 left-0 right-0 h-[.2vw] bg-gradient-to-r from-transparent via-yellow-400 to-transparent animate-pulse"></div>
-        <div class="absolute bottom-0 left-0 right-0 h-[.2vw] bg-gradient-to-r from-transparent via-yellow-400 to-transparent animate-pulse"></div>
+        <div class="absolute top-0 left-0 right-0 h-[.4vw] bg-gradient-to-r from-transparent via-yellow-400 to-transparent animate-pulse"></div>
+        <div class="absolute bottom-0 left-0 right-0 h-[.4vw] bg-gradient-to-r from-transparent via-yellow-400 to-transparent animate-pulse"></div>
         <div class="container mx-auto px-4 relative z-10 text-center">
           <p class="font-bold text-white text-[2vw]">
-            <span class="bg-clip-text text-transparent bg-gradient-to-r from-white via-yellow-100 to-yellow-200">
+            <span class="bg-clip-text text-transparent bg-gradient-to-r from-white via-[#F2CFCF] to-[#E8B5B5]">
               <span class="inline-flex items-center justify-center text-white text-[.8em] mx-[.8em]">⚪</span> 
               PRIMERA LEGISLATURA DEL TRICENTENARIO
               <span class="inline-flex items-center justify-center text-white text-[.8em] mx-[.8em]">⚪</span>
@@ -33,7 +33,7 @@
         <div class="flex flex-col h-full relative text-[1.4vw]" style="min-height: 37.1vw;">
           <div class="flex-1 flex flex-col justify-center">
             <div class="space-y-3">
-              <h1 class="font-extrabold text-[#E03636] text-[1.6em] text-center">
+              <h1 class="font-extrabold text-[#A54A4A] text-[1.6em] text-center">
                 {{ slides[currentSlide].title }}
                 <br>
               </h1>
@@ -54,8 +54,8 @@
                 class="transition-all duration-300 rounded-full"
                 :class="[
                   currentSlide === index 
-                    ? 'bg-[#E03636] ring-[.45em] ring-white outline outline-[.17em] outline-[#E03636] outline-offset-[.17em]' 
-                    : 'bg-[#E03636] hover:bg-[#E03636]/50'
+                    ? 'bg-[#A54A4A] ring-[.45em] ring-white outline outline-[.17em] outline-[#A54A4A] outline-offset-[.17em]' 
+                    : 'bg-[#A54A4A] hover:bg-[#A54A4A]/50'
                 ]"
                 :style="{ width: '.8em', height: '.8em' }"
                 :aria-label="`Ir a imagen ${index + 1}`"

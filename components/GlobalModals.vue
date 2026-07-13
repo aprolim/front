@@ -9,7 +9,7 @@
       <div class="bg-white rounded-xl shadow-2xl w-full max-w-[98vw] sm:max-w-[95vw] lg:max-w-[90vw] xl:max-w-[1400px] max-h-[95vh] overflow-hidden modal-container">
         
         <!-- Header -->
-        <div class="bg-[#E03636] text-white px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center">
+        <div class="bg-[#8A1B19] text-white px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center">
           <div>
             <h3 class="text-xl sm:text-2xl font-bold">Gaceta Legislativa - Redactor</h3>
             <p class="text-xs sm:text-sm text-white/80 mt-1">Seleccione un tomo para visualizar</p>
@@ -29,7 +29,7 @@
           <div v-for="periodo in periodosDisponibles" :key="periodo.key" class="mb-8 sm:mb-10">
             <!-- Encabezado del periodo legislativo (muestra el rango de años completo) -->
             <div class="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-5 sticky top-0 bg-white z-10">
-              <h4 class="text-xl sm:text-2xl font-bold text-white bg-[#E03636] w-full text-center">REDACTOR LEGISLATURA {{ periodo.nombre }}</h4>
+              <h4 class="text-xl sm:text-2xl font-bold text-white bg-[#A54A4A] w-full text-center">REDACTOR LEGISLATURA {{ periodo.nombre }}</h4>
               <!-- <div class="flex-1 h-px bg-gray-200"></div>
               <span class="text-xs sm:text-sm text-gray-500 bg-gray-100 px-2 sm:px-3 py-1 rounded-full">
                 {{ totalTomosPorPeriodo(periodo.key) }} tomos
@@ -47,7 +47,7 @@
                 >
                   <div class="flex flex-col items-center text-center">
                     <!-- Título del Tomo -->
-                    <h5 class="text-sm sm:text-base font-bold text-[#E03636] mt-1">TOMO {{ item.tomo }}</h5>
+                    <h5 class="text-sm sm:text-base font-bold text-[#A54A4A] mt-1">TOMO {{ item.tomo }}</h5>
                     
                     <!-- Portada específica del periodo y tomo -->
                     <div class="w-full aspect-square mb-2 overflow-hidden rounded-lg shadow-md bg-gray-100">

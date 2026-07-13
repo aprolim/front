@@ -1,16 +1,16 @@
-<!-- pages/gestion-legislativa.vue - VERSIÓN CORREGIDA -->
+<!-- pages/gestion-legislativa.vue -->
 <template>
   <div class="min-h-screen text-style">
-    <!-- Fondo fijo GLOBAL - PARA las secciones que lo necesiten -->
-    <div class="global-fixed-background" :class="{ 'show-fixed': isSection2Visible || isSection3Visible || isSection4Visible }"></div>
+    <!-- Fondo fijo GLOBAL -->
+    <div class="global-fixed-background" :class="{ 'show-fixed': isSection1Visible || isSection2Visible || isSection3Visible || isSection4Visible || isSection5Visible }"></div>
     
     <!-- Hero Section - Sesiones del Pleno (PRIMERA SECCIÓN) -->
     <section 
       id="sesiones-pleno"
-      class="relative h-screen flex items-start overflow-hidden transition-all duration-500"
-      :class="{ 'min-h-[40vh] md:min-h-[45vh]': scrolled }"
-      ref="plenarySessionsRef"
-      style="background-color: #eeeeee; background-size: cover"
+      ref="plenarySessionsRef" 
+      class="scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out z-10"
+      :class="{ 'animate-in': isSection1Visible }"
+      style="min-height: 100vh; position: relative; background: transparent !important; align-items: center; display: flex; justify-content: center; flex-direction: column;"
     >
       <PlenarySessions />
       <ScrollProgress
@@ -25,7 +25,7 @@
       ref="section2Ref" 
       class="scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out z-10"
       :class="{ 'animate-in': isSection2Visible }"
-      style="min-height: 100vh; position: relative; background: transparent; align-items: center; display: flex; justify-content: center; flex-direction: column;"
+      style="min-height: 100vh; position: relative; background: transparent !important; align-items: center; display: flex; justify-content: center; flex-direction: column;"
     >
       <LegislationTable
         :hash="hashParams" 
@@ -39,7 +39,7 @@
       ref="section3Ref" 
       class="scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out delay-200 z-10"
       :class="{ 'animate-in': isSection3Visible }"
-      style="min-height: 100vh; position: relative; background: transparent; align-items: center; display: flex; justify-content: center; flex-direction: column;"
+      style="min-height: 100vh; position: relative; background: transparent !important; align-items: center; display: flex; justify-content: center; flex-direction: column;"
     >
       <FiscalizationTable
         :hash="hashParams" 
@@ -53,7 +53,7 @@
       ref="section4Ref" 
       class="scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out delay-200 z-10"
       :class="{ 'animate-in': isSection4Visible }"
-      style="min-height: 100vh; position: relative; background: transparent; align-items: center; display: flex; justify-content: center; flex-direction: column;"
+      style="min-height: 100vh; position: relative; background: transparent !important; align-items: center; display: flex; justify-content: center; flex-direction: column;"
     >
       <ManagementTable
         :hash="hashParams" 
@@ -65,9 +65,9 @@
     <div 
       id="gaceta-legislativa"
       ref="section5Ref" 
-      class="h-screen w-full scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out delay-400 z-10"
+      class="scroll-section opacity-0 translate-y-8 transition-all duration-800 ease-out delay-400 z-10"
       :class="{ 'animate-in': isSection5Visible }"
-      style="background-color: #eeeeee; background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed;"
+      style="min-height: 100vh; position: relative; background: transparent !important; align-items: center; display: flex; justify-content: center; flex-direction: column;"
     >
       <LegislativeGazette />
     </div>
@@ -100,6 +100,7 @@ const section3Ref = ref(null)
 const section4Ref = ref(null)
 const section5Ref = ref(null)
 
+const isSection1Visible = ref(false)
 const isSection2Visible = ref(false)
 const isSection3Visible = ref(false)
 const isSection4Visible = ref(false)
@@ -114,24 +115,20 @@ const sections = {
   'gaceta-legislativa': section5Ref
 }
 
-// Función mejorada para hacer scroll a una sección
 const scrollToSection = (id) => {
   const sectionRef = sections[id]
   if (sectionRef?.value) {
-    // Desactivar scroll-snap temporalmente
     const container = document.querySelector('.snap-container')
     if (container) {
       container.style.scrollSnapType = 'none'
     }
     
-    // Hacer scroll a la sección
     sectionRef.value.scrollIntoView({ 
       behavior: 'smooth', 
       block: 'start',
       inline: 'nearest'
     })
     
-    // Reactivar scroll-snap después del scroll
     setTimeout(() => {
       if (container) {
         container.style.scrollSnapType = 'y mandatory'
@@ -147,7 +144,9 @@ const initScrollObserver = () => {
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          if (entry.target === section2Ref.value) {
+          if (entry.target === plenarySessionsRef.value) {
+            isSection1Visible.value = true;
+          } else if (entry.target === section2Ref.value) {
             isSection2Visible.value = true;
           } else if (entry.target === section3Ref.value) {
             isSection3Visible.value = true;
@@ -169,6 +168,7 @@ const initScrollObserver = () => {
   );
   
   const sectionsToObserve = [
+    plenarySessionsRef.value,
     section2Ref.value,
     section3Ref.value,
     section4Ref.value,
@@ -187,7 +187,6 @@ onMounted(async () => {
   await nextTick();
   initScrollObserver();
   
-  // Si hay hash al cargar la página, hacer scroll
   if (route.hash) {
     const id = route.hash.replace('#', '')
     setTimeout(() => {
@@ -196,7 +195,6 @@ onMounted(async () => {
   }
 });
 
-// Detectar cambios en el hash (navegación desde el menú)
 watch(() => route.hash, (newHash) => {
   if (newHash) {
     const id = newHash.replace('#', '')
@@ -221,28 +219,24 @@ definePageMeta({
   font-family: 'Montserrat', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* ===== SNAP SCROLL CON PADDING PARA HEADER ===== */
 :global(html), :global(body) {
   scroll-behavior: smooth;
   scroll-snap-type: y mandatory;
   scroll-padding-top: 80px;
 }
 
-/* Cada sección con snap */
 section, .scroll-section {
   scroll-snap-align: start;
   scroll-snap-stop: always;
   transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.3, 1.2);
 }
 
-/* El footer también hace snap - ESTO ES CRUCIAL */
 footer {
   scroll-snap-align: start;
   scroll-snap-stop: always;
   transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.3, 1.2);
 }
 
-/* ===== FONDO FIJO ===== */
 .global-fixed-background {
   position: fixed;
   top: 0;
@@ -284,14 +278,13 @@ footer {
   visibility: visible;
 }
 
-/* Todas las secciones */
 .scroll-section {
   position: relative;
   width: 100%;
   z-index: 5;
 }
 
-/* Transparencias para cada sección */
+/* FORZAR TRANSPARENCIA EN TODAS LAS SECCIONES */
 [ref="plenarySessionsRef"],
 [ref="section2Ref"],
 [ref="section3Ref"],
@@ -327,7 +320,6 @@ footer {
   }
 }
 
-/* Scrollbar elegante */
 ::-webkit-scrollbar {
   width: 10px;
   background: transparent;
@@ -352,7 +344,6 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Asegurar que el footer sea visible - ESTO ES CRUCIAL */
 footer {
   display: block !important;
   position: relative !important;

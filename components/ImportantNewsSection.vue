@@ -7,7 +7,7 @@
         <span>
           Gesti&oacute;n
         </span>
-        <span class="text-[#E03636] ml-1 sm:ml-2">
+        <span class="text-[#8A1B19] ml-1 sm:ml-2">
           Legislativa
         </span>
       </h2>
@@ -47,7 +47,7 @@
     <!-- Estado de Error -->
     <div v-else-if="error" class="error-state text-center min-h-[80px] flex flex-col items-center justify-center">
       <p class="text-red-600 text-[6px] sm:text-[7px] md:text-[8px] mb-0.5">{{ error }}</p>
-      <button @click="refresh" class="retry-button bg-[#E03636] text-white rounded hover:bg-opacity-90 transition px-1 py-0.5 text-[5px] sm:text-[6px] md:text-[7px]">
+      <button @click="refresh" class="retry-button bg-[#8A1B19] text-white rounded hover:bg-opacity-90 transition px-1 py-0.5 text-[5px] sm:text-[6px] md:text-[7px]">
         Reintentar
       </button>
     </div>
@@ -62,7 +62,7 @@
       >
         <!-- Header de Sección -->
         <div class="section-header text-center pb-0.5 sm:pb-1 mb-1 sm:mb-2">
-          <h2 class="section-title font-bold text-[#E03636] text-[9px] sm:text-[10px] md:text-[10px] lg:text-[12px] xl:text-[14px] 2xl:text-[19px] 3xl:text-[24px] 4xl:text-[35px] 5xl:text-[52px] mb-0">
+          <h2 class="section-title font-bold text-[#8A1B19] text-[9px] sm:text-[10px] md:text-[10px] lg:text-[12px] xl:text-[14px] 2xl:text-[19px] 3xl:text-[24px] 4xl:text-[35px] 5xl:text-[52px] mb-0">
             {{ areas[tab.id]?.titulo || tab.label }}
           </h2>
           <p class="section-description text-gray-600 text-[6px] sm:text-[7px] md:text-[8px] lg:text-[9px] xl:text-[11px] 2xl:text-[16px] 3xl:text-[19px] 4xl:text-[30px] 5xl:text-[45px] mx-auto">
@@ -93,13 +93,13 @@
                 2xl:w-20 2xl:h-20 3xl:w-24 3xl:h-24 4xl:w-28 4xl:h-28 5xl:w-32 5xl:h-32
                 rounded-full transition-all duration-300"
               :class="{
-                'bg-[#E03636]': hoveredCard === link.id,
+                'bg-[#A54A4A]': hoveredCard === link.id,
                 'scale-110': hoveredCard === link.id
               }"
             >
               <div 
                 class="w-full h-full flex items-center justify-center transition-colors duration-300"
-                :class="hoveredCard === link.id ? 'text-white' : 'text-[#E03636]'"
+                :class="hoveredCard === link.id ? 'text-white' : 'text-[#A54A4A]'"
               >
                 <div class="svg-wrapper w-[97%] h--[97%]" v-html="link.icono"></div>
               </div>

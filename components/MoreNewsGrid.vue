@@ -3,7 +3,7 @@
     <!-- ENCABEZADO -->
     <div class="text-center mb-2 pt-[5.8vw]">
       <h2 class="text-3xl md:text-4xl font-bold text-gray-800">
-        Más <span class="text-[#E03636]">Noticias</span>
+        Más <span class="text-[#A54A4A]">Noticias</span>
       </h2>
       <div class="w-20 h-1 bg-[#E03636] mx-auto mt-3"></div>
       <p class="text-gray-500 max-w-2xl mx-auto mt-4">
@@ -39,18 +39,18 @@
           </div>
           
           <!-- Overlay con blur y fondo rojo -->
-          <div class="absolute bottom-0 left-0 right-0 h-[40%] bg-[rgba(224,54,54,0.85)] backdrop-blur-sm p-4 flex flex-col justify-end">
+          <div class="absolute bottom-0 left-0 right-0 h-[40%] bg-[rgba(167,38,38,0.65)] backdrop-blur-sm p-4 flex flex-col justify-end">
             <!-- Fecha -->
-            <p class="text-white text-[0.7rem] sm:text-[0.8rem] md:text-[0.9rem] lg:text-[1rem] mb-1 opacity-90">
+            <p class="text-white text-[1.2vw] mb-1 opacity-90">
               {{ formatearFecha(noticia.publishedAt || noticia.fecha) }}
             </p>
             <!-- Título -->
-            <h3 class="font-bold text-white group-hover:text-red-200 transition-colors line-clamp-2 text-[0.8rem] sm:text-[0.9rem] md:text-[1rem] lg:text-[1.1rem] leading-tight">
+            <h3 class="font-bold text-white group-hover:text-red-200 transition-colors line-clamp-2 text-[1.15vw]  leading-tight">
               {{ limpiarAsteriscos(noticia.titulo || '') }}
             </h3>
             <!-- Botón Leer más -->
             <div class="mt-2 flex justify-end">
-              <span class="text-white text-[0.7rem] sm:text-[0.8rem] md:text-[0.9rem] font-semibold flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+              <span class="text-white text-[1vw] font-semibold flex items-center gap-1 group-hover:translate-x-1 transition-transform">
                 Leer más
                 <svg class="w-3 h-3 sm:w-3 sm:h-3 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -76,7 +76,7 @@
     <div v-if="noticiasLocal.length > 0" class="text-center mt-10 mb-8">
       <button 
         @click="irATodasLasNoticias"
-        class="inline-flex items-center gap-2 px-6 py-2 border-2 border-[#E03636] text-[#E03636] font-semibold rounded-lg hover:bg-[#E03636] hover:text-white transition-all duration-300"
+        class="inline-flex items-center gap-2 px-6 py-2 border-2 border-[#A54A4A] text-[#A54A4A] font-semibold rounded-lg hover:bg-[#A54A4A] hover:text-white transition-all duration-300"
       >
         Ver todas las noticias
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -20,7 +20,7 @@
         <!-- COLUMNA IZQUIERDA -->
         <div class="w-[30%] bg-transparent rounded-2xl shadow-xl border border-white/20 p-[1.22em] origin-right text-[#000] flex items-center">
           <div class="flex flex-col text-[.68em] text-justify w-full">
-            <p class="text-center text-[1.17em] text-[#E03636]">Rol Institucional de la Directiva</p>
+            <p class="text-center text-[1.17em] text-[#A54A4A]">Rol Institucional de la Directiva</p>
             <br>
             <div class="font-extralight">
               La Directiva de la Cámara de Senadores de Bolivia es el órgano colegiado responsable de la conducción política del ente legislativo. Conformada por una presidencia, dos vicepresidencias y tres secretarías, su estructura garantiza la pluralidad al integrar tanto al bloque de mayoría como al de minoría.
@@ -33,14 +33,14 @@
         </div>
 
         <!-- COLUMNA CENTRAL -->
-        <div class="w-[40%] bg-[#E03636]/80 rounded-2xl shadow-2xl border border-white/20 p-[.49em] flex items-center">
+        <div class="w-[40%] bg-[#8A1B19]/80 rounded-2xl shadow-2xl border border-white/20 p-[.49em] flex items-center">
           <div class="grid grid-cols-2 gap-y-4 w-full">
             <div 
               v-for="(senador, index) in senadores" 
               :key="index"
               @click="selectedSenador = senador"
               class="flex flex-col items-center cursor-pointer transition-all duration-300 hover:scale-105 py-2"
-              :class="{ 'rounded-[.44em] scale-105 border border-[#E4D294] bg-[#E03636]/20': selectedSenador?.nombre === senador.nombre }"
+              :class="{ 'rounded-[.44em] scale-105 border border-[#fff] bg-[#A54A4A]/20': selectedSenador?.nombre === senador.nombre }"
               >
               <div class="w-[4.9em] h-[4.9em] rounded-full overflow-hidden border-[.19em] border-[#E4D294] shadow-lg">
                 <SafeImage 
@@ -70,8 +70,8 @@
                 loading-strategy="eager"
               />
             </div>
-            <p class="text-[#E03636] text-center mt-2 font-extrabold uppercase">{{ selectedSenador.cargo }}</p>
-            <h3 class="text-[#E03636] font-light text-[.88em] text-center">{{ selectedSenador.nombre }}</h3>
+            <p class="text-[#A54A4A] text-center mt-2 font-extrabold uppercase">{{ selectedSenador.cargo }}</p>
+            <h3 class="text-[#A54A4A] font-light text-[.88em] text-center">{{ selectedSenador.nombre }}</h3>
             <p class="text-justify mt-4 text-[.68em]">{{ selectedSenador.funcion }}</p>
           </div>
           <div v-else class="w-full flex items-center justify-center">

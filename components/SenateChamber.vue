@@ -1,7 +1,7 @@
 <template>
   <div class="senate-chamber">
     <!-- Header -->
-    <header v-if="showHeader" class="chamber-header text-center">
+    <header v-if="showHeader" class="chamber-header text-center bg-[#A54A4A]">
       <slot name="header">
         <div class="default-header">
           <h2>Hemiciclo del Senado · Gestión 2025-2030</h2>
@@ -18,7 +18,7 @@
           <div v-if="showControls" class="column left-column text-[1.4em]">
             <div class="controls-panel transparent-panel">
               <div class="controls-section">
-                <h3 class="pill-red w-full">Distribución <br> 2025-2030</h3>
+                <h3 class="pill-red w-full bg-[#A54A4A]">Distribución <br> 2025-2030</h3>
                 <div class="legend-vertical">
                   <div 
                     v-for="party in parties"
@@ -359,7 +359,6 @@ defineExpose({
 
 .chamber-header {
   height: auto;
-  background: #575756;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   flex-shrink: 0;
 }
@@ -646,7 +645,6 @@ defineExpose({
 }
 
 .pill-red {
-  background-color: rgba(224, 54, 54, 0.85);
   color: white;
   border-radius: 1em;
   font-weight: 600;

@@ -5,6 +5,7 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "cross-env PORT=3001 nuxt dev --port 3001 --open",
+    "dev:expose": "cross-env PORT=3001 nuxt dev --port 3001 --open --host 0.0.0.0",
     "generate": "nuxt generate",
     "preview": "cross-env PORT=3000 nuxt preview --port 3000",
     "start": "cross-env PORT=3000 node .output/server/index.mjs",

@@ -351,7 +351,7 @@
         <div v-if="!busquedaGlobal" class="tabs-content px-1 sm:px-2 md:px-3 lg:px-4 xl:px-5 py-2 sm:py-3 md:py-4 lg:py-5 xl:py-6">
           <!-- Header de Sección (Legislación) -->
           <div class="section-header text-center pb-0.5 sm:pb-1 mb-1 sm:mb-2 border-b border-[#E03636] border-opacity-30">
-            <h2 class="section-title font-bold text-[#E03636] text-[3.0vw] mb-0 translate-y-[-7vw]">
+            <h2 class="section-title font-bold text-[#A54A4A] text-[3.0vw] mb-0 translate-y-[-7vw]">
               {{ areaLegislacion?.titulo || 'Area Legislación' }}
             </h2>
             <p class="section-description text-gray-600 text-[0.9vw] mx-auto translate-y-[-7vw]">
@@ -382,13 +382,13 @@
                   2xl:w-20 2xl:h-20 3xl:w-24 3xl:h-24 4xl:w-28 4xl:h-28 5xl:w-32 5xl:h-32
                   rounded-full transition-all duration-300"
                 :class="{
-                  'bg-[#E03636]': hoveredCard === link.id,
+                  'bg-[#A54A4A]': hoveredCard === link.id,
                   'scale-110': hoveredCard === link.id
                 }"
               >
                 <div 
                   class="w-full h-full flex items-center justify-center transition-colors duration-300"
-                  :class="hoveredCard === link.id ? 'text-white' : 'text-[#E03636]'"
+                  :class="hoveredCard === link.id ? 'text-white' : 'text-[#A54A4A]'"
                 >
                   <div class="svg-wrapper w-[97%] h-[97%]" v-html="link.icono"></div>
                 </div>
@@ -409,7 +409,7 @@
                 </p>
               </div>
               
-              <div class="link-arrow text-[#E03636] ml-0.5 flex-shrink-0
+              <div class="link-arrow text-[#A54A4A] ml-0.5 flex-shrink-0
                 text-[10px] sm:text-[12px] md:text-[13px] lg:text-[15px] xl:text-[18px] 
                 2xl:text-[22px] 3xl:text-[27px] 4xl:text-[35px] 5xl:text-[70px]">
                 ›
@@ -1155,7 +1155,7 @@ watch(itemsPorPagina, (nuevoValor) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #E03636;
+  color: #A54A4A;
   flex-shrink: 0;
 }
 
@@ -1198,7 +1198,7 @@ watch(itemsPorPagina, (nuevoValor) => {
 }
 
 .badge {
-  background: linear-gradient(135deg, #E03636, #b82c2c);
+  background: linear-gradient(135deg, #A64B4B, #A54A4A);
   color: white;
   padding: 2px 8px;
   border-radius: 16px;
@@ -1267,7 +1267,7 @@ watch(itemsPorPagina, (nuevoValor) => {
 }
 
 .search-button {
-  background: #E03636;
+  background: #A54A4A;
   color: white;
   border: none;
   padding: 5px 10px;
@@ -1399,7 +1399,7 @@ watch(itemsPorPagina, (nuevoValor) => {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  background: #E03636;
+  background: #A54A4A;
   color: white;
   text-decoration: none;
   padding: 4px 8px;
@@ -1462,9 +1462,9 @@ watch(itemsPorPagina, (nuevoValor) => {
 }
 
 .pagination-btn:hover:not(:disabled) {
-  background: #E03636;
+  background: #A54A4A;
   color: white;
-  border-color: #E03636;
+  border-color: #fff;
 }
 
 .pagination-btn:disabled {
@@ -1499,7 +1499,7 @@ watch(itemsPorPagina, (nuevoValor) => {
 }
 
 .pagination-number.active {
-  background: #E03636;
+  background: #A54A4A;
   color: white;
   border-color: #E03636;
 }
@@ -1974,7 +1974,7 @@ watch(itemsPorPagina, (nuevoValor) => {
 
 .section-title {
   font-weight: bold;
-  color: #E03636;
+  color: #A54A4A;
   margin-bottom: 0;
 }
 
@@ -2021,7 +2021,7 @@ watch(itemsPorPagina, (nuevoValor) => {
 }
 
 .icon-container.bg-\[\#E03636\] {
-  background-color: #E03636;
+  background-color: #A54A4A;
 }
 
 .icon-container.scale-110 {
